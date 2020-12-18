@@ -12,10 +12,33 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [],
+    'aliases'=>[
+        '@adminlte3' => '@backend/theme/AdminLTE-3.0.1',
+    ],
     'components' => [
+        'view' => [
+            'theme' => [
+                'pathMap' => [
+                    '@backend/views' => '@adminlte3/views'
+                ],
+            ],
+        ],
+        'assetManager' => [
+            'bundles' => [
+                'kartik\form\ActiveFormAsset' => [
+                    'bsDependencyEnabled' => true // do not load bootstrap assets for a specific asset bundle
+                ],
+            ],
+        ],
         'request' => [
             'csrfParam' => '_csrf-backend',
+            'enableCsrfValidation' => false,
         ],
+//        [
+//            'session' =>[
+//                'timeout' => 86400,
+//            ]
+//        ],
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
