@@ -38,7 +38,7 @@ class CompanyController extends Controller
     {
         $modelx = Company::find()->one();
         $model_address = new Addressbook();
-        if (count($modelx) > 0) {
+        if ($modelx != null) {
             return $this->redirect(['update', 'id' => $modelx->id]);
         }
         $model = new Company();

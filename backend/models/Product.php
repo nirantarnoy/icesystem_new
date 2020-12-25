@@ -49,11 +49,11 @@ class Product extends \common\models\Product
 
     public function findCode($id){
         $model = Product::find()->where(['id'=>$id])->one();
-        return count($model)>0?$model->code:'';
+        return $model != null?$model->code:'';
     }
     public function findName($id){
         $model = Product::find()->where(['id'=>$id])->one();
-        return count($model)>0?$model->name:'';
+        return $model !=null?$model->name:'';
     }
 //    public function findUnitid($code){
 //        $model = Unit::find()->where(['name'=>$code])->one();
