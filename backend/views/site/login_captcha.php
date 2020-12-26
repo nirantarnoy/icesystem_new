@@ -39,9 +39,9 @@ use yii\helpers\Html;
         <!-- /.login-logo -->
         <div class="card" style="margin-top: 0px;">
             <div class="card-body login-card-body">
-<!--                <div style="text-align: center">-->
-<!--                    <h1 style="color: #2b669a"><b>วรภัทร</b></h1>-->
-<!--                </div>-->
+                <!--                <div style="text-align: center">-->
+                <!--                    <h1 style="color: #2b669a"><b>วรภัทร</b></h1>-->
+                <!--                </div>-->
 
                 <div class="login-logo">
                     <a href="#">
@@ -58,6 +58,25 @@ use yii\helpers\Html;
                 <div class="row">
                     <div class="col-lg-12">
                         <?= $form->field($model, 'password')->passwordInput(['class' => 'form-control', 'placeholder' => 'Password']) ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <?= $form->field($model, 'captcha')->widget(Captcha::className(),
+                            [
+                                'imageOptions' => [
+                                    'id' => 'my-captcha-image'
+                                ],
+                                'template' => '<div class="col-lg-12">{image} <a href="javascript:void(0);" id="refresh_captcha">Refresh</a></div><div class="col-lg-12">{input}</div>',
+
+                            ]
+                        )->label('CAPTCHA'); ?>
+                        <?php //echo  $form->field($model, 'captcha')->widget(Captcha::className(),
+                        //                    ['template' => '<div class="captcha_img">{image}</div>'
+                        //                        . '<a class="refreshcaptcha" href="#">'
+                        //                        . Html::img('/images/imageName.png',[]).'</a>'
+                        //                        . 'Verification Code{input}',
+                        //                    ])->label(FALSE); ?>
                     </div>
                 </div>
                 <div class="row">
@@ -101,14 +120,14 @@ use yii\helpers\Html;
     <!-- /.login-box -->
 
 
-<!--    <script src="../../backend/web/plugins/jquery/jquery.min.js"></script>-->
-<!--    <script src="../../backend/web/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>-->
-<!--    <script src="../../backend/web/dist/js/adminlte.min.js"></script>-->
+    <!--    <script src="../../backend/web/plugins/jquery/jquery.min.js"></script>-->
+    <!--    <script src="../../backend/web/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>-->
+    <!--    <script src="../../backend/web/dist/js/adminlte.min.js"></script>-->
 
 
     <script>
         $("#refresh_captcha").click(function (event) {
-          //  alert();
+            //  alert();
             // event.preventDefault();
             //$('#my-captcha-image').yiiCaptcha('refresh');
             $('#my-captcha-image').trigger('click');

@@ -21,10 +21,10 @@ class SiteController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    [
-                        'actions' => ['captcha'],
-                        'allow' => true,
-                    ],
+//                    [
+//                        'actions' => ['captcha'],
+//                        'allow' => false,
+//                    ],
                     [
                         'actions' => ['login', 'error','createadmin'],
                         'allow' => true,
@@ -51,9 +51,9 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-            ],
+//            'captcha' => [
+//                'class' => 'yii\captcha\CaptchaAction',
+//            ],
             'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
