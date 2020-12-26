@@ -53,7 +53,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'code',
             'name',
             'description',
-            'customer_group_id',
+            [
+                'attribute' => 'customer_group_id',
+                'value' => function ($data) {
+                    return \backend\models\Customergroup::findName($data->customer_group_id);
+                }
+            ],
             //'location_info',
             //'delivery_route_id',
             //'active_date',
@@ -69,8 +74,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'status',
+                'format' => 'raw',
                 'headerOptions' => ['style' => 'text-align: center'],
-                'contentOptions' => ['style' => 'text-align: center']
+                'contentOptions' => ['style' => 'text-align: center'],
+                'value' => function ($data) {
+                    if ($data->status == 1) {
+                        return '<div class="badge badge-success">ใช้งาน</div>';
+                    } else {
+                        return '<div class="badge badge-secondary">ไม่ใช้งาน</div>';
+                    }
+                }
             ],
 
             [

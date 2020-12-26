@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'taxid')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'logo')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'logo')->fileInput(['maxlength' => true]) ?>
 
 
     <div class="form-group">

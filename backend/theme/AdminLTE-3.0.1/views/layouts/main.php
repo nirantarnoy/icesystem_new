@@ -498,6 +498,15 @@ $cururl = Yii::$app->controller->id;
                 </a>
               </li>
               <li class="nav-item">
+                <a href="index.php?r=unit" class="nav-link unit">
+                  <i class="far fa-circlez nav-icon"></i>
+                  <p>
+                    หน่วยนับ
+                    <!--                                <span class="right badge badge-danger">New</span>-->
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="index.php?r=product" class="nav-link product">
                   <i class="far fa-circlez nav-icon"></i>
                   <p>

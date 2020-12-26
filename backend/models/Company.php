@@ -49,7 +49,7 @@ class Company extends \common\models\Company
 
     public function findName($id){
         $model = Company::find()->where(['id'=>$id])->one();
-        return count($model)>0?$model->name:'';
+        return $model!=null?$model->name:'';
     }
 //    public function findName($id){
 //        $model = Unit::find()->where(['id'=>$id])->one();

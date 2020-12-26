@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if($data->status == 1){
                         return '<div class="badge badge-success">ใช้งาน</div>';
                     }else{
-                        return '<div class="badge badge-success">ไม่ใช้งาน</div>';
+                        return '<div class="badge badge-dark">ไม่ใช้งาน</div>';
                     }
                 }
             ],

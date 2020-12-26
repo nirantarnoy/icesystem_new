@@ -70,8 +70,19 @@ class CustomerController extends Controller
     {
         $model = new Customer();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $group = \Yii::$app->request->post('customer_group_id');
+            $route = \Yii::$app->request->post('delivery_route_id');
+            $status = \Yii::$app->request->post('status');
+
+            $model->customer_group_id = $group;
+            $model->delivery_route_id = $route;
+            $model->status = $status;
+            if($model->save()){
+                $session = Yii::$app->session;
+                $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('create', [
@@ -90,8 +101,19 @@ class CustomerController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $group = \Yii::$app->request->post('customer_group_id');
+            $route = \Yii::$app->request->post('delivery_route_id');
+            $status = \Yii::$app->request->post('status');
+
+            $model->customer_group_id = $group;
+            $model->delivery_route_id = $route;
+            $model->status = $status;
+            if($model->save()){
+                $session = Yii::$app->session;
+                $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('update', [

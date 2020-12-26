@@ -58,8 +58,16 @@ $this->params['breadcrumbs'][] = $this->title;
             //'photo',
             [
                 'attribute' => 'status',
-                'headerOptions' => ['style'=>'text-align: center'],
-                'contentOptions' => ['style'=>'text-align: center']
+                'format' => 'raw',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
+                'value' => function ($data) {
+                    if ($data->status == 1) {
+                        return '<div class="badge badge-success">ใช้งาน</div>';
+                    } else {
+                        return '<div class="badge badge-secondary">ไม่ใช้งาน</div>';
+                    }
+                }
             ],
 
             [

@@ -60,7 +60,6 @@ class DbbackupController extends Controller
 
     public function actionBak()
     {
-
         $host = "localhost";
         $username = "root";
         $password = "";

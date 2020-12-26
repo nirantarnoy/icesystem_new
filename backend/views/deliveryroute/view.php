@@ -7,14 +7,11 @@ use yii\widgets\DetailView;
 /* @var $model backend\models\Deliveryroute */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Deliveryroutes'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'เส้นทางขนส่ง'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = '/'.$this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="deliveryroute-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
@@ -29,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+       //     'id',
             'code',
             'name',
             'description',

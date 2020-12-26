@@ -53,7 +53,7 @@ class Unit extends \common\models\Unit
 //    }
     public function findName($id){
         $model = Unit::find()->where(['id'=>$id])->one();
-        return count($model)>0?$model->name:'';
+        return $model!= null?$model->name:'';
     }
 //    public function findUnitid($code){
 //        $model = Unit::find()->where(['name'=>$code])->one();
