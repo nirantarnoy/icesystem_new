@@ -9,6 +9,7 @@ $this->title = Yii::t('app', 'ประเภทรถ');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="cartype-index">
+    <form action="" id="form-delete"></form>
     <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">

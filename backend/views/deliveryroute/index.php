@@ -13,6 +13,7 @@ $this->title = Yii::t('app', 'เส้นทางขนส่ง');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="deliveryroute-index">
+    <form action="" id="form-delete"></form>
     <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">

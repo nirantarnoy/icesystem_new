@@ -9,6 +9,7 @@ $this->title = Yii::t('app', 'ประเภทลูกค้า');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customergroup-index">
+    <form action="" id="form-delete"></form>
     <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">
@@ -122,3 +123,4 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::end(); ?>
 
 </div>
+

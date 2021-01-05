@@ -9,6 +9,7 @@ $this->title = Yii::t('app', 'กลุ่มสินค้า');
 $this->params['breadcrumbs'][] = '/'.$this->title;
 ?>
 <div class="productgroup-index">
+    <form action="" id="form-delete"></form>
     <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">

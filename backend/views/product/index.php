@@ -10,6 +10,7 @@ $this->title = Yii::t('app', 'รหัสสินค้า');
 $this->params['breadcrumbs'][] = '/'.$this->title;
 ?>
 <div class="product-index">
+    <form action="" id="form-delete"></form>
     <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">
