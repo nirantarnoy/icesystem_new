@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 $this->title = Yii::t('app', 'รหัสสินค้า');
-$this->params['breadcrumbs'][] = '/'.$this->title;
+$this->params['breadcrumbs'][] = '/' . $this->title;
 ?>
 <div class="product-index">
     <form action="" id="form-delete"></form>
@@ -16,9 +16,9 @@ $this->params['breadcrumbs'][] = '/'.$this->title;
         <div class="col-lg-10">
             <p>
                 <?= Html::a(Yii::t('app', '<i class="fa fa-plus"></i> สร้างใหม่'), ['create'], ['class' => 'btn btn-success']) ?>
-                <?= Html::a(Yii::t('app', '<i class="fa fa-upload"></i> นำเข้า'), null, ['class' => 'btn btn-info','onclick'=>'showupload($(this))']) ?>
-                <?= Html::a(Yii::t('app', '<i class="fa fa-download"></i> นำออก Excel'), ['export'], ['class' => 'btn btn-warning','target'=>'_blank']) ?>
-                <?= Html::a(Yii::t('app', '<i class="fa fa-print"></i> พิมพ์'), ['printdoc'], ['class' => 'btn btn-primary','target'=>'_blank']) ?>
+                <?= Html::a(Yii::t('app', '<i class="fa fa-upload"></i> นำเข้า'), null, ['class' => 'btn btn-info', 'onclick' => 'showupload($(this))']) ?>
+                <?= Html::a(Yii::t('app', '<i class="fa fa-download"></i> นำออก Excel'), ['export'], ['class' => 'btn btn-warning', 'target' => '_blank']) ?>
+                <?= Html::a(Yii::t('app', '<i class="fa fa-print"></i> พิมพ์'), ['printdoc'], ['class' => 'btn btn-primary', 'target' => '_blank']) ?>
             </p>
         </div>
         <div class="col-lg-2" style="text-align: right">
@@ -67,16 +67,16 @@ $this->params['breadcrumbs'][] = '/'.$this->title;
                 'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
-                return \backend\models\Producttype::findName($data->product_type_id);
-            }
+                    return \backend\models\Producttype::findName($data->product_type_id);
+                }
             ],
             [
                 'attribute' => 'product_group_id',
                 'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
-                return \backend\models\Productgroup::findName($data->product_group_id);
-            }
+                    return \backend\models\Productgroup::findName($data->product_group_id);
+                }
             ],
             'barcode',
             [
@@ -92,8 +92,26 @@ $this->params['breadcrumbs'][] = '/'.$this->title;
                     }
                 }
             ],
-            //'std_cost',
-            //'sale_price',
+            [
+                'attribute' => 'unit_id',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
+                'value' => function ($data) {
+                    return \backend\models\Unit::findName($data->unit_id);
+                }
+            ],
+            [
+                'attribute' => 'std_cost',
+                'value' => function ($data) {
+                    return number_format($data->std_cost);
+                }
+            ],
+            [
+                'attribute' => 'sale_price',
+                'value' => function ($data) {
+                    return number_format($data->sale_price);
+                }
+            ],
             //'unit_id',
             //'nw',
             //'gw',
@@ -231,7 +249,7 @@ $this->params['breadcrumbs'][] = '/'.$this->title;
 
 <?php
 $url_to_delete_line = 'index.php?r=product/deleteline';
-$js=<<<JS
+$js = <<<JS
  $(function (){
      
  });
@@ -269,5 +287,5 @@ $js=<<<JS
     
 }
 JS;
-$this->registerJs($js,static::POS_END);
+$this->registerJs($js, static::POS_END);
 ?>

@@ -88,10 +88,16 @@ class ProductController extends Controller
             $prod_type = \Yii::$app->request->post('product_type_id');
             $prod_group = \Yii::$app->request->post('product_group_id');
             $status = \Yii::$app->request->post('status');
+            $unit = \Yii::$app->request->post('unit_id');
+            $sale_status = \Yii::$app->request->post('sale_status');
+            $stock_type = \Yii::$app->request->post('stock_type');
 
 
             $model->product_group_id = $prod_group;
             $model->product_type_id = $prod_type;
+            $model->sale_status= $sale_status;
+            $model->unit_id = $unit;
+            $model->stock_type = $stock_type;
             $model->status = $status;
 
             if ($model->save()) {
@@ -131,10 +137,17 @@ class ProductController extends Controller
             $prod_type = \Yii::$app->request->post('product_type_id');
             $prod_group = \Yii::$app->request->post('product_group_id');
             $status = \Yii::$app->request->post('status');
+            $unit = \Yii::$app->request->post('unit_id');
+            $sale_status = \Yii::$app->request->post('sale_status');
+            $stock_type = \Yii::$app->request->post('stock_type');
+
 
 
             $model->product_group_id = $prod_group;
             $model->product_type_id = $prod_type;
+            $model->sale_status= $sale_status;
+            $model->unit_id = $unit;
+            $model->stock_type = $stock_type;
             $model->status = $status;
             if ($model->save()) {
                 $session = Yii::$app->session;

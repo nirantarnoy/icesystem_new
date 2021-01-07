@@ -9,6 +9,9 @@ $prod_group_data = \backend\models\Productgroup::find()->all();
 $prod_type_data = \backend\models\Producttype::find()->all();
 $prod_status = \backend\helpers\ProductStatus::asArrayObject();
 //print_r($prod_status);
+
+$sale_status_data = [['id'=>1,'name'=>'ขาย'],['id'=>2,'name'=>'ไม่ขาย']];
+$stock_type_data = [['id'=>1,'name'=>'ตัดสต๊อก'],['id'=>2,'name'=>'ไม่ตัดสต๊อก']];
 ?>
 
 <div class="product-form">
@@ -70,6 +73,38 @@ $prod_status = \backend\helpers\ProductStatus::asArrayObject();
                     ?>
                     <option value="<?= $val2->id ?>" <?= $selected ?>><?= $val2->name ?></option>
                 <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-lg-4">
+            <label for=""><?= $model->getAttributeLabel('sale_status') ?></label>
+            <select name="sale_status" class="form-control sale-status" id=""
+                    onchange="">
+                <?php for ($i=0;$i<=count($sale_status_data)-1;$i++): ?>
+                    <?php
+                    $selected = '';
+                    if ($sale_status_data[$i]['id'] == $model->sale_status){
+                        $selected = 'selected';
+                    }
+                    ?>
+                    <option value="<?= $sale_status_data[$i]['id'] ?>" <?= $selected ?>><?= $sale_status_data[$i]['name'] ?></option>
+                <?php endfor; ?>
+            </select>
+        </div>
+        <div class="col-lg-4">
+            <label for=""><?= $model->getAttributeLabel('stock_type') ?></label>
+            <select name="stock_type" class="form-control stock_type" id=""
+                    onchange="">
+                <?php for ($i=0;$i<=count($stock_type_data)-1;$i++): ?>
+                    <?php
+                    $selected = '';
+                    if ($stock_type_data[$i]['id'] == $model->stock_type)
+                        $selected = 'selected';
+                    ?>
+                    <option value="<?= $stock_type_data[$i]['id'] ?>" <?= $selected ?>><?= $stock_type_data[$i]['name'] ?></option>
+                <?php endfor; ?>
             </select>
         </div>
     </div>
@@ -146,8 +181,8 @@ $js = <<<JS
   $(function(){
      $(".product-type-id,.product-group-id").select2({
        'class': 'form-control'
-     }); 
-     
+     });
+
      $(".btn-delete-photo").click(function (){
         var prodid = $(this).attr('data-var');
       //  alert(prodid);
