@@ -15,7 +15,7 @@ $this->title = 'Import Master Data';
 </div>
 <hr style="border-top: 1px dashed">
 <div class="row">
-    <form action="index.php?r=mainconfig/importemployee" enctype="multipart/form-data">
+    <form action="index.php?r=mainconfig/importemployee" method="post" enctype="multipart/form-data">
         <div class="col-lg-10">
             <label for="">นำเข้าข้อมูลพนักงาน</label><br/>
             <input type="file" class="file-employee" name="file_employee" accept=".csv">

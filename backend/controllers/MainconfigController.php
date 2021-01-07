@@ -25,7 +25,6 @@ class MainconfigController extends Controller
 
     public function actionImportcustomer()
     {
-//echo "ok naja";return;
             $uploaded = UploadedFile::getInstanceByName( 'file_customer');
             if (!empty($uploaded)) {
                 //echo "ok";return;
@@ -85,5 +84,65 @@ class MainconfigController extends Controller
 //        }
                 }
             }
+    }
+    public function actionImportemployee()
+    {
+        $uploaded = UploadedFile::getInstanceByName( 'file_employee');
+        if (!empty($uploaded)) {
+            //echo "ok";return;
+            $upfiles = time() . "." . $uploaded->getExtension();
+            // if ($uploaded->saveAs(Yii::$app->request->baseUrl . '/uploads/files/' . $upfiles)) {
+            if ($uploaded->saveAs('../web/uploads/files/customers/' . $upfiles)) {
+                //  echo "okk";return;
+                // $myfile = Yii::$app->request->baseUrl . '/uploads/files/' . $upfiles;
+                $myfile = '../web/uploads/files/customers/' . $upfiles;
+                $file = fopen($myfile, "r");
+                fwrite($file, "\xEF\xBB\xBF");
+
+                setlocale(LC_ALL, 'th_TH.TIS-620');
+                $i = -1;
+                $res = 0;
+                $data = [];
+                while (($rowData = fgetcsv($file, 10000, ",")) !== FALSE) {
+                    $i += 1;
+                    $catid = 0;
+                    $qty = 0;
+                    $price = 0;
+                    $cost = 0;
+                    if ($rowData[1] == '' || $i == 0) {
+                        continue;
+                    }
+
+                    $model_dup = \backend\models\Employee::find()->where(['fname'=>trim($rowData[2])])->one();
+                    if ($model_dup != null) {
+                        continue;
+                    }
+
+                    $modelx = new \backend\models\Employee();
+                    $modelx->code = $rowData[1];
+                    $modelx->fname = $rowData[2];
+                    $modelx->lname = $rowData[3];
+                    $modelx->status = 1;
+                    if ($modelx->save(false)) {
+                        $res += 1;
+                    }
+                }
+                //    print_r($qty_text);return;
+
+                if ($res > 0) {
+                    $session = Yii::$app->session;
+                    $session->setFlash('msg', 'นำเข้าข้อมูลเรียบร้อย');
+                    return $this->redirect(['index']);
+                } else {
+                    $session = Yii::$app->session;
+                    $session->setFlash('msg-error', 'พบข้อมผิดพลาด');
+                    return $this->redirect(['index']);
+                }
+                // }
+                fclose($file);
+//            }
+//        }
+            }
+        }
     }
 }
