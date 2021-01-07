@@ -53,6 +53,8 @@ class Product extends \yii\db\ActiveRecord
             [['code', 'name', 'description', 'photo'], 'string', 'max' => 255],
             [['branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['branch_id' => 'id']],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'id']],
+            [['barcode'],'string'],
+            [['stock_type','sale_status'],'integer']
         ];
     }
 
@@ -79,6 +81,9 @@ class Product extends \yii\db\ActiveRecord
             'status' => Yii::t('app', 'สถานะ'),
             'company_id' => Yii::t('app', 'บริษัท'),
             'branch_id' => Yii::t('app', 'สาขา'),
+            'barcode' => Yii::t('app', 'บาร์โค้ด'),
+            'sale_status' => Yii::t('app', 'สถานะขาย'),
+            'stock_type' => Yii::t('app', 'ตัดสต๊อก'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'created_by' => Yii::t('app', 'Created By'),

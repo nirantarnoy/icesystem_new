@@ -78,7 +78,20 @@ $this->params['breadcrumbs'][] = '/'.$this->title;
                 return \backend\models\Productgroup::findName($data->product_group_id);
             }
             ],
-            //'photo',
+            'barcode',
+            [
+                'attribute' => 'stock_type',
+                'format' => 'raw',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
+                'value' => function ($data) {
+                    if ($data->stock_type == 1) {
+                        return '<div class="badge badge-success">Yes</div>';
+                    } else {
+                        return '<div class="badge badge-secondary">No</div>';
+                    }
+                }
+            ],
             //'std_cost',
             //'sale_price',
             //'unit_id',
@@ -86,6 +99,19 @@ $this->params['breadcrumbs'][] = '/'.$this->title;
             //'gw',
             //'min_stock',
             //'max_stock',
+            [
+                'attribute' => 'sale_status',
+                'format' => 'raw',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
+                'value' => function ($data) {
+                    if ($data->sale_status == 1) {
+                        return '<div class="badge badge-success">ขาย</div>';
+                    } else {
+                        return '<div class="badge badge-secondary">ไม่ขาย</div>';
+                    }
+                }
+            ],
             [
                 'attribute' => 'status',
                 'format' => 'raw',
