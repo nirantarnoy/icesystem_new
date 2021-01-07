@@ -395,12 +395,12 @@ $cururl = Yii::$app->controller->id;
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <!--                            <li class="nav-item">-->
-              <!--                                <a href="index.php?r=productcategory" class="nav-link productcategory">-->
-              <!--                                    <i class="far fa-circlez nav-icon"></i>-->
-              <!--                                    <p>ประเภทสินค้า</p>-->
-              <!--                                </a>-->
-              <!--                            </li>-->
+                                          <li class="nav-item">
+                                              <a href="index.php?r=mainconfig" class="nav-link mainconfig">
+                                                  <i class="far fa-file-import nav-icon"></i>
+                                                  <p>Import Master</p>
+                                              </a>
+                                          </li>
               <!--                            <li class="nav-item">-->
               <!--                                <a href="index.php?r=product" class="nav-link product">-->
               <!--                                    <i class="far fa-circlez nav-icon"></i>-->

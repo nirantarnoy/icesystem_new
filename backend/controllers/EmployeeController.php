@@ -70,8 +70,12 @@ class EmployeeController extends Controller
     {
         $model = new Employee();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->save()){
+                $session = Yii::$app->session;
+                $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('create', [
@@ -90,8 +94,12 @@ class EmployeeController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->save()){
+                $session = Yii::$app->session;
+                $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('update', [
