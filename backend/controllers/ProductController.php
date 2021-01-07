@@ -21,6 +21,7 @@ use yii\helpers\ArrayHelper;
 class ProductController extends Controller
 {
     public $enableCsrfValidation = false;
+
     public function behaviors()
     {
         return [
@@ -95,7 +96,7 @@ class ProductController extends Controller
 
             $model->product_group_id = $prod_group;
             $model->product_type_id = $prod_type;
-            $model->sale_status= $sale_status;
+            $model->sale_status = $sale_status;
             $model->unit_id = $unit;
             $model->stock_type = $stock_type;
             $model->status = $status;
@@ -104,7 +105,7 @@ class ProductController extends Controller
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
                 return $this->redirect(['index']);
-               // return $this->redirect(['view', 'id' => $model->id]);
+                // return $this->redirect(['view', 'id' => $model->id]);
             }
 
         }
@@ -142,10 +143,9 @@ class ProductController extends Controller
             $stock_type = \Yii::$app->request->post('stock_type');
 
 
-
             $model->product_group_id = $prod_group;
             $model->product_type_id = $prod_type;
-            $model->sale_status= $sale_status;
+            $model->sale_status = $sale_status;
             $model->unit_id = $unit;
             $model->stock_type = $stock_type;
             $model->status = $status;
@@ -187,13 +187,13 @@ class ProductController extends Controller
         if ($id) {
             $photo = $this->getPhotoName($id);
             if ($photo != '') {
-                if(unlink('../web/uploads/images/products/' . $photo)){
-                   Product::updateAll(['photo'=>''],['id'=>$id]);
+                if (unlink('../web/uploads/images/products/' . $photo)) {
+                    Product::updateAll(['photo' => ''], ['id' => $id]);
                 }
             }
 
         }
-        return $this->redirect(['product/update','id'=>$id]);
+        return $this->redirect(['product/update', 'id' => $id]);
     }
 
     public function getPhotoName($id)
@@ -216,6 +216,7 @@ class ProductController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+
     public function actionExport()
     {
         $type = 'xsl';
@@ -233,7 +234,7 @@ class ProductController extends Controller
                 $fileName = "export_product.csv";
             }
 
-           // header('Content-Encoding: UTF-8');
+            // header('Content-Encoding: UTF-8');
             header("Content-Type: " . $contenttype . " ; name=\"$fileName\" ;charset=utf-8");
             header("Content-Disposition: attachment; filename=\"$fileName\"");
             header("Content-Transfer-Encoding: binary");
@@ -243,50 +244,47 @@ class ProductController extends Controller
             print "\xEF\xBB\xBF";
 
             $model = Product::find()->all();
+           // $model = \common\models\QueryProducts::find()->all();
             if ($model) {
-                echo "
-                       <table border='1'>
+                echo "<table border='1'>
                          <tr>
                             <td>รหัสสินค้า</td>
                             <td>ชื่อ</td>
                             <td>ประเภทสินค้า</td>
                             <td>กลุ่มสินค้า</td>
                             <td>สถานะ</td>
-                       
-                        </tr>
-                       
-                    ";
+                        </tr>";
                 foreach ($model as $data) {
-                    $cat = \backend\models\Productgroup::findName($data->product_group_id);
-                    $type = \backend\models\Producttype::findName($data->product_type_id);
+                    $typs = \backend\models\Producttype::findName($data->product_type_id);
+                    $group = \backend\models\Producttype::findName($data->product_group_id);
                     $status = \backend\helpers\ProductStatus::getTypeById($data->status);
-                    echo "
-                        <tr>
+                    echo "<tr>
                             <td>$data->code</td>
                             <td>$data->name</td>
                             <td>$type</td>
-                            <td>$cat</td>
+                            <td>$group</td>
                             <td>$status</td>
-                        </tr>
-                    ";
+                            </tr>";
                 }
                 echo "</table>";
             }
         }
     }
-    public function actionPrintdoc(){
+
+    public function actionPrintdoc()
+    {
         $model = \backend\models\Product::find()->all();
 
-        if($model){
+        if ($model) {
             $pdf = new Pdf([
                 'mode' => Pdf::MODE_UTF8, // leaner size using standard fonts
                 //  'format' => [150,236], //manaul
-                'format' =>  Pdf::FORMAT_A4,
+                'format' => Pdf::FORMAT_A4,
                 //'format' =>  Pdf::FORMAT_A5,
-                'orientation' =>Pdf::ORIENT_LANDSCAPE,
+                'orientation' => Pdf::ORIENT_LANDSCAPE,
                 'destination' => Pdf::DEST_BROWSER,
-                'content' => $this->renderPartial('_print',[
-                    'model'=>$model,
+                'content' => $this->renderPartial('_print', [
+                    'model' => $model,
                 ]),
                 //'content' => "nira",
                 // 'defaultFont' => '@backend/web/fonts/config.php',
@@ -296,8 +294,8 @@ class ProductController extends Controller
                     'subject' => ''
                 ],
                 'methods' => [
-                     // 'SetHeader' => ['รายงานรหัสสินค้า||Generated On: ' . date("r")],
-                     // 'SetFooter' => ['|Page {PAGENO}|'],
+                    // 'SetHeader' => ['รายงานรหัสสินค้า||Generated On: ' . date("r")],
+                    // 'SetFooter' => ['|Page {PAGENO}|'],
                     //'SetFooter'=>'niran',
                 ],
                 'marginLeft' => 5,
@@ -374,7 +372,7 @@ class ProductController extends Controller
                             $res += 1;
                         }
                     }
-                    if ($res > 0 ) {
+                    if ($res > 0) {
                         $session = Yii::$app->session;
                         $session->setFlash('msg', 'นำเข้าข้อมูลสินค้าเรียบร้อย');
                         return $this->redirect(['index']);
@@ -393,3 +391,5 @@ class ProductController extends Controller
         }
     }
 }
+
+?>
