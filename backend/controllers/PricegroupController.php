@@ -57,22 +57,22 @@ class PricegroupController extends Controller
         $model = new Pricegroup();
 
         if ($model->load(Yii::$app->request->post())) {
-            $prod_id = \Yii::$app->request->post('line_prod_id');
-            $prod_price = \Yii::$app->request->post('line_price');
+//            $prod_id = \Yii::$app->request->post('line_prod_id');
+//            $prod_price = \Yii::$app->request->post('line_price');
 
             //print_r($prod_price);return;
             $model->status = 1;
             if ($model->save()) {
-                if (count($prod_id)) {
-                    for ($i = 0; $i <= count($prod_id) - 1; $i++) {
-                        $model_line = new \common\models\PriceGroupLine();
-                        $model_line->price_group_id = $model->id;
-                        $model_line->product_id = $prod_id[$i];
-                        $model_line->sale_price = $prod_price[$i] == null ? 0 : $prod_price[$i];
-                        $model_line->status = 1;
-                        $model_line->save();
-                    }
-                }
+//                if (count($prod_id)) {
+//                    for ($i = 0; $i <= count($prod_id) - 1; $i++) {
+//                        $model_line = new \common\models\PriceGroupLine();
+//                        $model_line->price_group_id = $model->id;
+//                        $model_line->product_id = $prod_id[$i];
+//                        $model_line->sale_price = $prod_price[$i] == null ? 0 : $prod_price[$i];
+//                        $model_line->status = 1;
+//                        $model_line->save();
+//                    }
+//                }
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
                 return $this->redirect(['update', 'id' => $model->id]);
