@@ -498,7 +498,7 @@ $js = <<<JS
                     //cal_num();
                     console.log(line_prod_code);
                 } else {
-                    alert("dd");
+                   // alert("dd");
                     console.log(line_prod_code);
                     //tr.closest("tr").find(".line_code").css({'border-color': ''});
 
