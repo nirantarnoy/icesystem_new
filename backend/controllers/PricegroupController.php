@@ -2,18 +2,18 @@
 
 namespace backend\controllers;
 
-use backend\models\WarehouseSearch;
+use backend\models\CustomerSearch;
 use Yii;
-use backend\models\Branch;
-use backend\models\BranchSearch;
+use backend\models\Pricegroup;
+use backend\models\PricegroupSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * BranchController implements the CRUD actions for Branch model.
+ * PricegroupController implements the CRUD actions for Pricegroup model.
  */
-class BranchController extends Controller
+class PricegroupController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -31,13 +31,14 @@ class BranchController extends Controller
     }
 
     /**
-     * Lists all Branch models.
+     * Lists all Pricegroup models.
      * @return mixed
      */
     public function actionIndex()
     {
+        $pageSize = 50;
         $pageSize = \Yii::$app->request->post("perpage");
-        $searchModel = new BranchSearch();
+        $searchModel = new PricegroupSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->pagination->pageSize = $pageSize;
 
@@ -49,7 +50,7 @@ class BranchController extends Controller
     }
 
     /**
-     * Displays a single Branch model.
+     * Displays a single Pricegroup model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -62,38 +63,25 @@ class BranchController extends Controller
     }
 
     /**
-     * Creates a new Branch model.
+     * Creates a new Pricegroup model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Branch();
+        $model = new Pricegroup();
 
-        $model_has_company = \backend\models\Company::find()->count();
-
-        if ($model->load(Yii::$app->request->post())) {
-            $company = \Yii::$app->request->post('company_id');
-            $status = \Yii::$app->request->post('status');
-
-            $model->company_id = $company;
-            $model->status = $status;
-            if($model->save()){
-                $session = Yii::$app->session;
-                $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
-                return $this->redirect(['index']);
-            }
-
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
-            'model_has_company' =>$model_has_company
         ]);
     }
 
     /**
-     * Updates an existing Branch model.
+     * Updates an existing Pricegroup model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -103,17 +91,8 @@ class BranchController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
-            $company = \Yii::$app->request->post('company_id');
-            $status = \Yii::$app->request->post('status');
-
-            $model->company_id = $company;
-            $model->status = $status;
-            if($model->save()){
-                $session = Yii::$app->session;
-                $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
-                return $this->redirect(['index']);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -122,7 +101,7 @@ class BranchController extends Controller
     }
 
     /**
-     * Deletes an existing Branch model.
+     * Deletes an existing Pricegroup model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -137,15 +116,15 @@ class BranchController extends Controller
     }
 
     /**
-     * Finds the Branch model based on its primary key value.
+     * Finds the Pricegroup model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Branch the loaded model
+     * @return Pricegroup the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Branch::findOne($id)) !== null) {
+        if (($model = Pricegroup::findOne($id)) !== null) {
             return $model;
         }
 

@@ -36,6 +36,7 @@ class CustomerController extends Controller
      */
     public function actionIndex()
     {
+        $pageSize = 50;
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new CustomerSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -131,7 +132,8 @@ class CustomerController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
+        $session = Yii::$app->session;
+        $session->setFlash('msg', 'ดำเนินการเรียบร้อย');
         return $this->redirect(['index']);
     }
 

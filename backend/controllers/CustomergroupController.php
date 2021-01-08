@@ -15,16 +15,14 @@ use yii\filters\VerbFilter;
  */
 class CustomergroupController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
+  //  public $enableCsrfValidation = false;
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete' => ['POST','GET'],
                 ],
             ],
         ];
@@ -121,7 +119,8 @@ class CustomergroupController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
+        $session = Yii::$app->session;
+        $session->setFlash('msg', 'ดำเนินการเรียบร้อย');
         return $this->redirect(['index']);
     }
 

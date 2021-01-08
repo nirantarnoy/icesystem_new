@@ -3,13 +3,13 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Member */
+/* @var $model backend\models\Pricegroup */
 
-$this->title = Yii::t('app', 'Create Member');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Members'), 'url' => ['index']];
+$this->title = Yii::t('app', 'Create Pricegroup');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pricegroups'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="member-create">
+<div class="pricegroup-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

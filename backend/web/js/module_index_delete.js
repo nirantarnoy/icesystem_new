@@ -42,6 +42,7 @@ function recDelete(e){
     var url = e.attr("data-url");
     var id = e.attr("data-var");
     //alert(id);
+    //alert(url);
     swal({
         title: "ต้องการลบรายการนี้ใช่หรือไม่",
         text: "",
@@ -51,6 +52,7 @@ function recDelete(e){
         showLoaderOnConfirm: true
     }, function () {
        // alert($("form#form-delete").attr('action'));
+
         $("form#form-delete").attr('action',url);
         $("form#form-delete").submit();
         // $.ajax({

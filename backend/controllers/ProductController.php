@@ -255,7 +255,7 @@ class ProductController extends Controller
                             <td>สถานะ</td>
                         </tr>";
                 foreach ($model as $data) {
-                    $typs = \backend\models\Producttype::findName($data->product_type_id);
+                    $type = \backend\models\Producttype::findName($data->product_type_id);
                     $group = \backend\models\Producttype::findName($data->product_group_id);
                     $status = \backend\helpers\ProductStatus::getTypeById($data->status);
                     echo "<tr>

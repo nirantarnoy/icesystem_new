@@ -79,16 +79,18 @@ $cururl = Yii::$app->controller->id;
 
     .select2,
     .select2-search__field,
-    .select2-results__option
-    {
+    .select2-results__option {
       /*font-size:1.3em!important;*/
     }
+
     .select2-selection__rendered {
       line-height: 2em !important;
     }
+
     .select2-container .select2-selection--single {
       height: 2.4em !important;
     }
+
     .select2-selection__arrow {
       height: 2.4em !important;
     }
@@ -101,6 +103,7 @@ $cururl = Yii::$app->controller->id;
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
+
   <input type="hidden" id="current-url" value="<?= $cururl ?>">
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -173,17 +176,17 @@ $cururl = Yii::$app->controller->id;
     </ul>
 
     <!-- SEARCH FORM -->
-<!--    <form class="form-inline ml-3">-->
-<!--      <div class="input-group input-group-sm">-->
-<!--        <input class="form-control form-control-navbar" type="search" placeholder="Search"-->
-<!--               aria-label="Search">-->
-<!--        <div class="input-group-append">-->
-<!--          <button class="btn btn-navbar" type="submit">-->
-<!--            <i class="fas fa-search"></i>-->
-<!--          </button>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </form>-->
+    <!--    <form class="form-inline ml-3">-->
+    <!--      <div class="input-group input-group-sm">-->
+    <!--        <input class="form-control form-control-navbar" type="search" placeholder="Search"-->
+    <!--               aria-label="Search">-->
+    <!--        <div class="input-group-append">-->
+    <!--          <button class="btn btn-navbar" type="submit">-->
+    <!--            <i class="fas fa-search"></i>-->
+    <!--          </button>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </form>-->
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
@@ -379,12 +382,8 @@ $cururl = Yii::$app->controller->id;
                   </p>
                 </a>
               </li>
-
-
             </ul>
           </li>
-
-
 
           <li class="nav-item has-treeview has-sub">
             <a href="#" class="nav-link">
@@ -395,12 +394,12 @@ $cururl = Yii::$app->controller->id;
               </p>
             </a>
             <ul class="nav nav-treeview">
-                                          <li class="nav-item">
-                                              <a href="index.php?r=mainconfig" class="nav-link mainconfig">
-                                                  <i class="far fa-file-import nav-icon"></i>
-                                                  <p>Import Master</p>
-                                              </a>
-                                          </li>
+              <li class="nav-item">
+                <a href="index.php?r=mainconfig" class="nav-link mainconfig">
+                  <i class="far fa-file-import nav-icon"></i>
+                  <p>Import Master</p>
+                </a>
+              </li>
               <!--                            <li class="nav-item">-->
               <!--                                <a href="index.php?r=product" class="nav-link product">-->
               <!--                                    <i class="far fa-circlez nav-icon"></i>-->
@@ -516,7 +515,7 @@ $cururl = Yii::$app->controller->id;
                 </a>
               </li>
               <li class="nav-item">
-                <a href="index.php?r=standardprice" class="nav-link standardprice">
+                <a href="index.php?r=pricegroup" class="nav-link pricegroup">
                   <i class="far fa-circlez nav-icon"></i>
                   <p>
                     ราคามาตรฐาน
@@ -539,6 +538,12 @@ $cururl = Yii::$app->controller->id;
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="index.php?r=customergroup/index" class="nav-link customergroup">
+                  <i class="far fa-circlez nav-icon"></i>
+                  <p>กลุ่มลูกค้า</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="index.php?r=customertype/index" class="nav-link customertype">
                   <i class="far fa-circlez nav-icon"></i>
                   <p>ประเภทลูกค้า</p>
                 </a>
@@ -597,6 +602,12 @@ $cururl = Yii::$app->controller->id;
             </a>
             <ul class="nav nav-treeview">
 
+              <li class="nav-item">
+                <a href="index.php?r=pos/index" class="nav-link pos">
+                  <i class="far fa-circlez nav-icon"></i>
+                  <p>ขาย POS</p>
+                </a>
+              </li>
               <li class="nav-item">
                 <a href="index.php?r=orders/index" class="nav-link orders">
                   <i class="far fa-circlez nav-icon"></i>
@@ -814,6 +825,7 @@ $cururl = Yii::$app->controller->id;
         <input type="hidden" class="alert-msg-error" value="<?= $session->getFlash('msg-error'); ?>">
       <?php endif; ?>
       <div class="container-fluid">
+        <form action="" id="form-delete" method="post"></form>
         <br>
         <?php echo $content ?>
         <br>
@@ -891,7 +903,9 @@ $cururl = Yii::$app->controller->id;
   var cururl = $("#current-url").val();
   $(function () {
     //---- active menu
-
+    $("#perpage").change(function () {
+      $("#form-perpage").submit();
+    });
 
     //     var xx = $(".nav-sidebar").find(".nav-item").find("."+cururl+"").find(".nav-link").parent().parent().attr("class");
     $("ul.nav-sidebar li").each(function (index) {

@@ -9,7 +9,6 @@ $this->title = Yii::t('app', 'ล๊อคจัดเก็บสินค้�
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="location-index">
-    <form action="" id="form-delete"></form>
     <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">
@@ -18,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </p>
         </div>
         <div class="col-lg-2" style="text-align: right">
-            <form id="form-perpage" class="form-inline" action="<?= Url::to(['project/index'], true) ?>"
+            <form id="form-perpage" class="form-inline" action="<?= Url::to(['location/index'], true) ?>"
                   method="post">
                 <div class="form-group">
                     <label>แสดง </label>

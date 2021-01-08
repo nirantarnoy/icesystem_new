@@ -5,10 +5,10 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 
-$this->title = Yii::t('app', 'กลุ่มสินค้า');
-$this->params['breadcrumbs'][] = '/'.$this->title;
+$this->title = Yii::t('app', 'ประเภทลูกค้า');
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="productgroup-index">
+<div class="customertype-index">
     <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">
@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = '/'.$this->title;
             </p>
         </div>
         <div class="col-lg-2" style="text-align: right">
-            <form id="form-perpage" class="form-inline" action="<?= Url::to(['productgroup/index'], true) ?>"
+            <form id="form-perpage" class="form-inline" action="<?= Url::to(['customertype/index'], true) ?>"
                   method="post">
                 <div class="form-group">
                     <label>แสดง </label>
@@ -47,13 +47,7 @@ $this->params['breadcrumbs'][] = '/'.$this->title;
         //'tableOptions' => ['class' => 'table table-hover'],
         'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b> <span> เพิ่มรายการโดยการคลิกที่ปุ่ม </span><span class="text-success">"สร้างใหม่"</span></div>',
         'columns' => [
-            [
-                'class' => 'yii\grid\SerialColumn',
-                'headerOptions' => ['style' => 'text-align: center'],
-                'contentOptions' => ['style' => 'text-align: center'],
-            ],
-
-            // 'id',
+            ['class' => 'yii\grid\SerialColumn'],
             'code',
             'name',
             'description',
@@ -70,7 +64,9 @@ $this->params['breadcrumbs'][] = '/'.$this->title;
                     }
                 }
             ],
+
             [
+
                 'header' => 'ตัวเลือก',
                 'headerOptions' => ['style' => 'text-align:center;', 'class' => 'activity-view-link',],
                 'class' => 'yii\grid\ActionColumn',
@@ -122,6 +118,5 @@ $this->params['breadcrumbs'][] = '/'.$this->title;
     ]); ?>
 
     <?php Pjax::end(); ?>
-
 </div>
-<form id="form-delete" action="" method="post"></form>
+
