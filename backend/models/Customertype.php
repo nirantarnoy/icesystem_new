@@ -46,7 +46,10 @@ class Customertype extends \common\models\CustomerType
             ],
         ];
     }
-
+    public function findCode($id){
+        $model = Customertype::find()->where(['id'=>$id])->one();
+        return count($model)>0?$model->code:'';
+    }
     public function findName($id){
         $model = Customertype::find()->where(['id'=>$id])->one();
         return count($model)>0?$model->name:'';

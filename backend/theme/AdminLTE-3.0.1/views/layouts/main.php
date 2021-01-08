@@ -524,7 +524,6 @@ $cururl = Yii::$app->controller->id;
                 </a>
               </li>
 
-
             </ul>
           </li>
           <li class="nav-item has-treeview has-sub">

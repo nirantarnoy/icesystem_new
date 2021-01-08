@@ -75,9 +75,11 @@ class CustomerController extends Controller
             $group = \Yii::$app->request->post('customer_group_id');
             $route = \Yii::$app->request->post('delivery_route_id');
             $status = \Yii::$app->request->post('status');
+            $cust_type = \Yii::$app->request->post('customer_type_id');
 
             $model->customer_group_id = $group;
             $model->delivery_route_id = $route;
+            $model->customer_type_id = $cust_type;
             $model->status = $status;
             if($model->save()){
                 $session = Yii::$app->session;
@@ -106,9 +108,11 @@ class CustomerController extends Controller
             $group = \Yii::$app->request->post('customer_group_id');
             $route = \Yii::$app->request->post('delivery_route_id');
             $status = \Yii::$app->request->post('status');
+            $cust_type = \Yii::$app->request->post('customer_type_id');
 
             $model->customer_group_id = $group;
             $model->delivery_route_id = $route;
+            $model->customer_type_id = $cust_type;
             $model->status = $status;
             if($model->save()){
                 $session = Yii::$app->session;

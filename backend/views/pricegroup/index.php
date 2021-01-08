@@ -47,11 +47,24 @@ $this->params['breadcrumbs'][] = $this->title;
         //'tableOptions' => ['class' => 'table table-hover'],
         'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b> <span> เพิ่มรายการโดยการคลิกที่ปุ่ม </span><span class="text-success">"สร้างใหม่"</span></div>',
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'yii\grid\SerialColumn','headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],],
             'code',
             'name',
             'description',
-            'status',
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
+                'value' => function ($data) {
+                    if ($data->status == 1) {
+                        return '<div class="badge badge-success">ใช้งาน</div>';
+                    } else {
+                        return '<div class="badge badge-secondary">ไม่ใช้งาน</div>';
+                    }
+                }
+            ],
             //'created_at',
             //'created_by',
             //'updated_at',

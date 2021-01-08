@@ -59,6 +59,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     return \backend\models\Customergroup::findName($data->customer_group_id);
                 }
             ],
+            [
+                'attribute' => 'customer_type_id',
+                'value' => function ($data) {
+                    return \backend\models\Customertype::findName($data->customer_type_id);
+                }
+            ],
             //'location_info',
             //'delivery_route_id',
             //'active_date',

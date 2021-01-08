@@ -5,16 +5,15 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Pricegroup */
 
-$this->title = Yii::t('app', 'Create Pricegroup');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pricegroups'), 'url' => ['index']];
+$this->title = Yii::t('app', 'สร้างกลุ่มราคามาตรฐาน');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'กลุ่มราคามาตรฐาน'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="pricegroup-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
+        'model_detail' => null,
+         'model_customer_type'=>null
     ]) ?>
 
 </div>

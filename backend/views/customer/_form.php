@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 
 $prod_status = \backend\helpers\ProductStatus::asArrayObject();
 $customer_group_data = \backend\models\Customergroup::find()->all();
+$customer_type_data= \backend\models\Customertype::find()->all();
 $route_data = \backend\models\Deliveryroute::find()->all();
 ?>
 
@@ -23,7 +24,7 @@ $route_data = \backend\models\Deliveryroute::find()->all();
             <label for=""><?= $model->getAttributeLabel('customer_group_id') ?></label>
             <select name="customer_group_id" class="form-control customer-group-id" id=""
                     onchange="">
-                <option value="0">--เลือกประเภทลูกค้า-</option>
+                <option value="0">--เลือกกลุ่มลูกค้า-</option>
                 <?php foreach ($customer_group_data as $val2): ?>
                     <?php
                     $selected = '';
@@ -36,6 +37,21 @@ $route_data = \backend\models\Deliveryroute::find()->all();
         </div>
     </div>
     <div class="row">
+        <div class="col-lg-4">
+            <label for=""><?= $model->getAttributeLabel('customer_type_id') ?></label>
+            <select name="customer_type_id" class="form-control customer-type-id" id=""
+                    onchange="">
+                <option value="0">--เลือกประเภทลูกค้า-</option>
+                <?php foreach ($customer_type_data as $val2): ?>
+                    <?php
+                    $selected = '';
+                    if ($val2->id == $model->customer_type_id)
+                        $selected = 'selected';
+                    ?>
+                    <option value="<?= $val2->id ?>" <?= $selected ?>><?= $val2->name ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
         <div class="col-lg-4">
             <label for=""><?= $model->getAttributeLabel('deivery_route_id') ?></label>
             <select name="deivery_route_id" class="form-control deivery-route-id" id=""
@@ -54,11 +70,12 @@ $route_data = \backend\models\Deliveryroute::find()->all();
         <div class="col-lg-4">
             <?= $form->field($model, 'location_info')->textInput(['maxlength' => true]) ?>
         </div>
+
+    </div>
+    <div class="row">
         <div class="col-lg-4">
             <?= $form->field($model, 'active_date')->textInput() ?>
         </div>
-    </div>
-    <div class="row">
         <div class="col-lg-6">
             <?= $form->field($model, 'contact_name')->textInput(['maxlength' => true]) ?>
         </div>

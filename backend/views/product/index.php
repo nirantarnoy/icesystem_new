@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = '/' . $this->title;
                 'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
-                    return \backend\models\Producttype::findCode($data->product_type_id);
+                    return \backend\models\Producttype::findName($data->product_type_id);
                 }
             ],
             [

@@ -44,11 +44,13 @@ class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['code'],'unique'],
             [['customer_group_id', 'delivery_route_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['active_date'], 'safe'],
             [['code', 'name', 'description', 'location_info', 'logo', 'shop_photo'], 'string', 'max' => 255],
             [['branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['branch_id' => 'id']],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'id']],
+            [['customer_type_id'],'integer']
         ];
     }
 
@@ -62,7 +64,8 @@ class Customer extends \yii\db\ActiveRecord
             'code' => Yii::t('app', 'Code'),
             'name' => Yii::t('app', 'Name'),
             'description' => Yii::t('app', 'Description'),
-            'customer_group_id' => Yii::t('app', 'Customer Group ID'),
+            'customer_group_id' => Yii::t('app', 'Group'),
+            'customer_type_id' => Yii::t('app', 'Type'),
             'location_info' => Yii::t('app', 'Location Info'),
             'delivery_route_id' => Yii::t('app', 'Delivery Route ID'),
             'active_date' => Yii::t('app', 'Active Date'),
