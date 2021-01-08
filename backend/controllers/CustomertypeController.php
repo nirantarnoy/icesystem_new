@@ -47,8 +47,15 @@ class CustomertypeController extends Controller
     {
         $model = new Customertype();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $status = \Yii::$app->request->post('status');
+            $model->status = $status;
+            if($model->save()){
+                $session = Yii::$app->session;
+                $session->setFlash('msg', 'ดำเนินการเรียบร้อย');
+                return $this->redirect(['index']);
+            }
+
         }
 
         return $this->render('create', [
@@ -59,8 +66,14 @@ class CustomertypeController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $status = \Yii::$app->request->post('status');
+            $model->status = $status;
+            if($model->save()){
+                $session = Yii::$app->session;
+                $session->setFlash('msg', 'ดำเนินการเรียบร้อย');
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('update', [
