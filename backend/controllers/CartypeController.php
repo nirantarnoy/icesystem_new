@@ -39,6 +39,7 @@ class CartypeController extends Controller
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new CartypeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
         $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render('index', [

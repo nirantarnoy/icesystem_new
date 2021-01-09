@@ -39,6 +39,7 @@ class UnitController extends Controller
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new UnitSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
         $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render('index', [
@@ -73,7 +74,7 @@ class UnitController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $status = \Yii::$app->request->post('status');
             $model->status = $status;
-            if($model->save()){
+            if ($model->save()) {
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
                 return $this->redirect(['index']);
@@ -99,7 +100,7 @@ class UnitController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $status = \Yii::$app->request->post('status');
             $model->status = $status;
-            if($model->save()){
+            if ($model->save()) {
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
                 return $this->redirect(['index']);

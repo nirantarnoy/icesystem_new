@@ -39,6 +39,7 @@ class ProducttypeController extends Controller
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new ProducttypeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
         $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render('index', [

@@ -137,7 +137,7 @@ $prod_status = \backend\helpers\ProductStatus::asArrayObject();
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        <?php else:?>
+                                        <?php else: ?>
                                             <tr>
                                                 <td style="text-align: center">
                                                     <input type="text" class="form-control" disabled>
@@ -151,7 +151,8 @@ $prod_status = \backend\helpers\ProductStatus::asArrayObject();
                                                 <td><input type="text" class="form-control line-prod-name"
                                                            name="line_prod_name[]" value="" disabled>
                                                 </td>
-                                                <td><input type="number" class="form-control line-price" name="line_price[]"
+                                                <td><input type="number" class="form-control line-price"
+                                                           name="line_price[]"
                                                            style="text-align: right" value="0" min="0" step=".05"></td>
                                                 <td style="text-align: center">
                                                     <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
@@ -184,7 +185,7 @@ $prod_status = \backend\helpers\ProductStatus::asArrayObject();
                                         <th style="width: 5%;text-align: center">#</th>
                                         <th style="width: 15%">รหัสประเภทลูกค้า</th>
                                         <th>ชื่อประเภท</th>
-                                        <th style="width: 10%">ลบ</th>
+                                        <th style="width: 10%;text-align: center">ลบ</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -203,7 +204,7 @@ $prod_status = \backend\helpers\ProductStatus::asArrayObject();
                                                        name="line_type_name[]"
                                                        value="">
                                             </td>
-                                            <td>
+                                            <td style="text-align: center">
                                                 <div class="btn btn-danger btn-sm" onclick="removeline2($(this))"><i
                                                             class="fa fa-trash"></i></div>
                                             </td>
@@ -234,7 +235,7 @@ $prod_status = \backend\helpers\ProductStatus::asArrayObject();
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        <?php else:?>
+                                        <?php else: ?>
                                             <tr>
                                                 <td></td>
                                                 <td>
@@ -466,6 +467,29 @@ $js = <<<JS
             }
         }
     }
+    
+    function check_dup(prod_id){
+      var _has = 0;
+      $("#table-list tbody tr").each(function(){
+          var p_id = $(this).closest('tr').find('.line-prod-id').val();
+         // alert(p_id + " = " + prod_id);
+          if(p_id == prod_id){
+              _has = 1;
+          }
+      });
+      return _has;
+    }
+    function check_dup2(prod_id){
+      var _has = 0;
+      $("#table-list2 tbody tr").each(function(){
+          var p_id = $(this).closest('tr').find('.line-type-id').val();
+         // alert(p_id + " = " + prod_id);
+          if(p_id == prod_id){
+              _has = 1;
+          }
+      });
+      return _has;
+    }
 
     function disableselectitem() {
         if (selecteditem.length > 0) {
@@ -486,6 +510,11 @@ $js = <<<JS
                 var line_prod_code = selecteditem[i]['code'];
                 var line_prod_name = selecteditem[i]['name'];
                 var line_prod_price = selecteditem[i]['price'];
+                
+                 if(check_dup(line_prod_id) == 1){
+                        alert("รายการสินค้า " +line_prod_code+ " มีในรายการแล้ว");
+                        return false;
+                    }
                 
                 var tr = $("#table-list tbody tr:last");
                 
@@ -638,6 +667,11 @@ cal_num();
                 var line_prod_id = selecteditem2[i]['id'];
                 var line_prod_code = selecteditem2[i]['code'];
                 var line_prod_name = selecteditem2[i]['name'];
+                
+                if(check_dup2(line_prod_id) == 1){
+                        alert("รายการสินค้า " +line_prod_code+ " มีในรายการแล้ว");
+                        return false;
+                    }
                 
                 var tr = $("#table-list2 tbody tr:last");
                 

@@ -36,6 +36,7 @@ class PricegroupController extends Controller
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new PricegroupSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
         $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render('index', [
@@ -106,6 +107,7 @@ class PricegroupController extends Controller
             if ($model->save()) {
                 if (count($prod_id) > 0) {
                     for ($i = 0; $i <= count($prod_id) - 1; $i++) {
+                        if($prod_id[$i] == ''){continue;}
                         $model_update = \common\models\PriceGroupLine::find()->where(['product_id' => $prod_id[$i],'price_group_id'=>$model->id])->one();
                         if ($model_update) {
                             $model_update->sale_price = $prod_price[$i] == null ? 0 : $prod_price[$i];
@@ -123,6 +125,7 @@ class PricegroupController extends Controller
 
                 if (count($customer_type_id) > 0) {
                     for ($i = 0; $i <= count($customer_type_id) - 1; $i++) {
+                        if($customer_type_id[$i] == ''){continue;}
                         $model_update = \common\models\PriceCustomerType::find()->where(['customer_type_id' => $customer_type_id[$i],'price_group_id'=>$model->id])->one();
                         if ($model_update) {
 
