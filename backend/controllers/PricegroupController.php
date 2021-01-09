@@ -101,7 +101,7 @@ class PricegroupController extends Controller
             $customer_type_id = \Yii::$app->request->post('line_type_id');
             $removelist2 = \Yii::$app->request->post('removelist2');
 
-           // print_r($prod_id);return;
+           // print_r($removelist2);return;
 
             if ($model->save()) {
                 if (count($prod_id) > 0) {
@@ -137,10 +137,21 @@ class PricegroupController extends Controller
                 }
 
                 if ($removelist != '') {
-                    \common\models\PriceGroupLine::deleteAll(['id' => $removelist]);
+                    $x=explode(',',$removelist);
+                    if(count($x) >0) {
+                        for ($m = 0; $m <= count($x) - 1; $m++) {
+                            \common\models\PriceGroupLine::deleteAll(['id' => $x[$m]]);
+                        }
+                    }
+
                 }
                 if ($removelist2 != '') {
-                    \common\models\PriceCustomerType::deleteAll(['id' => $removelist2]);
+                    $x=explode(',',$removelist2);
+                    if(count($x) >0){
+                        for($m=0;$m<=count($x)-1;$m++){
+                            \common\models\PriceCustomerType::deleteAll(['id' => $x[$m]]);
+                        }
+                    }
                 }
 
                 $session = Yii::$app->session;

@@ -49,7 +49,7 @@ $prod_status = \backend\helpers\ProductStatus::asArrayObject();
                     <li class="nav-item">
                         <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill"
                            href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home"
-                           aria-selected="true">รายการสินค้า</a>
+                           aria-selected="true">ผูกราคากับสินค้า</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="custom-tabs-one-customer-tab" data-toggle="pill"
