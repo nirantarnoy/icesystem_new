@@ -51,10 +51,10 @@ class Salegroup extends \common\models\SaleGroup
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';
 //    }
-//    public function findName($id){
-//        $model = Unit::find()->where(['id'=>$id])->one();
-//        return count($model)>0?$model->name:'';
-//    }
+    public function findName($id){
+        $model = Unit::find()->where(['id'=>$id])->one();
+        return $model!=null?$model->name:'';
+    }
 //    public function findUnitid($code){
 //        $model = Unit::find()->where(['name'=>$code])->one();
 //        return count($model)>0?$model->id:0;
