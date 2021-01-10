@@ -70,8 +70,29 @@ class OrdersController extends Controller
     {
         $model = new Orders();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $prod_id = \Yii::$app->request->post('product_id');
+            $qty = \Yii::$app->request->post('line_qty');
+            $price = \Yii::$app->request->post('line_price');
+
+            if($model->save()){
+                if (count($prod_id) >0) {
+                    for ($i = 0; $i <= count($prod_id) - 1; $i++) {
+                        // echo $prod_id[0];return;
+                        $modelline = new \backend\models\Orderline();
+                        $modelline->order_id = $model->id;
+                        $modelline->product_id = $prod_id[$i];
+                        $modelline->qty = $qty[$i];
+                        $modelline->price = $price[$i];
+                        $modelline->line_total = $qty[$i] * $price[$i];
+                        $modelline->status = 0;
+                        $modelline->save(false);
+                    }
+                }
+                $session = Yii::$app->session;
+                $session->setFlash('msg', 'บันทึกรายการเรียบร้อย');
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('create', [
@@ -89,13 +110,56 @@ class OrdersController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $prod_id = \Yii::$app->request->post('product_id');
+            $qty = \Yii::$app->request->post('line_qty');
+            $price = \Yii::$app->request->post('line_price');
+            $removelist = Yii::$app->request->post('removelist');
+
+            if($model->save()){
+                if (count($prod_id) > 0) {
+                    //echo "hello";return;
+                    for ($i = 0; $i <= count($prod_id) - 1; $i++) {
+                        //echo "hello";return;
+                        $model_chk = \backend\models\Orderline::find()->where(['product_id' => $prod_id[$i],'order_id'=>$model->id])->one();
+                        if ($model_chk) {
+                            $model_chk->qty = $qty[$i];
+                            $model_chk->price = $price[$i];
+                            $model_chk->line_total = $qty[$i] * $price[$i];
+                            $model_chk->save(false);
+                        } else {
+                            //echo "hello sd";return;
+                            $modelline = new \backend\models\Orderline();
+                            $modelline->order_id = $model->id;
+                            $modelline->product_id = $prod_id[$i];
+                            $modelline->qty = $qty[$i];
+                            $modelline->price = $price[$i];
+                            $modelline->line_total = $qty[$i] * $price[$i];
+                            $modelline->status = 0;
+                            $modelline->save(false);
+                        }
+                    }
+                }
+                if (count($removelist)) {
+                    // count($removelist);return;
+                    $rec_del = explode(',', $removelist);
+//                    print_r($rec_del);return;
+                    for ($i = 0; $i <= count($rec_del) - 1; $i++) {
+                        \backend\models\Orderline::deleteAll(['id' => $rec_del[$i]]);
+                    }
+
+                }
+                $session = Yii::$app->session;
+                $session->setFlash('msg', 'บันทึกข้อมูลค้าเรียบร้อย');
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('update', [
             'model' => $model,
+            'model_line' => $model_line
         ]);
     }
 
@@ -127,5 +191,16 @@ class OrdersController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    public function actionFindCustomer($id){
+        $model = \common\models\Customer::find()->where(['delivery_route_id' => $id])->all();
+        if ($model != null) {
+            foreach ($model as $value) {
+                echo "<option value='" . $value->id . "'>$value->name</option>";
+            }
+        } else {
+            echo "<option></option>";
+        }
     }
 }

@@ -128,16 +128,16 @@ class SequenceController extends Controller
     public function actionDelete($id)
     {
         $session = Yii::$app->session;
-        $modelchecktrans = \backend\models\Journal::find()->where(['trans_type'=>$id])->count();
-        if(!$modelchecktrans){
+//        $modelchecktrans = \backend\models\Journal::find()->where(['trans_type'=>$id])->count();
+//        if(!$modelchecktrans){
             $this->findModel($id)->delete();
-                $session->setFlash('msg','ลบรายการเรียบร้อย');
+            $session->setFlash('msg','ลบรายการเรียบร้อย');
             return $this->redirect(['index']);
-        }else{
-
-            $session->setFlash('msg-error','พบข้อผิดพลาดในการทำรายการ');
-            return $this->redirect(['index']);
-        }
+//        }else{
+//
+//            $session->setFlash('msg-error','พบข้อผิดพลาดในการทำรายการ');
+//            return $this->redirect(['index']);
+//        }
 
 
 

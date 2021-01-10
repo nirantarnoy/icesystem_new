@@ -986,7 +986,7 @@ $.extend( AutoFill.prototype, {
 /**
  * AutoFill actions. The options here determine how AutoFill will fill the data
  * in the table when the user has selected a range of cells. Please see the
- * documentation on the DataTables site for full details on how to create plug-
+ * documentation on the DataTables site_ for full details on how to create plug-
  * ins.
  *
  * @type {Object}

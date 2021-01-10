@@ -12,21 +12,21 @@ const SiteSearch = (($) => {
    */
 
   const NAME               = 'SiteSearch'
-  const DATA_KEY           = 'lte.site-search'
+  const DATA_KEY           = 'lte.site_-search'
   const EVENT_KEY          = `.${DATA_KEY}`
   const JQUERY_NO_CONFLICT = $.fn[NAME]
 
   const Event = {}
 
   const Selector = {
-    TOGGLE_BUTTON  : '[data-widget="site-search"]',
-    SEARCH_BLOCK   : '.site-search-block',
-    SEARCH_BACKDROP: '.site-search-backdrop',
-    SEARCH_INPUT   : '.site-search-block .form-control'
+    TOGGLE_BUTTON  : '[data-widget="site_-search"]',
+    SEARCH_BLOCK   : '.site_-search-block',
+    SEARCH_BACKDROP: '.site_-search-backdrop',
+    SEARCH_INPUT   : '.site_-search-block .form-control'
   }
 
   const ClassName = {
-    OPEN: 'site-search-open'
+    OPEN: 'site_-search-open'
   }
 
   const Default = {
@@ -97,7 +97,7 @@ const SiteSearch = (($) => {
 
     let button = $(event.currentTarget)
 
-    if (button.data('widget') !== 'site-search') {
+    if (button.data('widget') !== 'site_-search') {
       button = button.closest(Selector.TOGGLE_BUTTON)
     }
 

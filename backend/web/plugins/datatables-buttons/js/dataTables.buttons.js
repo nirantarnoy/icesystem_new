@@ -1140,7 +1140,7 @@ Buttons.background = function ( show, className, fade, insertPoint ) {
  * value from the buttons assigned to a DataTable. This is only useful if
  * multiple instances are attached to a DataTable.
  * @param  {string|int|array} Instance selector - see `instance-selector`
- *   documentation on the DataTables site
+ *   documentation on the DataTables site_
  * @param  {array} Button instance array that was attached to the DataTables
  *   settings object
  * @return {array} Buttons instances
@@ -1198,7 +1198,7 @@ Buttons.instanceSelector = function ( group, buttons )
  * operation can be performed on them.
  * @param  {array} Button instances array that the selector should operate on
  * @param  {string|int|node|jQuery|array} Button selector - see
- *   `button-selector` documentation on the DataTables site
+ *   `button-selector` documentation on the DataTables site_
  * @return {array} Array of objects containing `inst` and `idx` properties of
  *   the selected buttons so you know which instance each button belongs to.
  * @static
@@ -1332,7 +1332,7 @@ Buttons.buttonSelector = function ( insts, selector )
 
 /**
  * Buttons defaults. For full documentation, please refer to the docs/option
- * directory or the DataTables site.
+ * directory or the DataTables site_.
  * @type {Object}
  * @static
  */
@@ -1487,7 +1487,7 @@ $.extend( _dtButtons, {
  * DataTables API
  *
  * For complete documentation, please refer to the docs/api directory or the
- * DataTables site
+ * DataTables site_
  */
 
 // Buttons group and individual button selector

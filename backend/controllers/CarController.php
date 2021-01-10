@@ -72,11 +72,6 @@ class CarController extends Controller
         $model = new Car();
 
         if ($model->load(Yii::$app->request->post())) {
-            $car_type = \Yii::$app->request->post('car_type_id');
-            $status = \Yii::$app->request->post('status');
-
-            $model->car_type_id = $car_type;
-            $model->status = $status;
             if($model->save()){
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
@@ -101,11 +96,6 @@ class CarController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
-            $car_type = \Yii::$app->request->post('car_type_id');
-            $status = \Yii::$app->request->post('status');
-
-            $model->car_type_id = $car_type;
-            $model->status = $status;
             if($model->save()){
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');

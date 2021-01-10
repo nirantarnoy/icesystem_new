@@ -553,7 +553,7 @@ $js = <<<JS
                     //cal_num();
                 }
             }
-cal_num();
+          cal_num();
         }
         $("#table-list tbody tr").each(function () {
             linenum += 1;

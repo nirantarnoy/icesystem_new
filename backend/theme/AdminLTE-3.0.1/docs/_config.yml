@@ -9,10 +9,10 @@
 # 'bundle exec jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
-# These are used to personalize your new site. If you look in the HTML files,
-# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# These are used to personalize your new site_. If you look in the HTML files,
+# you will see them accessed via {{ site_.title }}, {{ site_.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
-# in the templates via {{ site.myvariable }}.
+# in the templates via {{ site_.myvariable }}.
 markdown:  kramdown
 kramdown:
   auto_ids: false

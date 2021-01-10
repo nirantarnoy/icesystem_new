@@ -65,6 +65,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     return \backend\models\Customertype::findName($data->customer_type_id);
                 }
             ],
+            [
+                'attribute' => 'delivery_route_id',
+                'value' => function ($data) {
+                    return \backend\models\Deliveryroute::findName($data->delivery_route_id);
+                }
+            ],
             //'location_info',
             //'delivery_route_id',
             //'active_date',

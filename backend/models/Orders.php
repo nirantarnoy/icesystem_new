@@ -46,6 +46,26 @@ class Orders extends \common\models\Orders
             ],
         ];
     }
+    public static function getLastNo(){
+        $model = Orders::find()->MAX('order_no');
+        //$pre = \backend\models\Sequence::find()->where(['module_id'=>15])->one();
+        $pre = "SO";
+        if($model){
+            $prefix = $pre.substr(date("Y"),2,2);
+            $cnum = substr((string)$model,4,strlen($model));
+            $len = strlen($cnum);
+            $clen = strlen($cnum + 1);
+            $loop = $len - $clen;
+            for($i=1;$i<=$loop;$i++){
+                $prefix.="0";
+            }
+            $prefix.=$cnum + 1;
+            return $prefix;
+        }else{
+            $prefix =$pre.substr(date("Y"),2,2);
+            return $prefix.'000001';
+        }
+    }
 
 //    public function findUnitname($id){
 //        $model = Unit::find()->where(['id'=>$id])->one();

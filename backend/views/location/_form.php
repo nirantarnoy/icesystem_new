@@ -3,8 +3,6 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$prod_status = \backend\helpers\ProductStatus::asArrayObject();
-$warehouse_data = \backend\models\Warehouse::find()->all();
 ?>
 
 <div class="location-form">
@@ -14,19 +12,12 @@ $warehouse_data = \backend\models\Warehouse::find()->all();
         <div class="col-lg-1">
         </div>
         <div class="col-lg-10">
-            <label for=""><?= $model->getAttributeLabel('warehouse_id') ?></label>
-            <select name="warehouse_id" class="form-control warehouse-id" id=""
-                    onchange="">
-                <option value="0">--เลือกคลังสินค้า-</option>
-                <?php foreach ($warehouse_data as $val2): ?>
-                    <?php
-                    $selected = '';
-                    if ($val2->id == $model->warehouse_id)
-                        $selected = 'selected';
-                    ?>
-                    <option value="<?= $val2->id ?>" <?= $selected ?>><?= $val2->name ?></option>
-                <?php endforeach; ?>
-            </select>
+            <?= $form->field($model, 'warehouse_id')->Widget(\kartik\select2\Select2::className(),[
+                'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Warehouse::find()->all(),'id','name'),
+                'options'=>[
+                    'placeholder'=>'--เลือกคลังสินค้า--'
+                ]
+            ]) ?>
         </div>
         <div class="col-lg-1">
         </div>
@@ -73,17 +64,7 @@ $warehouse_data = \backend\models\Warehouse::find()->all();
         </div>
         <div class="col-lg-3">
             <label for=""><?= $model->getAttributeLabel('status') ?></label>
-            <select name="status" class="form-control status" id=""
-                    onchange="">
-                <?php for ($i = 0; $i <= count($prod_status) - 1; $i++): ?>
-                    <?php
-                    $selected = '';
-                    if ($prod_status[$i]['id'] == $model->status)
-                        $selected = 'selected';
-                    ?>
-                    <option value="<?= $prod_status[$i]['id'] ?>" <?= $selected ?>><?= $prod_status[$i]['name'] ?></option>
-                <?php endfor; ?>
-            </select>
+            <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(),['options'=>['label'=>'','class'=>'form-control']])->label(false) ?>
         </div>
         <div class="col-lg-8">
         </div>

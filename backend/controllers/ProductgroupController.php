@@ -72,8 +72,6 @@ class ProductgroupController extends Controller
         $model = new Productgroup();
 
         if ($model->load(Yii::$app->request->post())) {
-            $status = \Yii::$app->request->post('status');
-            $model->status = $status;
             if($model->save()){
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
@@ -99,8 +97,6 @@ class ProductgroupController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) ) {
-            $status = \Yii::$app->request->post('status');
-            $model->status = $status;
             if($model->save()){
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');

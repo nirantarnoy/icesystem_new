@@ -73,15 +73,15 @@ class CustomerController extends Controller
         $model = new Customer();
 
         if ($model->load(Yii::$app->request->post())) {
-            $group = \Yii::$app->request->post('customer_group_id');
-            $route = \Yii::$app->request->post('delivery_route_id');
-            $status = \Yii::$app->request->post('status');
-            $cust_type = \Yii::$app->request->post('customer_type_id');
-
-            $model->customer_group_id = $group;
-            $model->delivery_route_id = $route;
-            $model->customer_type_id = $cust_type;
-            $model->status = $status;
+//            $group = \Yii::$app->request->post('customer_group_id');
+//            $route = \Yii::$app->request->post('delivery_route_id');
+//            $status = \Yii::$app->request->post('status');
+//            $cust_type = \Yii::$app->request->post('customer_type_id');
+//
+//            $model->customer_group_id = $group;
+//            $model->delivery_route_id = $route;
+//            $model->customer_type_id = $cust_type;
+//            $model->status = $status;
             if($model->save()){
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
@@ -106,15 +106,15 @@ class CustomerController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
-            $group = \Yii::$app->request->post('customer_group_id');
-            $route = \Yii::$app->request->post('delivery_route_id');
-            $status = \Yii::$app->request->post('status');
-            $cust_type = \Yii::$app->request->post('customer_type_id');
-
-            $model->customer_group_id = $group;
-            $model->delivery_route_id = $route;
-            $model->customer_type_id = $cust_type;
-            $model->status = $status;
+//            $group = \Yii::$app->request->post('customer_group_id');
+//            $route = \Yii::$app->request->post('delivery_route_id');
+//            $status = \Yii::$app->request->post('status');
+//            $cust_type = \Yii::$app->request->post('customer_type_id');
+//
+//            $model->customer_group_id = $group;
+//            $model->delivery_route_id = $route;
+//            $model->customer_type_id = $cust_type;
+//            $model->status = $status;
             if($model->save()){
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');

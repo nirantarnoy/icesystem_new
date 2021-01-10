@@ -15,7 +15,7 @@ class RunnoTitle
     const RUNNO_PO_RETURN = 9;
     const RUNNO_COUNT = 10;
     const RUNNO_ADJUST = 11;
-    const RUNNO_WORKREQ = 12;
+    const RUNNO_CUSTOMER = 12;
     const RUNNO_WORKORDER = 13;
     const RUNNO_PRODREC = 14;
     const RUNN0_PDR = 15;
@@ -30,10 +30,10 @@ class RunnoTitle
         6 => 'เบิก',
         7 => 'คืนเบิก',
         8 => 'คืนขาย',
-        9 => 'คืนซ์้อ',
+        9 => 'คืนซื้อ',
         10 => 'นับสต๊อก',
         11 => 'ปรับสต๊อก',
-        12 => 'ใบคำร้อง',
+        12 => 'ลูกค้า',
         13 => 'ใบสั่งงาน',
         14 => 'ใบรับวัตถุดิบ',
         15 => 'รับเข้าผลิค',
@@ -53,7 +53,7 @@ class RunnoTitle
         ['id'=>9,'name' => 'คืนซ์้อ','prefix'=>'PRT'],
         ['id'=>10,'name' => 'นับสต๊อก','prefix'=>'CT'],
         ['id'=>11,'name' => 'ปรับสต๊อก','prefix'=>'AD'],
-        ['id'=>12,'name' => 'ใบคำร้อง','prefix'=>'WR'],
+        ['id'=>12,'name' => 'ลูกค้า','prefix'=>'CU'],
         ['id'=>13,'name' => 'ใบสั่งงาน','prefix'=>'WO'],
         ['id'=>14,'name' => 'ใบรับวัตถุดิบ','prefix'=>'PDR'],
         ['id'=>15,'name' => 'รับเข้าผลิต','prefix'=>'REP'],

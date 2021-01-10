@@ -138,10 +138,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
 
-                    'header' => '',
+                    'header' => 'ตัวเลือก',
                     'headerOptions' => ['style' => 'text-align:center;', 'class' => 'activity-view-link',],
                     'class' => 'yii\grid\ActionColumn',
-                    'contentOptions' => ['style' => 'text-align: right'],
+                    'contentOptions' => ['style' => 'text-align: center'],
+                    'template' => '{view} {update}{delete}',
                     'buttons' => [
                         'view' => function ($url, $data, $index) {
                             $options = [
@@ -150,7 +151,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'data-pjax' => '0',
                             ];
                             return Html::a(
-                                '<span class="glyphicon glyphicon-eye-open btn btn-xs btn-default"></span>', $url, $options);
+                                '<span class="fas fa-eye btn btn-xs btn-default"></span>', $url, $options);
                         },
                         'update' => function ($url, $data, $index) {
                             $options = array_merge([
@@ -159,15 +160,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'data-pjax' => '0',
                                 'id' => 'modaledit',
                             ]);
-                            return $data->status == 1 ? Html::a(
-                                '<span class="glyphicon glyphicon-pencil btn btn-xs btn-default"></span>', $url, [
+                            return Html::a(
+                                '<span class="fas fa-edit btn btn-xs btn-default"></span>', $url, [
                                 'id' => 'activity-view-link',
                                 //'data-toggle' => 'modal',
                                 // 'data-target' => '#modal',
                                 'data-id' => $index,
                                 'data-pjax' => '0',
                                 // 'style'=>['float'=>'rigth'],
-                            ]) : '';
+                            ]);
                         },
                         'delete' => function ($url, $data, $index) {
                             $options = array_merge([
@@ -177,9 +178,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 //'data-method' => 'post',
                                 //'data-pjax' => '0',
                                 'data-url' => $url,
+                                'data-var' => $data->id,
                                 'onclick' => 'recDelete($(this));'
                             ]);
-                            return Html::a('<span class="glyphicon glyphicon-trash btn btn-xs btn-default"></span>', 'javascript:void(0)', $options);
+                            return Html::a('<span class="fas fa-trash-alt btn btn-xs btn-default"></span>', 'javascript:void(0)', $options);
                         }
                     ]
                 ],
@@ -217,22 +219,6 @@ $this->registerJs('
                 });
             });
          });
-         function recDelete(e){
-        //e.preventDefault();
-        var url = e.attr("data-url");
-        //var url ="' . Url::to(['product/delete', 'id' => 10], true) . '" ;
-        //alert(url);
-        swal({
-              title: "ต้องการลบรายการนี้ใช่หรือไม่",
-              text: "",
-              type: "warning",
-              showCancelButton: true,
-              closeOnConfirm: false,
-              showLoaderOnConfirm: true
-            }, function () {
-              e.attr("href",url); 
-              e.trigger("click");        
-        });
-    }
+         
             
 ', static::POS_END) ?>

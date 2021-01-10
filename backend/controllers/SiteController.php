@@ -123,7 +123,7 @@ class SiteController extends Controller
                         if($model_user->save()){
                             $session = Yii::$app->session;
                             $session->setFlash('msg_success','ทำการเปลี่ยนรหัสผ่านเรียบร้อยแล้ว');
-                            return $this->redirect(['site/logout']);
+                            return $this->redirect(['site_/logout']);
                         }
                     }else{
                         $session = Yii::$app->session;
@@ -188,7 +188,7 @@ class SiteController extends Controller
 
         $mesg = 'สวัสดี คุณ'.'test' .'<br />';
         $mesg = $mesg.'คุณสามารถดำเนินการเปลี่ยนรหัสผ่านได้ที่ Link ด้านล่างนี้ '.'<br />';
-        $mesg = $mesg.'<p><a href="https://www.ngansorn.com/tutor/site/reset-password/token/'.$token.'">เปลี่ยนรหัสผ่าน</a> </p>';
+        $mesg = $mesg.'<p><a href="https://www.ngansorn.com/tutor/site_/reset-password/token/'.$token.'">เปลี่ยนรหัสผ่าน</a> </p>';
 
 
         $mail = new PHPMailer();

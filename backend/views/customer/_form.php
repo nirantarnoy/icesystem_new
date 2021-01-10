@@ -21,51 +21,30 @@ $route_data = \backend\models\Deliveryroute::find()->all();
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-lg-4">
-            <label for=""><?= $model->getAttributeLabel('customer_group_id') ?></label>
-            <select name="customer_group_id" class="form-control customer-group-id" id=""
-                    onchange="">
-                <option value="0">--เลือกกลุ่มลูกค้า-</option>
-                <?php foreach ($customer_group_data as $val2): ?>
-                    <?php
-                    $selected = '';
-                    if ($val2->id == $model->customer_group_id)
-                        $selected = 'selected';
-                    ?>
-                    <option value="<?= $val2->id ?>" <?= $selected ?>><?= $val2->name ?></option>
-                <?php endforeach; ?>
-            </select>
+            <?= $form->field($model, 'customer_group_id')->Widget(\kartik\select2\Select2::className(),[
+                    'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Customergroup::find()->all(),'id','name'),
+                    'options'=>[
+                            'placeholder'=>'--เลือกกลุ่มลูกค้า--'
+                    ]
+            ]) ?>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-4">
-            <label for=""><?= $model->getAttributeLabel('customer_type_id') ?></label>
-            <select name="customer_type_id" class="form-control customer-type-id" id=""
-                    onchange="">
-                <option value="0">--เลือกประเภทลูกค้า-</option>
-                <?php foreach ($customer_type_data as $val2): ?>
-                    <?php
-                    $selected = '';
-                    if ($val2->id == $model->customer_type_id)
-                        $selected = 'selected';
-                    ?>
-                    <option value="<?= $val2->id ?>" <?= $selected ?>><?= $val2->name ?></option>
-                <?php endforeach; ?>
-            </select>
+            <?= $form->field($model, 'delivery_route_id')->Widget(\kartik\select2\Select2::className(),[
+                'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(),'id','name'),
+                'options'=>[
+                    'placeholder'=>'--เลือกเส้นทางขนส่ง--'
+                ]
+            ]) ?>
         </div>
         <div class="col-lg-4">
-            <label for=""><?= $model->getAttributeLabel('deivery_route_id') ?></label>
-            <select name="deivery_route_id" class="form-control deivery-route-id" id=""
-                    onchange="">
-                <option value="0">--เลือกเส้นทางขนส่ง-</option>
-                <?php foreach ($route_data as $val2): ?>
-                    <?php
-                    $selected = '';
-                    if ($val2->id == $model->delivery_route_id)
-                        $selected = 'selected';
-                    ?>
-                    <option value="<?= $val2->id ?>" <?= $selected ?>><?= $val2->name ?></option>
-                <?php endforeach; ?>
-            </select>
+            <?= $form->field($model, 'customer_type_id')->Widget(\kartik\select2\Select2::className(),[
+                'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Customertype::find()->all(),'id','name'),
+                'options'=>[
+                    'placeholder'=>'--เลือกประเภทลูกค้า--'
+                ]
+            ]) ?>
         </div>
         <div class="col-lg-4">
             <?= $form->field($model, 'location_info')->textInput(['maxlength' => true]) ?>
@@ -91,17 +70,7 @@ $route_data = \backend\models\Deliveryroute::find()->all();
     <div class="row">
         <div class="col-lg-4">
             <label for=""><?= $model->getAttributeLabel('status') ?></label>
-            <select name="status" class="form-control status" id=""
-                    onchange="">
-                <?php for ($i = 0; $i <= count($prod_status) - 1; $i++): ?>
-                    <?php
-                    $selected = '';
-                    if ($prod_status[$i]['id'] == $model->status)
-                        $selected = 'selected';
-                    ?>
-                    <option value="<?= $prod_status[$i]['id'] ?>" <?= $selected ?>><?= $prod_status[$i]['name'] ?></option>
-                <?php endfor; ?>
-            </select>
+            <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(),['options'=>['label'=>'','class'=>'form-control']])->label(false) ?>
         </div>
         <div class="col-lg-4">
 

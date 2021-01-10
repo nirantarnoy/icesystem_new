@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$prod_status = \backend\helpers\ProductStatus::asArrayObject();
 ?>
 
 <div class="cartype-form">
@@ -36,17 +35,7 @@ $prod_status = \backend\helpers\ProductStatus::asArrayObject();
         <div class="col-lg-1"></div>
         <div class="col-lg-10">
             <label for=""><?= $model->getAttributeLabel('status') ?></label>
-            <select name="status" class="form-control status" id=""
-                    onchange="">
-                <?php for ($i = 0; $i <= count($prod_status) - 1; $i++): ?>
-                    <?php
-                    $selected = '';
-                    if ($prod_status[$i]['id'] == $model->status)
-                        $selected = 'selected';
-                    ?>
-                    <option value="<?= $prod_status[$i]['id'] ?>" <?= $selected ?>><?= $prod_status[$i]['name'] ?></option>
-                <?php endfor; ?>
-            </select>
+            <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(),['options'=>['label'=>'','class'=>'form-control']])->label(false) ?>
         </div>
         <div class="col-lg-1"></div>
     </div>

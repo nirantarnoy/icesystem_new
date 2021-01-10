@@ -803,7 +803,7 @@ DataTable.ext.selector.cell.push( function ( settings, opts, cells ) {
  * DataTables API
  *
  * For complete documentation, please refer to the docs/api directory or the
- * DataTables site
+ * DataTables site_
  */
 
 // Local variables to improve compression

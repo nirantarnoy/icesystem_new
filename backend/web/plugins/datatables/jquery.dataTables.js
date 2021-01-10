@@ -12053,7 +12053,7 @@
 		/**
 		 * DataTables makes use of renderers when displaying HTML elements for
 		 * a table. These renderers can be added or modified by plug-ins to
-		 * generate suitable mark-up for a site. For example the Bootstrap
+		 * generate suitable mark-up for a site_. For example the Bootstrap
 		 * integration plug-in for DataTables uses a paging button renderer to
 		 * display pagination buttons in the mark-up required by Bootstrap.
 		 *

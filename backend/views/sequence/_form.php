@@ -15,7 +15,7 @@ use kartik\checkbox\CheckboxX;
 ?>
     <div class="panel panel-headlin">
         <div class="panel-heading">
-                    <h3><i class="fa fa-hourglass"></i> <?=$this->title?> <small></small></h3>
+
                     <div class="clearfix"></div>
                   </div>
                   <div class="panel-body">

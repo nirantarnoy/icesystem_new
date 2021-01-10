@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-$prod_status = \backend\helpers\ProductStatus::asArrayObject();
 ?>
 
 <div class="customertype-form">
@@ -20,17 +19,7 @@ $prod_status = \backend\helpers\ProductStatus::asArrayObject();
 
             <?= $form->field($model, 'description')->textarea(['maxlength' => true]) ?>
             <label for=""><?= $model->getAttributeLabel('status') ?></label>
-            <select name="status" class="form-control status" id=""
-                    onchange="">
-                <?php for ($i = 0; $i <= count($prod_status) - 1; $i++): ?>
-                    <?php
-                    $selected = '';
-                    if ($prod_status[$i]['id'] == $model->status)
-                        $selected = 'selected';
-                    ?>
-                    <option value="<?= $prod_status[$i]['id'] ?>" <?= $selected ?>><?= $prod_status[$i]['name'] ?></option>
-                <?php endfor; ?>
-            </select>
+            <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(),['options'=>['label'=>'','class'=>'form-control']])->label(false) ?>
             <br>
             <div class="form-group">
                 <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

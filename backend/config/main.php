@@ -12,17 +12,24 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [],
-    'aliases'=>[
-        '@adminlte3' => '@backend/theme/AdminLTE-3.0.1',
-    ],
+//    'aliases'=>[
+//        '@adminlte3' => '@backend/theme/AdminLTE-3.0.1',
+//    ],
     'components' => [
         'view' => [
             'theme' => [
                 'pathMap' => [
-                    '@backend/views' => '@adminlte3/views'
+                    '@app/views' => '@backend/theme/views'
                 ],
             ],
         ],
+//        'view' => [
+//            'theme' => [
+//                'pathMap' => [
+//                    '@backend/views' => '@adminlte3/views'
+//                ],
+//            ],
+//        ],
         'assetManager' => [
             'bundles' => [
                 'kartik\form\ActiveFormAsset' => [
@@ -58,7 +65,7 @@ return [
             ],
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'errorAction' => 'site_/error',
         ],
         /*
         'urlManager' => [
