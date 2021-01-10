@@ -98,6 +98,13 @@ $cururl = Yii::$app->controller->id;
     .help-block {
       color: red;
     }
+    .product-items{
+      cursor: pointer;
+    }
+    .product-items:hover{
+      -webkit-transform: scale(1.1);
+      transform: scale(1.1);
+    }
   </style>
 
 </head>
@@ -400,6 +407,12 @@ $cururl = Yii::$app->controller->id;
                   <p>Import Master</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="index.php?r=sequence" class="nav-link sequence">
+                  <i class="far fa-file-import nav-icon"></i>
+                  <p>เลขที่เอกสาร</p>
+                </a>
+              </li>
               <!--                            <li class="nav-item">-->
               <!--                                <a href="index.php?r=product" class="nav-link product">-->
               <!--                                    <i class="far fa-circlez nav-icon"></i>-->
@@ -545,6 +558,12 @@ $cururl = Yii::$app->controller->id;
                 <a href="index.php?r=customertype/index" class="nav-link customertype">
                   <i class="far fa-circlez nav-icon"></i>
                   <p>ประเภทลูกค้า</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="index.php?r=salegroup/index" class="nav-link salegroup">
+                  <i class="far fa-circlez nav-icon"></i>
+                  <p>กลุ่มการขาย</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -905,6 +924,11 @@ $cururl = Yii::$app->controller->id;
     $("#perpage").change(function () {
       $("#form-perpage").submit();
     });
+
+    if(cururl == 'pos'){
+      $(".sidebar-mini").removeClass('layout-fixed');
+      $(".sidebar-mini").addClass('sidebar-collapse');
+    }
 
     //     var xx = $(".nav-sidebar").find(".nav-item").find("."+cururl+"").find(".nav-link").parent().parent().attr("class");
     $("ul.nav-sidebar li").each(function (index) {

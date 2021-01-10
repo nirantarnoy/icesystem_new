@@ -5,17 +5,14 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Orders */
 
-$this->title = Yii::t('app', 'Update Orders: {name}', [
-    'name' => $model->id,
+$this->title = Yii::t('app', 'แก้ไขคำสั่งซื้อ: {name}', [
+    'name' => $model->order_no,
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Orders'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'คำสั่งซื้อ'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->order_no, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = Yii::t('app', 'แก้ไข');
 ?>
 <div class="orders-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

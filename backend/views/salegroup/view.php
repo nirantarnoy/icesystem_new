@@ -4,14 +4,14 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Orders */
+/* @var $model backend\models\Salegroup */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'คำสั่งซื้อ'), 'url' => ['index']];
+$this->title = $model->name;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'กลุ่มการขาย'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="orders-view">
+<div class="salegroup-view">
     <p>
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
@@ -26,24 +26,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'order_no',
-            'customer_id',
-            'customer_type',
-            'customer_name',
-            'order_date',
-            'vat_amt',
-            'vat_per',
-            'order_total_amt',
-            'emp_sale_id',
-            'car_ref_id',
-            'order_channel_id',
+        //    'id',
+            'code',
+            'name',
             'status',
-            'company_id',
-            'branch_id',
             'created_at',
-            'updated_at',
             'created_by',
+            'updated_at',
             'updated_by',
         ],
     ]) ?>
