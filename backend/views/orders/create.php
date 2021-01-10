@@ -5,14 +5,11 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Orders */
 
-$this->title = Yii::t('app', 'Create Orders');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Orders'), 'url' => ['index']];
+$this->title = Yii::t('app', 'สร้างคำสั่งซื้อ');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'คำสั่งซื้อ'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="orders-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

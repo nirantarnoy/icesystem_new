@@ -12,41 +12,48 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'order_no')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'customer_id')->textInput() ?>
-
-    <?= $form->field($model, 'customer_type')->textInput() ?>
-
-    <?= $form->field($model, 'customer_name')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'order_date')->textInput() ?>
-
-    <?= $form->field($model, 'vat_amt')->textInput() ?>
-
-    <?= $form->field($model, 'vat_per')->textInput() ?>
-
-    <?= $form->field($model, 'order_total_amt')->textInput() ?>
-
-    <?= $form->field($model, 'emp_sale_id')->textInput() ?>
-
-    <?= $form->field($model, 'car_ref_id')->textInput() ?>
-
-    <?= $form->field($model, 'order_channel_id')->textInput() ?>
-
-    <?= $form->field($model, 'status')->textInput() ?>
-
-    <?= $form->field($model, 'company_id')->textInput() ?>
-
-    <?= $form->field($model, 'branch_id')->textInput() ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
-    <?= $form->field($model, 'created_by')->textInput() ?>
-
-    <?= $form->field($model, 'updated_by')->textInput() ?>
+    <div class="row">
+        <div class="col-lg-3">
+            <?= $form->field($model, 'order_no')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'order_date')->textInput() ?>
+        </div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'customer_id')->textInput() ?>
+        </div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'emp_sale_id')->textInput() ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <?= $form->field($model, 'order_channel_id')->textInput() ?>
+        </div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'car_ref_id')->textInput() ?>
+        </div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'order_total_amt')->textInput() ?>
+        </div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'status')->textInput() ?>
+        </div>
+    </div>
+    <br>
+    <table class="table table-bordered table-striped table-list">
+        <thead>
+        <tr>
+            <th style="width: 5%;text-align: center">#</th>
+            <th>รหัสสินค้า</th>
+            <th>ชื่อสินค้า</th>
+            <th style="text-align: right">จำนวน</th>
+            <th style="text-align: right">ราคา</th>
+            <th style="text-align: right">รวม</th>
+            <th style="width: 5%;text-align: center">-</th>
+        </tr>
+        </thead>
+    </table>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

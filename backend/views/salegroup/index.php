@@ -5,10 +5,10 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 
-$this->title = Yii::t('app', 'คำสั่งซื้อ');
+$this->title = Yii::t('app', 'กลุ่มการขาย');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="orders-index">
+<div class="salegroup-index">
 
     <?php Pjax::begin(); ?>
     <div class="row">
@@ -53,30 +53,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center'],
             ],
-            'order_no',
-            'order_date',
+            'code',
+            'name',
             [
-                'attribute' => 'customer_id',
+                'attribute' => 'status',
+                'format' => 'raw',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
-                    return \backend\models\Customer::findName($data->customer_id);
+                    if ($data->status == 1) {
+                        return '<div class="badge badge-success">ใช้งาน</div>';
+                    } else {
+                        return '<div class="badge badge-secondary">ไม่ใช้งาน</div>';
+                    }
                 }
             ],
-//            'customer_type',
-//            'customer_name',
-
-            //'vat_amt',
-            //'vat_per',
-            //'order_total_amt',
-            //'emp_sale_id',
-            //'car_ref_id',
-            //'order_channel_id',
-            'status',
-            //'company_id',
-            //'branch_id',
-            //'created_at',
-            //'updated_at',
-            //'created_by',
-            //'updated_by',
 
             [
 
