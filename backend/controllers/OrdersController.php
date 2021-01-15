@@ -79,7 +79,7 @@ class OrdersController extends Controller
                                 $x_id += 1;
                                 // $prod_line = \Yii::$app->request->post($prods->code);
                                 $prod_line_qty = \Yii::$app->request->post('line_qty_' . $prods->code);
-                                $line_sale_price = \Yii::$app->request->post('line_sale_price');
+                                $line_sale_price = \Yii::$app->request->post('line_sale_price_'.$prods->code);
                                 // print_r($prod_line_qty);return;
 
                                 //  if(count($prod_line) > 0){
@@ -159,7 +159,7 @@ class OrdersController extends Controller
                                 $x_id += 1;
                                 // $prod_line = \Yii::$app->request->post($prods->code);
                                 $prod_line_qty = \Yii::$app->request->post('line_qty_' . $prods->code);
-                                $line_sale_price = \Yii::$app->request->post('line_sale_price');
+                                $line_sale_price = \Yii::$app->request->post('line_sale_price_'.$prods->code);
 
                                 $model_has = $this->check_has_line($model->id, $line_customer_id[$i], $prods->id);
                                 if ($model_has != null) {
@@ -341,11 +341,12 @@ class OrdersController extends Controller
 
             $i += 1;
             $input_name = "line_qty_" . $value->code . "[]";
+            $input_name_price = "line_sale_price_".$value->code."[]";
             $line_prod_code = $value->code . '[]';
             $html .= '<td>
                        <input type="hidden" class="line-qty-' . $i . '">
                        <input type="hidden" class="line-product-code" name="' . $line_prod_code . '" value="' . $value->code . '">
-                       <input type="hidden" class="line-sale-price" name="line_sale_price[]" value="' . $value->sale_price . '">
+                       <input type="hidden" class="line-sale-price" name="'.$input_name_price.'" value="' . $value->sale_price . '">
                        <input type="number" name="' . $input_name . '" data-var="'.$value->sale_price.'" style="text-align: center" class="form-control" min="0" onchange="line_qty_cal($(this))">
                   </td>';
         }
@@ -408,6 +409,7 @@ class OrdersController extends Controller
             $i += 1;
             $line_prod_code = \backend\models\Product::findCode($value->product_id) . "[]";
             $input_name = "line_qty_" . $line_prod_code;
+            $input_name_price = "line_sale_price_".$value->code."[]";
 
             $line_total_qty = $line_total_qty + $value->qty;
             $line_total_price = $line_total_price + ($value->qty * $value->price);
@@ -415,7 +417,7 @@ class OrdersController extends Controller
             $html .= '<td>
                        <input type="hidden" class="line-qty-' . $i . '">
                        <input type="hidden" class="line-product-code" name="' . $line_prod_code . '" value="' . $line_prod_code . '">
-                       <input type="hidden" class="line-sale-price" name="line_sale_price[]" value="' . $value->price . '">
+                       <input type="hidden" class="line-sale-price" name="'.$input_name_price.'" value="' . $value->price . '">
                        <input type="number" name="' . $input_name . '" data-var="'.$value->price.'" style="text-align: center" value="' . $value->qty . '" class="form-control" min="0" onchange="line_qty_cal($(this))">
                   </td>';
         }
