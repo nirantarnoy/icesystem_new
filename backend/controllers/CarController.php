@@ -110,7 +110,7 @@ class CarController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $emp_list = $model->emp_id;
             if ($model->save()) {
-                if (count($emp_list) > 0) {
+                if ($emp_list != null) {
                     for ($i = 0; $i <= count($emp_list) - 1; $i++) {
                         $model_check = \common\models\CarEmp::find()->where(['car_id' => $model->id,'emp_id' => $emp_list[$i]])->one();
                         if ($model_check) {

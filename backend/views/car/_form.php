@@ -36,7 +36,7 @@ use softark\duallistbox\DualListbox;
         <div class="col-lg-1"></div>
         <div class="col-lg-5">
             <?= $form->field($model, 'car_type_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customergroup::find()->all(), 'id', 'name'),
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Cartype::find()->all(), 'id', 'name'),
                 'options' => [
                     'placeholder' => '--เลือกประเภทรถ--'
                 ]

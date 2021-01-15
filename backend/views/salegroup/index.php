@@ -5,7 +5,7 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 
-$this->title = Yii::t('app', 'กลุ่มการขาย');
+$this->title = Yii::t('app', 'กลุ่มสายส่ง');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="salegroup-index">

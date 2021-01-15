@@ -174,12 +174,6 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="index.php?r=salegroup/index" class="nav-link salegroup">
-                                <i class="far fa-circlez nav-icon"></i>
-                                <p>กลุ่มการขาย</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a href="index.php?r=customer" class="nav-link customer">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>
@@ -242,6 +236,12 @@
                             <a href="index.php?r=cartype/index" class="nav-link cartype">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>ประเภทรถ</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="index.php?r=salegroup/index" class="nav-link salegroup">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>กลุ่มสายส่ง</p>
                             </a>
                         </li>
                         <li class="nav-item">
