@@ -346,7 +346,7 @@ class OrdersController extends Controller
                        <input type="hidden" class="line-qty-' . $i . '">
                        <input type="hidden" class="line-product-code" name="' . $line_prod_code . '" value="' . $value->code . '">
                        <input type="hidden" class="line-sale-price" name="line_sale_price[]" value="' . $value->sale_price . '">
-                       <input type="number" name="' . $input_name . '" style="text-align: center" class="form-control" min="0" onchange="line_qty_cal($(this))">
+                       <input type="number" name="' . $input_name . '" data-var="'.$value->sale_price.'" style="text-align: center" class="form-control" min="0" onchange="line_qty_cal($(this))">
                   </td>';
         }
         return $html;
@@ -416,7 +416,7 @@ class OrdersController extends Controller
                        <input type="hidden" class="line-qty-' . $i . '">
                        <input type="hidden" class="line-product-code" name="' . $line_prod_code . '" value="' . $line_prod_code . '">
                        <input type="hidden" class="line-sale-price" name="line_sale_price[]" value="' . $value->price . '">
-                       <input type="number" name="' . $input_name . '" style="text-align: center" value="' . $value->qty . '" class="form-control" min="0" onchange="line_qty_cal($(this))">
+                       <input type="number" name="' . $input_name . '" data-var="'.$value->price.'" style="text-align: center" value="' . $value->qty . '" class="form-control" min="0" onchange="line_qty_cal($(this))">
                   </td>';
         }
         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right" value="' . number_format($line_total_qty) . '"></td>';
