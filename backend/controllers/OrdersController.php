@@ -326,7 +326,8 @@ class OrdersController extends Controller
         $html = '';
         $model = \common\models\QueryProductFromRoute::find()->where(['delivery_route_id' => $route_id])->all();
         foreach ($model as $value) {
-            $html .= '<th style="text-align: center">' . $value->code . '</th>';
+            $new_price = '<span style="color: red">'.$value->sale_price.'</span>';
+            $html .= '<th style="text-align: center">' . $value->code.' ( '.$new_price.' ) ' . '</th>';
         }
         return $html;
     }
