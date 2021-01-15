@@ -47,6 +47,10 @@ class Customer extends \common\models\Customer
         ];
     }
 
+    public function findCode($id){
+        $model = Customer::find()->where(['id'=>$id])->one();
+        return $model!=null?$model->code:'';
+    }
     public function findName($id){
         $model = Customer::find()->where(['id'=>$id])->one();
         return $model!=null?$model->name:'';

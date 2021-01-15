@@ -34,6 +34,7 @@ class SaleGroup extends \yii\db\ActiveRecord
         return [
             [['status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['code', 'name'], 'string', 'max' => 255],
+            [['delivery_route_id'],'integer']
         ];
     }
 

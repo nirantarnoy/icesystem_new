@@ -18,35 +18,10 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
-
-    <?= $form->field($model, 'code') ?>
-
-    <?= $form->field($model, 'name') ?>
-
-    <?= $form->field($model, 'engname') ?>
-
-    <?= $form->field($model, 'taxid') ?>
-
-    <?php // echo $form->field($model, 'logo') ?>
-
-    <?php // echo $form->field($model, 'created_at') ?>
-
-    <?php // echo $form->field($model, 'updated_at') ?>
-
-    <?php // echo $form->field($model, 'created_by') ?>
-
-    <?php // echo $form->field($model, 'updated_by') ?>
-
-    <?php // echo $form->field($model, 'tenant_id') ?>
-
-    <?php // echo $form->field($model, 'status') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-outline-secondary']) ?>
+    <div class="input-group">
+        <!--         <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>-->
+        <?= $form->field($model, 'globalSearch')->textInput(['placeholder' => 'ค้นหา', 'class' => 'form-control', 'aria-describedby' => 'basic-addon1'])->label(false) ?>
     </div>
-
     <?php ActiveForm::end(); ?>
 
 </div>

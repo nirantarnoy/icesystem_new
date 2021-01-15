@@ -3,10 +3,6 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$prod_status = \backend\helpers\ProductStatus::asArrayObject();
-$customer_group_data = \backend\models\Customergroup::find()->all();
-$customer_type_data= \backend\models\Customertype::find()->all();
-$route_data = \backend\models\Deliveryroute::find()->all();
 ?>
 
 <div class="customer-form">

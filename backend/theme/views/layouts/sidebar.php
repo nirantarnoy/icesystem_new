@@ -50,7 +50,6 @@
                         </li>
                     </ul>
                 </li>
-
                 <li class="nav-item has-treeview has-sub">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-cog"></i>
@@ -72,48 +71,6 @@
                                 <p>เลขที่เอกสาร</p>
                             </a>
                         </li>
-                        <!--                            <li class="nav-item">-->
-                        <!--                                <a href="index.php?r=product" class="nav-link product">-->
-                        <!--                                    <i class="far fa-circlez nav-icon"></i>-->
-                        <!--                                    <p>สินค้า</p>-->
-                        <!--                                </a>-->
-                        <!--                            </li>-->
-                        <!--                            <li class="nav-item">-->
-                        <!--                                <a href="index.php?r=costgroup" class="nav-link costgroup">-->
-                        <!--                                    <i class="far fa-circlez nav-icon"></i>-->
-                        <!--                                    <p>กลุ่มต้นทุน</p>-->
-                        <!--                                </a>-->
-                        <!--                            </li>-->
-                        <!--                            <li class="nav-item">-->
-                        <!--                                <a href="index.php?r=costitem" class="nav-link costitem">-->
-                        <!--                                    <i class="far fa-circlez nav-icon"></i>-->
-                        <!--                                    <p>รหัสต้นทุน</p>-->
-                        <!--                                </a>-->
-                        <!--                            </li>-->
-                        <!--                            <li class="nav-item">-->
-                        <!--                                <a href="index.php?r=materialgroup" class="nav-link materialgroup">-->
-                        <!--                                    <i class="far fa-circlez nav-icon"></i>-->
-                        <!--                                    <p>กลุ่มวัสดุ</p>-->
-                        <!--                                </a>-->
-                        <!--                            </li>-->
-                        <!--                            <li class="nav-item">-->
-                        <!--                                <a href="index.php?r=material" class="nav-link material">-->
-                        <!--                                    <i class="far fa-circlez nav-icon"></i>-->
-                        <!--                                    <p>วัสดุ/อุปกรณ์</p>-->
-                        <!--                                </a>-->
-                        <!--                            </li>-->
-                        <!--                            <li class="nav-item">-->
-                        <!--                                <a href="index.php?r=jobperiod" class="nav-link jobperiod">-->
-                        <!--                                    <i class="far fa-circlez nav-icon"></i>-->
-                        <!--                                    <p>รหัสงวดงาน</p>-->
-                        <!--                                </a>-->
-                        <!--                            </li>-->
-                        <!--                            <li class="nav-item">-->
-                        <!--                                <a href="index.php?r=unit" class="nav-link unit">-->
-                        <!--                                    <i class="far fa-circlez nav-icon"></i>-->
-                        <!--                                    <p>หน่วยนับ</p>-->
-                        <!--                                </a>-->
-                        <!--                            </li>-->
                     </ul>
                 </li>
                 <li class="nav-item has-treeview has-sub">
@@ -140,8 +97,6 @@
                                 </p>
                             </a>
                         </li>
-
-
                     </ul>
                 </li>
                 <li class="nav-item has-treeview has-sub">
@@ -195,7 +150,6 @@
                                 </p>
                             </a>
                         </li>
-
                     </ul>
                 </li>
                 <li class="nav-item has-treeview has-sub">
@@ -238,37 +192,6 @@
 
                     </ul>
                 </li>
-                <!--                    <li class="nav-item has-treeview has-sub">-->
-                <!--                        <a href="#" class="nav-link">-->
-                <!--                            <i class="nav-icon fas fa-edit"></i>-->
-                <!--                            <p>-->
-                <!--                                ข้อมูลโครงการ-->
-                <!--                                <i class="fas fa-angle-left right"></i>-->
-                <!--                            </p>-->
-                <!--                        </a>-->
-                <!--                        <ul class="nav nav-treeview">-->
-                <!--                            <li class="nav-item">-->
-                <!--                                <a href="index.php?r=quotation/index" class="nav-link quotation">-->
-                <!--                                    <i class="far fa-circlez nav-icon"></i>-->
-                <!--                                    <p>เสนอราคา</p>-->
-                <!--                                </a>-->
-                <!--                            </li>-->
-                <!--                            <li class="nav-item">-->
-                <!--                                <a href="index.php?r=projecttype/index" class="nav-link projecttype">-->
-                <!--                                    <i class="far fa-circlez nav-icon"></i>-->
-                <!--                                    <p>ประเภทโครงการ</p>-->
-                <!--                                </a>-->
-                <!--                            </li>-->
-                <!--                            <li class="nav-item">-->
-                <!--                                <a href="index.php?r=project/index" class="nav-link project">-->
-                <!--                                    <i class="far fa-circlez nav-icon"></i>-->
-                <!--                                    <p>โครงการ</p>-->
-                <!--                                </a>-->
-                <!--                            </li>-->
-                <!---->
-                <!---->
-                <!--                        </ul>-->
-                <!--                    </li>-->
                 <li class="nav-item has-treeview has-sub">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-shopping-cart"></i>
@@ -279,6 +202,12 @@
                     </a>
                     <ul class="nav nav-treeview">
 
+                        <li class="nav-item">
+                            <a href="index.php?r=paymentmethod/index" class="nav-link paymentmethod">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>วิธีชำระเงิน</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="index.php?r=pos/index" class="nav-link pos">
                                 <i class="far fa-circlez nav-icon"></i>
@@ -291,13 +220,6 @@
                                 <p>ใบสั่งขาย</p>
                             </a>
                         </li>
-                        <!--                            <li class="nav-item">-->
-                        <!--                                <a href="pages/forms/advanced.html" class="nav-link">-->
-                        <!--                                    <i class="far fa-circlez nav-icon"></i>-->
-                        <!--                                    <p>บันทึกสินค้าเข้า</p>-->
-                        <!--                                </a>-->
-                        <!--                            </li>-->
-
                     </ul>
                 </li>
                 <li class="nav-item has-treeview has-sub">
@@ -351,7 +273,18 @@
                                 <p>ตั้งค่าคอมฯ</p>
                             </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a href="index.php?r=salecomcon/index" class="nav-link salecomcon">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>เงื่อนไขพิเศษ</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="index.php?r=comreport/index" class="nav-link comreport">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>รายงานคอมมิชชั่น</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item has-treeview has-sub">
@@ -389,17 +322,17 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="index.php?r=report" class="nav-link report">
+                            <a href="index.php?r=salereport" class="nav-link salereport">
                                 <i class="far fa-circlez nav-icon"></i>
-                                <p>รายจ่าย</p>
+                                <p>รายงานขายแยกตามสายส่ง</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="index.php?r=report" class="nav-link report">
-                                <i class="far fa-circlez nav-icon"></i>
-                                <p>รายรับ</p>
-                            </a>
-                        </li>
+<!--                        <li class="nav-item">-->
+<!--                            <a href="index.php?r=report" class="nav-link report">-->
+<!--                                <i class="far fa-circlez nav-icon"></i>-->
+<!--                                <p>รายรับ</p>-->
+<!--                            </a>-->
+<!--                        </li>-->
                     </ul>
                 </li>
                 <li class="nav-item has-treeview has-sub">

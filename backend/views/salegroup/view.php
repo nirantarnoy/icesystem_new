@@ -29,7 +29,23 @@ $this->params['breadcrumbs'][] = $this->title;
         //    'id',
             'code',
             'name',
-            'status',
+            [
+                'attribute' => 'delivery_route_id',
+                'value' => function ($data) {
+                    return \backend\models\Deliveryroute::findName($data->delivery_route_id);
+                }
+            ],
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    if ($data->status == 1) {
+                        return '<div class="badge badge-success">ใช้งาน</div>';
+                    } else {
+                        return '<div class="badge badge-secondary">ไม่ใช้งาน</div>';
+                    }
+                }
+            ],
             'created_at',
             'created_by',
             'updated_at',

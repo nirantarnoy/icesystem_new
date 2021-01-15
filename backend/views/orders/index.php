@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </p>
         </div>
         <div class="col-lg-2" style="text-align: right">
-            <form id="form-perpage" class="form-inline" action="<?= Url::to(['producttype/index'], true) ?>"
+            <form id="form-perpage" class="form-inline" action="<?= Url::to(['orders/index'], true) ?>"
                   method="post">
                 <div class="form-group">
                     <label>แสดง </label>
@@ -54,23 +54,47 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'text-align: center'],
             ],
             'order_no',
-            'order_date',
             [
-                'attribute' => 'customer_id',
+                'attribute' => 'order_date',
                 'value' => function ($data) {
-                    return \backend\models\Customer::findName($data->customer_id);
+                    return date('d/m/Y', strtotime($data->order_date));
                 }
             ],
+//            [
+//                'attribute' => 'customer_id',
+//                'value' => function ($data) {
+//                    return \backend\models\Customer::findName($data->customer_id);
+//                }
+//            ],
 //            'customer_type',
 //            'customer_name',
 
-            //'vat_amt',
+            [
+                'attribute' => 'order_total_amt',
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
+                'value' => function ($data) {
+                    return number_format($data->order_total_amt);
+                }
+            ],
             //'vat_per',
             //'order_total_amt',
             //'emp_sale_id',
             //'car_ref_id',
             //'order_channel_id',
-            'status',
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
+                'value' => function ($data) {
+                    if ($data->status == 1) {
+                        return '<div class="badge badge-success">Closed</div>';
+                    } else {
+                        return '<div class="badge badge-secondary">Open</div>';
+                    }
+                }
+            ],
             //'company_id',
             //'branch_id',
             //'created_at',

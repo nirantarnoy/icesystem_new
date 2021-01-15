@@ -48,14 +48,26 @@ $this->params['breadcrumbs'][] = $this->title;
         //'tableOptions' => ['class' => 'table table-hover'],
         'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b> <span> เพิ่มรายการโดยการคลิกที่ปุ่ม </span><span class="text-success">"สร้างใหม่"</span></div>',
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-          //  'id',
+            [
+                'class' => 'yii\grid\SerialColumn',
+                'headerOptions' => ['style' => 'text-align:center;'],
+                'contentOptions' => ['style' => 'text-align: center'],
+            ],
             'code',
             'name',
             'description',
-            'car_type_id',
-            //'plate_number',
+            [
+                'attribute' => 'car_type_id',
+                'value' => function ($data) {
+                    return \backend\models\Cartype::findName($data->car_type_id);
+                }
+            ],
+            [
+                'attribute' => 'sale_group_id',
+                'value' => function ($data) {
+                    return \backend\models\Salegroup::findName($data->sale_group_id);
+                }
+            ],
             //'photo',
             [
                 'attribute' => 'status',

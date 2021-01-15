@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use backend\models\CustomerSearch;
+use backend\models\Product;
 use Yii;
 use backend\models\Company;
 use backend\models\Addressbook;
@@ -9,6 +11,7 @@ use backend\models\CompanySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * CompanyController implements the CRUD actions for Company model.
@@ -36,23 +39,23 @@ class CompanyController extends Controller
      */
     public function actionIndex()
     {
-        $modelx = Company::find()->one();
-        $model_address = new Addressbook();
-        if ($modelx != null) {
-            return $this->redirect(['update', 'id' => $modelx->id]);
-        }
-        $model = new Company();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['update', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-                'model_address' => $model_address,
-                'model_address_plant' => null,
-                //'model_bankaccount' => $model_bankaccount,
-            ]);
-        }
+//        $modelx = Company::find()->one();
+//        $model_address = new Addressbook();
+//        if ($modelx != null) {
+//            return $this->redirect(['update', 'id' => $modelx->id]);
+//        }
+//        $model = new Company();
+//
+//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+//            return $this->redirect(['update', 'id' => $model->id]);
+//        } else {
+//            return $this->render('create', [
+//                'model' => $model,
+//                'model_address' => $model_address,
+//                'model_address_plant' => null,
+//                //'model_bankaccount' => $model_bankaccount,
+//            ]);
+//        }
 //        $searchModel = new CompanySearch();
 //        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 //
@@ -60,6 +63,17 @@ class CompanyController extends Controller
 //            'searchModel' => $searchModel,
 //            'dataProvider' => $dataProvider,
 //        ]);
+        $pageSize = \Yii::$app->request->post("perpage");
+        $searchModel = new CompanySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
+        $dataProvider->pagination->pageSize = $pageSize;
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'perpage' => $pageSize,
+        ]);
     }
 
     /**
@@ -83,8 +97,14 @@ class CompanyController extends Controller
     public function actionCreate()
     {
         $model = new Company();
-
         if ($model->load(Yii::$app->request->post())) {
+            $photo = UploadedFile::getInstance($model, 'logo');
+            if (!empty($photo)) {
+                $photo_name = time() . "." . $photo->getExtension();
+                $photo->saveAs(Yii::getAlias('@backend') . '/web/uploads/images/company/' . $photo_name);
+                $model->logo = $photo_name;
+            }
+
             if($model->save()){
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
@@ -97,18 +117,17 @@ class CompanyController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing Company model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        $model_branch = \backend\models\Branch::find()->where(['company_id'=>$id])->all();
         if ($model->load(Yii::$app->request->post())) {
+            $photo = UploadedFile::getInstance($model, 'logo');
+            if (!empty($photo)) {
+                $photo_name = time() . "." . $photo->getExtension();
+                $photo->saveAs(Yii::getAlias('@backend') . '/web/uploads/images/company/' . $photo_name);
+                $model->logo = $photo_name;
+            }
             if($model->save()){
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
@@ -118,16 +137,10 @@ class CompanyController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'model_branch' => $model_branch
         ]);
     }
 
-    /**
-     * Deletes an existing Company model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -135,13 +148,6 @@ class CompanyController extends Controller
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Company model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Company the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Company::findOne($id)) !== null) {
@@ -149,5 +155,31 @@ class CompanyController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    public function actionDeletephoto()
+    {
+        $id = \Yii::$app->request->post('delete_id');
+        if ($id) {
+            $photo = $this->getPhotoName($id);
+            if ($photo != '') {
+                if (unlink('../web/uploads/images/company/' . $photo)) {
+                    Company::updateAll(['logo' => ''], ['id' => $id]);
+                }
+            }
+
+        }
+        return $this->redirect(['company/update', 'id' => $id]);
+    }
+    public function getPhotoName($id)
+    {
+        $photo_name = '';
+        if ($id) {
+            $model = Company::find()->where(['id' => $id])->one();
+            if ($model) {
+                $photo_name = $model->logo;
+            }
+        }
+        return $photo_name;
     }
 }

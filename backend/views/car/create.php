@@ -12,6 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="car-create">
     <?= $this->render('_form', [
         'model' => $model,
+        'emp_select_list' => []
     ]) ?>
 
 </div>

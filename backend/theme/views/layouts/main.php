@@ -49,17 +49,17 @@ $cururl = Yii::$app->controller->id;
             font-size: 16px;
         }
 
-        .pagination li {
-            padding: 10px;
-        }
+        /*.pagination li {*/
+        /*    padding: 10px;*/
+        /*}*/
 
-        .pagination li.active {
-            background-color: #2e6da4;
-        }
+        /*.pagination li.active {*/
+        /*    background-color: #2e6da4;*/
+        /*}*/
 
-        .pagination li.active a {
-            color: white;
-        }
+        /*.pagination li.active a {*/
+        /*    color: white;*/
+        /*}*/
 
         .help-block {
             color: red;
@@ -67,6 +67,10 @@ $cururl = Yii::$app->controller->id;
 
         .my-br {
             margin-top: 10px;
+        }
+        .product-items:hover{
+            -webkit-transform: scale(1.1);
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -121,7 +125,7 @@ $cururl = Yii::$app->controller->id;
             $("#form-perpage").submit();
         });
 
-        if(cururl == 'pos'){
+        if(cururl == 'pos' || cururl == 'orders' || cururl == 'salereport'){
             $(".sidebar-mini").removeClass('layout-fixed');
             $(".sidebar-mini").addClass('sidebar-collapse');
         }

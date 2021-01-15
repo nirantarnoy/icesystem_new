@@ -56,6 +56,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'code',
             'name',
             [
+                'attribute' => 'delivery_route_id',
+                'value' => function ($data) {
+                    return \backend\models\Deliveryroute::findName($data->delivery_route_id);
+                }
+            ],
+            [
                 'attribute' => 'status',
                 'format' => 'raw',
                 'headerOptions' => ['style' => 'text-align: center'],

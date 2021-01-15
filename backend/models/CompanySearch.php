@@ -11,14 +11,13 @@ use backend\models\Company;
  */
 class CompanySearch extends Company
 {
-    /**
-     * {@inheritdoc}
-     */
+    public $globalSearch;
     public function rules()
     {
         return [
             [['id', 'created_at', 'updated_at', 'created_by', 'updated_by', 'tenant_id', 'status'], 'integer'],
             [['code', 'name', 'engname', 'taxid', 'logo'], 'safe'],
+            [['globalSearch'],'string']
         ];
     }
 
@@ -67,11 +66,13 @@ class CompanySearch extends Company
             'status' => $this->status,
         ]);
 
-        $query->andFilterWhere(['like', 'code', $this->code])
-            ->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'engname', $this->engname])
-            ->andFilterWhere(['like', 'taxid', $this->taxid])
-            ->andFilterWhere(['like', 'logo', $this->logo]);
+        if($this->globalSearch != ''){
+            $query->orFilterWhere(['like', 'code', $this->globalSearch])
+                ->orFilterWhere(['like', 'name', $this->globalSearch])
+                ->orFilterWhere(['like', 'engname', $this->globalSearch])
+                ->orFilterWhere(['like', 'taxid', $this->globalSearch]);
+        }
+
 
         return $dataProvider;
     }

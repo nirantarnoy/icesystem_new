@@ -51,12 +51,22 @@ $this->params['breadcrumbs'][] = $this->title;
         //'tableOptions' => ['class' => 'table table-hover'],
         'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b> <span> เพิ่มรายการโดยการคลิกที่ปุ่ม </span><span class="text-success">"สร้างใหม่"</span></div>',
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'yii\grid\SerialColumn', 'headerOptions' => ['style' => 'text-align:center;'],
+                'contentOptions' => ['style' => 'text-align: center'],],
 
-          //  'id',
+            //  'id',
             'code',
             'name',
             'description',
+            [
+                'label' => 'Customer Qty',
+                'format' => 'raw',
+                'headerOptions' => ['style' => 'text-align:center;'],
+                'contentOptions' => ['style' => 'text-align: center'],
+                'value' => function ($data) {
+                    return '<a href="#" data-var="' . $data->id . '" onclick="showcust($(this))">' . \backend\models\Deliveryroute::countCust($data->id) . '</a>';
+                }
+            ],
             // 'company_id',
             //'branch_id',
             //'created_at',
@@ -119,3 +129,66 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::end(); ?>
 
 </div>
+
+<div id="findModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>รายการลูกค้า</h3>
+            </div>
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+
+            <div class="modal-body">
+                <input type="hidden" name="line_qc_product" class="line_qc_product" value="">
+                <table class="table table-bordered table-striped table-find-list" width="100%">
+                    <thead>
+                    <tr>
+                        <th>รหัสลูกค้า</th>
+                        <th>ชื่อลูกค้า</th>
+                        <th>สถานะ</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                            class="fa fa-close text-danger"></i> ปิดหน้าต่าง
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<?php
+$url_to_find_cust = Url::to(['deliveryroute/getcustomer'], true);
+$js = <<<JS
+$(function(){
+  
+});
+function showcust(e){
+    var ids = e.attr("data-var");
+    if(ids >0 ){
+     $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_find_cust",
+              'data': {'id': ids},
+              'success': function(data) {
+                  //  alert(data);
+                   $(".table-find-list tbody").html(data);
+                   $("#findModal").modal("show");
+                 }
+              });   
+    }
+}
+JS;
+$this->registerJs($js, static::POS_END);
+?>

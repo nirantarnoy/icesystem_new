@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id
 
     <?= $this->render('_form', [
         'model' => $model,
+        'model_branch' => $model_branch,
     ]) ?>
 
 </div>

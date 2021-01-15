@@ -31,12 +31,33 @@ $this->params['breadcrumbs'][] = $this->title;
             'code',
             'name',
             'description',
-            'car_type_id',
+            [
+                'attribute' => 'car_type_id',
+                'value' => function ($data) {
+                    return \backend\models\Cartype::findName($data->car_type_id);
+                }
+            ],
+            [
+                'attribute' => 'sale_group_id',
+                'value' => function ($data) {
+                    return \backend\models\Salegroup::findName($data->sale_group_id);
+                }
+            ],
+            //'photo',
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    if ($data->status == 1) {
+                        return '<div class="badge badge-success">ใช้งาน</div>';
+                    } else {
+                        return '<div class="badge badge-secondary">ไม่ใช้งาน</div>';
+                    }
+                }
+            ],
+
             'plate_number',
             'photo',
-            'status',
-            'company_id',
-            'branch_id',
             'created_at',
             'updated_at',
             'created_by',

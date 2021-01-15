@@ -12,6 +12,7 @@ $this->params['breadcrumbs'][] = '/'.$this->title;
 <div class="company-create">
     <?= $this->render('_form', [
         'model' => $model,
+        'model_branch' => null,
     ]) ?>
 
 </div>
