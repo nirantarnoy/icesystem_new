@@ -48,7 +48,7 @@ class Branch extends \yii\db\ActiveRecord
         return [
             [['code'],'unique'],
             [['company_id', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['code', 'name', 'description', 'logo'], 'string', 'max' => 255],
+            [['code', 'name', 'description', 'logo','address'], 'string', 'max' => 255],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'id']],
         ];
     }

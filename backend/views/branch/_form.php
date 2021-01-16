@@ -45,6 +45,13 @@ use yii\widgets\ActiveForm;
     </div>
     <div class="row">
         <div class="col-lg-1"></div>
+        <div class="col-lg-10">
+            <?= $form->field($model, 'address')->textarea(['maxlength' => true]) ?>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-1"></div>
         <div class="col-lg-3">
             <label for=""><?= $model->getAttributeLabel('status') ?></label>
             <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(),['options'=>['label'=>'','class'=>'form-control']])->label(false) ?>
