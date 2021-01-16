@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'taxid')->textInput(['maxlength' => true]) ?>
 
-            <?= $form->field($model, 'address')->textarea(['maxlength' => true]) ?>
+            <?= $form->field($model, 'address')->textarea() ?>
 
             <?php if ($model->logo != ''): ?>
                 <div class="row">
