@@ -347,7 +347,7 @@ class OrdersController extends Controller
                        <input type="hidden" class="line-qty-' . $i . '">
                        <input type="hidden" class="line-product-code" name="' . $line_prod_code . '" value="' . $value->code . '">
                        <input type="hidden" class="line-sale-price" name="'.$input_name_price.'" value="' . $value->sale_price . '">
-                       <input type="number" name="' . $input_name . '" data-var="'.$value->sale_price.'" style="text-align: center" class="form-control" min="0" onchange="line_qty_cal($(this))">
+                       <input type="number" name="' . $input_name . '" data-var="'.$value->sale_price.'" style="text-align: center" class="form-control" min="0" value="0" onchange="line_qty_cal($(this))">
                   </td>';
         }
         return $html;
