@@ -44,7 +44,7 @@ class Car extends \yii\db\ActiveRecord
             [['car_type_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['code', 'name', 'description', 'plate_number', 'photo'], 'string', 'max' => 255],
             [['emp_id'], 'safe'],
-            [['sale_group_id'],'integer'],
+            [['sale_group_id','sale_com_id','sale_com_extra'],'integer'],
             [['branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['branch_id' => 'id']],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'id']],
         ];

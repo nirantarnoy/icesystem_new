@@ -463,12 +463,12 @@ $js = <<<JS
  
  function line_qty_cal(e){
       var row = e.parent().parent();
-      var line_price = e.attr('data-var');
+     // var line_price = e.attr('data-var');
       var line_total = 0;
       var line_sale_price_total = 0;
       row.find(':input[type=number]').each(function(){
          var qty = parseFloat($(this).val());
-         var price = line_price;//$(this).closest('tr').find('.line-sale-price').val();
+         var price = $(this).attr('data-var');
          var xqty = 0;
         // alert(qty);
          if(!isNaN(qty)){

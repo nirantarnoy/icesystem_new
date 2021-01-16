@@ -55,6 +55,27 @@ use softark\duallistbox\DualListbox;
     <br>
     <div class="row">
         <div class="col-lg-1"></div>
+        <div class="col-lg-5">
+            <?= $form->field($model, 'sale_com_id')->Widget(\kartik\select2\Select2::className(), [
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Salecom::find()->all(), 'id', 'name'),
+                'options' => [
+                    'placeholder' => '--เลือกกลุ่มคอมมิชชั่น--'
+                ]
+            ]) ?>
+        </div>
+        <div class="col-lg-5">
+            <?= $form->field($model, 'sale_com_extra')->Widget(\kartik\select2\Select2::className(), [
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Salecomcon::find()->all(), 'id', 'name'),
+                'options' => [
+                    'placeholder' => '--เลือกกลุ่มเงื่อนไขพิเศษ--'
+                ]
+            ]) ?>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-lg-1"></div>
         <div class="col-lg-10">
             <?= $form->field($model, 'plate_number')->textInput(['maxlength' => true]) ?>
         </div>

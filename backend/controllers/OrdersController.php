@@ -391,9 +391,11 @@ class OrdersController extends Controller
     public function getProductcolumnUpdate($order_id)
     {
         $html = '';
-        $model = \common\models\OrderLine::find()->select(['product_id'])->where(['order_id' => $order_id])->groupBy(['product_id'])->all();
+        $model = \common\models\OrderLine::find()->select(['product_id','price'])->where(['order_id' => $order_id])->groupBy(['product_id'])->all();
         foreach ($model as $value) {
-            $html .= '<th style="text-align: center">' . \backend\models\Product::findCode($value->product_id) . '</th>';
+            $new_price = '<span style="color: red">'.$value->price.'</span>';
+            $html .= '<th style="text-align: center">' . \backend\models\Product::findCode($value->product_id).' ( '.$new_price.' ) ' . '</th>';
+          //  $html .= '<th style="text-align: center">' . \backend\models\Product::findCode($value->product_id) . '</th>';
         }
         return $html;
     }
@@ -409,7 +411,7 @@ class OrdersController extends Controller
             $i += 1;
             $line_prod_code = \backend\models\Product::findCode($value->product_id) . "[]";
             $input_name = "line_qty_" . $line_prod_code;
-            $input_name_price = "line_sale_price_".$value->code."[]";
+            $input_name_price = "line_sale_price_".$line_prod_code."[]";
 
             $line_total_qty = $line_total_qty + $value->qty;
             $line_total_price = $line_total_price + ($value->qty * $value->price);
