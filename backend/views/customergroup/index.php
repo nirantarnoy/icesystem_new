@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
+use yii\bootstrap4\LinkPager;
 
 $this->title = Yii::t('app', 'กลุ่มลูกค้า');
 $this->params['breadcrumbs'][] = $this->title;
@@ -119,6 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]
             ],
         ],
+        'pager' => ['class' => LinkPager::className()],
     ]); ?>
 
     <?php Pjax::end(); ?>

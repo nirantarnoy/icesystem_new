@@ -4,9 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\UnitSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+use yii\bootstrap4\LinkPager;
 
 $this->title = Yii::t('app', 'หน่วยนับ');
 $this->params['breadcrumbs'][] = $this->title;
@@ -124,6 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]
             ],
         ],
+        'pager' => ['class' => LinkPager::className()],
     ]); ?>
 
     <?php Pjax::end(); ?>

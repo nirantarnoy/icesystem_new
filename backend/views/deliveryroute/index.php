@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
+use yii\bootstrap4\LinkPager;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\DeliveryrouteSearch */
@@ -124,6 +125,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]
             ],
         ],
+        'pager' => ['class' => LinkPager::className()],
     ]); ?>
 
     <?php Pjax::end(); ?>

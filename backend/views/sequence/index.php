@@ -5,7 +5,7 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 use lavrentiev\widgets\toastr\Notification;
-
+use yii\bootstrap4\LinkPager;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\SequenceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -186,6 +186,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                 ],
             ],
+            'pager' => ['class' => LinkPager::className()],
         ]); ?>
     </div>
 </div>
