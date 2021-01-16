@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dfc5e53f061a0e08dd5d55551584e5b4",
+    "content-hash": "c6dc86b65e3a3cf9354fcc42e9cb10f8",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -90,7 +90,7 @@
             "version": "3.5.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "4c0e4becb8263bb5b3e6dadc448d8e7305ef8215"
             },
             "dist": {
@@ -4924,7 +4924,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "yiisoft/yii2-bootstrap4": 20,
         "kartik-v/yii2-widget-select2": 20,
         "kartik-v/yii2-checkbox-x": 20,
         "softark/yii2-dual-listbox": 20,
