@@ -99,7 +99,7 @@ if($view_emp_id != null){
 }
 
 ?>
-<form action="index.php?r=salereportemp/empcomlist" method="post">
+<form id="form-export" action="index.php?r=salereportemp/empcomlist" method="post">
     <div class="row">
         <div class="col-lg-3">
             <label for="">เลือกวันที่</label>
@@ -137,6 +137,10 @@ if($view_emp_id != null){
         <div class="col-lg-3">
             <label for="" style="color: white">เรียกดูข้อมูล</label><br>
             <button type="submit" class="btn btn-success">เรียกดูข้อมูล</button>
+        </div>
+        <div class="col-lg-3" style="text-align: right">
+            <label for="" style="color: white">เรียกดูข้อมูล</label><br>
+            <div type="button" class="btn btn-primary" onclick="submit_export($(this))">Export Excel</div>
         </div>
     </div>
 </form>
@@ -325,4 +329,17 @@ function findCarempcount($car_id)
     return $c;
 }
 
+?>
+
+<?php
+$js=<<<JS
+$(function(){
+    
+});
+function submit_export(e){
+    $("form#form-export").attr('action','index.php?r=salereportemp/export');
+    $("form#form-export").submit();
+}
+JS;
+$this->registerJs($js,static::POS_END);
 ?>

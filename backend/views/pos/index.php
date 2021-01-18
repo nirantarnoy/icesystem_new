@@ -1,6 +1,7 @@
 <?php
 
 use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
 
 $this->title = 'ทำรายการขายหน้าร้าน POS';
 
@@ -23,15 +24,21 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
             </div>
         </div>
         <div class="row div-customer-search" style="display: none;">
-            <div class="col-lg-12">
+            <div class="col-lg-6">
                 <div class="input-group" style="margin-left: 10px;">
                     <!--                    <input type="text" class="form-control find-customer" value="">-->
-                    <?php $cust_data = \backend\models\Customer::find()->all(); ?>
-                    <select name="" class="form-control customer-id" id="">
-                        <?php foreach ($cust_data as $value): ?>
-                            <option value="<?= $value->id ?>"><?= $value->name ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                    <?php echo Select2::widget([
+                        'name' => 'customer_id',
+                        'value' => 1,
+                        'data' => ArrayHelper::map(\backend\models\Customer::find()->all(), 'id', function ($data) {
+                            return $data->code . ' ' . $data->name;
+                        }),
+                        'options' => [
+                            'placeholder' => '--เลือกลูกค้า--',
+                            'onchange' => 'getproduct_price($(this))'
+                        ],
+                    ]);
+                    ?>
                     <button class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </div>
             </div>
@@ -225,6 +232,7 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
 </div>
 
 <?php
+$url_to_get_price = \yii\helpers\Url::to(['pos/getcustomerprice'],true);
 $js = <<<JS
  $(function(){
      $(".customer-id").select2({
@@ -269,12 +277,31 @@ $js = <<<JS
      });
  });
 
+function getproduct_price(e){
+    var ids = e.val();
+    if(ids > 0){
+         $.ajax({
+              type: "post",
+              dataType: "html",
+              url: "' . $url_to_get_price . '",
+              data: {cust_id: ids},
+              success: function(data){
+                  alert(data);
+               }
+             });
+    }
+    // $(".product-items").each(function(){
+    //   // console.log($(this).find(".list-item-price").val()); 
+    //    $(".popup-price").val($(this).find(".list-item-price").val());
+    // });
+}
+
 function showadditem(e){
     var c_prod_id = e.find('.list-item-id').val();
     var c_prod_code = e.find('.list-item-code').val();
     var c_prod_name = e.find('.list-item-name').val();
     var c_prod_price = e.find('.list-item-price').val();
-   // alert(c_prod_code);
+   //alert(c_prod_price);
     if(c_prod_id > 0){
         $(".popup-product-id").val(c_prod_id);
         $(".popup-product-code").val(c_prod_code);
