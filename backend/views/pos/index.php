@@ -59,6 +59,9 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
                                     <input type="hidden" class="list-item-price" value="<?= $value->sale_price ?>">
                                     <p class="card-text" style="font-size: 14px;"><?= $value->name ?></p>
                                 </div>
+                                <div class="card-footer" style="text-align: center">
+                                    <div class="item-price" style="color: red;font-weight: bold;"><?= $value->sale_price ?></div>
+                                </div>
                             </div>
                         </div>
                     <?php endforeach; ?>

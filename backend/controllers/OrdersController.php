@@ -160,13 +160,13 @@ class OrdersController extends Controller
                                 // $prod_line = \Yii::$app->request->post($prods->code);
                                 $prod_line_qty = \Yii::$app->request->post('line_qty_' . $prods->code);
                                 $line_sale_price = \Yii::$app->request->post('line_sale_price_'.$prods->code);
-
+                             //  print_r($line_sale_price);return;
                                 $model_has = $this->check_has_line($model->id, $line_customer_id[$i], $prods->id);
                                 if ($model_has != null) {
                                     // echo "has ";return;
                                     $model_has->qty = $prod_line_qty[$i];
                                     $model_has->price = $line_sale_price[$i];
-                                    $model_has->line_total =$prod_line_qty[$i] * $line_sale_price[$i] ;
+                                    $model_has->line_total = ($prod_line_qty[$i] * $line_sale_price[$i]);
                                     $model_has->save(false);
                                 } else {
                                     $model_line = new \backend\models\Orderline();
@@ -411,7 +411,7 @@ class OrdersController extends Controller
             $i += 1;
             $line_prod_code = \backend\models\Product::findCode($value->product_id) . "[]";
             $input_name = "line_qty_" . $line_prod_code;
-            $input_name_price = "line_sale_price_".$line_prod_code."[]";
+            $input_name_price = "line_sale_price_".$line_prod_code;
 
             $line_total_qty = $line_total_qty + $value->qty;
             $line_total_price = $line_total_price + ($value->qty * $value->price);

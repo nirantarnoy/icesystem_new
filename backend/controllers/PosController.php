@@ -41,9 +41,9 @@ class PosController extends Controller
         $data = [];
         $customer_id = \Yii::$app->request->post('customer_id');
         if($customer_id){
-            $model = \backend\models\Customer::find()->where(['id'=>$customer_id])->one();
+            $model = \common\models\QueryCustomerPrice::find()->where(['customer_id'=>$customer_id])->all();
             if($model){
-                $model_price = \backend\models\Customertype::find()->where(['id'=>$model->pr])->one();
+
             }
 
         }
