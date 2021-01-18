@@ -25,6 +25,8 @@ class SalereportempController extends Controller{
     }
     public function actionEmpcomlist(){
 
+        $view_com_date = \Yii::$app->request->post('com_date');
+        $view_emp_id = \Yii::$app->request->post('emp_id');
         $searchModel = new SalereportbyempSearch();
 //print_r(Yii::$app->request->queryParams);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -37,6 +39,8 @@ class SalereportempController extends Controller{
         return $this->render('empcomlist', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'view_com_date' => $view_com_date,
+            'view_emp_id' => $view_emp_id
         ]);
     }
 }
