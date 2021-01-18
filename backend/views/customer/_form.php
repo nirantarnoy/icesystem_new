@@ -17,28 +17,34 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-lg-4">
-            <?= $form->field($model, 'customer_group_id')->Widget(\kartik\select2\Select2::className(),[
-                    'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Customergroup::find()->all(),'id','name'),
-                    'options'=>[
-                            'placeholder'=>'--เลือกกลุ่มลูกค้า--'
-                    ]
+            <?= $form->field($model, 'customer_group_id')->Widget(\kartik\select2\Select2::className(), [
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customergroup::find()->all(), 'id', function ($data) {
+                    return $data->code . ' ' . $data->name;
+                }),
+                'options' => [
+                    'placeholder' => '--เลือกกลุ่มลูกค้า--'
+                ]
             ]) ?>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-4">
-            <?= $form->field($model, 'delivery_route_id')->Widget(\kartik\select2\Select2::className(),[
-                'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(),'id','name'),
-                'options'=>[
-                    'placeholder'=>'--เลือกเส้นทางขนส่ง--'
+            <?= $form->field($model, 'delivery_route_id')->Widget(\kartik\select2\Select2::className(), [
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(), 'id', function ($data) {
+                    return $data->code . ' ' . $data->name;
+                }),
+                'options' => [
+                    'placeholder' => '--เลือกเส้นทางขนส่ง--'
                 ]
             ]) ?>
         </div>
         <div class="col-lg-4">
-            <?= $form->field($model, 'customer_type_id')->Widget(\kartik\select2\Select2::className(),[
-                'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Customertype::find()->all(),'id','name'),
-                'options'=>[
-                    'placeholder'=>'--เลือกประเภทลูกค้า--'
+            <?= $form->field($model, 'customer_type_id')->Widget(\kartik\select2\Select2::className(), [
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customertype::find()->all(), 'id', function ($data) {
+                    return $data->code . ' ' . $data->name;
+                }),
+                'options' => [
+                    'placeholder' => '--เลือกประเภทลูกค้า--'
                 ]
             ]) ?>
         </div>
@@ -66,7 +72,7 @@ use yii\widgets\ActiveForm;
     <div class="row">
         <div class="col-lg-4">
             <label for=""><?= $model->getAttributeLabel('status') ?></label>
-            <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(),['options'=>['label'=>'','class'=>'form-control']])->label(false) ?>
+            <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label(false) ?>
         </div>
         <div class="col-lg-4">
 
@@ -84,11 +90,6 @@ use yii\widgets\ActiveForm;
 
         </div>
     </div>
-
-
-
-
-
 
 
     <?php ActiveForm::end(); ?>
