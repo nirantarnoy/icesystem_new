@@ -327,6 +327,12 @@
                                 <p>รายงานขายแยกตามสายส่ง</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="index.php?r=salereportemp" class="nav-link salereportemp">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>รายงานขายแยกตามพนักงาน</p>
+                            </a>
+                        </li>
 <!--                        <li class="nav-item">-->
 <!--                            <a href="index.php?r=report" class="nav-link report">-->
 <!--                                <i class="far fa-circlez nav-icon"></i>-->

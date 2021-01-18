@@ -284,8 +284,8 @@ $prod_status = \backend\helpers\ProductStatus::asArrayObject();
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <div class="row">
-                    <div class="col-lg-12">
+                <div class="row" style="width: 100%">
+                    <div class="col-lg-11">
                         <div class="input-group">
                             <input type="text" class="form-control search-item" placeholder="ค้นหาสินค้า">
                             <span class="input-group-addon">
@@ -341,10 +341,10 @@ $prod_status = \backend\helpers\ProductStatus::asArrayObject();
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <div class="row">
-                    <div class="col-lg-12">
+                <div class="row" style="width: 100%" >
+                    <div class="col-lg-11">
                         <div class="input-group">
-                            <input type="text" class="form-control search-item" placeholder="ค้นหาประเภทสินค้า">
+                            <input type="text" class="form-control search-item2" placeholder="ค้นหาประเภทสินค้า">
                             <span class="input-group-addon">
                                         <button type="submit" class="btn btn-primary btn-search-submit2">
                                             <span class="fa fa-search"></span>
@@ -401,7 +401,37 @@ $js = <<<JS
   var selecteditem = [];
   var selecteditem2 = [];
   $(function(){
+      $(".btn-search-submit").click(function (){
+         var txt = $(".search-item").val();
+         $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_find_item",
+              'data': {txt_search: txt},
+              'success': function(data) {
+                  //  alert(data);
+                   $(".table-find-list tbody").html(data);
+                 //  $("#findModal").modal("show");
+                 }
+              });
+      });
       
+      $(".btn-search-submit2").click(function (){
+         var txt = $(".search-item2").val();
+         $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_find_customer_type",
+              'data': {txt_search: txt},
+              'success': function(data) {
+                  //  alert(data);
+                   $(".table-find-list2 tbody").html(data);
+                 //  $("#findModal").modal("show");
+                 }
+              });
+      });
   });
   
   function showfind(e){

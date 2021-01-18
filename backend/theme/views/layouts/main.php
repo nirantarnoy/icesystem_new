@@ -125,7 +125,7 @@ $cururl = Yii::$app->controller->id;
             $("#form-perpage").submit();
         });
 
-        if(cururl == 'pos' || cururl == 'orders' || cururl == 'salereport'){
+        if(cururl == 'pos' || cururl == 'orders' || cururl == 'salereport' || cururl == 'salereportemp'){
             $(".sidebar-mini").removeClass('layout-fixed');
             $(".sidebar-mini").addClass('sidebar-collapse');
         }

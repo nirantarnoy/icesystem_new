@@ -35,7 +35,7 @@ echo GridView::widget([
         '{export}',
 
     ],
-    'panel' => ['type' => 'info', 'heading' => 'รายงานแสดงยอดขายแยกตามสายส่ง'],
+    'panel' => ['type' => 'warning', 'heading' => 'รายงานแสดงยอดขายแยกตามพนักงานขาย'],
     'toggleDataContainer' => ['class' => 'btn-group mr-2'],
     'columns' => [
         ['class' => 'kartik\grid\SerialColumn'],
@@ -52,26 +52,26 @@ echo GridView::widget([
 //            'expandOneOnly' => true
 //        ],
         [
-            'attribute' => 'order_channel_id',
+            'attribute' => 'emp_id',
             'width' => '10%',
             'value' => function ($model, $key, $index, $widget) {
-                return 'สายส่ง ' . $model->route_code;
+                return $model->fname.' '. $model->lname.' สายส่ง '.$model->route_code;
             },
             'filterType' => GridView::FILTER_SELECT2,
-            'filter' => ArrayHelper::map(\backend\models\Deliveryroute::find()->orderBy('name')->asArray()->all(), 'id', 'name'),
+            'filter' => ArrayHelper::map(\backend\models\Employee::find()->orderBy('id')->asArray()->all(), 'id', 'fname'),
             'filterWidgetOptions' => [
-                'pluginOptions' => ['allowClear' => true],
+                'pluginOptions' => ['allowClear' => true,'multiple' => true,],
             ],
-            'filterInputOptions' => ['placeholder' => '--เลือกสายส่ง--'],
+            'filterInputOptions' => ['placeholder' => '--เลือกพนักงาน--'],
             'group' => true,  // enable grouping,
             'groupHeader' => function ($model, $key, $index, $widget) { // Closure method
                 return [
                     'mergeColumns' => [[1, 4]], // columns to merge in summary
                     'content' => [             // content to show in each summary cell
-                        1 => 'ยอดรวมสายส่ง (' . $model->route_code . ')',
+                        1 => 'ยอดรวม (' . $model->fname. ' '.$model->lname . ')',
                         6 => GridView::F_SUM,
                         8 => GridView::F_SUM,
-//                        7 => GridView::F_SUM,
+//                        7 => GridView::,
                     ],
                     'contentFormats' => [      // content reformatting for each summary cell
                         //4 => ['format' => 'number', 'decimals' => 0],

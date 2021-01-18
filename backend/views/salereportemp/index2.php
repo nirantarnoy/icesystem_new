@@ -1,0 +1,223 @@
+<?php
+
+use kartik\grid\GridView;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use kartik\daterange\DateRangePicker;
+
+$this->title = 'รายงานสรุปค่าคอมมิชชั่น';
+
+?>
+
+<?php
+//echo GridView::widget([
+//    'dataProvider' => $dataProvider,
+//    'filterModel' => $searchModel,
+//    'showPageSummary' => true,
+//    'pjax' => true,
+//    'striped' => true,
+//    'hover' => true,
+//    'options' => [
+//        'style' => 'font-size: 14px;'
+//    ],
+//    'toolbar' => [
+////        [
+////            'content' =>
+////               '<input type="text" class="form-control">' . ' '.
+////                Html::a('<i class="fas fa-search"></i>', '', [
+////                    'class' => 'btn btn-outline-secondary',
+////                    'title'=>Yii::t('app', 'Reset Grid'),
+////                    'data-pjax' => 0,
+////                ]),
+////            'options' => ['class' => 'btn-group mr-2']
+////        ],
+//        '{toggleData}',
+//        '{export}',
+//
+//    ],
+//    'panel' => ['type' => 'warning', 'heading' => 'รายงานแสดงยอดขายแยกตามพนักงานขาย'],
+//    'toggleDataContainer' => ['class' => 'btn-group mr-2'],
+//    'columns' => [
+//        ['class' => 'kartik\grid\SerialColumn'],
+//        'fname',
+//        'lname',
+//       'Cash',
+//       'Credit',
+//        [
+//            'attribute' => '1',
+//
+//        ],
+//        '2',
+//        '3',
+//        '4',
+//        '5',
+//        '6',
+//        '7',
+//        '8',
+//    ],
+//]);
+?>
+<?php
+$model = \backend\models\Product::find()->all();
+$model_emp = \backend\models\Employee::find()->all();
+?>
+<div class="row">
+    <div class="col-lg-3">
+        <label for="">เลือกวันที่</label>
+        <input type="text" class="form-control" placeholder="DD/MM/YYYY">
+    </div>
+    <div class="col-lg-3">
+        <label for="">พนักงาน</label>
+        <select name="" class="form-control" id="">
+            <option value="">--เลือกพนักงาน--</option>
+        </select>
+    </div>
+    <div class="col-lg-3">
+        <label for="" style="color: white">เรียกดูข้อมูล</label><br>
+       <div class="btn btn-success">เรียกดูข้อมูล</div>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-lg-12">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr style="font-size: 12px;">
+                <th width="5%" style="text-align: center" rowspan="2">#</th>
+                <th style="text-align: center" rowspan="2">รหัส</th>
+                <th rowspan="2">ชื่อ-นามสกุล</th>
+                <th style="text-align: right;background-color: #44ab7d;color: white" rowspan="2">เงินสด</th>
+                <th style="text-align: right;background-color: #e4606d;color: white" rowspan="2">เงินเชื่อ</th>
+                <?php foreach ($model as $value):?>
+                    <th colspan="2" style="text-align: center"><?=$value->code?>
+                    </th>
+                <?php endforeach;?>
+                <th style="text-align: right;background-color: #258faf;color: white" rowspan="2">Rate Com</th>
+                <th style="text-align: right;background-color: #258faf;color: white" rowspan="2">คอมมิชชั่น</th>
+                <th style="text-align: right;background-color: #258faf;color: white" rowspan="2">เงินพิเศษ</th>
+            </tr>
+            <tr style="font-size: 12px;">
+<!--                <th width="5%" style="text-align: center"></th>-->
+<!--                <th style="text-align: center">รหัส</th>-->
+<!--                <th>ชื่อ-นามสกุล</th>-->
+<!--                <th style="text-align: right;background-color: #44ab7d;color: white">เงินสด</th>-->
+<!--                <th style="text-align: right;background-color: #e4606d;color: white">เงินเชื่อ</th>-->
+                <?php foreach ($model as $value):?>
+                    <th>จำนวน</th>
+                    <th style="background-color: #B4B9BE">ยอดเงิน</th>
+                <?php endforeach;?>
+<!--                <th style="text-align: right;background-color: #258faf;color: white">Rate Com</th>-->
+<!--                <th style="text-align: right;background-color: #258faf;color: white">คอมมิชชั่น</th>-->
+<!--                <th style="text-align: right;background-color: #258faf;color: white">เงินพิเศษ</th>-->
+            </tr>
+            </thead>
+            <tbody>
+            <?php $i=0;?>
+            <?php foreach ($model_emp as $value):?>
+                <?php $i+=1;?>
+                <?php $line_com = 0;?>
+                <?php $line_sum_qty = 0;?>
+                <tr style="font-size: 12px;">
+                <td style="text-align: center"><?=$i;?></td>
+                <td style="text-align: center"><?=$value->code?></td>
+                <td><?=$value->fname.' '. $value->lname?></td>
+                <td style="text-align: right;background-color: #44ab7d;color: white"><?=findCash($value->id)?></td>
+                <td style="text-align: right;background-color: #e4606d;color: white"><?=findCredit($value->id)?></td>
+                <?php foreach ($model as $value2):?>
+                <?php $line_qty = findProductqty($value->id,$value2->id);?>
+                <?php
+                    $line_sum_qty = $line_sum_qty + $line_qty;
+                    $line_com_rate = findComrate($value->id);
+                    ?>
+                    <td style="text-align: right"><?=$line_qty;?></td>
+                    <td style="text-align: right;background-color: #B4B9BE"><?=findProduct($value->id,$value2->id)?></td>
+                <?php endforeach;?>
+                <td style="text-align: right;background-color: #258faf;color: white"><?=$line_com_rate;?></td>
+                <td style="text-align: right;background-color: #258faf;color: white"><?=$line_sum_qty * $line_com_rate;?></td>
+                <td style="text-align: right;background-color: #258faf;color: white">0</td>
+            </tr>
+            <?php endforeach;?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<?php
+ function findCash($emp_id){
+     $c = 0;
+     if($emp_id){
+         $model = \common\models\QuerySaleTransByEmp::find()->where(['payment_method_id'=>1, 'emp_id'=>$emp_id])->sum('qty * price');
+         if($model){
+             $c = $model;
+         }
+     }
+     return $c;
+ }
+function findCredit($emp_id){
+    $c = 0;
+    if($emp_id){
+        $model = \common\models\QuerySaleTransByEmp::find()->where(['payment_method_id'=>2, 'emp_id'=>$emp_id])->sum('qty * price');
+        if($model){
+            $c = $model;
+        }
+    }
+    return $c;
+}
+function findProduct($emp_id, $product_id){
+    $c = 0;
+    if($emp_id && $product_id){
+        $model = \common\models\QuerySaleTransByEmp::find()->where(['product_id'=>$product_id, 'emp_id'=>$emp_id])->sum('qty * price');
+        if($model){
+            $c = $model;
+        }
+    }
+    return $c;
+}
+function findProductqty($emp_id, $product_id){
+    $c = 0;
+    if($emp_id && $product_id){
+        $model = \common\models\QuerySaleTransByEmp::find()->where(['product_id'=>$product_id, 'emp_id'=>$emp_id])->sum('qty');
+        if($model){
+            $c = $model;
+        }
+    }
+    return $c;
+}
+function findComrate($emp_id){
+    $c = 0;
+    if($emp_id){
+        $model = \common\models\CarEmp::find()->where(['emp_id'=>$emp_id])->one();
+        if($model){
+            if($model->car_id){
+              $sql = "SELECT sale_com.com_extra,sale_com.emp_qty FROM car INNER JOIN sale_com ON car.sale_com_id=sale_com.id WHERE car.id=".$model->car_id;
+              $query = \Yii::$app->db->createCommand($sql)->queryAll();
+                if($query != null){
+                    //print_r($query);return;
+                   // foreach ($query as $value){
+                        $emp_count = findCarempcount($model->car_id);
+                        if($emp_count == $query[0]['emp_qty']){
+                            $c = $query[0]['com_extra'];
+                        }else{
+                            $c = 0.75;
+                        }
+
+                   // }
+
+                }
+            }
+        }else{
+//            $c= 33;
+        }
+    }
+    return $c;
+}
+function findCarempcount($car_id){
+    $c = 0;
+    if($car_id){
+        $model = \common\models\CarEmp::find()->where(['car_id'=>$car_id])->count('emp_id');
+        $c = $model;
+    }
+    return $c;
+}
+?>

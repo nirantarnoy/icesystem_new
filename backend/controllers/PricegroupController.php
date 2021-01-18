@@ -191,8 +191,14 @@ class PricegroupController extends Controller
 
     public function actionProductdata()
     {
+        $txt = \Yii::$app->request->post('txt_search');
         $html = '';
-        $model = \backend\models\Product::find()->all();
+        $model = null;
+        if($txt !=''){
+            $model = \backend\models\Product::find()->where(['OR',['LIKE','code',$txt],['LIKE','name',$txt]])->all();
+        }else{
+            $model = \backend\models\Product::find()->all();
+        }
         foreach ($model as $value) {
             $html .= '<tr>';
             $html .= '<td style="text-align: center">
@@ -212,8 +218,14 @@ class PricegroupController extends Controller
 
     public function actionCustomertypedata()
     {
+        $txt = \Yii::$app->request->post('txt_search');
         $html = '';
-        $model = \backend\models\Customertype::find()->all();
+        $model = null;
+        if($txt !=''){
+            $model = \backend\models\Customertype::find()->where(['OR',['LIKE','code',$txt],['LIKE','name',$txt]])->all();
+        }else{
+            $model = \backend\models\Customertype::find()->all();
+        }
         foreach ($model as $value) {
             $html .= '<tr>';
             $html .= '<td style="text-align: center">

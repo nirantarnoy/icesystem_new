@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use backend\models\Paymentmethod;
+use common\models\QuerySaleTransByEmp;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use \common\models\QuerySaleTransData;
@@ -10,7 +11,7 @@ use \common\models\QuerySaleTransData;
 /**
  * PaymentmethodSearch represents the model behind the search form of `backend\models\Paymentmethod`.
  */
-class SalereportSearch extends QuerySaleTransData
+class SalereportempSearch extends QuerySaleTransByEmp
 {
     public $globalSearch;
 
@@ -20,8 +21,9 @@ class SalereportSearch extends QuerySaleTransData
 //            [['id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
 //            [['code', 'name', 'note'], 'safe'],
 //            [['globalSearch'],'string']
+
             [['customer_id', 'order_channel_id', 'payment_method_id'], 'integer'],
-            [['order_date'], 'safe'],
+            [['order_date','emp_id'], 'safe'],
             [['product_id'], 'safe']
         ];
     }
@@ -44,7 +46,7 @@ class SalereportSearch extends QuerySaleTransData
      */
     public function search($params)
     {
-        $query = QuerySaleTransData::find();
+        $query = QuerySaleTransByEmp::find();
 
         // add conditions that should always apply here
 
@@ -70,9 +72,15 @@ class SalereportSearch extends QuerySaleTransData
             'customer_id' => $this->customer_id,
             'product_id' => $this->product_id,
             'order_channel_id' => $this->order_channel_id,
-            'payment_method_id' => $this->payment_method_id
+            'payment_method_id' => $this->payment_method_id,
+           // 'emp_id' => $this->emp_id
             //'!=','route_code','NULL'
         ]);
+
+        if($this->emp_id != ''){
+           // $new_emp = explode(',',$this->emp_id);
+            $query->andFilterWhere(['IN','emp_id',$this->emp_id]);
+        }
 
         if($this->order_date != ''){
             $date_data = explode(' - ',$this->order_date);
@@ -101,6 +109,7 @@ class SalereportSearch extends QuerySaleTransData
                // ->andFilterWhere(['<=','date(order_date)',$t_date]);
 
         }
+
 
 //
 //        if($this->globalSearch != ''){
