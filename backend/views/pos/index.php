@@ -50,14 +50,15 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
                     <?php $product_data = \backend\models\Product::find()->all(); ?>
                     <?php foreach ($product_data as $value): ?>
                         <div class="col-lg-2 product-items">
-                            <div class="card" style="width: ;height: 180px;" onclick="showadditem($(this))">
-                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">
+                            <div class="card" style="width: ;height: 200px;" onclick="showadditem($(this))">
+<!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
+                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="" >
                                 <div class="card-body">
                                     <input type="hidden" class="list-item-id" value="<?= $value->id ?>">
                                     <input type="hidden" class="list-item-code" value="<?= $value->code ?>">
                                     <input type="hidden" class="list-item-name" value="<?= $value->name ?>">
                                     <input type="hidden" class="list-item-price" value="<?= $value->sale_price ?>">
-                                    <p class="card-text" style="font-size: 14px;"><?= $value->name ?></p>
+                                    <p class="card-text" style="font-size: 12px;"><?= $value->name ?></p>
                                 </div>
                                 <div class="card-footer" style="text-align: center">
                                     <div class="item-price" style="color: red;font-weight: bold;"><?= $value->sale_price ?></div>
@@ -302,6 +303,8 @@ function getproduct_price(e){
                              
                         //    $(".popup-price").val($(this).find(".list-item-price").val());
                          });
+                  }else{
+                      alert();
                   }
                }
              });
