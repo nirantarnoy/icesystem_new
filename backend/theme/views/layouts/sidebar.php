@@ -280,7 +280,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="index.php?r=comreport/index" class="nav-link comreport">
+                            <a href="index.php?r=salereportemp/empcomlist" class="nav-link salereport">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>รายงานคอมมิชชั่น</p>
                             </a>
