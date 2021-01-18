@@ -6,6 +6,7 @@ use backend\models\WarehouseSearch;
 use Yii;
 use backend\models\Car;
 use backend\models\CarSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -15,12 +16,24 @@ use yii\filters\VerbFilter;
  */
 class PosController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
+   public $enableCsrfValidation = false;
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['login', 'error'],
+                        'allow' => true,
+                    ],
+                    [
+                        'actions' => ['logout', 'index','getcustomerprice'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -42,11 +55,14 @@ class PosController extends Controller
         $customer_id = \Yii::$app->request->post('customer_id');
         if($customer_id){
             $model = \common\models\QueryCustomerPrice::find()->where(['customer_id'=>$customer_id])->all();
-            if($model){
-
+            if($model != null){
+                foreach ($model as $value){
+                    array_push($data,['product_id'=>$value->product_id,'sale_price'=>$value->sale_price]);
+                }
             }
 
         }
+        echo json_encode($data);
     }
 
 }

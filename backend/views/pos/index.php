@@ -39,7 +39,7 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
                         ],
                     ]);
                     ?>
-                    <button class="btn btn-primary"><i class="fa fa-search"></i></button>
+<!--                    <button class="btn btn-primary"><i class="fa fa-search"></i></button>-->
                 </div>
             </div>
         </div>
@@ -285,11 +285,24 @@ function getproduct_price(e){
     if(ids > 0){
          $.ajax({
               type: "post",
-              dataType: "html",
-              url: "' . $url_to_get_price . '",
-              data: {cust_id: ids},
+              dataType: "json",
+              url: "$url_to_get_price",
+              data: {customer_id: ids},
               success: function(data){
-                  alert(data);
+                  if(data.length > 0){
+                      //alert(data[0]['product_id']);
+                          var i = -1;
+                         $(".product-items").each(function(){
+                             i+=1;
+                             var line_product_id = $(this).find(".list-item-id").val();
+                             if(line_product_id == data[i]['product_id']){
+                                 $(this).find(".list-item-price").val(data[i]['sale_price']); 
+                                 $(this).find(".item-price").html(data[i]['sale_price']); 
+                             }
+                             
+                        //    $(".popup-price").val($(this).find(".list-item-price").val());
+                         });
+                  }
                }
              });
     }
