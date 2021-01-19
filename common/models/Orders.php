@@ -51,7 +51,7 @@ class Orders extends \yii\db\ActiveRecord
             [['order_date'], 'safe'],
             [['vat_amt', 'vat_per', 'order_total_amt'], 'number'],
             [['order_no', 'customer_name'], 'string', 'max' => 255],
-            [['payment_method_id'],'integer'],
+            [['payment_method_id','payment_term_id'],'integer'],
             [['branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['branch_id' => 'id']],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'id']],
         ];
@@ -76,6 +76,7 @@ class Orders extends \yii\db\ActiveRecord
             'car_ref_id' => Yii::t('app', 'Car Ref ID'),
             'order_channel_id' => Yii::t('app', 'Order Channel ID'),
             'status' => Yii::t('app', 'Status'),
+            'payment_term_id' => Yii::t('app', 'Payment Term'),
             'company_id' => Yii::t('app', 'Company ID'),
             'branch_id' => Yii::t('app', 'Branch ID'),
             'created_at' => Yii::t('app', 'Created At'),

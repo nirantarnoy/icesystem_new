@@ -59,6 +59,16 @@ use yii\widgets\ActiveForm;
             ]) ?>
         </div>
         <div class="col-lg-3">
+            <?= $form->field($model, 'payment_term_id')->Widget(\kartik\select2\Select2::className(), [
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentterm::find()->all(), 'id', function ($data) {
+                    return $data->name;
+                }),
+                'options' => [
+                    'placeholder' => '--เลือกเงื่อนไขชำระเงิน--'
+                ]
+            ]) ?>
+        </div>
+        <div class="col-lg-3">
             <?= $form->field($model, 'order_total_amt')->textInput(['readonly' => 'readonly', 'id' => 'order-total-amt']) ?>
         </div>
         <div class="col-lg-3">

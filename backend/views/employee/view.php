@@ -6,15 +6,12 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Employee */
 
-$this->title = $model->id;
+$this->title = $model->code;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Employees'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="employee-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
@@ -29,17 +26,43 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+            // 'id',
             'code',
             'fname',
             'lname',
-            'gender',
-            'position',
-            'salary_type',
+            [
+                'attribute' => 'gender',
+                'value' => function ($data) {
+                    return \backend\helpers\GenderType::getTypeById($data->gender);
+                }
+            ],
+            [
+                'attribute' => 'position',
+                'value' => function ($data) {
+                    return \backend\models\Position::findName($data->position);
+                }
+            ],
+            [
+                'attribute' => 'salary_type',
+                'value' => function ($data) {
+                    return \backend\helpers\SalaryType::getTypeById($data->salary_type);
+                }
+            ],
             'emp_start',
             'description',
             'photo',
-            'status',
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    if ($data->status == 1) {
+                        return '<div class="badge badge-success">ใช้งาน</div>';
+                    } else {
+                        return '<div class="badge badge-secondary">ไม่ใช้งาน</div>';
+                    }
+                }
+            ],
+
             'company_id',
             'branch_id',
             'created_at',

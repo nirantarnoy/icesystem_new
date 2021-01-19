@@ -9,29 +9,27 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="paymentterm-form">
-
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
+    <div class="row">
+        <div class="col-lg-1">
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-lg-10">
+            <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'description')->textarea(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
+            <label for=""><?= $model->getAttributeLabel('status') ?></label>
+            <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label(false) ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'created_by')->textInput() ?>
-
-    <?= $form->field($model, 'updated_by')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+            <br>
+            <div class="form-group">
+                <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+            </div>
+        </div>
     </div>
-
     <?php ActiveForm::end(); ?>
 
 </div>

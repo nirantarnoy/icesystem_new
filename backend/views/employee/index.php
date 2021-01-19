@@ -57,7 +57,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'code',
             'fname',
             'lname',
-            'gender',
+            [
+                'attribute' => 'gender',
+                'value' => function ($data) {
+                    return \backend\helpers\GenderType::getTypeById($data->gender);
+                }
+            ],
+            [
+                'attribute' => 'position',
+                'value' => function ($data) {
+                    return \backend\models\Position::findName($data->position);
+                }
+            ],
             [
                 'attribute' => 'status',
                 'format' => 'raw',

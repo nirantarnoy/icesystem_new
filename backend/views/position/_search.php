@@ -18,29 +18,10 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
-
-    <?= $form->field($model, 'code') ?>
-
-    <?= $form->field($model, 'name') ?>
-
-    <?= $form->field($model, 'description') ?>
-
-    <?= $form->field($model, 'status') ?>
-
-    <?php // echo $form->field($model, 'created_at') ?>
-
-    <?php // echo $form->field($model, 'created_by') ?>
-
-    <?php // echo $form->field($model, 'updated_at') ?>
-
-    <?php // echo $form->field($model, 'updated_by') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
+    <div class="input-group">
+        <!--         <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>-->
+        <?= $form->field($model, 'globalSearch')->textInput(['placeholder'=>'ค้นหา','class'=>'form-control','aria-describedby'=>'basic-addon1'])->label(false) ?>
     </div>
-
     <?php ActiveForm::end(); ?>
 
 </div>

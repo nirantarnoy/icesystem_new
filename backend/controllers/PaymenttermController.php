@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\SalecomSearch;
 use Yii;
 use backend\models\Paymentterm;
 use backend\models\PaymenttermSearch;
@@ -35,12 +36,16 @@ class PaymenttermController extends Controller
      */
     public function actionIndex()
     {
+        $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new PaymenttermSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
+        $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'perpage' => $pageSize,
         ]);
     }
 

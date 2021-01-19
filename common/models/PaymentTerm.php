@@ -33,6 +33,8 @@ class PaymentTerm extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['code','name'],'required'],
+            [['code'],'unique'],
             [['status', 'created_at', 'created_by', 'updated_by', 'updated_at'], 'integer'],
             [['code', 'name', 'description'], 'string', 'max' => 255],
         ];
