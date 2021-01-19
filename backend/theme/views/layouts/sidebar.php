@@ -203,6 +203,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="index.php?r=paymentterm/index" class="nav-link paymentterm">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>เงื่อนไขชำระเงิน</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="index.php?r=pos/index" class="nav-link pos">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>ขาย POS</p>
@@ -261,6 +267,12 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="index.php?r=position/index" class="nav-link position">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>ตำแหน่ง</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="index.php?r=employee/index" class="nav-link employee">
                                 <i class="far fa-circlez nav-icon"></i>

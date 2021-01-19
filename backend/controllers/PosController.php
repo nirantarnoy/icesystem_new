@@ -52,16 +52,25 @@ class PosController extends Controller
 
     public function actionGetcustomerprice(){
         $data = [];
+        $data_cus_price = [];
+        $data_basic_price = [];
         $customer_id = \Yii::$app->request->post('customer_id');
         if($customer_id){
             $model = \common\models\QueryCustomerPrice::find()->where(['customer_id'=>$customer_id])->all();
             if($model != null){
                 foreach ($model as $value){
-                    array_push($data,['product_id'=>$value->product_id,'sale_price'=>$value->sale_price]);
+                    array_push($data_cus_price,['product_id'=>$value->product_id,'sale_price'=>$value->sale_price]);
                 }
             }
 
         }
+        $model_basic_price = \backend\models\Product::find()->all();
+        if($model_basic_price){
+            foreach ($model_basic_price as $value){
+                array_push($data_basic_price,['product_id'=>$value->id,'sale_price'=>$value->sale_price]);
+            }
+        }
+        array_push($data,$data_cus_price,$data_basic_price);
         echo json_encode($data);
     }
 

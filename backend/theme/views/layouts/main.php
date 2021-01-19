@@ -49,6 +49,7 @@ $cururl = Yii::$app->controller->id;
             font-size: 16px;
         }
 
+
         /*.pagination li {*/
         /*    padding: 10px;*/
         /*}*/

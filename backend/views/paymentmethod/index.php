@@ -5,6 +5,9 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\bootstrap4\LinkPager;
+use kartik\icons\Icon;
+Icon::map($this);
+
 $this->title = 'วิธีชำระเงิน';
 $this->params['breadcrumbs'][] = $this->title;
 ?>

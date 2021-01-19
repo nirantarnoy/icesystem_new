@@ -39,7 +39,7 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
                         ],
                     ]);
                     ?>
-<!--                    <button class="btn btn-primary"><i class="fa fa-search"></i></button>-->
+                    <!--                    <button class="btn btn-primary"><i class="fa fa-search"></i></button>-->
                 </div>
             </div>
         </div>
@@ -51,17 +51,19 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
                     <?php foreach ($product_data as $value): ?>
                         <div class="col-lg-2 product-items">
                             <div class="card" style="width: ;height: 200px;" onclick="showadditem($(this))">
-<!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
-                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="" >
-                                <div class="card-body">
+                                                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">
+<!--                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="">-->
+                                <div class="card-body" style="margin-top: 0">
                                     <input type="hidden" class="list-item-id" value="<?= $value->id ?>">
                                     <input type="hidden" class="list-item-code" value="<?= $value->code ?>">
                                     <input type="hidden" class="list-item-name" value="<?= $value->name ?>">
                                     <input type="hidden" class="list-item-price" value="<?= $value->sale_price ?>">
-                                    <p class="card-text" style="font-size: 12px;"><?= $value->name ?></p>
+                                    <p class="card-text"
+                                       style="font-size: 20px;text-align: center;font-weight: bold"><?= $value->code ?></p>
                                 </div>
                                 <div class="card-footer" style="text-align: center">
-                                    <div class="item-price" style="color: red;font-weight: bold;"><?= $value->sale_price ?></div>
+                                    <div class="item-price"
+                                         style="color: red;font-weight: bold;"><?= $value->sale_price ?></div>
                                 </div>
                             </div>
                         </div>
@@ -76,6 +78,7 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
                 <h5><i class="fa fa-shopping-basket"></i> รายการขายสินค้า</h5>
             </div>
             <div class="col-lg-6" style="text-align: right">
+                <input type="hidden" class="total-value-top" value="0">
                 <h5> ยอดขาย <span style="color: red" class="total-text-top">0</span></h5>
             </div>
         </div>
@@ -101,7 +104,8 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
                         <td style="vertical-align: middle"></td>
                         <td style="text-align: right">
                             <input type="number" style="vertical-align: middle;text-align: right"
-                                   class="form-control cart-qty" name="cart_qty[]"  onchange="line_cal($(this))" value="">
+                                   class="form-control cart-qty" name="cart_qty[]" onchange="line_cal($(this))"
+                                   value="" min="1">
                         </td>
                         <td style="text-align: right;vertical-align: middle"></td>
                         <td style="text-align: right;vertical-align: middle"></td>
@@ -129,39 +133,12 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
             </div>
         </div>
         <hr>
-        <!--        <div class="row">-->
-        <!--            <div class="col-lg-12">-->
-        <!--                <table class="" width="100%">-->
-        <!--                    <tr>-->
-        <!--                        <td width="70%" style="text-align: right">จำนวนสินค้า</td>-->
-        <!--                        <td style="text-align: right;width: 10%">5</td>-->
-        <!--                        <td></td>-->
-        <!--                    </tr>-->
-        <!--                    <tr>-->
-        <!--                        <td width="70%" style="text-align: right">ราคา</td>-->
-        <!--                        <td style="text-align: right;width: 10%">5</td>-->
-        <!--                        <td></td>-->
-        <!--                    </tr>-->
-        <!--                    <tr>-->
-        <!--                        <td width="70%" style="text-align: right">ภาษีมูลค่าเพิ่ม</td>-->
-        <!--                        <td style="text-align: right;width: 10%">5</td>-->
-        <!--                        <td></td>-->
-        <!--                    </tr>-->
-        <!--                    <tr>-->
-        <!--                        <td width="70%" style="text-align: right">รวมทั้งสิ้น</td>-->
-        <!--                        <td style="text-align: right;width: 10%">5</td>-->
-        <!--                        <td></td>-->
-        <!--                    </tr>-->
-        <!--                </table>-->
-        <!--            </div>-->
-        <!--        </div>-->
-        <!--        <hr/>-->
         <div class="row div-payment" style="display: none">
             <div class="col-lg-12" style="text-align: center">
                 <div class="btn btn-group">
-                    <div class="btn btn-outline-success btn-lg">ชำระเงินสด</div>
-                    <div class="btn btn-outline-primary btn-lg">ชำระเงินเชื่อ</div>
-                    <div class="btn btn-outline-warning btn-lg">ชำระบัตรเครดิต</div>
+                    <div class="btn btn-outline-success btn-lg btn-pay-cash">ชำระเงินสด</div>
+<!--                    <div class="btn btn-outline-primary btn-lg btn-pay-credit">ชำระเงินเชื่อ</div>-->
+                    <div class="btn btn-outline-warning btn-lg btn-pay-credit-card">ชำระบัตรเครดิต</div>
                 </div>
             </div>
         </div>
@@ -181,7 +158,6 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
                         <input type="hidden" class="popup-product-code" value="">
                     </div>
                 </div>
-
             </div>
             <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
             <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
@@ -235,8 +211,188 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
     </div>
 </div>
 
+<div id="payModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #2b669a">
+                <div class="row" style="text-align: center;width: 100%;color: white">
+                    <div class="col-lg-12">
+                        <span><h3 class="popup-payment" style="color: white"><i class="fa fa-shopping-cart"></i> บันทึกรับเงิน</h3></span>
+                        <input type="hidden" class="popup-product-id" value="">
+                        <input type="hidden" class="popup-product-code" value="">
+                    </div>
+                </div>
+
+            </div>
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+
+            <div class="modal-body">
+                <!--                <div class="row">-->
+                <!--                    <div class="col-lg-12">-->
+                <!--                        <p>เลขที่ <b>POS20010002</b></p>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+                <!--                <hr style="border-top: 1px dashed gray">-->
+                <form action="">
+                    
+                </form>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <div class="col-lg-4"></div>
+                            <div class="col-lg-4" style="text-align: center">
+                                <h4>ยอดขาย</h4>
+                            </div>
+                            <div class="col-lg-4"></div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-lg-3"></div>
+                            <div class="col-lg-6">
+                                <input type="number" class="form-control pay-total-amount" value="" min="1"
+                                       style="font-size: 50px;height: 60px;text-align: center" disabled>
+                            </div>
+                            <div class="col-lg-3"></div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-lg-4"></div>
+                            <div class="col-lg-4" style="text-align: center">
+                                <h4>ชำระเงิน</h4>
+                            </div>
+                            <div class="col-lg-4"></div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-lg-3"></div>
+                            <div class="col-lg-6">
+                                <input type="number" class="form-control pay-amount" min="1"
+                                       style="font-size: 50px;height: 60px;text-align: center" value="0">
+                                <br>
+                                <div class="alert alert-danger pay-alert" style="height: 50px;display: none;">
+                                    <p>จำนวนเงินไม่พอสำหรับการซื้อนี้</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3"></div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-lg-4"></div>
+                            <div class="col-lg-4" style="text-align: center">
+                                <h4>เงินทอน</h4>
+                            </div>
+                            <div class="col-lg-4">
+
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-lg-3"></div>
+                            <div class="col-lg-6">
+                                <input type="text" class="form-control pay-change" value="" readonly
+                                       style="font-size: 50px;height: 60px;text-align: center">
+                            </div>
+                            <div class="col-lg-3"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="row">
+                            <div class="col-lg-12" style="text-align: center">
+                                <h4>เหรียญหรือธนบัตร</h4>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="btn btn-outline-primary" data-var="1"
+                                     style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                                     onclick="calpayprice($(this))">1
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="btn btn-outline-primary" data-var="5"
+                                     style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                                     onclick="calpayprice($(this))">5
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="btn btn-outline-primary" data-var="10"
+                                     style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                                     onclick="calpayprice($(this))">10
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="btn btn-outline-primary" data-var="20"
+                                     style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                                     onclick="calpayprice($(this))">20
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="btn btn-outline-primary" data-var="50"
+                                     style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                                     onclick="calpayprice($(this))">50
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="btn btn-outline-primary" data-var="100"
+                                     style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                                     onclick="calpayprice($(this))">100
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="btn btn-outline-primary" data-var="500"
+                                     style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                                     onclick="calpayprice($(this))">500
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="btn btn-outline-primary" data-var="1000"
+                                     style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                                     onclick="calpayprice($(this))">1000
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="btn btn-outline-danger" data-var="0"
+                                     style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                                     onclick="calpayprice($(this))">Clear
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline-success btn-pay-submit" data-dismiss="modalx" onclick="addcart($(this))">
+                    <i class="fa fa-check"></i> จบการขาย
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                            class="fa fa-ban text-danger"></i> ยกเลิก
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <?php
-$url_to_get_price = \yii\helpers\Url::to(['pos/getcustomerprice'],true);
+$url_to_get_price = \yii\helpers\Url::to(['pos/getcustomerprice'], true);
 $js = <<<JS
  $(function(){
      $(".customer-id").select2({
@@ -247,6 +403,24 @@ $js = <<<JS
      }else{
          $(".div-customer-search").show();
      }
+     $(".btn-pay-cash").click(function(){
+         var sale_total_amt = $(".total-value-top").val()
+             if(sale_total_amt > 0){
+                 $(".pay-total-amount").val(sale_total_amt);
+                  $(".pay-amount").val(0);
+                  $(".pay-change").val(0);
+                  var c_pay = $(".pay-amount").val();
+                  var sale_total = $(".pay-total-amount").val();
+                    if(c_pay < sale_total){
+                       // $(".pay-alert").fadeIn();
+                        $(".btn-pay-submit").prop('disabled','disabled');
+                    }else{
+                       // $(".pay-alert").hide();
+                        $(".btn-pay-submit").prop('disabled','');
+                    }
+                 $("#payModal").modal("show");
+             }
+     });
      
      $(".table-cart tbody tr").each(function (){
          var check_row = $(this).closest('tr').find('td:eq(1)').html();
@@ -281,6 +455,28 @@ $js = <<<JS
      });
  });
 
+function calpayprice(e){
+    var price_val = e.attr('data-var');
+    if(price_val == 0){
+        $(".pay-amount").val(0);
+    }
+    var c_pay = $(".pay-amount").val();
+    var new_pay = parseFloat(price_val) + parseFloat(c_pay);
+
+    var sale_total = $(".pay-total-amount").val();
+    var price_change = parseFloat(new_pay) - parseFloat(sale_total);
+    if(price_val == 0){ price_change = 0;}
+    $(".pay-amount").val(new_pay);
+    $(".pay-change").val(price_change);
+    
+    if(new_pay < sale_total){
+        $(".pay-alert").fadeIn();
+        $(".btn-pay-submit").prop('disabled','disabled');
+    }else{
+        $(".pay-alert").hide();
+        $(".btn-pay-submit").prop('disabled','');
+    }
+}
 function getproduct_price(e){
     var ids = e.val();
     if(ids > 0){
@@ -291,18 +487,27 @@ function getproduct_price(e){
               data: {customer_id: ids},
               success: function(data){
                   if(data.length > 0){
-                      //alert(data[0]['product_id']);
+                     // alert(data[0][0]['product_id']);
                           var i = -1;
-                         $(".product-items").each(function(){
-                             i+=1;
-                             var line_product_id = $(this).find(".list-item-id").val();
-                             if(line_product_id == data[i]['product_id']){
-                                 $(this).find(".list-item-price").val(data[i]['sale_price']); 
-                                 $(this).find(".item-price").html(data[i]['sale_price']); 
-                             }
-                             
-                        //    $(".popup-price").val($(this).find(".list-item-price").val());
-                         });
+                          if(data[0][0] != null){
+                              $(".product-items").each(function(){
+                                     i++;
+                                     var line_product_id = $(this).find(".list-item-id").val();
+                                     if(line_product_id == data[0][i]['product_id']){
+                                         $(this).find(".list-item-price").val(data[0][i]['sale_price']);
+                                         $(this).find(".item-price").html(data[0][i]['sale_price']);
+                                     }
+                              });
+                          }else{
+                              $(".product-items").each(function(){
+                                     i+=1;
+                                     var line_product_id = $(this).find(".list-item-id").val();
+                                     if(line_product_id == data[1][i]['product_id']){
+                                         $(this).find(".list-item-price").val(data[1][i]['sale_price']);
+                                         $(this).find(".item-price").html(data[1][i]['sale_price']);
+                                     }
+                              });
+                          }
                   }else{
                       alert();
                   }
@@ -310,7 +515,7 @@ function getproduct_price(e){
              });
     }
     // $(".product-items").each(function(){
-    //   // console.log($(this).find(".list-item-price").val()); 
+    //   // console.log($(this).find(".list-item-price").val());
     //    $(".popup-price").val($(this).find(".list-item-price").val());
     // });
 }
@@ -333,7 +538,7 @@ function showadditem(e){
 function check_dup(prod_id){
     var has_id = 0;
      $(".table-cart tbody tr").each(function(){
-        var id = $(this).closest('tr').find('.cart-product-id').val(); 
+        var id = $(this).closest('tr').find('.cart-product-id').val();
         if(id == prod_id){
             has_id =1;
         }
@@ -352,9 +557,9 @@ function addcart(e){
     var check_old = check_dup(prod_id);
     if(check_old == 1){
         $(".table-cart tbody tr").each(function(){
-        var id = $(this).closest('tr').find('.cart-product-id').val(); 
+        var id = $(this).closest('tr').find('.cart-product-id').val();
         if(id == prod_id){
-            var old_qty = $(this).closest('tr').find('.cart-qty').val(); 
+            var old_qty = $(this).closest('tr').find('.cart-qty').val();
             var new_qty = parseFloat(old_qty) + parseFloat(qty);
             $(this).closest('tr').find('.cart-qty').val(new_qty);
             line_cal($(this));
@@ -368,7 +573,7 @@ function addcart(e){
             tr.closest('tr').find('td:eq(1)').html(prod_code);
             tr.closest('tr').find('td:eq(2)').html(prod_name);
             tr.closest('tr').find('td:eq(4)').html(price);
-            
+
             tr.closest('tr').find('.cart-qty').prop("disabled","");
             tr.closest('tr').find('.removecart-item').show();
             $(".div-payment").show();
@@ -385,7 +590,6 @@ function addcart(e){
             line_cal(clone);
         }
     }
-    
     cal_linenum();
     calall();
     $("#posModal").modal('hide');
@@ -397,7 +601,6 @@ function removecartitem(e){
         cal_linenum();
         calall();
     }
-    
 }
 function cal_linenum() {
         var xline = 0;
@@ -406,7 +609,7 @@ function cal_linenum() {
             $(this).closest("tr").find("td:eq(0)").text(xline);
         });
 }
-   
+
 function line_cal(e){
     var line_total = 0;
   //  $(".table-cart tbody tr").each(function(){
@@ -422,7 +625,7 @@ function line_cal(e){
 function calall(){
       var total_qty = 0;
       var total_price = 0;
-      
+
       $(".table-cart tbody tr").each(function(){
           var qty = $(this).closest('tr').find('.cart-qty').val();
           var price = $(this).closest('tr').find('.cart-total-price').val();
@@ -430,10 +633,12 @@ function calall(){
           total_price = total_price + parseFloat(price);
           // alert(total_price);
       });
-      
+
       $(".table-cart tfoot tr").find('td:eq(1)').html(total_qty);
       $(".table-cart tfoot tr").find('td:eq(3)').html(addCommas(total_price));
       $(".total-text-top").html(addCommas(total_price));
+      $(".total-value-top").val(total_price);
+
 }
 function addCommas(nStr) {
         nStr += '';
