@@ -74,4 +74,39 @@ class PosController extends Controller
         echo json_encode($data);
     }
 
+    public function actionClosesale(){
+        $pay_total_amount = \Yii::$app->request->post('pay_total_amount');
+        $pay_amount = \Yii::$app->request->post('pay_amount');
+        $pay_change = \Yii::$app->request->post('sale_pay_change');
+        $payment_type = \Yii::$app->request->post('sale_pay_type');
+
+        $customer_id = \Yii::$app->request->post('customer_id');
+        $product_list = \Yii::$app->request->post('cart_product_id');
+        $line_qty = \Yii::$app->request->post('cart_qty');
+        $line_price = \Yii::$app->request->post('cart_price');
+
+
+        if($customer_id){
+              $model_order = new \backend\models\Orders();
+              $model_order->order_no = $model_order->getLastNo();
+              $model_order->order_date = date('Y-m-d');
+              $model_order->customer_id = $customer_id;
+              $model_order->status = 1;
+              if($model_order->save()){
+                  if(count($product_list) > 0){
+                      for($i=0;$i<=count($product_list)-1;$i++){
+                          $model_order_line = new \backend\models\Orderline();
+                          $model_order_line->order_id = $model_order->id;
+                          $model_order_line->product_id  = $product_list[$i];
+                          $model_order_line->qty = $line_qty[$i];
+                          $model_order_line->price = $line_price[$i];
+                          $model_order_line->line_total = ($line_price[$i] * $line_qty[$i]);
+                          $model_order_line->status = 1;
+                          $model_order_line->save();
+                      }
+                  }
+              }
+        }
+    }
+
 }

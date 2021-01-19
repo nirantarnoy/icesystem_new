@@ -6,7 +6,7 @@ use yii\helpers\ArrayHelper;
 $this->title = 'ทำรายการขายหน้าร้าน POS';
 
 ?>
-<div class="row">
+<form class="row">
     <div class="col-lg-6" style="border-right: 1px dashed gray ">
         <div class="row">
             <div class="col-lg-12">
@@ -51,8 +51,8 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
                     <?php foreach ($product_data as $value): ?>
                         <div class="col-lg-2 product-items">
                             <div class="card" style="width: ;height: 200px;" onclick="showadditem($(this))">
-                                                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">
-<!--                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="">-->
+                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">
+                                <!--                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="">-->
                                 <div class="card-body" style="margin-top: 0">
                                     <input type="hidden" class="list-item-id" value="<?= $value->id ?>">
                                     <input type="hidden" class="list-item-code" value="<?= $value->code ?>">
@@ -73,76 +73,83 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
         </div>
     </div>
     <div class="col-lg-6">
-        <div class="row">
-            <div class="col-lg-6">
-                <h5><i class="fa fa-shopping-basket"></i> รายการขายสินค้า</h5>
-            </div>
-            <div class="col-lg-6" style="text-align: right">
-                <input type="hidden" class="total-value-top" value="0">
-                <h5> ยอดขาย <span style="color: red" class="total-text-top">0</span></h5>
-            </div>
-        </div>
-        <hr style="border-top: 1px dashed gray">
-        <div class="row">
-            <div class="col-lg-12">
-                <table class="table table-striped table-bordered table-cart">
-                    <thead>
-                    <tr>
-                        <th style="text-align: center;width: 5%">#</th>
-                        <th style="width: 15%">รหัสสินค้า</th>
-                        <th>ชื่อสินค้า</th>
-                        <th style="text-align: right;width: 15%">จำนวน</th>
-                        <th style="text-align: right">ราคา</th>
-                        <th style="text-align: right">ราคารวม</th>
-                        <th style="text-align: center">ลบ</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td style="text-align: center;vertical-align: middle;width: 5%"></td>
-                        <td style="vertical-align: middle"></td>
-                        <td style="vertical-align: middle"></td>
-                        <td style="text-align: right">
-                            <input type="number" style="vertical-align: middle;text-align: right"
-                                   class="form-control cart-qty" name="cart_qty[]" onchange="line_cal($(this))"
-                                   value="" min="1">
-                        </td>
-                        <td style="text-align: right;vertical-align: middle"></td>
-                        <td style="text-align: right;vertical-align: middle"></td>
-                        <td style="text-align: center">
-                            <input type="hidden" class="cart-product-id" name="cart_product_id[]" value="">
-                            <input type="hidden" class="cart-price" name="cart_price[]" value="">
-                            <input type="hidden" class="cart-total-price" name="cart_total_price[]" value="">
-                            <div class="btn btn-danger btn-sm removecart-item" onclick="removecartitem($(this))"><i
-                                        class="fa fa-trash"></i></div>
-                        </td>
-                    </tr>
-
-                    </tbody>
-                    <tfoot>
-                    <tr>
-                        <td colspan="3" style="text-align: right;font-weight: bold">รวมทั้งหมด</td>
-                        <td style="font-weight: bold;text-align: right"></td>
-                        <td></td>
-                        <td style="font-weight: bold;text-align: right"></td>
-                        <td></td>
-                    </tr>
-
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-        <hr>
-        <div class="row div-payment" style="display: none">
-            <div class="col-lg-12" style="text-align: center">
-                <div class="btn btn-group">
-                    <div class="btn btn-outline-success btn-lg btn-pay-cash">ชำระเงินสด</div>
-<!--                    <div class="btn btn-outline-primary btn-lg btn-pay-credit">ชำระเงินเชื่อ</div>-->
-                    <div class="btn btn-outline-warning btn-lg btn-pay-credit-card">ชำระบัตรเครดิต</div>
+        <form action="<?= \yii\helpers\Url::to(['pos/closesale'], true) ?>">
+            <input type="hidden" class="sale-customer-id" name="customer_id" value="">
+            <input type="hidden" class="sale-total-amount" name="sale_total_amount" value="">
+            <input type="hidden" class="sale-pay-amount" name="sale_pay_amount" value="">
+            <input type="hidden" class="sale-pay-change" name="sale_pay_change" value="">
+            <input type="hidden" class="sale-pay-type" name="sale_pay_type" value="">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h5><i class="fa fa-shopping-basket"></i> รายการขายสินค้า</h5>
+                </div>
+                <div class="col-lg-6" style="text-align: right">
+                    <input type="hidden" class="total-value-top" value="0">
+                    <h5> ยอดขาย <span style="color: red" class="total-text-top">0</span></h5>
                 </div>
             </div>
-        </div>
+            <hr style="border-top: 1px dashed gray">
+            <div class="row">
+                <div class="col-lg-12">
+                    <table class="table table-striped table-bordered table-cart">
+                        <thead>
+                        <tr>
+                            <th style="text-align: center;width: 5%">#</th>
+                            <th style="width: 15%">รหัสสินค้า</th>
+                            <th>ชื่อสินค้า</th>
+                            <th style="text-align: right;width: 15%">จำนวน</th>
+                            <th style="text-align: right">ราคา</th>
+                            <th style="text-align: right">ราคารวม</th>
+                            <th style="text-align: center">ลบ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="text-align: center;vertical-align: middle;width: 5%"></td>
+                            <td style="vertical-align: middle"></td>
+                            <td style="vertical-align: middle"></td>
+                            <td style="text-align: right">
+                                <input type="number" style="vertical-align: middle;text-align: right"
+                                       class="form-control cart-qty" name="cart_qty[]" onchange="line_cal($(this))"
+                                       value="" min="1">
+                            </td>
+                            <td style="text-align: right;vertical-align: middle"></td>
+                            <td style="text-align: right;vertical-align: middle"></td>
+                            <td style="text-align: center">
+                                <input type="hidden" class="cart-product-id" name="cart_product_id[]" value="">
+                                <input type="hidden" class="cart-price" name="cart_price[]" value="">
+                                <input type="hidden" class="cart-total-price" name="cart_total_price[]" value="">
+                                <div class="btn btn-danger btn-sm removecart-item" onclick="removecartitem($(this))"><i
+                                            class="fa fa-trash"></i></div>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="3" style="text-align: right;font-weight: bold">รวมทั้งหมด</td>
+                            <td style="font-weight: bold;text-align: right"></td>
+                            <td></td>
+                            <td style="font-weight: bold;text-align: right"></td>
+                            <td></td>
+                        </tr>
+
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <hr>
+            <div class="row div-payment" style="display: none">
+                <div class="col-lg-12" style="text-align: center">
+                    <div class="btn btn-group">
+                        <div class="btn btn-outline-success btn-lg btn-pay-cash">ชำระเงินสด</div>
+                        <!--                    <div class="btn btn-outline-primary btn-lg btn-pay-credit">ชำระเงินเชื่อ</div>-->
+                        <div class="btn btn-outline-warning btn-lg btn-pay-credit-card">ชำระบัตรเครดิต</div>
+                    </div>
+                </div>
+            </div>
     </div>
+</form>
 </div>
 
 
@@ -235,9 +242,6 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
                 <!--                    </div>-->
                 <!--                </div>-->
                 <!--                <hr style="border-top: 1px dashed gray">-->
-                <form action="">
-                    
-                </form>
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="row">
@@ -375,11 +379,10 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <div class="modal-footer">
-                <button class="btn btn-outline-success btn-pay-submit" data-dismiss="modalx" onclick="addcart($(this))">
+                <button class="btn btn-outline-success btn-pay-submit" data-dismiss="modalx">
                     <i class="fa fa-check"></i> จบการขาย
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal"><i
@@ -404,6 +407,7 @@ $js = <<<JS
          $(".div-customer-search").show();
      }
      $(".btn-pay-cash").click(function(){
+         $(".sale-pay-type").val(1);
          var sale_total_amt = $(".total-value-top").val()
              if(sale_total_amt > 0){
                  $(".pay-total-amount").val(sale_total_amt);
@@ -469,6 +473,9 @@ function calpayprice(e){
     $(".pay-amount").val(new_pay);
     $(".pay-change").val(price_change);
     
+    $(".sale-pay-amount").val(new_pay);
+    $(".sale-pay-change").val(price_change);
+    
     if(new_pay < sale_total){
         $(".pay-alert").fadeIn();
         $(".btn-pay-submit").prop('disabled','disabled');
@@ -480,6 +487,7 @@ function calpayprice(e){
 function getproduct_price(e){
     var ids = e.val();
     if(ids > 0){
+        $(".sale-customer-id").val(ids);
          $.ajax({
               type: "post",
               dataType: "json",
