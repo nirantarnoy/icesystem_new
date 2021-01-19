@@ -6,7 +6,7 @@ use yii\helpers\ArrayHelper;
 $this->title = 'ทำรายการขายหน้าร้าน POS';
 
 ?>
-<form class="row">
+<div class="row">
     <div class="col-lg-6" style="border-right: 1px dashed gray ">
         <div class="row">
             <div class="col-lg-12">
@@ -149,9 +149,7 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
                 </div>
             </div>
     </div>
-</form>
 </div>
-
 
 <div id="posModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
