@@ -53,7 +53,7 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
                             <div class="card" style="width: ;height: 200px;" onclick="showadditem($(this))">
                                 <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">
                                 <!--                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="">-->
-                                <div class="card-body" style="margin-top: 0">
+                                <div class="card-body">
                                     <input type="hidden" class="list-item-id" value="<?= $value->id ?>">
                                     <input type="hidden" class="list-item-code" value="<?= $value->code ?>">
                                     <input type="hidden" class="list-item-name" value="<?= $value->name ?>">
@@ -499,16 +499,23 @@ function getproduct_price(e){
                               $(".product-items").each(function(){
                                      i++;
                                      var line_product_id = $(this).find(".list-item-id").val();
-                                     if(line_product_id == data[0][i]['product_id']){
-                                         $(this).find(".list-item-price").val(data[0][i]['sale_price']);
-                                         $(this).find(".item-price").html(data[0][i]['sale_price']);
+                                         if(data[0][i]!= null){
+                                              if(line_product_id == data[0][i]['product_id']){
+                                                     $(".card").css("background-color","green");
+                                                     $(this).find(".list-item-price").val(data[0][i]['sale_price']);
+                                                     $(this).find(".item-price").html(data[0][i]['sale_price']);
+                                              }else{
+                                                    $(".card").css("background-color","white"); 
+                                              }
                                      }
+                                
                               });
                           }else{
                               $(".product-items").each(function(){
                                      i+=1;
                                      var line_product_id = $(this).find(".list-item-id").val();
                                      if(line_product_id == data[1][i]['product_id']){
+                                          $(".card").css("background-color","white"); 
                                          $(this).find(".list-item-price").val(data[1][i]['sale_price']);
                                          $(this).find(".item-price").html(data[1][i]['sale_price']);
                                      }
