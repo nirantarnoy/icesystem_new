@@ -142,11 +142,14 @@ class WarehouseController extends Controller
         $id = \Yii::$app->request->post('com_id');
         $html = '';
         if($id){
-            $model = \backend\models\Branch::find()->where(['company_id'=>$id])->one();
+            $model = \backend\models\Branch::find()->where(['company_id'=>$id])->all();
             if($model){
-                $html.='<option value="'.$model->id.'">';
-                $html.= $model->name;
-                $html.='</option>';
+                foreach ($model as $value){
+                    $html.='<option value="'.$value->id.'">';
+                    $html.= $value->name;
+                    $html.='</option>';
+                }
+
             }
 
         }
