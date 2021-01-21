@@ -513,7 +513,6 @@ function getproduct_price(e){
                                                      $(this).find(".list-item-price").val(data[0][i]['sale_price']);
                                                      $(this).find(".item-price").html(data[0][i]['sale_price']);
                                                  }
-                                            
                                               price_group_name = data[0][i]['price_name'];
                                              // alert(price_group_name);
                                      }else{
