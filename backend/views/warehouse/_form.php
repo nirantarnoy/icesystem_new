@@ -27,6 +27,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'branch_id')->Widget(\kartik\select2\Select2::className(),[
                 'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Branch::find()->all(),'id','name'),
                 'options'=>[
+                        'class'=>'warehouse-branc-id',
                     'placeholder'=>'--เลือกสาขา--'
                 ]
             ]) ?>
