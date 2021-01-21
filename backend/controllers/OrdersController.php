@@ -135,7 +135,7 @@ class OrdersController extends Controller
             $removelist = Yii::$app->request->post('removelist');
             $line_customer_id = \Yii::$app->request->post('line_customer_id');
             $line_price = \Yii::$app->request->post('line_qty_cal');
-            //        print_r($line_customer_id);
+                //    print_r($removelist);return;
 //            print "<pre>";
             //       print_r($_POST);
 //            print "</pre>";
@@ -209,8 +209,8 @@ class OrdersController extends Controller
 //                        }
 //                    }
 //                }
-                if (count($removelist)) {
-                    // count($removelist);return;
+                if ($removelist != '') {
+                     //print_r($removelist);return;
                     $rec_del = explode(',', $removelist);
 //                    print_r($rec_del);return;
                     for ($i = 0; $i <= count($rec_del) - 1; $i++) {
@@ -312,7 +312,7 @@ class OrdersController extends Controller
                 $html .= $this->getProducttextfield($id);
                 $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right"></td>';
                 $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"></td>';
-                $html .= '<td style="text-align: center"><div class="btn btn-danger btn-sm" onclick="removeorderline($(this))">ลบ</div></td>';
+                $html .= '<td style="text-align: center"><div class="btn btn-danger btn-sm" data-var="" onclick="removeorderline($(this))">ลบ</div></td>';
                 $html .= '</tr>';
             }
             $html .= '</tbody>';
@@ -425,7 +425,7 @@ class OrdersController extends Controller
         }
         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right" value="' . number_format($line_total_qty) . '"></td>';
         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"  value="' . number_format($line_total_price) . '"></td>';
-        $html .= '<td style="text-align: center"><div class="btn btn-danger btn-sm" onclick="removeorderline($(this))">ลบ</div></td>';
+        $html .= '<td style="text-align: center"><div class="btn btn-danger btn-sm" data-var="'.$value->customer_id.'" onclick="removeorderline($(this))">ลบ</div></td>';
         return $html;
     }
 }

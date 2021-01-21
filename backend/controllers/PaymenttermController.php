@@ -71,8 +71,12 @@ class PaymenttermController extends Controller
     {
         $model = new Paymentterm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if( $model->save()){
+                $session = Yii::$app->session;
+                $session->setFlash('msg', 'บันทึกข้อมูลค้าเรียบร้อย');
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('create', [
@@ -91,8 +95,12 @@ class PaymenttermController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if( $model->save()){
+                $session = Yii::$app->session;
+                $session->setFlash('msg', 'บันทึกข้อมูลค้าเรียบร้อย');
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('update', [
@@ -110,8 +118,10 @@ class PaymenttermController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+            $session = Yii::$app->session;
+            $session->setFlash('msg', 'ลบข้อมูลเรียบร้อย');
+            return $this->redirect(['index']);
 
-        return $this->redirect(['index']);
     }
 
     /**

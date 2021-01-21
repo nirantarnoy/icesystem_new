@@ -59,7 +59,7 @@ class PosController extends Controller
             $model = \common\models\QueryCustomerPrice::find()->where(['customer_id'=>$customer_id])->all();
             if($model != null){
                 foreach ($model as $value){
-                    array_push($data_cus_price,['product_id'=>$value->product_id,'sale_price'=>$value->sale_price]);
+                    array_push($data_cus_price,['product_id'=>$value->product_id,'sale_price'=>$value->sale_price,'price_name'=>$value->name]);
                 }
             }
 

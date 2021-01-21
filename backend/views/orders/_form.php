@@ -72,7 +72,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'order_total_amt')->textInput(['readonly' => 'readonly', 'id' => 'order-total-amt']) ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'status')->textInput(['readonly' => 'readonly']) ?>
+            <?= $form->field($model, 'status')->textInput(['readonly' => 'readonly','value'=> $model->isNewRecord?'Open': \backend\helpers\OrderStatus::getTypeById($model->status)]) ?>
         </div>
     </div>
     <br>
@@ -445,13 +445,15 @@ $js = <<<JS
  }
  
  function removeorderline(e){
-     var cust_line_id = e.closest('tr').find('.line-customer-id').val();
-     if(cust_line_id > 0){
-         removelist.push(cust_line_id);
+     //var cust_line_id = e.closest('tr').find('.line-customer-id').val();
+    var recid = e.attr("data-var");
+     if(recid > 0){
+         alert(recid);
+         removelist.push(recid);
          e.parent().parent().remove();
      }
      $(".remove-list").val(removelist);
-     
+     cal_all();
  }
  
  function order_update_data(ids) {

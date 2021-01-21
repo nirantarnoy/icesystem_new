@@ -31,6 +31,7 @@ class QueryCustomerPrice extends \yii\db\ActiveRecord
         return [
             [['customer_id', 'price_group_id', 'product_id', 'customer_type_id'], 'integer'],
             [['sale_price'], 'number'],
+            [['name'],'string']
         ];
     }
 

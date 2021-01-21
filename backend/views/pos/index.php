@@ -22,6 +22,11 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
                     <button id="btn-fix-customer" class="btn btn-outline-secondary btn-sm">ระบุลูกค้า</button>
                 </div>
             </div>
+            <div class="col-lg-3" style="text-align: right;">
+                <span style="font-size: 20px;display: none;" class="text-price-type"><div
+                            class="badge badge-primary badge-text-price-type"
+                            style="vertical-align: middle"></div></span>
+            </div>
         </div>
         <div class="row div-customer-search" style="display: none;">
             <div class="col-lg-6">
@@ -402,6 +407,7 @@ $js = <<<JS
      if($("#btn-general-customer").hasClass("active")){
          $(".div-customer-search").hide();
      }else{
+         $(".text-price-type").show();
          $(".div-customer-search").show();
      }
      $(".btn-pay-cash").click(function(){
@@ -441,7 +447,7 @@ $js = <<<JS
         $("#btn-general-customer").removeClass('btn-success');
         $("#btn-general-customer").removeClass('active');
         $("#btn-general-customer").addClass('btn-outline-secondary');
-        
+        //$(".text-price-type").show();
         $(".div-customer-search").show();
      });
      
@@ -495,32 +501,46 @@ function getproduct_price(e){
                   if(data.length > 0){
                      // alert(data[0][0]['product_id']);
                           var i = -1;
+                          var price_group_name = '';
                           if(data[0][0] != null){
                               $(".product-items").each(function(){
                                      i++;
                                      var line_product_id = $(this).find(".list-item-id").val();
                                          if(data[0][i]!= null){
-                                              if(line_product_id == data[0][i]['product_id']){
-                                                     $(".card").css("background-color","green");
+                                            // alert(data[0][i]['product_id']);
+                                                 if(line_product_id == data[0][i]['product_id']){
+                                                     $(this).find(".card").css("background-color","#66CCFF");
                                                      $(this).find(".list-item-price").val(data[0][i]['sale_price']);
                                                      $(this).find(".item-price").html(data[0][i]['sale_price']);
-                                              }else{
-                                                    $(".card").css("background-color","white"); 
-                                              }
+                                                 }
+                                            
+                                              price_group_name = data[0][i]['price_name'];
+                                             // alert(price_group_name);
+                                     }else{
+                                              $(this).find(".card").css("background-color","white"); 
                                      }
-                                
+                               
                               });
                           }else{
                               $(".product-items").each(function(){
                                      i+=1;
                                      var line_product_id = $(this).find(".list-item-id").val();
                                      if(line_product_id == data[1][i]['product_id']){
-                                          $(".card").css("background-color","white"); 
+                                         $(".card").css("background-color","white"); 
                                          $(this).find(".list-item-price").val(data[1][i]['sale_price']);
                                          $(this).find(".item-price").html(data[1][i]['sale_price']);
                                      }
                               });
                           }
+                         
+                          if(price_group_name !=''){
+                              $(".text-price-type").show();
+                              $(".badge-text-price-type").html(price_group_name);
+                          }else{
+                               $(".text-price-type").hide();
+                              $(".badge-text-price-type").html('');
+                          }
+                            
                   }else{
                       alert();
                   }
