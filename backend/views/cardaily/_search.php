@@ -19,6 +19,12 @@ use yii\widgets\ActiveForm;
     ]); ?>
 
     <div class="form-inline">
+        <?= $form->field($model, 'car_id')->widget(\kartik\select2\Select2::className(),[
+                'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(),'id','name'),
+            'options' => [
+                    'placeholder'=>'--ค้นหาสายส่ง--'
+            ]
+        ])->label('สายส่ง') ?>
         <?= $form->field($model, 'car_id')->textInput(['class'=>'form-control','style'=>'margin-left:5px;margin-right:5px;','autocomplete'=>'off','placeholder'=>'ชื่อรถ หรือ รหัสรถ'])->label('ค้นหารถ') ?>
         <!--        <input type="text" class="form-control search-date" name="search_date" placeholder="เลือกวันที่" style="margin-left: 5px;">-->
         <?php //echo $form->field($model, 'trans_date')->textInput(['class'=>'form-control search-date','placeholder'=>'เลือกวันที่','autocomplete'=>'off'])->label(false) ?>
