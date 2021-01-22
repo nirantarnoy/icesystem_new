@@ -17,11 +17,15 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'order_date')->textInput(['value' => date('d/m/Y'), 'id' => 'order-date']) ?>
         </div>
         <div class="col-lg-3">
+            <?php
+                 $x_disabled = !$model->isNewRecord?"disabled":'';
+
+            ?>
             <?= $form->field($model, 'order_channel_id')->Widget(\kartik\select2\Select2::className(), [
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(), 'id', 'name'),
                 'options' => [
                     'id' => 'delivery-route-id',
-                    'disabled' => !$model->isNewRecord?"disabled":"",
+                     'readonly'=>'readonly',
                     'placeholder' => '--เลือกสายส่ง--',
                     'onchange' => '
                            route_change($(this));
@@ -35,6 +39,7 @@ use yii\widgets\ActiveForm;
                 'options' => [
                     'id' => 'car-ref-id',
                     'disabled'=>'disabled',
+                    'onchange'=>'getcaremp($(this));',
                     'placeholder' => '--เลือกรถขาย--'
                 ]
             ]) ?>
@@ -78,22 +83,9 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
     <br>
-    <h5>รายละเอียดการขาย</h5>
+    <h5>รายละเอียดการขาย <span class="badge badge-info text-car-emp"></span></h5>
     <hr>
     <table class="table" id="table-sale-list">
-        <!--        <thead>-->
-        <!--        <tr>-->
-        <!--            <th>#</th>-->
-        <!--            <th></th>-->
-        <!--            <th></th>-->
-        <!--            <th></th>-->
-        <!--            <th></th>-->
-        <!--            <th></th>-->
-        <!--            <th></th>-->
-        <!--        </tr>-->
-        <!--        </thead>-->
-        <!--        <tbody>-->
-        <!--        </tbody>-->
     </table>
     <br/>
     <?= $form->field($model, 'order_total_amt')->hiddenInput(['readonly' => 'readonly', 'id' => 'order-total-amt'])->label(false) ?>
@@ -132,7 +124,6 @@ use yii\widgets\ActiveForm;
             <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
 
             <div class="modal-body">
-
                 <input type="hidden" name="line_qc_product" class="line_qc_product" value="">
                 <table class="table table-bordered table-striped table-find-list" width="100%">
                     <thead>
@@ -165,6 +156,7 @@ $url_to_find_item = \yii\helpers\Url::to(['pricegroup/productdata'], true);
 $url_to_get_sale_item = \yii\helpers\Url::to(['orders/find-saledata'], true);
 $url_to_get_car_item = \yii\helpers\Url::to(['orders/find-car-data'], true);
 $url_to_get_sale_item_update = \yii\helpers\Url::to(['orders/find-saledata-update'], true);
+$url_to_get_car_emp = \yii\helpers\Url::to(['orders/findcarempdaily'], true);
 $js = <<<JS
   var removelist = [];
   var selecteditem = [];
@@ -421,7 +413,7 @@ $js = <<<JS
            //alert(data);
            //  $("#table-sale-list tbody").html(data);
          //});
-
+         $(".text-car-emp").html("");
          $.ajax({
               'type':'post',
               'dataType': 'html',
@@ -512,6 +504,24 @@ $js = <<<JS
 
        $("#order-total-amt").val(parseFloat(totalall).toFixed(0));
        $("#order-total-amt-text").val(addCommas(parseFloat(totalall).toFixed(0)));
+ }
+
+ function getcaremp(e){
+   var ids = e.val();
+   var trans_date = $("#order-date").val();
+   if(ids){
+               $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_get_car_emp",
+              'data': {'id': ids,'order_date': trans_date},
+              'success': function(data) {
+                  // alert(data);
+                  $(".text-car-emp").html(data);
+              }
+         });
+   }
  }
 
 function addCommas(nStr) {

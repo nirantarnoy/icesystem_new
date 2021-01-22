@@ -51,10 +51,14 @@ class Employee extends \common\models\Employee
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';
 //    }
-//    public function findName($id){
-//        $model = Unit::find()->where(['id'=>$id])->one();
-//        return count($model)>0?$model->name:'';
-//    }
+    public function findCode($id){
+        $model = Employee::find()->where(['id'=>$id])->one();
+        return $model !=null?$model->code:'';
+    }
+    public function findFullName($id){
+        $model = Employee::find()->where(['id'=>$id])->one();
+        return $model !=null?$model->fname. ' '.$model->lname:'';
+    }
 //    public function findUnitid($code){
 //        $model = Unit::find()->where(['name'=>$code])->one();
 //        return count($model)>0?$model->id:0;

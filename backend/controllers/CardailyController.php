@@ -36,29 +36,26 @@ class CardailyController extends Controller
      */
     public function actionIndex()
     {
-//        $searchModel = new CardailySearch();
-//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-//
-//        return $this->render('index', [
-//            'searchModel' => $searchModel,
-//            'dataProvider' => $dataProvider,
-//        ]);
         $searchModel = new CardailySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->pagination->pageSize = 100;
 
         return $this->render('_index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+//        $searchModel = new CardailySearch();
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+       // $dataProvider->pagination->pageSize = 1000;
+       // $model = \backend\models\Cardaily::find()->all();
+
+       // print_r($model);return;
+
+//        return $this->render('_index', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
     }
 
-    /**
-     * Displays a single Cardaily model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionView($id)
     {
         return $this->render('view', [
@@ -66,11 +63,6 @@ class CardailyController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Cardaily model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
         $model = new Cardaily();
@@ -130,7 +122,38 @@ class CardailyController extends Controller
         if (($model = Cardaily::findOne($id)) !== null) {
             return $model;
         }
-
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionAddemp(){
+        $t_date = null;
+        $car_id = \Yii::$app->request->post('selected_car');
+        $t_date = \Yii::$app->request->post('selected_date');
+        $emp_id = \Yii::$app->request->post('line_car_emp_id');
+
+        if($t_date == null){
+            $t_date = date('Y-m-d');
+        }
+       // print_r($emp_id);return;
+        if($car_id){
+            if(count($emp_id) >0 ){
+                for($i=0;$i<=count($emp_id)-1;$i++){
+                    $this->checkOld($emp_id[$i], $car_id, $t_date);
+                    $model = new \backend\models\Cardaily();
+                    $model->car_id = $car_id;
+                    $model->employee_id = $emp_id[$i];
+                    $model->trans_date = date('Y-m-d');
+                    $model->status = 1;
+                    $model->save();
+                }
+            }
+        }
+        return $this->redirect(['index']);
+    }
+    public function checkOld($emp_id, $car_id, $t_date){
+          $model = \backend\models\Cardaily::find()->where(['car_id'=>$car_id,'employee_id'=>$emp_id,'trans_date'=>$t_date])->one();
+          if($model){
+              \backend\models\Cardaily::deleteAll(['car_id'=>$car_id,'employee_id'=>$emp_id,'trans_date'=>$t_date]);
+          }
     }
 }
