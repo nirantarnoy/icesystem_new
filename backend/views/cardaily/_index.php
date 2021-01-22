@@ -226,9 +226,12 @@ $js=<<<JS
               'data': {"car_id": ids, "trans_date": t_date},
               'success': function(data) {
                   //  alert(data);
-                   $("#table-list tbody").html(data);
-                   $(".selected-car").val(ids); 
-                   $("#empModal").modal('show');
+                  if(data != ''){
+                         $("#table-list tbody").html(data);
+                       $(".selected-car").val(ids); 
+                       $("#empModal").modal('show');
+                  }
+                
                  }
         });
           
