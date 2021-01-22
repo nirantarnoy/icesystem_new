@@ -475,24 +475,42 @@ class OrdersController extends Controller
             $t_date = date('Y-m-d', strtotime($t_date));
 
             $model = \backend\models\Cardaily::find()->where(['car_id' => $id, 'trans_date' => $t_date])->all();
-            $i=0;
-            foreach ($model as $value) {
-                $i+=1;
-                $emp_code = \backend\models\Employee::findCode($value->employee_id);
-                $emp_fullname = \backend\models\Employee::findFullName($value->employee_id);
-                $html .= '<tr>';
-                $html .= '<td style="text-align: center">'.$i.'</td>';
-                $html .= '<td><input type="text" class="form-control line-car-emp-code" name="line_car_emp_code[]" value="'.$emp_code.'" readonly></td>';
-                $html .= '<td><input type="text" class="form-control line-car-emp-name" name="line_car_emp_name[]" value="'.$emp_fullname.'" readonly></td>';
-                $html .= '<td>
-                               <input type="hidden" class="line-car-emp-id" value="'.$value->id.'" name="line_car_emp_id[]">
+            $i = 0;
+            if ($model) {
+                foreach ($model as $value) {
+                    $i += 1;
+                    $emp_code = \backend\models\Employee::findCode($value->employee_id);
+                    $emp_fullname = \backend\models\Employee::findFullName($value->employee_id);
+                    $html .= '<tr>';
+                    $html .= '<td style="text-align: center">' . $i . '</td>';
+                    $html .= '<td><input type="text" class="form-control line-car-emp-code" name="line_car_emp_code[]" value="' . $emp_code . '" readonly></td>';
+                    $html .= '<td><input type="text" class="form-control line-car-emp-name" name="line_car_emp_name[]" value="' . $emp_fullname . '" readonly></td>';
+                    $html .= '<td>
+                               <input type="hidden" class="line-car-emp-id" value="' . $value->id . '" name="line_car_emp_id[]">
                                <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i class="fa fa-trash"></i></div>
                           </td>';
-                $html .= '</tr>';
+                    $html .= '</tr>';
 
 
-
+                }
+            } else {
+                $html .= '
+                    <tr>
+                                       <td style="text-align: center"></td>
+                                       <td>
+                                           <input type="text" class="form-control line-car-emp-code" name="line_car_emp_code[]" value="" readonly>
+                                       </td>
+                                       <td>
+                                           <input type="text" class="form-control line-car-emp-name" name="line_car_emp_name[]" value="" readonly>
+                                       </td>
+                                       <td>
+                                           <input type="hidden" class="line-car-emp-id" value="" name="line_car_emp_id[]">
+                                           <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i class="fa fa-trash"></i></div>
+                                       </td>
+                                   </tr>
+                ';
             }
+
         }
 
         echo $html;
@@ -513,13 +531,13 @@ class OrdersController extends Controller
             $t_date = date('Y-m-d', strtotime($t_date));
 
             $model = \backend\models\Cardaily::find()->where(['car_id' => $id, 'date(trans_date)' => $t_date])->all();
-            $i=0;
+            $i = 0;
             foreach ($model as $value) {
-                $i+=1;
+                $i += 1;
                 $emp_code = \backend\models\Employee::findCode($value->employee_id);
                 $emp_fullname = \backend\models\Employee::findFullName($value->employee_id);
 
-                $html.= $emp_fullname. ' , ';
+                $html .= $emp_fullname . ' , ';
 
             }
         }
@@ -527,14 +545,15 @@ class OrdersController extends Controller
         echo $html;
     }
 
-    public function actionDeletecaremp(){
-         $id = \Yii::$app->request->post('id');
-         $res = 0;
-         if($id){
-             if(\backend\models\Cardaily::deleteAll(['id'=>$id])){
-                 $res +=1;
-             }
-         }
-         echo $res;
+    public function actionDeletecaremp()
+    {
+        $id = \Yii::$app->request->post('id');
+        $res = 0;
+        if ($id) {
+            if (\backend\models\Cardaily::deleteAll(['id' => $id])) {
+                $res += 1;
+            }
+        }
+        echo $res;
     }
 }
