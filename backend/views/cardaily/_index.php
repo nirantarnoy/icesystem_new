@@ -229,9 +229,9 @@ $js=<<<JS
                   if(data != ''){
                          $("#table-list tbody").html(data);
                        $(".selected-car").val(ids); 
-                       $("#empModal").modal('show');
+                      
                   }
-                
+                 $("#empModal").modal('show');
                  }
         });
           
