@@ -51,21 +51,32 @@ class MainconfigController extends Controller
                             continue;
                         }
 
-                        $model_dup = \backend\models\Customer::find()->where(['name'=>trim($rowData[3])])->one();
+                        $model_dup = \backend\models\Customer::find()->where(['name'=>trim($rowData[1])])->one();
                         if ($model_dup != null) {
                             continue;
                         }
 
-                        $route_id = $this->checkRoute($rowData[4]);
+                        $route_id = $this->checkRoute($rowData[11]);
+                        $group_id = $this->checkCustomergroup($rowData[13]);
+                        $type_id = $this->checkCustomertype($rowData[14]);
+                       // $payment_method = $this->checkPaymethod($rowData[4]);
+                        $payment_term = $this->checkPayterm($rowData[6]);
 
                         $modelx = new \backend\models\Customer();
-                        $modelx->code = $rowData[2];
-                        $modelx->name = $rowData[3];
-                        $modelx->description = $rowData[3];
-                        $modelx->contact_name = $rowData[5];
-                        $modelx->location_info = $rowData[9];
-                        $modelx->address = $rowData[10];
-                        $modelx->phone = $rowData[10];
+                        $modelx->code = $rowData[0];
+                        $modelx->name = $rowData[1];
+                        $modelx->description = $rowData[1];
+                        $modelx->contact_name = '';
+                        $modelx->branch_no = $rowData[2];
+                        $modelx->location_info = $rowData[10];
+                        $modelx->customer_group_id = $group_id;
+                        $modelx->customer_type_id = $type_id;
+                        $modelx->delivery_route_id = $route_id;
+                        $modelx->address = $rowData[4];
+                        $modelx->address2 = $rowData[3];
+                        $modelx->phone = $rowData[15];
+                      //  $modelx->payment_method_id = $payment_method;
+                        $modelx->payment_term_id = $payment_term;
                         $modelx->status = 1;
                         if ($modelx->save(false)) {
                             $res += 1;
@@ -159,13 +170,90 @@ class MainconfigController extends Controller
             if($model){
                 $id = $model->id;
             }else{
-               $model_new = new \backend\models\Customergroup();
+               $model_new = new \backend\models\Deliveryroute();
                $model_new->code = $name;
+               $model_new->name = $name;
                $model_new->description = $name;
-               $model_new->status = 1;
+              // $model_new->status = 1;
                if($model_new->save()){
                    $id = $model_new->id;
                }
+            }
+        }
+        return $id;
+    }
+    public function checkCustomergroup($name){
+        $id = 0;
+        if($name != ''){
+            $model = \backend\models\Customergroup::find()->where(['code'=>$name])->one();
+            if($model){
+                $id = $model->id;
+            }else{
+                $model_new = new \backend\models\Customergroup();
+                $model_new->code = $name;
+                $model_new->name = $name;
+                $model_new->description = $name;
+                $model_new->status = 1;
+                if($model_new->save()){
+                    $id = $model_new->id;
+                }
+            }
+        }
+        return $id;
+    }
+    public function checkCustomertype($name){
+        $id = 0;
+        if($name != ''){
+            $model = \backend\models\Customertype::find()->where(['code'=>$name])->one();
+            if($model){
+                $id = $model->id;
+            }else{
+                $model_new = new \backend\models\Customertype();
+                $model_new->code = $name;
+                $model_new->name = $name;
+                $model_new->description = $name;
+                $model_new->status = 1;
+                if($model_new->save()){
+                    $id = $model_new->id;
+                }
+            }
+        }
+        return $id;
+    }
+    public function checkPaymethod($name){
+        $id = 0;
+        if($name != ''){
+            $model = \backend\models\Paymentmethod::find()->where(['code'=>$name])->one();
+            if($model){
+                $id = $model->id;
+            }else{
+                $model_new = new \backend\models\Paymentmethod();
+                $model_new->code = $name;
+                $model_new->name = $name;
+                $model_new->note = $name;
+                $model_new->status = 1;
+                if($model_new->save()){
+                    $id = $model_new->id;
+                }
+            }
+        }
+        return $id;
+    }
+    public function checkPayterm($name){
+        $id = 0;
+        if($name != ''){
+            $model = \backend\models\Paymentterm::find()->where(['code'=>$name])->one();
+            if($model){
+                $id = $model->id;
+            }else{
+                $model_new = new \backend\models\Paymentterm();
+                $model_new->code = $name;
+                $model_new->name = $name;
+                $model_new->description = $name;
+                $model_new->status = 1;
+                if($model_new->save()){
+                    $id = $model_new->id;
+                }
             }
         }
         return $id;
