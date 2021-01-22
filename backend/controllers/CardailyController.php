@@ -151,9 +151,9 @@ class CardailyController extends Controller
         return $this->redirect(['index']);
     }
     public function checkOld($emp_id, $car_id, $t_date){
-          $model = \backend\models\Cardaily::find()->where(['car_id'=>$car_id,'employee_id'=>$emp_id,'trans_date'=>$t_date])->one();
+          $model = \backend\models\Cardaily::find()->where(['car_id'=>$car_id,'employee_id'=>$emp_id,'date(trans_date)'=>$t_date])->one();
           if($model){
-              \backend\models\Cardaily::deleteAll(['car_id'=>$car_id,'employee_id'=>$emp_id,'trans_date'=>$t_date]);
+              \backend\models\Cardaily::deleteAll(['car_id'=>$car_id,'employee_id'=>$emp_id,'date(trans_date)'=>$t_date]);
           }
     }
 }
