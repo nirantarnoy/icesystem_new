@@ -78,6 +78,16 @@ class CardailySearch extends Cardaily
         if($this->car_name !=''){
             $query->andFilterWhere(['OR',['LIKE','car.name', $this->car_name],['LIKE','car.description', $this->car_name]]);
         }
+        if($this->trans_date != null){
+            $x_date = explode('/', $this->trans_date);
+            $f_date = date('Y-m-d');
+            if (count($x_date) > 1) {
+                $f_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
+            }
+
+            $this->trans_date = date('Y-m-d', strtotime($f_date));
+            $query->andFilterWhere(['date(car_daily.trans_date)'=>$this->trans_date]);
+        }
 
         return $dataProvider;
     }
