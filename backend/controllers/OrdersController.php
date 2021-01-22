@@ -512,7 +512,7 @@ class OrdersController extends Controller
             }
             $t_date = date('Y-m-d', strtotime($t_date));
 
-            $model = \backend\models\Cardaily::find()->where(['car_id' => $id, 'trans_date' => $t_date])->all();
+            $model = \backend\models\Cardaily::find()->where(['car_id' => $id, 'date(trans_date)' => $t_date])->all();
             $i=0;
             foreach ($model as $value) {
                 $i+=1;
