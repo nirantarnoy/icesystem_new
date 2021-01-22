@@ -431,4 +431,29 @@ class OrdersController extends Controller
         $html .= '<td style="text-align: center"><div class="btn btn-danger btn-sm" data-var="'.$value->customer_id.'" onclick="removeorderline($(this))">ลบ</div></td>';
         return $html;
     }
+
+
+    public function actionEmpdata()
+    {
+        $txt = \Yii::$app->request->post('txt_search');
+        $html = '';
+        $model = null;
+        if($txt !=''){
+            $model = \backend\models\Employee::find()->where(['OR',['LIKE','code',$txt],['LIKE','fname',$txt],['LIKE','lname',$txt]])->all();
+        }else{
+            $model = \backend\models\Employee::find()->all();
+        }
+        foreach ($model as $value) {
+            $html .= '<tr>';
+            $html .= '<td style="text-align: center">
+                        <div class="btn btn-outline-success btn-sm" onclick="addselecteditem($(this))" data-var="' . $value->id . '">เลือก</div>
+                        <input type="hidden" class="line-find-type-code" value="' . $value->code . '">
+                        <input type="hidden" class="line-find-type-name" value="' . $value->fname. ' '.$value->lname . '">
+                       </td>';
+            $html .= '<td>' . $value->code . '</td>';
+            $html .= '<td>' . $value->fname. ' '.$value->lname. '</td>';
+            $html .= '</tr>';
+        }
+        echo $html;
+    }
 }
