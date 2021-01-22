@@ -271,6 +271,7 @@ class OrdersController extends Controller
             $model = \common\models\SaleGroup::find()->where(['delivery_route_id' => $id])->one();
             if ($model) {
                 $model_car = \backend\models\Car::find()->where(['sale_group_id'=>$model->id])->all();
+                echo "<option value=''>--เลือกรถ--</option>";
                 foreach ($model_car as $value) {
                     echo "<option value='" . $value->id . "'>$value->name</option>";
                 }
@@ -311,7 +312,7 @@ class OrdersController extends Controller
                 $html .= '<td>' . \backend\models\Customer::findName($value->id) . '</td>';
                 $html .= $this->getProducttextfield($id);
                 $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right"></td>';
-                $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"></td>';
+                $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"><input type="hidden" class="form-control line-total-price-cal" style="text-align: right"></td>';
                 $html .= '<td style="text-align: center"><div class="btn btn-danger btn-sm" data-var="" onclick="removeorderline($(this))">ลบ</div></td>';
                 $html .= '</tr>';
             }
@@ -342,11 +343,13 @@ class OrdersController extends Controller
             $i += 1;
             $input_name = "line_qty_" . $value->code . "[]";
             $input_name_price = "line_sale_price_".$value->code."[]";
+            $input_name_price_cal = "line_sale_price_cal".$value->code."[]";
             $line_prod_code = $value->code . '[]';
             $html .= '<td>
                        <input type="hidden" class="line-qty-' . $i . '">
                        <input type="hidden" class="line-product-code" name="' . $line_prod_code . '" value="' . $value->code . '">
                        <input type="hidden" class="line-sale-price" name="'.$input_name_price.'" value="' . $value->sale_price . '">
+                       <input type="hidden" class="line-sale-price-cal" name="'.$input_name_price_cal.'" value="' . $value->sale_price . '">
                        <input type="number" name="' . $input_name . '" data-var="'.$value->sale_price.'" style="text-align: center" class="form-control" min="0" value="0" onchange="line_qty_cal($(this))">
                   </td>';
         }
@@ -424,7 +427,7 @@ class OrdersController extends Controller
                   </td>';
         }
         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right" value="' . number_format($line_total_qty) . '"></td>';
-        $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"  value="' . number_format($line_total_price) . '"></td>';
+        $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"  value="' . number_format($line_total_price) . '"><input type="hidden" class="form-control line-total-price-cal" style="text-align: right" value="' . $line_total_price. '"></td>';
         $html .= '<td style="text-align: center"><div class="btn btn-danger btn-sm" data-var="'.$value->customer_id.'" onclick="removeorderline($(this))">ลบ</div></td>';
         return $html;
     }

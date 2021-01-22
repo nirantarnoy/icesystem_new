@@ -33,6 +33,7 @@ use yii\widgets\ActiveForm;
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Car::find()->all(), 'id', 'name'),
                 'options' => [
                     'id' => 'car-ref-id',
+                    'disabled'=>'disabled',
                     'placeholder' => '--เลือกรถขาย--'
                 ]
             ]) ?>
@@ -69,7 +70,7 @@ use yii\widgets\ActiveForm;
             ]) ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'order_total_amt')->textInput(['readonly' => 'readonly', 'id' => 'order-total-amt']) ?>
+            <?= $form->field($model, 'order_total_amt_text')->textInput(['readonly' => 'readonly', 'id' => 'order-total-amt-text'])->label('ยอดขาย') ?>
         </div>
         <div class="col-lg-3">
             <?= $form->field($model, 'status')->textInput(['readonly' => 'readonly','value'=> $model->isNewRecord?'Open': \backend\helpers\OrderStatus::getTypeById($model->status)]) ?>
@@ -94,6 +95,7 @@ use yii\widgets\ActiveForm;
         <!--        </tbody>-->
     </table>
     <br/>
+    <?= $form->field($model, 'order_total_amt')->hiddenInput(['readonly' => 'readonly', 'id' => 'order-total-amt'])->label(false) ?>
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>
@@ -170,14 +172,14 @@ $js = <<<JS
      $("#order-date").datepicker({
        'format':'dd/mm/yyyy'
      });
-     
+
      $(".line_qty,.line_price").on("keypress", function (event) {
             $(this).val($(this).val().replace(/[^0-9\.]/g, ""));
             if ((event.which != 46 || $(this).val().indexOf(".") != -1) && (event.which < 48 || event.which > 57)) {
                 event.preventDefault();
             }
      });
-     
+
      var page_status = $(".page-status").val();
      if(page_status == 1){
          var ids = $(".page-status").attr("data-var");
@@ -198,7 +200,7 @@ $js = <<<JS
 //                   $("#findModal").modal("show");
 //                 }
 //              });
-//      
+//
 //  }
 //  function addselecteditem(e) {
 //        var id = e.attr('data-var');
@@ -213,7 +215,7 @@ $js = <<<JS
 //                obj['name'] = name;
 //                obj['price'] = price;
 //                selecteditem.push(obj);
-//                
+//
 //                e.removeClass('btn-outline-success');
 //                e.addClass('btn-success');
 //                disableselectitem();
@@ -232,7 +234,7 @@ $js = <<<JS
 //            }
 //        }
 //    }
-//    
+//
 //    function check_dup(prod_id){
 //      var _has = 0;
 //      $("#table-list tbody tr").each(function(){
@@ -244,7 +246,7 @@ $js = <<<JS
 //      });
 //      return _has;
 //    }
-//    
+//
 //    function disableselectitem() {
 //        if (selecteditem.length > 0) {
 //            $(".btn-product-selected").prop("disabled", "");
@@ -264,14 +266,14 @@ $js = <<<JS
 //                var line_prod_code = selecteditem[i]['code'];
 //                var line_prod_name = selecteditem[i]['name'];
 //                var line_prod_price = selecteditem[i]['price'];
-//                
+//
 //                 if(check_dup(line_prod_id) == 1){
 //                        alert("รายการสินค้า " +line_prod_code+ " มีในรายการแล้ว");
 //                        return false;
 //                    }
-//                
+//
 //                var tr = $("#table-list tbody tr:last");
-//                
+//
 //                if (tr.closest("tr").find(".line-prod-code").val() == "") {
 //                    tr.closest("tr").find(".line-prod-id").val(line_prod_id);
 //                    tr.closest("tr").find(".line-prod-code").val(line_prod_code);
@@ -322,7 +324,7 @@ $js = <<<JS
 //        });
 //        $(".btn-product-selected").removeClass('btn-success');
 //        $(".btn-product-selected").addClass('btn-outline-success');
-//        
+//
 //      //  alert();
 //        $("#findModal").modal('hide');
 //    });
@@ -406,7 +408,7 @@ $js = <<<JS
 //        });
 //        $(".qty-sum").text(parseFloat(totalqty).toFixed(2));
 //        $(".total-amount").val(parseFloat(totalall).toFixed(2));
-//        
+//
 //        $("#order-total-amt").val(parseFloat(totalall).toFixed(0));
 //  }
 
@@ -418,7 +420,7 @@ $js = <<<JS
            //alert(data);
            //  $("#table-sale-list tbody").html(data);
          //});
-         
+
          $.ajax({
               'type':'post',
               'dataType': 'html',
@@ -429,7 +431,7 @@ $js = <<<JS
                   $("#table-sale-list").html(data);
               }
          });
-         
+
          $.ajax({
               'type':'post',
               'dataType': 'html',
@@ -439,11 +441,12 @@ $js = <<<JS
               'success': function(data) {
                  // alert();
                  $("#car-ref-id").html(data);
+                 $("#car-ref-id").prop("disabled","");
               }
          });
-         
+
  }
- 
+
  function removeorderline(e){
      //var cust_line_id = e.closest('tr').find('.line-customer-id').val();
     var recid = e.attr("data-var");
@@ -455,7 +458,7 @@ $js = <<<JS
      $(".remove-list").val(removelist);
      cal_all();
  }
- 
+
  function order_update_data(ids) {
      if(ids !='' || ids > 0){
                $.ajax({
@@ -469,10 +472,10 @@ $js = <<<JS
                   $("#table-sale-list").html(data);
               }
          });
-     }         
+     }
      cal_all();
  }
- 
+
  function line_qty_cal(e){
       var row = e.parent().parent();
      // var line_price = e.attr('data-var');
@@ -491,25 +494,25 @@ $js = <<<JS
       });
       e.closest("tr").find(".line-qty-cal").val(line_total);
       e.closest("tr").find(".line-total-price").val(line_sale_price_total);
-      
+      e.closest("tr").find(".line-total-price-cal").val(line_sale_price_total);
+
       cal_all();
  }
- 
+
    function cal_all() {
        var totalall = 0;
        $("#table-sale-list tr").each(function () {
-           var linetotal = $(this).closest("tr").find(".line-total-price").val();
-           
+           var linetotal = $(this).closest("tr").find(".line-total-price-cal").val();
            if (linetotal == '' || isNaN(linetotal)) {
                linetotal = 0;
            }
-    
            totalall = parseFloat(totalall) + parseFloat(linetotal);
        });
-   
+
        $("#order-total-amt").val(parseFloat(totalall).toFixed(0));
+       $("#order-total-amt-text").val(addCommas(parseFloat(totalall).toFixed(0)));
  }
- 
+
 function addCommas(nStr) {
         nStr += '';
         var x = nStr.split('.');
