@@ -142,9 +142,9 @@ class CardailyController extends Controller
                     $model = new \backend\models\Cardaily();
                     $model->car_id = $car_id;
                     $model->employee_id = $emp_id[$i];
-                    $model->trans_date = date('Y-m-d');
+                    $model->trans_date = $t_date;
                     $model->status = 1;
-                    $model->save();
+                    $model->save(false);
                 }
             }
         }
