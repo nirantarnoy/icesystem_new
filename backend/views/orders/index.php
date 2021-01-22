@@ -102,9 +102,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
                     if ($data->status == 1) {
-                        return '<div class="badge badge-success">Closed</div>';
+                        return '<div class="badge badge-success">Open</div>';
                     } else {
-                        return '<div class="badge badge-secondary">Open</div>';
+                        return '<div class="badge badge-secondary">Closed</div>';
                     }
                 }
             ],
