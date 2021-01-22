@@ -48,6 +48,7 @@ class SaleGroup extends \yii\db\ActiveRecord
             'code' => 'รห้ส',
             'name' => 'ชื่อ',
             'status' => 'สถานะ',
+            'delivery_route_id' => 'เส้นทาง',
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),
             'updated_at' => Yii::t('app', 'Updated At'),

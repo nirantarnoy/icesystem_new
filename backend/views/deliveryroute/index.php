@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'description',
             [
-                'label' => 'Customer Qty',
+                'label' => 'จำนวนลูกค้า',
                 'format' => 'raw',
                 'headerOptions' => ['style' => 'text-align:center;'],
                 'contentOptions' => ['style' => 'text-align: center'],
