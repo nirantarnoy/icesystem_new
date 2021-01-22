@@ -285,6 +285,25 @@ class OrdersController extends Controller
 
     }
 
+    public function actionFindTermData()
+    {
+        $id = \Yii::$app->request->post('id');
+        if ($id) {
+            $model = \common\models\PaymentTerm::find()->where(['payment_method_id' => $id])->all();
+            if ($model) {
+                echo "<option value=''>--เงื่อนไขชำระเงิน--</option>";
+                foreach ($model as $value) {
+                    echo "<option value='" . $value->id . "'>$value->name</option>";
+                }
+            } else {
+                echo "<option></option>";
+            }
+        } else {
+            echo "<option></option>";
+        }
+
+    }
+
     public function actionFindSaledata()
     {
         $id = \Yii::$app->request->post('id');

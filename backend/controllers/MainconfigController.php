@@ -56,12 +56,16 @@ class MainconfigController extends Controller
                             continue;
                         }
 
+                        $route_id = $this->checkRoute($rowData[4]);
+
                         $modelx = new \backend\models\Customer();
                         $modelx->code = $rowData[2];
                         $modelx->name = $rowData[3];
                         $modelx->description = $rowData[3];
                         $modelx->contact_name = $rowData[5];
                         $modelx->location_info = $rowData[9];
+                        $modelx->address = $rowData[10];
+                        $modelx->phone = $rowData[10];
                         $modelx->status = 1;
                         if ($modelx->save(false)) {
                             $res += 1;
@@ -118,6 +122,8 @@ class MainconfigController extends Controller
                         continue;
                     }
 
+
+
                     $modelx = new \backend\models\Employee();
                     $modelx->code = $rowData[1];
                     $modelx->fname = $rowData[2];
@@ -144,5 +150,24 @@ class MainconfigController extends Controller
 //        }
             }
         }
+    }
+
+    public function checkRoute($name){
+        $id = 0;
+        if($name != ''){
+            $model = \backend\models\Deliveryroute::find()->where(['code'=>$name])->one();
+            if($model){
+                $id = $model->id;
+            }else{
+               $model_new = new \backend\models\Customergroup();
+               $model_new->code = $name;
+               $model_new->description = $name;
+               $model_new->status = 1;
+               if($model_new->save()){
+                   $id = $model_new->id;
+               }
+            }
+        }
+        return $id;
     }
 }

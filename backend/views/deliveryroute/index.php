@@ -147,7 +147,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <table class="table table-bordered table-striped table-find-list" width="100%">
                     <thead>
                     <tr>
-                        <th>รหัสลูกค้า</th>
+                        <th>ข้อมูลลูกค้า</th>
                         <th>ชื่อลูกค้า</th>
                         <th>สถานะ</th>
                     </tr>

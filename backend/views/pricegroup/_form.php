@@ -368,7 +368,7 @@ $prod_status = \backend\helpers\ProductStatus::asArrayObject();
                     <thead>
                     <tr>
                         <th style="text-align: center">เลือก</th>
-                        <th>รหัสสินค้า</th>
+                        <th>ประเภทสินค้า</th>
                         <th>รายละเอียด</th>
                     </tr>
                     </thead>

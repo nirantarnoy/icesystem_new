@@ -18,14 +18,14 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="col-lg-3">
             <?php
-                 $x_disabled = !$model->isNewRecord?"disabled":'';
+            $x_disabled = !$model->isNewRecord ? "disabled" : '';
 
             ?>
             <?= $form->field($model, 'order_channel_id')->Widget(\kartik\select2\Select2::className(), [
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(), 'id', 'name'),
                 'options' => [
                     'id' => 'delivery-route-id',
-                     'readonly'=>'readonly',
+                    'readonly' => 'readonly',
                     'placeholder' => '--เลือกสายส่ง--',
                     'onchange' => '
                            route_change($(this));
@@ -38,8 +38,8 @@ use yii\widgets\ActiveForm;
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Car::find()->all(), 'id', 'name'),
                 'options' => [
                     'id' => 'car-ref-id',
-                    'disabled'=>'disabled',
-                    'onchange'=>'getcaremp($(this));',
+                    'disabled' => 'disabled',
+                    'onchange' => 'getcaremp($(this));',
                     'placeholder' => '--เลือกรถขาย--'
                 ]
             ]) ?>
@@ -61,7 +61,8 @@ use yii\widgets\ActiveForm;
                     return $data->name;
                 }),
                 'options' => [
-                    'placeholder' => '--เลือกวิธีชำระเงิน--'
+                    'placeholder' => '--เลือกวิธีชำระเงิน--',
+                    'onchange' => 'getPaymentterm($(this))'
                 ]
             ]) ?>
         </div>
@@ -71,6 +72,7 @@ use yii\widgets\ActiveForm;
                     return $data->name;
                 }),
                 'options' => [
+                    'id' => 'payment-term-id',
                     'placeholder' => '--เลือกเงื่อนไขชำระเงิน--'
                 ]
             ]) ?>
@@ -79,7 +81,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'order_total_amt_text')->textInput(['readonly' => 'readonly', 'id' => 'order-total-amt-text'])->label('ยอดขาย') ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'status')->textInput(['readonly' => 'readonly','value'=> $model->isNewRecord?'Open': \backend\helpers\OrderStatus::getTypeById($model->status)]) ?>
+            <?= $form->field($model, 'status')->textInput(['readonly' => 'readonly', 'value' => $model->isNewRecord ? 'Open' : \backend\helpers\OrderStatus::getTypeById($model->status)]) ?>
         </div>
     </div>
     <br>
@@ -157,6 +159,7 @@ $url_to_get_sale_item = \yii\helpers\Url::to(['orders/find-saledata'], true);
 $url_to_get_car_item = \yii\helpers\Url::to(['orders/find-car-data'], true);
 $url_to_get_sale_item_update = \yii\helpers\Url::to(['orders/find-saledata-update'], true);
 $url_to_get_car_emp = \yii\helpers\Url::to(['orders/findcarempdaily'], true);
+$url_to_get_term_item =\yii\helpers\Url::to(['orders/find-term-data'], true);
 $js = <<<JS
   var removelist = [];
   var selecteditem = [];
@@ -438,6 +441,21 @@ $js = <<<JS
               }
          });
 
+ }
+ 
+ function getPaymentterm(e){
+     $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_get_term_item",
+              'data': {'id': e.val()},
+              'success': function(data) {
+                 // alert();
+                 $("#payment-term-id").html(data);
+                // $("#car-ref-id").prop("disabled","");
+              }
+         });
  }
 
  function removeorderline(e){

@@ -16,6 +16,14 @@ use yii\widgets\ActiveForm;
 
         </div>
         <div class="col-lg-10">
+
+            <?= $form->field($model, 'payment_method_id')->widget(\kartik\select2\Select2::className(), [
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentmethod::find()->all(), 'id', 'name'),
+                'options' => [
+                    'placeholder' => '--วิธีชำระเงิน--'
+                ]
+            ]) ?>
+
             <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
 
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
