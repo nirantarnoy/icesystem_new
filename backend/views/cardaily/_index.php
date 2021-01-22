@@ -229,6 +229,8 @@ $js=<<<JS
                   //  alert(data);
                   if(data != ''){
                       $("#table-list tbody").html(data);
+                  }else{
+                      $("#table-list tbody").html('');
                   }
                  $("#empModal").modal('show');
                  }
