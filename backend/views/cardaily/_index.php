@@ -6,7 +6,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $model = $dataProvider->getModels();
 $model_new = null;
 //if($model == null){
-$model_new = \backend\models\Car::find()->all();
+$model_new = $model_car;
 //}
 //$emp_data = \common\models\USRPWOPERSON::find()->where(['WCID' => 'PTVB'])->all();
 

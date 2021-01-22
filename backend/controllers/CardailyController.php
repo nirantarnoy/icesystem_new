@@ -36,12 +36,35 @@ class CardailyController extends Controller
      */
     public function actionIndex()
     {
+       // print_r(Yii::$app->request->queryParams);return;
+        $route_type_id = null;
+        $car_name = null;
+        if(isset(Yii::$app->request->queryParams['CardailySearch'])){
+            $route_type_id =  Yii::$app->request->queryParams['CardailySearch']['route_id'];
+        }
+        if(isset(Yii::$app->request->queryParams['CardailySearch'])){
+            $car_name =  Yii::$app->request->queryParams['CardailySearch']['car_name'];
+        }
+
+        $car_search_text = \Yii::$app->request->post('car_name');
+
         $searchModel = new CardailySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+      //  echo $route_type_id;return;
+        $query = \common\models\QueryCarRoute::find();
+        if($route_type_id != null){
+            $query = $query->andFilterWhere(['delivery_route_id'=>$route_type_id]);
+        }
+        if($car_name != null){
+            $query = $query->andFilterWhere(['OR',['LIKE','name',$car_name],['LIKE','code',$car_name]]);
+        }
+        $model_car = $query->all();
 
         return $this->render('_index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'model_car' => $model_car
         ]);
 //        $searchModel = new CardailySearch();
 //        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
