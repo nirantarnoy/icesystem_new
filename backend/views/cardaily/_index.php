@@ -36,7 +36,7 @@ $model_new = \backend\models\Car::find()->all();
 
             $assign_id = 0;
             $stream_assign_date = '';
-            //if ($i >= 10) $status_color = 'bg-success';
+            if ($i <= 10) $status_color = 'bg-success';
             // if (\backend\models\Streamer::getStatus($value->NAME)) $status_color = 'Open';
 
 //            foreach ($model as $value2) {
@@ -53,15 +53,15 @@ $model_new = \backend\models\Car::find()->all();
                 <!-- small box -->
                 <div class="small-box <?= $status_color ?>">
                     <div class="inner">
-                        <h3><?= $value->name ?></h3>
-                        <p><?= $status_name ?></p>
+                        <h6><?= $value->name ?></h6>
+                        <p><?php //echo $status_name ?></p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-truck"></i>
                         <!--                       <img src="../web/uploads/images/streamer/streamer.jpg" width="50%" alt="">-->
                     </div>
                     <a href="#" onclick="showstreaminfo($(this))" class="small-box-footer"><i
-                            class="fas fa-edit"></i> จัดการข้อมูล </a>
+                            class="fas fa-users"></i> จัดการข้อมูล </a>
                 </div>
             </div>
         <?php endforeach; ?>
