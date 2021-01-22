@@ -21,6 +21,7 @@ use yii\widgets\ActiveForm;
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(), 'id', 'name'),
                 'options' => [
                     'id' => 'delivery-route-id',
+                    'disabled' => !$model->isNewRecord?"disabled":"",
                     'placeholder' => '--เลือกสายส่ง--',
                     'onchange' => '
                            route_change($(this));

@@ -69,6 +69,18 @@ $this->params['breadcrumbs'][] = $this->title;
 //            ],
 //            'customer_type',
 //            'customer_name',
+            [
+                'attribute' => 'order_channel_id',
+                'value' => function ($data) {
+                    return \backend\models\Deliveryroute::findName($data->order_channel_id);
+                }
+            ],
+            [
+                'attribute' => 'car_ref_id',
+                'value' => function ($data) {
+                    return \backend\models\Car::findName($data->car_ref_id);
+                }
+            ],
 
             [
                 'attribute' => 'order_total_amt',

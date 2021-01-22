@@ -70,7 +70,7 @@ class Orders extends \yii\db\ActiveRecord
             'order_date' => Yii::t('app', 'วันที่สั่งซื้อ'),
             'vat_amt' => Yii::t('app', 'Vat Amt'),
             'vat_per' => Yii::t('app', 'Vat Per'),
-            'order_total_amt' => Yii::t('app', 'ยอดรวมทั้งสิ้น'),
+            'order_total_amt' => Yii::t('app', 'ยอดรวม'),
             'emp_sale_id' => Yii::t('app', 'Emp Sale ID'),
             'car_ref_id' => Yii::t('app', 'รหัสรถ'),
             'order_channel_id' => Yii::t('app', 'สายส่ง'),
