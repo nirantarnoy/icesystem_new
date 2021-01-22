@@ -53,7 +53,7 @@ $model_new = \backend\models\Car::find()->all();
                 <!-- small box -->
                 <div class="small-box <?= $status_color ?>">
                     <div class="inner">
-                        <h6><?= $value->name ?></h6>
+                        <h6><b><?= $value->name ?></b></h6>
                         <p><?php //echo $status_name ?></p>
                     </div>
                     <div class="icon">
