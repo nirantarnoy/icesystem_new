@@ -12,6 +12,11 @@ use Yii;
  * @property int|null $employee_id
  * @property int|null $is_driver
  * @property int|null $status
+ * @property string|null $trans_date
+ * @property int|null $created_at
+ * @property int|null $updated_at
+ * @property int|null $created_by
+ * @property int|null $updated_by
  */
 class CarDaily extends \yii\db\ActiveRecord
 {
@@ -29,7 +34,8 @@ class CarDaily extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['car_id', 'employee_id', 'is_driver', 'status'], 'integer'],
+            [['car_id', 'employee_id', 'is_driver', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['trans_date'], 'safe'],
         ];
     }
 
@@ -44,6 +50,11 @@ class CarDaily extends \yii\db\ActiveRecord
             'employee_id' => 'Employee ID',
             'is_driver' => 'Is Driver',
             'status' => 'Status',
+            'trans_date' => 'Trans Date',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'created_by' => 'Created By',
+            'updated_by' => 'Updated By',
         ];
     }
 }

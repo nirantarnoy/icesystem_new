@@ -256,6 +256,12 @@
                                 <p>ข้อมูลรถ</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="index.php?r=cardaily/index" class="nav-link cardaily">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>ข้อมูลรถประจำวัน</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item has-treeview has-sub">
