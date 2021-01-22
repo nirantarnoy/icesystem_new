@@ -218,6 +218,7 @@ $js=<<<JS
       var ids = e.attr('data-id');
       var t_date = $("#car-trans-date").val();
       if(ids && t_date != ''){
+          $(".selected-car").val(ids);
           $.ajax({
               'type':'post',
               'dataType': 'html',
@@ -227,9 +228,7 @@ $js=<<<JS
               'success': function(data) {
                   //  alert(data);
                   if(data != ''){
-                         $("#table-list tbody").html(data);
-                       $(".selected-car").val(ids); 
-                      
+                      $("#table-list tbody").html(data);
                   }
                  $("#empModal").modal('show');
                  }
