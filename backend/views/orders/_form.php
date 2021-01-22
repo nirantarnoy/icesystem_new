@@ -183,7 +183,7 @@ $js = <<<JS
          var ids = $(".page-status").attr("data-var");
          order_update_data(ids);
      }
-     
+     cal_all();
   });
 //  function showfind(e){
 //      $.ajax({

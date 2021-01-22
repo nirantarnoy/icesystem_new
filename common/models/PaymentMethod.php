@@ -47,10 +47,10 @@ class PaymentMethod extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'code' => 'Code',
-            'name' => 'Name',
-            'note' => 'Note',
-            'status' => 'Status',
+            'code' => 'รห้ส',
+            'name' => 'ชื่อ',
+            'note' => 'รายละเอียด',
+            'status' => 'สถานะ',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',

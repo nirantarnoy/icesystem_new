@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use yii\bootstrap4\LinkPager;
 
 $this->title = Yii::t('app', 'ประเภทสินค้า');
-$this->params['breadcrumbs'][] = '/'.$this->title;
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="producttype-index">
     <?php Pjax::begin(); ?>
