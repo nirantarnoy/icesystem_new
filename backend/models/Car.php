@@ -53,7 +53,7 @@ class Car extends \common\models\Car
 //    }
     public function findName($id){
         $model = Car::find()->where(['id'=>$id])->one();
-        return count($model)>0?$model->name:'';
+        return $model!=null?$model->name:'';
     }
 //    public function findUnitid($code){
 //        $model = Unit::find()->where(['name'=>$code])->one();
