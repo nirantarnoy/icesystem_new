@@ -28,7 +28,7 @@ class PosController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index','getcustomerprice'],
+                        'actions' => ['logout', 'index','getcustomerprice','closesale'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -85,14 +85,16 @@ class PosController extends Controller
         $line_qty = \Yii::$app->request->post('cart_qty');
         $line_price = \Yii::$app->request->post('cart_price');
 
+        //echo $customer_id;return;
 
         if($customer_id){
               $model_order = new \backend\models\Orders();
               $model_order->order_no = $model_order->getLastNo();
               $model_order->order_date = date('Y-m-d');
               $model_order->customer_id = $customer_id;
+              $model_order->sale_channel_id = 2;
               $model_order->status = 1;
-              if($model_order->save()){
+              if($model_order->save(false)){
                   if(count($product_list) > 0){
                       for($i=0;$i<=count($product_list)-1;$i++){
                           $model_order_line = new \backend\models\Orderline();
@@ -102,11 +104,13 @@ class PosController extends Controller
                           $model_order_line->price = $line_price[$i];
                           $model_order_line->line_total = ($line_price[$i] * $line_qty[$i]);
                           $model_order_line->status = 1;
-                          $model_order_line->save();
+                          $model_order_line->save(false);
                       }
                   }
               }
         }
+
+        return $this->redirect(['pos/index']);
     }
 
 }

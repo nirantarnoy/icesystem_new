@@ -101,7 +101,7 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
         </div>
     </div>
     <div class="col-lg-6">
-        <form action="<?= \yii\helpers\Url::to(['pos/closesale'], true) ?>">
+        <form action="<?= \yii\helpers\Url::to(['pos/closesale'], true) ?>" id="form-close-sale" method="post">
             <input type="hidden" class="sale-customer-id" name="customer_id" value="">
             <input type="hidden" class="sale-total-amount" name="sale_total_amount" value="">
             <input type="hidden" class="sale-pay-amount" name="sale_pay_amount" value="">
@@ -128,7 +128,7 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
                         <thead>
                         <tr style="background-color: #1aa67d;color: #e3e3e3">
                             <th style="text-align: center;width: 5%">#</th>
-                            <th style="width: 15%">รหัสสินค้า</th>
+                            <th style="width: 15%;text-align: center">รหัสสินค้า</th>
                             <th>ชื่อสินค้า</th>
                             <th style="text-align: right;width: 15%">จำนวน</th>
                             <th style="text-align: right">ราคา</th>
@@ -139,7 +139,7 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
                         <tbody>
                         <tr>
                             <td style="text-align: center;vertical-align: middle;width: 5%"></td>
-                            <td style="vertical-align: middle"></td>
+                            <td style="vertical-align: middle;text-align: center"></td>
                             <td style="vertical-align: middle"></td>
                             <td style="text-align: right">
                                 <input type="number" style="vertical-align: middle;text-align: right"
@@ -530,6 +530,10 @@ $js = <<<JS
          });  
         
      });
+     
+     $(".btn-pay-submit").click(function(){
+         $("form#form-close-sale").submit();
+     });
       
  });
 
@@ -561,6 +565,7 @@ function calpayprice(e){
 function getproduct_price(e){
     var ids = e.val();
     if(ids > 0){
+        alert(ids);
         $(".sale-customer-id").val(ids);
          $.ajax({
               type: "post",

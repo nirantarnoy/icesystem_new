@@ -68,6 +68,7 @@ class OrdersController extends Controller
             }
             $model->order_date = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
+            $model->sale_channel_id = 1;
             if ($model->save()) {
                 if (count($line_customer_id) > 0) {
                     $product_list = \backend\models\Product::find()->all();
