@@ -50,7 +50,7 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
         </div>
         <br/>
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-12" style="overflow-x: hidden">
                 <div class="row">
                     <?php $i = 0; ?>
                     <?php $product_data = \backend\models\Product::find()->all(); ?>
