@@ -154,11 +154,13 @@ if($view_emp_id != null){
                 <th style="text-align: center" rowspan="2">รหัส</th>
                 <th rowspan="2">ชื่อ-นามสกุล</th>
                 <th style="text-align: right;background-color: #44ab7d;color: white" rowspan="2">เงินสด</th>
-                <th style="text-align: right;background-color: #e4606d;color: white" rowspan="2">เงินเชื่อ</th>
+                <th style="text-align: right;background-color: #255985;color: white" rowspan="2">เงินเชื่อ</th>
                 <?php foreach ($model as $value): ?>
                     <th colspan="2" style="text-align: center"><?= $value->code ?>
                     </th>
                 <?php endforeach; ?>
+                <th style="text-align: right;background-color: #e4606d;color: white" rowspan="2">จำนวนรวม</th>
+                <th style="text-align: right;background-color: #ec4844;color: white" rowspan="2">ยอดเงินรวม</th>
                 <th style="text-align: right;background-color: #258faf;color: white" rowspan="2">Rate Com</th>
                 <th style="text-align: right;background-color: #258faf;color: white" rowspan="2">คอมมิชชั่น</th>
                 <th style="text-align: right;background-color: #258faf;color: white" >เงินพิเศษ</th>
@@ -191,7 +193,7 @@ if($view_emp_id != null){
                     <td style="text-align: center"><?= $value->code ?></td>
                     <td><?= $value->fname . ' ' . $value->lname ?></td>
                     <td style="text-align: right;background-color: #44ab7d;color: white"><?= findCash($value->id, $f_date, $t_date) ?></td>
-                    <td style="text-align: right;background-color: #e4606d;color: white"><?= findCredit($value->id, $f_date, $t_date) ?></td>
+                    <td style="text-align: right;background-color: #255985;color: white"><?= findCredit($value->id, $f_date, $t_date) ?></td>
                     <?php foreach ($model as $value2): ?>
                         <?php
                         $line_qty = findProductqty($value->id, $value2->id, $f_date, $t_date);
@@ -205,6 +207,8 @@ if($view_emp_id != null){
                         <td style="text-align: right"><?= $line_qty; ?></td>
                         <td style="text-align: right;background-color: #B4B9BE"><?= $line_amt; ?></td>
                     <?php endforeach; ?>
+                    <td style="text-align: right;background-color: #e4606d;color: white"><?= $line_sum_qty; ?></td>
+                    <td style="text-align: right;background-color: #ec4844;color: white"><?= $line_sum_amt; ?></td>
                     <td style="text-align: right;background-color: #258faf;color: white"><?= $line_com_rate; ?></td>
                     <td style="text-align: right;background-color: #258faf;color: white"><?= $line_sum_qty * $line_com_rate; ?></td>
                     <td style="text-align: right;background-color: #258faf;color: white"><?= findComextrarate($value->id, $line_sum_amt)?></td>
