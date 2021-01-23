@@ -3,7 +3,7 @@
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 
-$this->title = 'ทำรายการขายหน้าร้าน POS';
+$this->title = '<p style="color: #255985">ทำรายการขายหน้าร้าน POS</p>';
 
 ?>
 <div class="row">
@@ -52,23 +52,46 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
         <div class="row">
             <div class="col-lg-12">
                 <div class="row">
+                    <?php $i = 0; ?>
                     <?php $product_data = \backend\models\Product::find()->all(); ?>
                     <?php foreach ($product_data as $value): ?>
+                        <?php $i += 1; ?>
                         <div class="col-lg-2 product-items">
-                            <div class="card" style="width: ;height: 200px;" onclick="showadditem($(this))">
+                            <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
+                            <div class="card" style="heightc: 200px;">
                                 <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">
                                 <!--                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="">-->
                                 <div class="card-body">
-                                    <input type="hidden" class="list-item-id" value="<?= $value->id ?>">
-                                    <input type="hidden" class="list-item-code" value="<?= $value->code ?>">
-                                    <input type="hidden" class="list-item-name" value="<?= $value->name ?>">
-                                    <input type="hidden" class="list-item-price" value="<?= $value->sale_price ?>">
                                     <p class="card-text"
                                        style="font-size: 20px;text-align: center;font-weight: bold"><?= $value->code ?></p>
                                 </div>
-                                <div class="card-footer" style="text-align: center">
-                                    <div class="item-price"
-                                         style="color: red;font-weight: bold;"><?= $value->sale_price ?></div>
+                                <div class="card-footer" style="width: 100%">
+                                    <div class="row" style="width: 120%;text-align: center">
+                                        <div class="col-lg-12">
+                                            <div class="item-price"
+                                                 style="color: red;font-weight: bold;"><?= $value->sale_price ?></div>
+                                        </div>
+                                    </div>
+                                    <div style="height: 10px;"></div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <input type="hidden" class="list-item-id-<?= $i ?>"
+                                                   value="<?= $value->id ?>">
+                                            <input type="hidden" class="list-item-code-<?= $i ?>"
+                                                   value="<?= $value->code ?>">
+                                            <input type="hidden" class="list-item-name-<?= $i ?>"
+                                                   value="<?= $value->name ?>">
+                                            <input type="hidden" class="list-item-price-<?= $i ?>"
+                                                   value="<?= $value->sale_price ?>">
+                                            <div class="btn-group" style="width: 100%">
+                                                <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"
+                                                     onclick="reducecart2($(this))"><i class="fa fa-minus"></i></div>
+                                                <div class="btn btn-outline-primary btn-sm" data-var="<?= $i ?>"
+                                                     onclick="addcart2($(this))">
+                                                    <i class="fa fa-plus"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -85,10 +108,14 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
             <input type="hidden" class="sale-pay-change" name="sale_pay_change" value="">
             <input type="hidden" class="sale-pay-type" name="sale_pay_type" value="">
             <div class="row">
-                <div class="col-lg-6">
-                    <h5><i class="fa fa-shopping-basket"></i> รายการขายสินค้า</h5>
+                <div class="col-lg-4">
+                    <h5 style="color: #258faf"><i class="fa fa-calendar"></i> <?= date('d/m/Y') ?> <span class="c-time"><?=date('H:i')?></span>
+                    </h5>
                 </div>
-                <div class="col-lg-6" style="text-align: right">
+                <div class="col-lg-3">
+
+                </div>
+                <div class="col-lg-5" style="text-align: right">
                     <input type="hidden" class="total-value-top" value="0">
                     <h5> ยอดขาย <span style="color: red" class="total-text-top">0</span></h5>
                 </div>
@@ -98,7 +125,7 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
                 <div class="col-lg-12">
                     <table class="table table-striped table-bordered table-cart">
                         <thead>
-                        <tr>
+                        <tr style="background-color: #1aa67d;color: #e3e3e3">
                             <th style="text-align: center;width: 5%">#</th>
                             <th style="width: 15%">รหัสสินค้า</th>
                             <th>ชื่อสินค้า</th>
@@ -401,6 +428,14 @@ $this->title = 'ทำรายการขายหน้าร้าน POS';
 $url_to_get_price = \yii\helpers\Url::to(['pos/getcustomerprice'], true);
 $js = <<<JS
  $(function(){
+     
+     setInterval(function (){
+          var dt = new Date();
+          var time = dt.getHours() + ":" + dt.getMinutes();
+          $(".c-time").html(time);
+     },60000);
+    
+     
      $(".customer-id").select2({
      dropdownAutoWidth : true
      });
@@ -625,6 +660,111 @@ function addcart(e){
     cal_linenum();
     calall();
     $("#posModal").modal('hide');
+}
+
+function addcart2(e){
+    var ids = e.attr('data-var');
+    
+    var prod_id = $(".list-item-id-"+ids).val();
+    var prod_code = $(".list-item-code-"+ids).val();
+    var prod_name = $(".list-item-name-"+ids).val();
+    // alert(prod_id);
+    var qty = 1;
+    var price = $(".list-item-price-"+ids).val();
+    var tr = $(".table-cart tbody tr:last");
+     
+    var check_old = check_dup(prod_id);
+    if(check_old == 1){
+        $(".table-cart tbody tr").each(function(){
+        var id = $(this).closest('tr').find('.cart-product-id').val();
+        if(id == prod_id){
+            var old_qty = $(this).closest('tr').find('.cart-qty').val();
+            var new_qty = parseFloat(old_qty) + parseFloat(qty);
+            $(this).closest('tr').find('.cart-qty').val(new_qty);
+            line_cal($(this));
+        }
+     });
+    }else{
+        if(tr.closest('tr').find('.cart-product-id').val() == ''){
+            tr.closest('tr').find('.cart-product-id').val(prod_id);
+            tr.closest('tr').find('.cart-qty').val(qty);
+            tr.closest('tr').find('.cart-price').val(price);
+            tr.closest('tr').find('td:eq(1)').html(prod_code);
+            tr.closest('tr').find('td:eq(2)').html(prod_name);
+            tr.closest('tr').find('td:eq(4)').html(price);
+
+            tr.closest('tr').find('.cart-qty').prop("disabled","");
+            tr.closest('tr').find('.removecart-item').show();
+            $(".div-payment").show();
+            line_cal(tr);
+        }else{
+            var clone = tr.clone();
+            clone.find(".cart-product-id").val(prod_id);
+            clone.find('.cart-qty').val(qty);
+            clone.find('.cart-price').val(price);
+            clone.find('td:eq(1)').html(prod_code);
+            clone.find('td:eq(2)').html(prod_name);
+            clone.find('td:eq(4)').html(price);
+            tr.after(clone);
+            line_cal(clone);
+        }
+    }
+    cal_linenum();
+    calall();
+   // $("#posModal").modal('hide');
+}
+function reducecart2(e){
+    var ids = e.attr('data-var');
+    
+    var prod_id = $(".list-item-id-"+ids).val();
+    var prod_code = $(".list-item-code-"+ids).val();
+    var prod_name = $(".list-item-name-"+ids).val();
+    // alert(prod_id);
+    var qty = -1;
+    var price = $(".list-item-price-"+ids).val();
+    var tr = $(".table-cart tbody tr:last");
+     
+    var check_old = check_dup(prod_id);
+    if(check_old == 1){
+        $(".table-cart tbody tr").each(function(){
+        var id = $(this).closest('tr').find('.cart-product-id').val();
+        if(id == prod_id){
+            var old_qty = $(this).closest('tr').find('.cart-qty').val();
+            var new_qty = parseFloat(old_qty) + parseFloat(qty);
+            if(new_qty < 0){return false;}
+            $(this).closest('tr').find('.cart-qty').val(new_qty);
+            line_cal($(this));
+            
+        }
+     });
+    }else{
+        if(tr.closest('tr').find('.cart-product-id').val() == ''){
+            tr.closest('tr').find('.cart-product-id').val(prod_id);
+            tr.closest('tr').find('.cart-qty').val(qty);
+            tr.closest('tr').find('.cart-price').val(price);
+            tr.closest('tr').find('td:eq(1)').html(prod_code);
+            tr.closest('tr').find('td:eq(2)').html(prod_name);
+            tr.closest('tr').find('td:eq(4)').html(price);
+
+            tr.closest('tr').find('.cart-qty').prop("disabled","");
+            tr.closest('tr').find('.removecart-item').show();
+            $(".div-payment").show();
+            line_cal(tr);
+        }else{
+            var clone = tr.clone();
+            clone.find(".cart-product-id").val(prod_id);
+            clone.find('.cart-qty').val(qty);
+            clone.find('.cart-price').val(price);
+            clone.find('td:eq(1)').html(prod_code);
+            clone.find('td:eq(2)').html(prod_name);
+            clone.find('td:eq(4)').html(price);
+            tr.after(clone);
+            line_cal(clone);
+        }
+    }
+    cal_linenum();
+    calall();
+   // $("#posModal").modal('hide');
 }
 
 function removecartitem(e){
