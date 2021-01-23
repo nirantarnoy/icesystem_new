@@ -70,7 +70,7 @@ class SaleorderbyrouteSearch extends QuerySaleorderByRoute
 //            'updated_at' => $this->updated_at,
             'customer_id' => $this->customer_id,
             'product_id' => $this->product_id,
-            'order_channel_id' => $this->rt_id,
+            'rt_id' => $this->rt_id,
             'payment_method_id' => $this->payment_method_id
             //'!=','route_code','NULL'
         ]);
