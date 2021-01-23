@@ -128,6 +128,8 @@ class OrdersController extends Controller
         $model = $this->findModel($id);
         $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
 
+        //$model_car_emp  = \common\models\CarDaily::find()->where()->all();
+
         if ($model->load(Yii::$app->request->post())) {
 //            $prod_id = \Yii::$app->request->post('product_id');
 //            $qty = \Yii::$app->request->post('line_qty');

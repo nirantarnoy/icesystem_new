@@ -344,7 +344,7 @@ $prod_status = \backend\helpers\ProductStatus::asArrayObject();
                 <div class="row" style="width: 100%" >
                     <div class="col-lg-11">
                         <div class="input-group">
-                            <input type="text" class="form-control search-item2" placeholder="ค้นหาประเภทสินค้า">
+                            <input type="text" class="form-control search-item2" placeholder="ค้นหาประเภทลูกค้า">
                             <span class="input-group-addon">
                                         <button type="submit" class="btn btn-primary btn-search-submit2">
                                             <span class="fa fa-search"></span>
@@ -368,7 +368,7 @@ $prod_status = \backend\helpers\ProductStatus::asArrayObject();
                     <thead>
                     <tr>
                         <th style="text-align: center">เลือก</th>
-                        <th>ประเภทสินค้า</th>
+                        <th>ประเภทลูกค้า</th>
                         <th>รายละเอียด</th>
                     </tr>
                     </thead>

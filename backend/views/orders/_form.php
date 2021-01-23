@@ -85,7 +85,10 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
     <br>
-    <h5>รายละเอียดการขาย <span class="badge badge-info text-car-emp"></span></h5>
+    <?php
+    $get_emp_show = \backend\models\Orders::findOrderemp($model->id);
+    ?>
+    <h5>รายละเอียดการขาย <span class="badge badge-info text-car-emp"><?=$get_emp_show;?></span></h5>
     <hr>
     <table class="table" id="table-sale-list">
     </table>

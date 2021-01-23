@@ -67,6 +67,36 @@ class Orders extends \common\models\Orders
         }
     }
 
+    public function findOrderemp($id){
+        $html = '';
+        if ($id) {
+//            $x_date = explode('/', $trans_date);
+//            $t_date = date('Y-m-d');
+//            if (count($x_date) > 1) {
+//                $t_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
+//            }
+
+            $model_o = \backend\models\Orders::find()->where(['id'=>$id])->one();
+            if($model_o){
+                $t_date = date('Y-m-d', strtotime($model_o->order_date));
+
+                $model = \backend\models\Cardaily::find()->where(['car_id' => $model_o->car_ref_id, 'date(trans_date)' => $t_date])->all();
+                $i = 0;
+                foreach ($model as $value) {
+                    $i += 1;
+                    $emp_code = \backend\models\Employee::findCode($value->employee_id);
+                    $emp_fullname = \backend\models\Employee::findFullName($value->employee_id);
+
+                    $html .= $emp_fullname . ' , ';
+
+                }
+            }
+
+        }
+
+        return $html;
+    }
+
 //    public function findUnitname($id){
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';
