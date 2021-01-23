@@ -539,7 +539,14 @@ $js = <<<JS
               'data': {'id': ids,'order_date': trans_date},
               'success': function(data) {
                   // alert(data);
-                  $(".text-car-emp").html(data);
+                  if(data == ''){
+                      $(".text-car-emp").removeClass('badge-info');
+                      $(".text-car-emp").addClass('badge-danger');
+                      $(".text-car-emp").html('ไม่พบรายชื่อพนักงาน');
+                  }else{
+                      $(".text-car-emp").html(data);
+                  }
+                  
               }
          });
    }
