@@ -5,6 +5,7 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\bootstrap4\LinkPager;
+use yii\helpers\ArrayHelper;
 
 $this->title = Yii::t('app', 'ลูกค้า');
 $this->params['breadcrumbs'][] = $this->title;
@@ -36,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        // 'filterModel' => $searchModel,
+         //'filterModel' => $searchModel,
         'emptyCell' => '-',
         'layout' => "{items}\n{summary}\n<div class='text-center'>{pager}</div>",
         'summary' => "แสดง {begin} - {end} ของทั้งหมด {totalCount} รายการ",
@@ -66,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'customer_type_id',
                 'value' => function ($data) {
                     return \backend\models\Customertype::findName($data->customer_type_id);
-                }
+                },
             ],
             [
                 'attribute' => 'delivery_route_id',

@@ -16,7 +16,7 @@ class CustomerSearch extends Customer
     public function rules()
     {
         return [
-            [['id', 'customer_group_id', 'delivery_route_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['id', 'customer_group_id','customer_type_id', 'delivery_route_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['code', 'name', 'description', 'location_info', 'active_date', 'logo', 'shop_photo'], 'safe'],
             [['globalSearch'],'string']
         ];
@@ -60,6 +60,7 @@ class CustomerSearch extends Customer
         $query->andFilterWhere([
             'id' => $this->id,
             'customer_group_id' => $this->customer_group_id,
+            'customer_type_id' => $this->customer_type_id,
             'delivery_route_id' => $this->delivery_route_id,
             'active_date' => $this->active_date,
             'status' => $this->status,
