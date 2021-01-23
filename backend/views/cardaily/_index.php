@@ -1,4 +1,5 @@
 <?php
+use kartik\date\DatePicker;
 
 $this->title = 'จัดการข้อมูลรถประจำวัน';
 $this->params['breadcrumbs'][] = $this->title;
@@ -186,6 +187,72 @@ $model_new = $model_car;
                             class="fa fa-close text-danger"></i> ปิดหน้าต่าง
                 </button>
             </div>
+        </div>
+
+    </div>
+</div>
+<div id="copyModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row" style="width: 100%">
+                    <div class="col-lg-9">
+                        <h4><i class="fa fa-copy text-success"></i> Copy ข้อมูล</h4>
+                    </div>
+
+                    <div class="col-lg-3" style="text-align: right">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                </div>
+
+            </div>
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+            <form action="<?= \yii\helpers\Url::to(['cardaily/copydailytrans'], true) ?>" method="post">
+                <input type="hidden" class="selected-date" name="selected_date" value="">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-2">
+                            จากวันที่
+                        </div>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control original-date" name="from_date" value="" readonly>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            ไปวันที
+                        </div>
+                        <div class="col-lg-6">
+                            <?php
+                            echo DatePicker::widget([
+                                'name' => 'to_date',
+                                'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                                'value' => date('d/m/Y'),
+                                'pluginOptions' => [
+                                    'autoclose' => true,
+                                    'format' => 'dd/mm/yyyy'
+                                ]
+                            ]);
+                            ?>
+<!--                            <input type="text" class="form-control new-date" name="to_date" value="" autocomplete="off">-->
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="btn btn-warning">วันนี้</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">ตกลง</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                                class="fa fa-close text-danger"></i> ปิดหน้าต่าง
+                    </button>
+                </div>
+
+            </form>
         </div>
 
     </div>
@@ -389,6 +456,12 @@ $js=<<<JS
           }
       }
   }  
+  
+  function showcopy(e){
+      var select_date = $("#car-trans-date").val();
+      $(".original-date").val(select_date);
+      $("#copyModal").modal("show");
+  }
     
 JS;
 $this->registerJs($js,static::POS_END);
