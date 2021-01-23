@@ -221,7 +221,7 @@ function findCash($emp_id, $f_date, $t_date)
 {
     $c = 0;
     if ($emp_id) {
-        $model = \common\models\QuerySaleTransByEmp::find()->where(['payment_method_id' => 1, 'emp_id' => $emp_id])->andFilterWhere(['between','order_date',$f_date,$t_date])->sum('qty * price');
+        $model = \common\models\QuerySaleorderByEmp::find()->where(['payment_method_id' => 1, 'employee_id' => $emp_id])->andFilterWhere(['between','order_date',$f_date,$t_date])->sum('qty * price');
         if ($model) {
             $c = $model;
         }
@@ -233,7 +233,7 @@ function findCredit($emp_id, $f_date, $t_date)
 {
     $c = 0;
     if ($emp_id) {
-        $model = \common\models\QuerySaleTransByEmp::find()->where(['payment_method_id' => 2, 'emp_id' => $emp_id])->andFilterWhere(['between','order_date',$f_date,$t_date])->sum('qty * price');
+        $model = \common\models\QuerySaleorderByEmp::find()->where(['payment_method_id' => 2, 'employee_id' => $emp_id])->andFilterWhere(['between','order_date',$f_date,$t_date])->sum('qty * price');
         if ($model) {
             $c = $model;
         }
@@ -245,7 +245,7 @@ function findProduct($emp_id, $product_id, $f_date, $t_date)
 {
     $c = 0;
     if ($emp_id && $product_id) {
-        $model = \common\models\QuerySaleTransByEmp::find()->where(['product_id' => $product_id, 'emp_id' => $emp_id])->andFilterWhere(['between','order_date',$f_date,$t_date])->sum('qty * price');
+        $model = \common\models\QuerySaleorderByEmp::find()->where(['product_id' => $product_id, 'employee_id' => $emp_id])->andFilterWhere(['between','order_date',$f_date,$t_date])->sum('qty * price');
         if ($model) {
             $c = $model;
         }
@@ -257,7 +257,7 @@ function findProductqty($emp_id, $product_id, $f_date, $t_date)
 {
     $c = 0;
     if ($emp_id && $product_id) {
-        $model = \common\models\QuerySaleTransByEmp::find()->where(['product_id' => $product_id, 'emp_id' => $emp_id])->andFilterWhere(['between','order_date',$f_date,$t_date])->sum('qty');
+        $model = \common\models\QuerySaleorderByEmp::find()->where(['product_id' => $product_id, 'employee_id' => $emp_id])->andFilterWhere(['between','order_date',$f_date,$t_date])->sum('qty');
         if ($model) {
             $c = $model;
         }
