@@ -109,7 +109,8 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
             <input type="hidden" class="sale-pay-type" name="sale_pay_type" value="">
             <div class="row">
                 <div class="col-lg-4">
-                    <h5 style="color: #258faf"><i class="fa fa-calendar"></i> <?= date('d/m/Y') ?> <span class="c-time"><?=date('H:i')?></span>
+                    <h5 style="color: #258faf"><i class="fa fa-calendar"></i> <?= date('d/m/Y') ?> <span
+                                class="c-time"><?= date('H:i') ?></span>
                     </h5>
                 </div>
                 <div class="col-lg-3">
@@ -168,6 +169,13 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
 
                         </tfoot>
                     </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12" style="text-align: right">
+                    <div class="btn btn-outline-secondary btn-cancel-cart" style="display: none">
+                        ยกเลิกการขาย
+                    </div>
                 </div>
             </div>
             <hr>
@@ -496,6 +504,31 @@ $js = <<<JS
         
         $(".div-customer-search").hide();
      });
+      
+     $(".btn-cancel-cart").click(function(){
+         $(".table-cart tbody tr").each(function(){
+             if($(".table-cart tbody>tr").length == 1){
+                 $(".table-cart tbody tr").each(function(){
+                     $(this).closest('tr').find('.cart-product-id').val('');
+                     $(this).closest('tr').find('.cart-price').val('');
+                     $(this).closest('tr').find('.cart-qty').val('');
+                     $(this).closest('tr').find('.cart-qty').prop('disabled','disabled');
+                     $(this).closest('tr').find('td:eq(0)').html('');
+                     $(this).closest('tr').find('td:eq(1)').html('');
+                     $(this).closest('tr').find('td:eq(2)').html('');
+                     $(this).closest('tr').find('td:eq(4)').html('');
+                     $(this).closest('tr').find('td:eq(5)').html('');
+                     $(this).closest('tr').find('.removecart-item').hide();
+                 });
+                  $(".btn-cancel-cart").hide();
+                  $(".div-payment").hide();
+             }else{
+                 $(this).remove();
+             }
+         });  
+         calall();
+     });
+      
  });
 
 function calpayprice(e){
@@ -686,6 +719,7 @@ function addcart2(e){
      });
     }else{
         if(tr.closest('tr').find('.cart-product-id').val() == ''){
+            // alert('has');
             tr.closest('tr').find('.cart-product-id').val(prod_id);
             tr.closest('tr').find('.cart-qty').val(qty);
             tr.closest('tr').find('.cart-price').val(price);
@@ -711,6 +745,7 @@ function addcart2(e){
     }
     cal_linenum();
     calall();
+    $(".btn-cancel-cart").show();
    // $("#posModal").modal('hide');
 }
 function reducecart2(e){
@@ -737,30 +772,6 @@ function reducecart2(e){
             
         }
      });
-    }else{
-        if(tr.closest('tr').find('.cart-product-id').val() == ''){
-            tr.closest('tr').find('.cart-product-id').val(prod_id);
-            tr.closest('tr').find('.cart-qty').val(qty);
-            tr.closest('tr').find('.cart-price').val(price);
-            tr.closest('tr').find('td:eq(1)').html(prod_code);
-            tr.closest('tr').find('td:eq(2)').html(prod_name);
-            tr.closest('tr').find('td:eq(4)').html(price);
-
-            tr.closest('tr').find('.cart-qty').prop("disabled","");
-            tr.closest('tr').find('.removecart-item').show();
-            $(".div-payment").show();
-            line_cal(tr);
-        }else{
-            var clone = tr.clone();
-            clone.find(".cart-product-id").val(prod_id);
-            clone.find('.cart-qty').val(qty);
-            clone.find('.cart-price').val(price);
-            clone.find('td:eq(1)').html(prod_code);
-            clone.find('td:eq(2)').html(prod_name);
-            clone.find('td:eq(4)').html(price);
-            tr.after(clone);
-            line_cal(clone);
-        }
     }
     cal_linenum();
     calall();
@@ -769,8 +780,26 @@ function reducecart2(e){
 
 function removecartitem(e){
     if(confirm('ต้องการลบข้อมูลนี้ใช่หรือไม่?')){
-        e.parent().parent().remove();
-        cal_linenum();
+        
+        if($('.table-cart tbody tr').length == 1){
+            var tr = $('.table-cart tbody tr:last');
+             tr.find('.cart-product-id').val('');
+             tr.find('.cart-price').val('');
+             tr.find('.cart-qty').val('');
+             tr.find('.cart-qty').prop('disabled','disabled');
+             tr.find('td:eq(0)').html('');
+             tr.find('td:eq(1)').html('');
+             tr.find('td:eq(2)').html('');
+             tr.find('td:eq(4)').html('');
+             tr.find('td:eq(5)').html('');
+             tr.find('.removecart-item').hide();
+            $(".btn-cancel-cart").hide();
+            $(".div-payment").hide();
+        }else{
+             e.parent().parent().remove();
+              cal_linenum();
+        }
+        
         calall();
     }
 }
@@ -778,7 +807,12 @@ function cal_linenum() {
         var xline = 0;
         $(".table-cart tbody tr").each(function () {
             xline += 1;
-            $(this).closest("tr").find("td:eq(0)").text(xline);
+            var ids = $(this).closest('tr').find('.cart-product-id').val();
+            if(ids !=''){
+               // alert()
+                $(this).closest("tr").find("td:eq(0)").text(xline);
+            }
+            
         });
 }
 
