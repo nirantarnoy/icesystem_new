@@ -347,7 +347,7 @@ function findComextrarate($emp_id, $sale_total_amt)
         $model = \common\models\CarEmp::find()->where(['emp_id' => $emp_id])->one();
         $modelx = \common\models\QueryCarEmpData::find()->where(['emp_id' => $emp_id])->one();
         if($modelx) {
-            $model_cnt = \common\models\QueryCarDailyEmpCount::find()->where(['car_id' => $model->car_id_])->andFilterWhere(['between', 'trans_date', $f_date, $t_date])->one();
+            $model_cnt = \common\models\QueryCarDailyEmpCount::find()->where(['car_id' => $modelx->car_id_])->andFilterWhere(['between', 'trans_date', $f_date, $t_date])->one();
             if($model_cnt){
                 if($model_cnt->emp_qty > 1){
                     $c = 0;
