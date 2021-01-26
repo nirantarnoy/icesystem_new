@@ -194,7 +194,7 @@ if ($view_emp_id != null) {
                 <?php $line_sum_qty_free = 0; ?>
                 <?php $extra = 0; ?>
                 <tr style="font-size: 12px;">
-                    <td style="text-align: center"><?= $i; ?></td>
+                    <td style="text-align: center"><?=$i; ?></td>
                     <td style="text-align: center"><?= $value->code ?></td>
                     <td><?= $value->fname . ' ' . $value->lname ?></td>
                     <td style="text-align: right;background-color: #44ab7d;color: white"><?= findCash($value->id, $f_date, $t_date) ?></td>
@@ -233,8 +233,6 @@ if ($view_emp_id != null) {
         </table>
     </div>
 </div>
-
-
 <?php
 function findCash($emp_id, $f_date, $t_date)
 {
@@ -284,33 +282,61 @@ function findProductqty($emp_id, $product_id, $f_date, $t_date)
     return $c;
 }
 
+
 function findComrate($emp_id)
 {
+    $car_id = 0;
     $c = 0;
-    if ($emp_id) {
-        $model = \common\models\CarEmp::find()->where(['emp_id' => $emp_id])->one();
-        if ($model) {
-            if ($model->car_id) {
-                $sql = "SELECT sale_com.com_extra,sale_com.emp_qty FROM car INNER JOIN sale_com ON car.sale_com_id=sale_com.id WHERE car.id=" . $model->car_id;
-                $query = \Yii::$app->db->createCommand($sql)->queryAll();
-                if ($query != null) {
-                    //print_r($query);return;
-                    // foreach ($query as $value){
-                    $emp_count = findCarempcount($model->car_id);
-                    if ($emp_count == $query[0]['emp_qty']) {
-                        $c = $query[0]['com_extra'];
-                    } else {
-                        $c = 0.75;
+    if($emp_id){
+        $model = \common\models\QueryCarEmpData::find()->where(['emp_id' => $emp_id])->one();
+        if($model){
+            $model_cnt = \common\models\QueryCarDailyEmpCount::find()->where(['car_id' => $model->car_id_])->one();
+            if ($model_cnt) {
+                if ($model_cnt->emp_qty) {
+                    $sql = "SELECT sale_com.com_extra,sale_com.emp_qty FROM car INNER JOIN sale_com ON car.sale_com_id=sale_com.id WHERE car.id=" . $model_cnt->car_id;
+                    $query = \Yii::$app->db->createCommand($sql)->queryAll();
+                    if ($query != null) {
+                        //print_r($query);return;
+                        // foreach ($query as $value){
+                        $emp_count = $model_cnt->emp_qty;
+                        if ($emp_count == $query[0]['emp_qty']) {
+                            $c = $query[0]['com_extra'];
+                        } else {
+                            $c = 0.75;
+                        }
+
+                        // }
+
                     }
-
-                    // }
-
                 }
             }
-        } else {
-//            $c= 33;
         }
     }
+
+//    if ($emp_id) {
+//        $model = \common\models\QueryCarDailyEmpCount::find()->where(['car_id' => $car_id])->one();
+//        if ($model) {
+//            if ($model->emp_qty) {
+//                $sql = "SELECT sale_com.com_extra,sale_com.emp_qty FROM car INNER JOIN sale_com ON car.sale_com_id=sale_com.id WHERE car.id=" . $car_id;
+//                $query = \Yii::$app->db->createCommand($sql)->queryAll();
+//                if ($query != null) {
+//                    //print_r($query);return;
+//                    // foreach ($query as $value){
+//                    $emp_count = $model->emp_qty;
+//                    if ($emp_count == $query[0]['emp_qty']) {
+//                        $c = $query[0]['com_extra'];
+//                    } else {
+//                        $c = 0.75;
+//                    }
+//
+//                    // }
+//
+//                }
+//            }
+//        } else {
+////            $c= 33;
+//        }
+//    }
     return $c;
 }
 
