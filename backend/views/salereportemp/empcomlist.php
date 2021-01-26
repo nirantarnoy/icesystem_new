@@ -304,7 +304,12 @@ function findComrate($emp_id, $f_date, $t_date)
                         // foreach ($query as $value){
                         $emp_count = $model_cnt->emp_qty;
                         if ($emp_count == $query[0]['emp_qty']) {
-                            $c = ($query[0]['com_extra'] / 2);
+                            if($emp_count == 1){
+                                $c = $query[0]['com_extra'];
+                            }else{
+                                $c = ($query[0]['com_extra'] / 2);
+                            }
+
                         } else {
                             $c = 0.75;
                         }
