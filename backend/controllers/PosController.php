@@ -75,8 +75,8 @@ class PosController extends Controller
     }
 
     public function actionClosesale(){
-        $pay_total_amount = \Yii::$app->request->post('pay_total_amount');
-        $pay_amount = \Yii::$app->request->post('pay_amount');
+        $pay_total_amount = \Yii::$app->request->post('sale_total_amount');
+        $pay_amount = \Yii::$app->request->post('sale_pay_amount');
         $pay_change = \Yii::$app->request->post('sale_pay_change');
         $payment_type = \Yii::$app->request->post('sale_pay_type');
 
@@ -85,7 +85,7 @@ class PosController extends Controller
         $line_qty = \Yii::$app->request->post('cart_qty');
         $line_price = \Yii::$app->request->post('cart_price');
 
-        //echo $customer_id;return;
+       // echo $pay_amount;return;
 
         if($customer_id){
               $model_order = new \backend\models\Orders();
@@ -93,6 +93,7 @@ class PosController extends Controller
               $model_order->order_date = date('Y-m-d');
               $model_order->customer_id = $customer_id;
               $model_order->sale_channel_id = 2;
+              $model_order->payment_status = 0;
               $model_order->status = 1;
               if($model_order->save(false)){
                   if(count($product_list) > 0){
@@ -107,10 +108,37 @@ class PosController extends Controller
                           $model_order_line->save(false);
                       }
                   }
+
+                  if($pay_total_amount > 0 && $pay_amount > 0){
+                      $model_pay = new \common\models\JournalPayment();
+                      $model_pay->journal_no = 'AX';
+                      $model_pay->order_id = $model_order->id;
+                      $model_pay->trans_date = date('Y-m-d');
+                      $model_pay->payment_method_id = $payment_type;
+                      $model_pay->total_amount = $pay_total_amount;
+                      $model_pay->pay_amount = $pay_amount;
+                      $model_pay->change_amount = $pay_change;
+                      $model_pay->save(false);
+
+                  }
+
+                  $this->updateorderpayment($model_order->id,$pay_total_amount,$pay_amount);
               }
         }
 
         return $this->redirect(['pos/index']);
+    }
+
+    public function updateorderpayment($order_id,$order_amt,$pay_amt){
+        if($order_id){
+            if($pay_amt >= $order_amt){
+                $model = \backend\models\Orders::find()->where(['id'=>$order_id])->one();
+                if($model){
+                    $model->payment_status = 1;
+                    $model->save();
+                }
+            }
+        }
     }
 
 }

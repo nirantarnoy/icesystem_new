@@ -88,8 +88,8 @@ class CardailySearch extends Cardaily
             $this->trans_date = date('Y-m-d', strtotime($f_date));
             $query->andFilterWhere(['date(car_daily.trans_date)'=>$this->trans_date]);
         }else{
-            $this->trans_date = date('Y-m-d');
-            $query->andFilterWhere(['date(car_daily.trans_date)'=>$this->trans_date]);
+//            $this->trans_date = date('Y-m-d');
+//            $query->andFilterWhere(['date(car_daily.trans_date)'=>$this->trans_date]);
         }
 
         return $dataProvider;

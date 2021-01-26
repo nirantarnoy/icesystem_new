@@ -172,7 +172,12 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-12" style="text-align: right">
+                <div class="col-lg-6" style="text-align: left">
+                    <div class="btn btn-outline-info btn-history-cart" style="display: noneผ">
+                        ประวัติการขาย
+                    </div>
+                </div>
+                <div class="col-lg-6" style="text-align: right">
                     <div class="btn btn-outline-secondary btn-cancel-cart" style="display: none">
                         ยกเลิกการขาย
                     </div>
@@ -458,6 +463,8 @@ $js = <<<JS
          var sale_total_amt = $(".total-value-top").val()
              if(sale_total_amt > 0){
                  $(".pay-total-amount").val(sale_total_amt);
+                 $(".sale-total-amount").val(sale_total_amt);
+                 
                   $(".pay-amount").val(0);
                   $(".pay-change").val(0);
                   var c_pay = $(".pay-amount").val();

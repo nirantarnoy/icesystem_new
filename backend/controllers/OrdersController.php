@@ -508,7 +508,8 @@ class OrdersController extends Controller
                     $html .= '<td><input type="text" class="form-control line-car-emp-code" name="line_car_emp_code[]" value="' . $emp_code . '" readonly></td>';
                     $html .= '<td><input type="text" class="form-control line-car-emp-name" name="line_car_emp_name[]" value="' . $emp_fullname . '" readonly></td>';
                     $html .= '<td>
-                               <input type="hidden" class="line-car-emp-id" value="' . $value->id . '" name="line_car_emp_id[]">
+                               <input type="hidden" class="line-car-emp-id" value="' . $value->employee_id . '" name="line_car_emp_id[]">
+                               <input type="hidden" class="line-car-daily-id" value="' . $value->id . '" name="line_car_daily_id[]">
                                <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i class="fa fa-trash"></i></div>
                           </td>';
                     $html .= '</tr>';
@@ -527,6 +528,7 @@ class OrdersController extends Controller
                                        </td>
                                        <td>
                                            <input type="hidden" class="line-car-emp-id" value="" name="line_car_emp_id[]">
+                                           <input type="hidden" class="line-car-daily-id" value="" name="line_car_daily_id[]">
                                            <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i class="fa fa-trash"></i></div>
                                        </td>
                                    </tr>

@@ -46,7 +46,7 @@ class Orders extends \yii\db\ActiveRecord
         return [
             [['order_no'],'unique'],
             [['order_no','order_date','order_channel_id','payment_method_id','payment_term_id','car_ref_id'],'required'],
-            [['customer_id', 'customer_type', 'emp_sale_id', 'car_ref_id', 'order_channel_id', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['customer_id', 'customer_type', 'emp_sale_id','payment_status', 'car_ref_id', 'order_channel_id', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['order_date','status','order_total_amt_text'], 'safe'],
             [['vat_amt', 'vat_per', 'order_total_amt'], 'number'],
             [['order_no', 'customer_name'], 'string', 'max' => 255],
@@ -78,6 +78,7 @@ class Orders extends \yii\db\ActiveRecord
             'payment_method_id' => Yii::t('app', 'วิธีชำระเงิน'),
             'payment_term_id' => Yii::t('app', 'เงื่อนไขชำระเงิน'),
             'sale_channel_id' => Yii::t('app', 'ช่องทางการขาย'),
+            'payment_status' => Yii::t('app', 'สถานะชำระเงิน'),
             'company_id' => Yii::t('app', 'Company ID'),
             'branch_id' => Yii::t('app', 'Branch ID'),
             'created_at' => Yii::t('app', 'Created At'),

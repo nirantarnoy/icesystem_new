@@ -8,6 +8,7 @@ $model = $dataProvider->getModels();
 $model_new = null;
 //if($model == null){
 $model_new = $model_car;
+
 //}
 //$emp_data = \common\models\USRPWOPERSON::find()->where(['WCID' => 'PTVB'])->all();
 
@@ -20,7 +21,7 @@ $model_new = $model_car;
     </div>
     <div class="col-lg-3" style="text-align: right">
         <div class="btn btn-info" onclick="showcopy($(this))"><i class="fa fa-copy"></i> Copy ข้อมูล</div>
-        <!--        <div class="btn btn-info"><i class="fa fa-users-cog"></i> ย้ายเตาพนักงาน</div>-->
+                <div class="btn btn-warning" onclick="showgetdefault($(this))"><i class="fa fa-users-cog"></i> ดึงค่าเริ่มต้น</div>
     </div>
 </div>
 <br/>
@@ -89,7 +90,8 @@ $model_new = $model_car;
             <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
             <form action="<?= \yii\helpers\Url::to(['cardaily/addemp'], true) ?>" method="post">
                 <input type="hidden" class="selected-car" name="selected_car" value="">
-                <input type="hidden" class="selected-date" name="selected_date" value="">
+                <input type="hidden" class="selected-route-id" name="selected_route_id" value="">
+                <input type="hidden" class="selected-date-add" name="selected_date" value="">
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-12">
@@ -165,7 +167,6 @@ $model_new = $model_car;
             <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
 
             <div class="modal-body">
-
                 <input type="hidden" name="line_qc_product" class="line_qc_product" value="">
                 <table class="table table-bordered table-striped table-find-list" width="100%">
                     <thead>
@@ -257,6 +258,60 @@ $model_new = $model_car;
 
     </div>
 </div>
+<div id="getoriginModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row" style="width: 100%">
+                    <div class="col-lg-9">
+                        <h4><i class="fa fa-copy text-success"></i> ดึงข้อมูลค่าเริ่มต้นจากแฟ้มรถ</h4>
+                    </div>
+
+                    <div class="col-lg-3" style="text-align: right">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                </div>
+
+            </div>
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+            <form action="<?= \yii\helpers\Url::to(['cardaily/copyfromoriginal'], true) ?>" method="post">
+                <input type="hidden" class="selected-date" name="selected_date" value="">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-2">
+                            วันที
+                        </div>
+                        <div class="col-lg-6">
+                            <?php
+                            echo DatePicker::widget([
+                                'name' => 'to_date',
+                                'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                                'value' => date('d/m/Y'),
+                                'pluginOptions' => [
+                                    'autoclose' => true,
+                                    'format' => 'dd/mm/yyyy'
+                                ]
+                            ]);
+                            ?>
+                            <!--                            <input type="text" class="form-control new-date" name="to_date" value="" autocomplete="off">-->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">ตกลง</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                                class="fa fa-close text-danger"></i> ปิดหน้าต่าง
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
 <?php
 $url_to_find_item = \yii\helpers\Url::to(['orders/empdata'], true);
 $url_to_find_emp_item = \yii\helpers\Url::to(['orders/findempdata'], true);
@@ -284,14 +339,17 @@ $js=<<<JS
   function showcarinfo(e){
       var ids = e.attr('data-id');
       var t_date = $("#car-trans-date").val();
+      var route_id = $("#route-id").val();
       if(ids && t_date != ''){
           $(".selected-car").val(ids);
+          $(".selected-route-id").val(route_id);
+          $(".selected-date-add").val(t_date);
           $.ajax({
               'type':'post',
               'dataType': 'html',
               'async': false,
               'url': "$url_to_find_emp_item",
-              'data': {"car_id": ids, "trans_date": t_date},
+              'data': {"car_id": ids, "trans_date": t_date,"route_id": route_id},
               'success': function(data) {
                   //  alert(data);
                   if(data != ''){
@@ -436,7 +494,7 @@ $js=<<<JS
     }
   
   function removeline(e){
-      var ids = e.closest('tr').find('.line-car-emp-id').val();
+      var ids = e.closest('tr').find('.line-car-daily-id').val();
       if(ids){
           if(confirm('ต้องการลบรายการนี้ใช่หรือไม่ ?')){
            $.ajax({
@@ -461,6 +519,10 @@ $js=<<<JS
       var select_date = $("#car-trans-date").val();
       $(".original-date").val(select_date);
       $("#copyModal").modal("show");
+  }
+  
+  function showgetdefault(e){
+      $("#getoriginModal").modal("show");
   }
     
 JS;
