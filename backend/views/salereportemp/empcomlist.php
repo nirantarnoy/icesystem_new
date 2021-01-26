@@ -11,29 +11,29 @@ $com_date = '';
 $f_date = null;
 $t_date = null;
 
-if($view_com_date != null){
+if ($view_com_date != null) {
     $com_date = $view_com_date;
-}else{
+} else {
     $com_date = date('d/m/Y') . ' - ' . date('d/m/Y');
 }
 
-if($com_date != ''){
-    $date_data = explode(' - ',$com_date);
+if ($com_date != '') {
+    $date_data = explode(' - ', $com_date);
     $fdate = null;
     $tdate = null;
-    if($date_data > 1){
-        $xdate = explode('/',$date_data[0]);
-        if(count($xdate)>1){
-            $fdate = $xdate[2].'-'.$xdate[1].'-'.$xdate[0];
+    if ($date_data > 1) {
+        $xdate = explode('/', $date_data[0]);
+        if (count($xdate) > 1) {
+            $fdate = $xdate[2] . '-' . $xdate[1] . '-' . $xdate[0];
         }
-        $xdate2 = explode('/',$date_data[1]);
-        if(count($xdate2)>1){
-            $tdate = $xdate2[2].'-'.$xdate2[1].'-'.$xdate2[0];
+        $xdate2 = explode('/', $date_data[1]);
+        if (count($xdate2) > 1) {
+            $tdate = $xdate2[2] . '-' . $xdate2[1] . '-' . $xdate2[0];
         }
     }
 
-    $f_date = date('Y-m-d',strtotime($fdate));
-    $t_date = date('Y-m-d',strtotime($tdate));
+    $f_date = date('Y-m-d', strtotime($fdate));
+    $t_date = date('Y-m-d', strtotime($tdate));
 
 }
 
@@ -92,9 +92,9 @@ if($com_date != ''){
 $model_emp = null;
 $model = \backend\models\Product::find()->all();
 
-if($view_emp_id != null){
-    $model_emp = \backend\models\Employee::find()->where(['id'=>$view_emp_id])->all();
-}else{
+if ($view_emp_id != null) {
+    $model_emp = \backend\models\Employee::find()->where(['id' => $view_emp_id])->all();
+} else {
     $model_emp = \backend\models\Employee::find()->all();
 }
 
@@ -150,7 +150,7 @@ if($view_emp_id != null){
         <table class="table table-striped table-bordered">
             <thead>
             <tr style="font-size: 12px;">
-                <th width="5%" style="text-align: center" rowspan="2">#</th>
+                <th style="text-align: center" rowspan="2">#</th>
                 <th style="text-align: center" rowspan="2">รหัส</th>
                 <th rowspan="2">ชื่อ-นามสกุล</th>
                 <th style="text-align: right;background-color: #44ab7d;color: white" rowspan="2">เงินสด</th>
@@ -159,11 +159,14 @@ if($view_emp_id != null){
                     <th colspan="2" style="text-align: center"><?= $value->code ?>
                     </th>
                 <?php endforeach; ?>
+                <th style="text-align: right;background-color: #e4606d;color: white" rowspan="2">รวมปกติ</th>
+                <th style="text-align: right;background-color: #e4606d;color: white" rowspan="2">รวมฟรี</th>
                 <th style="text-align: right;background-color: #e4606d;color: white" rowspan="2">จำนวนรวม</th>
                 <th style="text-align: right;background-color: #ec4844;color: white" rowspan="2">ยอดเงินรวม</th>
                 <th style="text-align: right;background-color: #258faf;color: white" rowspan="2">Rate Com</th>
                 <th style="text-align: right;background-color: #258faf;color: white" rowspan="2">คอมมิชชั่น</th>
-                <th style="text-align: right;background-color: #258faf;color: white" >เงินพิเศษ</th>
+                <th style="text-align: right;background-color: #258faf;color: white">เงินพิเศษ</th>
+                <th style="text-align: right;background-color: #258faf;color: white" rowspan="2">รวมค่าคอม</th>
             </tr>
             <tr style="font-size: 12px;">
                 <!--                <th width="5%" style="text-align: center"></th>-->
@@ -177,7 +180,7 @@ if($view_emp_id != null){
                 <?php endforeach; ?>
                 <!--                <th style="text-align: right;background-color: #258faf;color: white">Rate Com</th>-->
                 <!--                <th style="text-align: right;background-color: #258faf;color: white">คอมมิชชั่น</th>-->
-                                <th style="text-align: right;background-color: #258faf;color: white">>3,500</th>
+                <th style="text-align: right;background-color: #258faf;color: white">>3,500</th>
             </tr>
             </thead>
             <tbody>
@@ -188,6 +191,8 @@ if($view_emp_id != null){
                 <?php $line_amt = 0; ?>
                 <?php $line_sum_qty = 0; ?>
                 <?php $line_sum_amt = 0; ?>
+                <?php $line_sum_qty_free = 0; ?>
+                <?php $extra = 0; ?>
                 <tr style="font-size: 12px;">
                     <td style="text-align: center"><?= $i; ?></td>
                     <td style="text-align: center"><?= $value->code ?></td>
@@ -200,18 +205,28 @@ if($view_emp_id != null){
                         $line_amt = findProduct($value->id, $value2->id, $f_date, $t_date);
                         ?>
                         <?php
-                        $line_sum_qty = $line_sum_qty + $line_qty;
+
                         $line_sum_amt = $line_sum_amt + $line_amt;
                         $line_com_rate = findComrate($value->id);
+                        if ($line_amt == 0) {
+                            $line_sum_qty_free = $line_sum_qty_free + $line_qty;
+                        }
+                        if ($line_amt > 0) {
+                            $line_sum_qty = $line_sum_qty + $line_qty;
+                        }
                         ?>
                         <td style="text-align: right"><?= $line_qty; ?></td>
                         <td style="text-align: right;background-color: #B4B9BE"><?= $line_amt; ?></td>
                     <?php endforeach; ?>
-                    <td style="text-align: right;background-color: #e4606d;color: white"><?= $line_sum_qty; ?></td>
-                    <td style="text-align: right;background-color: #ec4844;color: white"><?= $line_sum_amt; ?></td>
+                    <?php $extra = findComextrarate($value->id, $line_sum_amt); ?>
+                    <td style="text-align: right;background-color: #b8a2e0;color: black"><?= $line_sum_qty; ?></td>
+                    <td style="text-align: right;background-color: #b8a2e0;color: black"><?= $line_sum_qty_free; ?></td>
+                    <td style="text-align: right;background-color: #b8a2e0;color: black"><?= $line_sum_qty; ?></td>
+                    <td style="text-align: right;background-color: #b8a2e0;color: black"><?= $line_sum_amt; ?></td>
                     <td style="text-align: right;background-color: #258faf;color: white"><?= $line_com_rate; ?></td>
                     <td style="text-align: right;background-color: #258faf;color: white"><?= $line_sum_qty * $line_com_rate; ?></td>
-                    <td style="text-align: right;background-color: #258faf;color: white"><?= findComextrarate($value->id, $line_sum_amt)?></td>
+                    <td style="text-align: right;background-color: #258faf;color: white"><?= $extra ?></td>
+                    <td style="text-align: right;background-color: #258faf;color: white"><?= ($line_sum_qty * $line_com_rate) + $extra; ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
@@ -225,7 +240,7 @@ function findCash($emp_id, $f_date, $t_date)
 {
     $c = 0;
     if ($emp_id) {
-        $model = \common\models\QuerySaleorderByEmp::find()->where(['payment_method_id' => 1, 'employee_id' => $emp_id])->andFilterWhere(['between','order_date',$f_date,$t_date])->sum('qty * price');
+        $model = \common\models\QuerySaleorderByEmp::find()->where(['payment_method_id' => 1, 'employee_id' => $emp_id])->andFilterWhere(['between', 'order_date', $f_date, $t_date])->sum('qty * price');
         if ($model) {
             $c = $model;
         }
@@ -237,7 +252,7 @@ function findCredit($emp_id, $f_date, $t_date)
 {
     $c = 0;
     if ($emp_id) {
-        $model = \common\models\QuerySaleorderByEmp::find()->where(['payment_method_id' => 2, 'employee_id' => $emp_id])->andFilterWhere(['between','order_date',$f_date,$t_date])->sum('qty * price');
+        $model = \common\models\QuerySaleorderByEmp::find()->where(['payment_method_id' => 2, 'employee_id' => $emp_id])->andFilterWhere(['between', 'order_date', $f_date, $t_date])->sum('qty * price');
         if ($model) {
             $c = $model;
         }
@@ -249,7 +264,7 @@ function findProduct($emp_id, $product_id, $f_date, $t_date)
 {
     $c = 0;
     if ($emp_id && $product_id) {
-        $model = \common\models\QuerySaleorderByEmp::find()->where(['product_id' => $product_id, 'employee_id' => $emp_id])->andFilterWhere(['between','order_date',$f_date,$t_date])->sum('qty * price');
+        $model = \common\models\QuerySaleorderByEmp::find()->where(['product_id' => $product_id, 'employee_id' => $emp_id])->andFilterWhere(['between', 'order_date', $f_date, $t_date])->sum('qty * price');
         if ($model) {
             $c = $model;
         }
@@ -261,7 +276,7 @@ function findProductqty($emp_id, $product_id, $f_date, $t_date)
 {
     $c = 0;
     if ($emp_id && $product_id) {
-        $model = \common\models\QuerySaleorderByEmp::find()->where(['product_id' => $product_id, 'employee_id' => $emp_id])->andFilterWhere(['between','order_date',$f_date,$t_date])->sum('qty');
+        $model = \common\models\QuerySaleorderByEmp::find()->where(['product_id' => $product_id, 'employee_id' => $emp_id])->andFilterWhere(['between', 'order_date', $f_date, $t_date])->sum('qty');
         if ($model) {
             $c = $model;
         }
@@ -298,6 +313,7 @@ function findComrate($emp_id)
     }
     return $c;
 }
+
 function findComextrarate($emp_id, $sale_total_amt)
 {
     $c = 0;
@@ -308,9 +324,9 @@ function findComextrarate($emp_id, $sale_total_amt)
                 $sql = "SELECT sale_com_summary.com_extra,sale_com_summary.sale_price FROM car INNER JOIN sale_com_summary ON car.sale_com_extra=sale_com_summary.id WHERE car.id=" . $model->car_id;
                 $query = \Yii::$app->db->createCommand($sql)->queryAll();
                 if ($query != null) {
-                    if($sale_total_amt > $query[0]['sale_price']){
+                    if ($sale_total_amt > $query[0]['sale_price']) {
                         $c = $query[0]['com_extra'];
-                    }else{
+                    } else {
                         $c = 0;
                     }
 
@@ -336,7 +352,7 @@ function findCarempcount($car_id)
 ?>
 
 <?php
-$js=<<<JS
+$js = <<<JS
 $(function(){
     
 });
@@ -345,5 +361,5 @@ function submit_export(e){
     $("form#form-export").submit();
 }
 JS;
-$this->registerJs($js,static::POS_END);
+$this->registerJs($js, static::POS_END);
 ?>
