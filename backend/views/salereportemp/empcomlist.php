@@ -354,7 +354,6 @@ function findComextrarate($emp_id, $sale_total_amt)
                     return $c;
                 }
             }
-
         }
         if ($model) {
             if ($model->car_id) {
