@@ -288,7 +288,7 @@ function findComrate($emp_id, $f_date, $t_date)
     $car_id = 0;
     $c = 0;
     if($emp_id){
-        $model = \common\models\QueryCarEmpData::find()->where(['emp_id' => $emp_id])->one();
+        $model = \common\models\QueryCarEmpData::find()->where(['emp_id' => $emp_id])->andFilterWhere(['between','trans_date',$f_date,$t_date])->one();
         if($model){
             $model_cnt = \common\models\QueryCarDailyEmpCount::find()->where(['car_id' => $model->car_id_])->andFilterWhere(['between','trans_date',$f_date,$t_date])->one();
             if ($model_cnt) {
@@ -345,7 +345,7 @@ function findComextrarate($emp_id, $sale_total_amt, $f_date, $t_date)
     $c = 0;
     if ($emp_id) {
         $model = \common\models\CarEmp::find()->where(['emp_id' => $emp_id])->one();
-        $modelx = \common\models\QueryCarEmpData::find()->where(['emp_id' => $emp_id])->one();
+        $modelx = \common\models\QueryCarEmpData::find()->where(['emp_id' => $emp_id])->andFilterWhere(['between','trans_date',$f_date,$t_date])->one();
         if($modelx) {
             $model_cnt = \common\models\QueryCarDailyEmpCount::find()->where(['car_id' => $modelx->car_id_])->andFilterWhere(['between', 'trans_date', $f_date, $t_date])->one();
             if($model_cnt){
