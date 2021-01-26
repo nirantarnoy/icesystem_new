@@ -290,9 +290,9 @@ function findComrate($emp_id, $f_date, $t_date)
     if($emp_id){
         $model = \common\models\QueryCarEmpData::find()->where(['emp_id' => $emp_id])->andFilterWhere(['between','trans_date',$f_date,$t_date])->one();
         if($model){
-            return 100;
             $model_cnt = \common\models\QueryCarDailyEmpCount::find()->where(['car_id' => $model->car_id_])->andFilterWhere(['between','trans_date',$f_date,$t_date])->one();
             if ($model_cnt) {
+                return 200;
                 if ($model_cnt->emp_qty) {
                     $sql = "SELECT sale_com.com_extra,sale_com.emp_qty FROM car INNER JOIN sale_com ON car.sale_com_id=sale_com.id WHERE car.id=" . $model_cnt->car_id;
                     $query = \Yii::$app->db->createCommand($sql)->queryAll();
