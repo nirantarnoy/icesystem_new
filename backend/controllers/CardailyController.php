@@ -211,7 +211,7 @@ class CardailyController extends Controller
         }
         // print_r($emp_id);return;
         if ($car_id) {
-            if (count($emp_id) > 0) {
+            if ($emp_id != null) {
                // count($emp_id);return;
                 for ($i = 0; $i <= count($emp_id) - 1; $i++) {
                     if($emp_id[$i]=='' || $emp_id == null)continue;
