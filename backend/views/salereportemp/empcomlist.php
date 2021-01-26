@@ -191,7 +191,7 @@ if ($view_emp_id != null) {
                 <?php $line_amt = 0; ?>
                 <?php $line_sum_qty = 0; ?>
                 <?php $line_sum_amt = 0; ?>
-                <?php $line_sum_qty_free = 0; ?>
+                <?php $line_sum_qty_free = 0;$line_com_rate=0; ?>
                 <?php $extra = 0; ?>
                 <tr style="font-size: 12px;">
                     <td style="text-align: center"><?=$i; ?></td>
