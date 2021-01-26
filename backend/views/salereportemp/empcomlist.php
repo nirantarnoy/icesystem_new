@@ -207,7 +207,7 @@ if ($view_emp_id != null) {
                         <?php
 
                         $line_sum_amt = $line_sum_amt + $line_amt;
-                        $line_com_rate = findComrate($value->id);
+                        $line_com_rate = findComrate($value->id, $f_date, $t_date);
                         if ($line_amt == 0) {
                             $line_sum_qty_free = $line_sum_qty_free + $line_qty;
                         }
@@ -283,14 +283,14 @@ function findProductqty($emp_id, $product_id, $f_date, $t_date)
 }
 
 
-function findComrate($emp_id)
+function findComrate($emp_id, $f_date, $t_date)
 {
     $car_id = 0;
     $c = 0;
     if($emp_id){
         $model = \common\models\QueryCarEmpData::find()->where(['emp_id' => $emp_id])->one();
         if($model){
-            $model_cnt = \common\models\QueryCarDailyEmpCount::find()->where(['car_id' => $model->car_id_])->one();
+            $model_cnt = \common\models\QueryCarDailyEmpCount::find()->where(['car_id' => $model->car_id_])->andFilterWhere(['between','trans_date',$f_date,$t_date])->one();
             if ($model_cnt) {
                 if ($model_cnt->emp_qty) {
                     $sql = "SELECT sale_com.com_extra,sale_com.emp_qty FROM car INNER JOIN sale_com ON car.sale_com_id=sale_com.id WHERE car.id=" . $model_cnt->car_id;
@@ -300,7 +300,7 @@ function findComrate($emp_id)
                         // foreach ($query as $value){
                         $emp_count = $model_cnt->emp_qty;
                         if ($emp_count == $query[0]['emp_qty']) {
-                            $c = $query[0]['com_extra'];
+                            $c = $query[0]['com_extra'] / 2;
                         } else {
                             $c = 0.75;
                         }
@@ -345,6 +345,17 @@ function findComextrarate($emp_id, $sale_total_amt)
     $c = 0;
     if ($emp_id) {
         $model = \common\models\CarEmp::find()->where(['emp_id' => $emp_id])->one();
+        $modelx = \common\models\QueryCarEmpData::find()->where(['emp_id' => $emp_id])->one();
+        if($modelx) {
+            $model_cnt = \common\models\QueryCarDailyEmpCount::find()->where(['car_id' => $model->car_id_])->andFilterWhere(['between', 'trans_date', $f_date, $t_date])->one();
+            if($model_cnt){
+                if($model_cnt->emp_qty > 1){
+                    $c = 0;
+                    return $c;
+                }
+            }
+
+        }
         if ($model) {
             if ($model->car_id) {
                 $sql = "SELECT sale_com_summary.com_extra,sale_com_summary.sale_price FROM car INNER JOIN sale_com_summary ON car.sale_com_extra=sale_com_summary.id WHERE car.id=" . $model->car_id;
