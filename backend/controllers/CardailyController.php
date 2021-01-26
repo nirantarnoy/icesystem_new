@@ -236,7 +236,7 @@ class CardailyController extends Controller
 
     public function checkOld($emp_id, $car_id, $t_date)
     {
-        $model = \backend\models\Cardaily::find()->where(['car_id' => $car_id, 'employee_id' => $emp_id, 'date(trans_date)' => $t_date])->count();
+        $model = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date])->count();
 //        if ($model>0) {
 //            \backend\models\Cardaily::deleteAll(['car_id' => $car_id, 'employee_id' => $emp_id, 'date(trans_date)' => $t_date]);
 //        }
