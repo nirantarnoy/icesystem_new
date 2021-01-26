@@ -290,6 +290,7 @@ function findComrate($emp_id, $f_date, $t_date)
     if($emp_id){
         $model = \common\models\QueryCarEmpData::find()->where(['emp_id' => $emp_id])->andFilterWhere(['between','trans_date',$f_date,$t_date])->one();
         if($model){
+            return 100;
             $model_cnt = \common\models\QueryCarDailyEmpCount::find()->where(['car_id' => $model->car_id_])->andFilterWhere(['between','trans_date',$f_date,$t_date])->one();
             if ($model_cnt) {
                 if ($model_cnt->emp_qty) {
