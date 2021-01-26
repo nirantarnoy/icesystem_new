@@ -299,7 +299,7 @@ function findComrate($emp_id, $f_date, $t_date)
                     $sql = "SELECT sale_com.com_extra,sale_com.emp_qty FROM car INNER JOIN sale_com ON car.sale_com_id=sale_com.id WHERE car.id=" . $model_cnt->car_id;
                     $query = \Yii::$app->db->createCommand($sql)->queryAll();
                     if ($query != null) {
-                        return 300;
+                        //return 300;
                         //print_r($query);return;
                         // foreach ($query as $value){
                         $emp_count = $model_cnt->emp_qty;
