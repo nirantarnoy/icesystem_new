@@ -207,7 +207,7 @@ if ($view_emp_id != null) {
                         <?php
 
                         $line_sum_amt = $line_sum_amt + $line_amt;
-                        $line_com_rate = findComrate($value->id);
+                        $line_com_rate = findComrate($value->id, $f_date, $t_date);
                         if ($line_amt == 0) {
                             $line_sum_qty_free = $line_sum_qty_free + $line_qty;
                         }
