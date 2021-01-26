@@ -207,7 +207,7 @@ if ($view_emp_id != null) {
                         <?php
 
                         $line_sum_amt = $line_sum_amt + $line_amt;
-                        $line_com_rate = findComrate($value->id, $f_date, $t_date);
+                        $line_com_rate = findComrate($value->id);
                         if ($line_amt == 0) {
                             $line_sum_qty_free = $line_sum_qty_free + $line_qty;
                         }
@@ -218,7 +218,7 @@ if ($view_emp_id != null) {
                         <td style="text-align: right"><?= $line_qty; ?></td>
                         <td style="text-align: right;background-color: #B4B9BE"><?= $line_amt; ?></td>
                     <?php endforeach; ?>
-                    <?php $extra = findComextrarate($value->id, $line_sum_amt); ?>
+                    <?php $extra = findComextrarate($value->id, $line_sum_amt,$f_date, $t_date); ?>
                     <td style="text-align: right;background-color: #b8a2e0;color: black"><?= $line_sum_qty; ?></td>
                     <td style="text-align: right;background-color: #b8a2e0;color: black"><?= $line_sum_qty_free; ?></td>
                     <td style="text-align: right;background-color: #b8a2e0;color: black"><?= $line_sum_qty; ?></td>
@@ -340,7 +340,7 @@ function findComrate($emp_id, $f_date, $t_date)
     return $c;
 }
 
-function findComextrarate($emp_id, $sale_total_amt)
+function findComextrarate($emp_id, $sale_total_amt, $f_date, $t_date)
 {
     $c = 0;
     if ($emp_id) {
