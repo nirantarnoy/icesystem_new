@@ -207,7 +207,10 @@ if ($view_emp_id != null) {
                         <?php
 
                         $line_sum_amt = $line_sum_amt + $line_amt;
-                        $line_com_rate = findComrate($value->id, $f_date, $t_date);
+                        if($line_sum_amt >0){
+                            $line_com_rate = findComrate($value->id, $f_date, $t_date);
+                        }
+
                         if ($line_amt == 0) {
                             $line_sum_qty_free = $line_sum_qty_free + $line_qty;
                         }
@@ -292,16 +295,16 @@ function findComrate($emp_id, $f_date, $t_date)
         if($model){
             $model_cnt = \common\models\QueryCarDailyEmpCount::find()->where(['car_id' => $model->car_id_])->andFilterWhere(['between','trans_date',$f_date,$t_date])->one();
             if ($model_cnt) {
-                return 200;
                 if ($model_cnt->emp_qty) {
                     $sql = "SELECT sale_com.com_extra,sale_com.emp_qty FROM car INNER JOIN sale_com ON car.sale_com_id=sale_com.id WHERE car.id=" . $model_cnt->car_id;
                     $query = \Yii::$app->db->createCommand($sql)->queryAll();
                     if ($query != null) {
+                        return 300;
                         //print_r($query);return;
                         // foreach ($query as $value){
                         $emp_count = $model_cnt->emp_qty;
                         if ($emp_count == $query[0]['emp_qty']) {
-                            $c = $query[0]['com_extra'] / 2;
+                            $c = ($query[0]['com_extra'] / 2);
                         } else {
                             $c = 0.75;
                         }
