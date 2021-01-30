@@ -696,7 +696,7 @@ class OrdersController extends Controller
             $html .= '<th style="width: 5%;text-align: center">#</th>';
             $html .= '<th style="width: 8%">รหัสลูกค้า</th>';
             $html .= '<th style="width: 15%">ชื่อลูกค้า</th>';
-            $html .= $this->getProductcolumn2($price_group_id);
+           // $html .= $this->getProductcolumn2($price_group_id);
             $html .= '<th style="width: 8%;text-align: right">รวมจำนวน</th>';
             $html .= '<th style="text-align: right">รวมเงิน</th>';
             $html .= '<th style="text-align: center">-</th>';
@@ -719,7 +719,7 @@ class OrdersController extends Controller
                     $html .= '<td style="text-align: center'.$payment_color.'">' . $i . '</td>';
                     $html .= '<td style="'.$payment_color.'">' . $value->code . '<input type="hidden" class="line-customer-id" name="line_customer_id' . $price_group_id . '[]" value="' . $value->customer_id . '"></td>';
                     $html .= '<td style="'.$payment_color.'">' . $value->name . '</td>';
-                   // $html .= $this->getProducttextfieldUpdate2($order_id, $value->customer_id, $price_group_id);
+                    $html .= $this->getProducttextfieldUpdate2($order_id, $value->customer_id, $price_group_id);
                     $html .= '</tr>';
                 }
                 $html .= '</tbody>';
