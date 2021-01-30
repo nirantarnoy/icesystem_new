@@ -468,7 +468,7 @@ class OrdersController extends Controller
                         $html .= '<td style="text-align: center">' . $i . '</td>';
                         $html .= '<td>' . \backend\models\Customer::findCode($val->id) . '<input type="hidden" class="line-customer-id" name="line_customer_id' . $price_group_id . '[]" value="' . $val->id . '"></td>';
                         $html .= '<td>' . \backend\models\Customer::findName($val->id) . '</td>';
-                        $html .= $this->getProducttextfield2($price_group_id);
+                       // $html .= $this->getProducttextfield2($price_group_id);
                         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right"></td>';
                         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"><input type="hidden" class="form-control line-total-price-cal" style="text-align: right"></td>';
                         $html .= '<td style="text-align: center"><div class="btn btn-danger btn-sm" data-var="" onclick="removeorderline($(this))">ลบ</div></td>';
@@ -639,7 +639,7 @@ class OrdersController extends Controller
                             <div class="tab-pane fade show ' . $is_active2 . '" id="custom-tabs-one-home' . $price_group_list[$i] . '" role="tabpanel"
                              aria-labelledby="custom-tabs-one-home-tab">';
                         $html .= '<table class="table" id="table-sale-list' . $price_group_list[$i] . '">';
-                      //  $html .= $this->gettablelistupdate($price_group_list[$i], $id);
+                        $html .= $this->gettablelistupdate($price_group_list[$i], $id);
                         $html .= '</table>
                             </div>
                        ';
@@ -719,7 +719,7 @@ class OrdersController extends Controller
                     $html .= '<td style="text-align: center'.$payment_color.'">' . $i . '</td>';
                     $html .= '<td style="'.$payment_color.'">' . $value->code . '<input type="hidden" class="line-customer-id" name="line_customer_id' . $price_group_id . '[]" value="' . $value->customer_id . '"></td>';
                     $html .= '<td style="'.$payment_color.'">' . $value->name . '</td>';
-                    $html .= $this->getProducttextfieldUpdate2($order_id, $value->customer_id, $price_group_id);
+                   // $html .= $this->getProducttextfieldUpdate2($order_id, $value->customer_id, $price_group_id);
                     $html .= '</tr>';
                 }
                 $html .= '</tbody>';
