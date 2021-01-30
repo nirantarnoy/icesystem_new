@@ -468,7 +468,7 @@ class OrdersController extends Controller
                         $html .= '<td style="text-align: center">' . $i . '</td>';
                         $html .= '<td>' . \backend\models\Customer::findCode($val->id) . '<input type="hidden" class="line-customer-id" name="line_customer_id' . $price_group_id . '[]" value="' . $val->id . '"></td>';
                         $html .= '<td>' . \backend\models\Customer::findName($val->id) . '</td>';
-                       // $html .= $this->getProducttextfield2($price_group_id);
+                        $html .= $this->getProducttextfield2($price_group_id);
                         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right"></td>';
                         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"><input type="hidden" class="form-control line-total-price-cal" style="text-align: right"></td>';
                         $html .= '<td style="text-align: center"><div class="btn btn-danger btn-sm" data-var="" onclick="removeorderline($(this))">ลบ</div></td>';
