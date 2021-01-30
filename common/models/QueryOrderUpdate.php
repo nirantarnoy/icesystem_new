@@ -11,6 +11,8 @@ use Yii;
  * @property string|null $name
  * @property int|null $order_id
  * @property string|null $code
+ * @property int|null $price_group_id
+ * @property int $id
  */
 class QueryOrderUpdate extends \yii\db\ActiveRecord
 {
@@ -28,7 +30,7 @@ class QueryOrderUpdate extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'order_id'], 'integer'],
+            [['customer_id', 'order_id', 'price_group_id', 'id'], 'integer'],
             [['name', 'code'], 'string', 'max' => 255],
         ];
     }
@@ -43,6 +45,8 @@ class QueryOrderUpdate extends \yii\db\ActiveRecord
             'name' => 'Name',
             'order_id' => 'Order ID',
             'code' => 'Code',
+            'price_group_id' => 'Price Group ID',
+            'id' => 'ID',
         ];
     }
 }

@@ -44,7 +44,7 @@ class OrderLine extends \yii\db\ActiveRecord
         return [
             [['order_id', 'product_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['qty', 'price', 'line_disc_amt', 'line_disc_per', 'line_total'], 'number'],
-            [['customer_id'],'id'],
+            [['customer_id','price_group_id'],'integer'],
             [['branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['branch_id' => 'id']],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'id']],
         ];

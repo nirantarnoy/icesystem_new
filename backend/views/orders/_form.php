@@ -8,6 +8,7 @@ use yii\widgets\ActiveForm;
     <input type="hidden" class="page-status" data-var="<?= $model->id ?>" value="<?= $model->isNewRecord ? 0 : 1 ?>">
     <?php $form = ActiveForm::begin(['id' => 'order-form', 'method' => 'post']); ?>
     <input type="hidden" class="current_id" value="<?= $model->id ?>">
+    <input type="hidden" class="current-price-group" value="">
     <input type="hidden" class="remove-list" name="removelist" value="">
     <div class="row">
         <div class="col-lg-3">
@@ -56,28 +57,6 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-lg-3">
-            <?= $form->field($model, 'payment_method_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentmethod::find()->all(), 'id', function ($data) {
-                    return $data->name;
-                }),
-                'options' => [
-                    'placeholder' => '--เลือกวิธีชำระเงิน--',
-                    'onchange' => 'getPaymentterm($(this))'
-                ]
-            ]) ?>
-        </div>
-        <div class="col-lg-3">
-            <?= $form->field($model, 'payment_term_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentterm::find()->all(), 'id', function ($data) {
-                    return $data->name;
-                }),
-                'options' => [
-                    'id' => 'payment-term-id',
-                    'placeholder' => '--เลือกเงื่อนไขชำระเงิน--'
-                ]
-            ]) ?>
-        </div>
-        <div class="col-lg-3">
             <?= $form->field($model, 'order_total_amt_text')->textInput(['readonly' => 'readonly', 'id' => 'order-total-amt-text'])->label('ยอดขาย') ?>
         </div>
         <div class="col-lg-3">
@@ -88,10 +67,20 @@ use yii\widgets\ActiveForm;
     <?php
     $get_emp_show = \backend\models\Orders::findOrderemp($model->id);
     ?>
-    <h5>รายละเอียดการขาย <span class="badge badge-info text-car-emp"><?=$get_emp_show;?></span></h5>
+    <div class="row">
+        <div class="col-lg-10">
+            <h5>รายละเอียดการขาย <span class="badge badge-info text-car-emp"><?= $get_emp_show; ?></span></h5>
+        </div>
+        <div class="col-lg-2" style="text-align: right">
+            <div class="btn btn-primary btn-payment" style="display: none"><span class="count-selected"></span>บันทึกชำระเงิน
+            </div>
+        </div>
+    </div>
+
     <hr>
-    <table class="table" id="table-sale-list">
-    </table>
+    <div class="list-detail">
+
+    </div>
     <br/>
     <?= $form->field($model, 'order_total_amt')->hiddenInput(['readonly' => 'readonly', 'id' => 'order-total-amt'])->label(false) ?>
     <div class="form-group">
@@ -103,69 +92,112 @@ use yii\widgets\ActiveForm;
 </div>
 <div class="url-customer" data-url="<?= \yii\helpers\Url::to(['orders/find-saledata'], true) ?>"></div>
 
-<div id="findModal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+<div id="paymentModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-xl">
         <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="input-group">
-                            <input type="text" class="form-control search-item" placeholder="ค้นหาสินค้า">
-                            <span class="input-group-addon">
-                                        <button type="submit" class="btn btn-primary btn-search-submit">
-                                            <span class="fa fa-search"></span>
-                                        </button>
-                                    </span>
+        <form id="form-payment" action="<?=\yii\helpers\Url::to(['orders/addpayment'],true)?>" method="post">
+            <input type="hidden" class="payment-order-id" name="payment_order_id" value="<?=$model->id?>">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row" style="width: 100%">
+                        <div class="col-lg-11">
+                            <h2 style="color: #255985"><i class="fa fa-coins"></i> บันทึกชำระเงิน</h2>
+                        </div>
+                        <div class="col-lg-1">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                     </div>
-                    <div class="col-lg-1">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
+
                 </div>
+                <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+                <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
 
-            </div>
-            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
-            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="label">วันที่</div>
+                            <?php
+                            echo \kartik\date\DatePicker::widget([
+                                'name' => 'payment_date',
+                                'value' => date('d/m/Y'),
+                                'options' => [
+                                    // 'readonly' => true,
+                                ],
+                                'pluginOptions' => [
+                                    'format' => 'dd/mm/yyyy',
+                                    'todayHighlight' => true
+                                ],
+                            ]);
+                            ?>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="label">เวลา</div>
+                            <?php
+                            echo \kartik\time\TimePicker::widget([
+                                'name' => 'payment_time',
+                                'options' => [
+                                    //'readonly' => true,
+                                ],
+                                'pluginOptions' => [
+                                    'showSeconds' => false,
+                                    'showMeridian' => false,
+                                    'minuteStep' => 1,
+                                    'secondStep' => 5,
+                                ]
+                            ]);
+                            ?>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table class="table table-striped table-bordered table-payment-list">
+                                <thead>
+                                <tr>
+                                    <th>รหัสลูกค้า</th>
+                                    <th>ชื่อลูกค้า</th>
+                                    <th>ยอดขาย</th>
+                                    <th>วิธีชำระเงิน</th>
+                                    <th>เงื่อนไข</th>
+                                    <th>ยอดชำระ</th>
+                                    <th>คงค้าง</th>
+                                    <th style="text-align: center">-</th>
+                                </tr>
+                                </thead>
+                                <tbody>
 
-            <div class="modal-body">
-                <input type="hidden" name="line_qc_product" class="line_qc_product" value="">
-                <table class="table table-bordered table-striped table-find-list" width="100%">
-                    <thead>
-                    <tr>
-                        <th style="text-align: center">เลือก</th>
-                        <th>รหัสสินค้า</th>
-                        <th>รายละเอียด</th>
-                        <th>ต้นทุน</th>
-                        <th>ราคาขาย</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline-success btn-product-selected" data-dismiss="modalx" disabled><i
-                            class="fa fa-check"></i> ตกลง
-                </button>
-                <button type="button" class="btn btn-default" data-dismiss="modal"><i
-                            class="fa fa-close text-danger"></i> ปิดหน้าต่าง
-                </button>
-            </div>
-        </div>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-success btn-paymet-submit" data-dismiss="modalx"><i
+                                class="fa fa-check"></i> ตกลง
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                                class="fa fa-close text-danger"></i> ปิดหน้าต่าง
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 <?php
 $url_to_find_item = \yii\helpers\Url::to(['pricegroup/productdata'], true);
 $url_to_get_sale_item = \yii\helpers\Url::to(['orders/find-saledata'], true);
+$url_to_get_price_group = \yii\helpers\Url::to(['orders/find-pricegroup'], true);
 $url_to_get_car_item = \yii\helpers\Url::to(['orders/find-car-data'], true);
 $url_to_get_sale_item_update = \yii\helpers\Url::to(['orders/find-saledata-update'], true);
 $url_to_get_car_emp = \yii\helpers\Url::to(['orders/findcarempdaily'], true);
-$url_to_get_term_item =\yii\helpers\Url::to(['orders/find-term-data'], true);
+$url_to_get_term_item = \yii\helpers\Url::to(['orders/find-term-data'], true);
+$url_to_get_payment_list = \yii\helpers\Url::to(['orders/find-payment-list'], true);
+$url_to_get_condition = \yii\helpers\Url::to(['orders/getpaycondition'], true);
 $js = <<<JS
   var removelist = [];
   var selecteditem = [];
+  var checkeditem = [];
   var current_row = 0;
   $(function(){
      $("#order-date").datepicker({
@@ -185,232 +217,50 @@ $js = <<<JS
          order_update_data(ids);
      }
      cal_all();
+     
+     $(".btn-payment").click(function(){
+          var ids = $(".current_id").val();
+          var price_group = $(".current-price-group").val();
+          if(checkeditem.length > 0 && ids >0){
+              $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_get_payment_list",
+              'data': {'order_id': checkeditem, 'id': ids, 'price_group_id': price_group},
+              'success': function(data) {
+                  //  alert(data);
+                   $(".table-payment-list tbody").html(data);
+                  $("#paymentModal").modal("show"); 
+                 }
+              });
+          }
+     });
+     
+     $(".btn-paymet-submit").click(function(){
+        if(confirm('คุณมันใจที่จะทำรายการนี้ใช่หรือไม่ ?')){
+            $("form#form-payment").submit();
+        } 
+     });
+     
   });
-//  function showfind(e){
-//      $.ajax({
-//              'type':'post',
-//              'dataType': 'html',
-//              'async': false,
-//              'url': "$url_to_find_item",
-//              'data': {},
-//              'success': function(data) {
-//                  //  alert(data);
-//                   $(".table-find-list tbody").html(data);
-//                   $("#findModal").modal("show");
-//                 }
-//              });
-//
-//  }
-//  function addselecteditem(e) {
-//        var id = e.attr('data-var');
-//        var code = e.closest('tr').find('.line-find-code').val();
-//        var name = e.closest('tr').find('.line-find-name').val();
-//        var price = e.closest('tr').find('.line-find-price').val();
-//        if (id) {
-//            if (e.hasClass('btn-outline-success')) {
-//                var obj = {};
-//                obj['id'] = id;
-//                obj['code'] = code;
-//                obj['name'] = name;
-//                obj['price'] = price;
-//                selecteditem.push(obj);
-//
-//                e.removeClass('btn-outline-success');
-//                e.addClass('btn-success');
-//                disableselectitem();
-//                console.log(selecteditem);
-//            } else {
-//                //selecteditem.pop(id);
-//                $.each(selecteditem, function (i, el) {
-//                    if (this.id == id) {
-//                        selecteditem.splice(i, 1);
-//                    }
-//                });
-//                e.removeClass('btn-success');
-//                e.addClass('btn-outline-success');
-//                disableselectitem();
-//                console.log(selecteditem);
-//            }
-//        }
-//    }
-//
-//    function check_dup(prod_id){
-//      var _has = 0;
-//      $("#table-list tbody tr").each(function(){
-//          var p_id = $(this).closest('tr').find('.line-prod-id').val();
-//         // alert(p_id + " = " + prod_id);
-//          if(p_id == prod_id){
-//              _has = 1;
-//          }
-//      });
-//      return _has;
-//    }
-//
-//    function disableselectitem() {
-//        if (selecteditem.length > 0) {
-//            $(".btn-product-selected").prop("disabled", "");
-//            $(".btn-product-selected").removeClass('btn-outline-success');
-//            $(".btn-product-selected").addClass('btn-success');
-//        } else {
-//            $(".btn-product-selected").prop("disabled", "disabled");
-//            $(".btn-product-selected").removeClass('btn-success');
-//            $(".btn-product-selected").addClass('btn-outline-success');
-//        }
-//    }
-//    $(".btn-product-selected").click(function () {
-//        var linenum = 0;
-//        if (selecteditem.length > 0) {
-//            for (var i = 0; i <= selecteditem.length - 1; i++) {
-//                var line_prod_id = selecteditem[i]['id'];
-//                var line_prod_code = selecteditem[i]['code'];
-//                var line_prod_name = selecteditem[i]['name'];
-//                var line_prod_price = selecteditem[i]['price'];
-//
-//                 if(check_dup(line_prod_id) == 1){
-//                        alert("รายการสินค้า " +line_prod_code+ " มีในรายการแล้ว");
-//                        return false;
-//                    }
-//
-//                var tr = $("#table-list tbody tr:last");
-//
-//                if (tr.closest("tr").find(".line-prod-code").val() == "") {
-//                    tr.closest("tr").find(".line-prod-id").val(line_prod_id);
-//                    tr.closest("tr").find(".line-prod-code").val(line_prod_code);
-//                    tr.closest("tr").find("td:eq(2)").html(line_prod_name);
-//                    tr.closest("tr").find(".line-qty").val(1);
-//                    tr.closest("tr").find(".line-price").val(line_prod_price);
-//
-//                    //cal_num();
-//                    console.log(line_prod_code);
-//                } else {
-//                   // alert("dd");
-//                    console.log(line_prod_code);
-//                    //tr.closest("tr").find(".line_code").css({'border-color': ''});
-//
-//                    var clone = tr.clone();
-//                    //clone.find(":text").val("");
-//                    // clone.find("td:eq(1)").text("");
-//                    clone.find(".line-prod-id").val(line_prod_id);
-//                    clone.find(".line-prod-code").val(line_prod_code);
-//                    clone.find("td:eq(2)").html(line_prod_name);
-//                    clone.find(".line-qty").val(1);
-//                    clone.find(".line-price").val(line_prod_price);
-//
-//                    clone.attr("data-var", "");
-//                    clone.find('.rec-id').val("");
-//
-//                    clone.find(".line-price").on("keypress", function (event) {
-//                        $(this).val($(this).val().replace(/[^0-9\.]/g, ""));
-//                        if ((event.which != 46 || $(this).val().indexOf(".") != -1) && (event.which < 48 || event.which > 57)) {
-//                            event.preventDefault();
-//                        }
-//                    });
-//                    tr.after(clone);
-//                }
-//            }
-//            selecteditem.length = 0;
-//        }
-//        $("#table-list tbody tr").each(function () {
-//            linenum += 1;
-//            $(this).closest("tr").find("td:eq(0)").text(linenum);
-//            // $(this).closest("tr").find(".line-prod-code").val(line_prod_code);
-//        });
-//        selecteditem.length = 0;
-//
-//        $("#table-find-list tbody tr").each(function () {
-//            $(this).closest("tr").find(".btn-line-select").removeClass('btn-success');
-//            $(this).closest("tr").find(".btn-line-select").addClass('btn-outline-success');
-//        });
-//        $(".btn-product-selected").removeClass('btn-success');
-//        $(".btn-product-selected").addClass('btn-outline-success');
-//
-//      //  alert();
-//        $("#findModal").modal('hide');
-//    });
-//  function cal_num(){}
-//  function removeline(e) {
-//        if (confirm("ต้องการลบรายการนี้ใช่หรือไม่?")) {
-//            if (e.parent().parent().attr("data-var") != '') {
-//                removelist.push(e.parent().parent().attr("data-var"));
-//            }
-//            // alert(removelist);
-//            $(".remove-list").val(removelist);
-//            if ($(".table-list tbody tr").length == 1) {
-//                $(".table-list tbody tr").each(function () {
-//                    $(this).find(":text").val("");
-//                });
-//            } else {
-//
-//                e.parent().parent().remove();
-//                cal_linenum();
-//            }
-//            cal_all();
-//        }
-//  }
-//  function line_cal(e){
-//    var line_total = 0;
-//  //  $(".table-cart tbody tr").each(function(){
-//          var qty = e.closest('tr').find('.line-qty').val();
-//          var price = e.closest('tr').find('.line-price').val();
-//          line_total = parseFloat(qty) * parseFloat(price);
-//        //  alert(price);
-//   // });
-//    e.closest('tr').find('.line-total-cal').val(line_total);
-//     e.closest('tr').find('.line-price-total').val(addCommas(line_total));
-//   // e.closest('tr').find('td:eq(5)').html(addCommas(line_total));
-//    cal_all();
-//}
-//  function cal_linenum() {
-//        var xline = 0;
-//        $(".table-list tbody tr").each(function () {
-//            xline += 1;
-//            $(this).closest("tr").find("td:eq(0)").text(xline);
-//        });
-//    }
-//
-//    function cal_num(e) {
-//        var qty = e.closest("tr").find(".line-qty").val();
-//        var price = e.closest("tr").find(".line-price").val();
-//
-//        if (qty == "") {
-//            qty = 0;
-//        }
-//        if (price == "") {
-//            price = 0;
-//        }
-//
-//        var total = parseFloat(qty).toFixed(2) * parseFloat(price).toFixed(2);
-//       // e.closest("tr").find(".line-total-cal").val(parseFloat(total).toFixed(2));
-//
-//        e.closest("tr").find(".line-price-total").val("");
-//        e.closest("tr").find(".line-price-total").val(addCommas(parseFloat(total).toFixed(2)));
-//
-//        cal_all();
-//  }
-//
-//   function cal_all() {
-//        var totalall = 0;
-//        var totalqty = 0;
-//        $(".table-list tbody tr").each(function () {
-//            var linetotal = $(this).closest("tr").find(".line-total-cal").val();
-//            var lineqty = $(this).closest("tr").find(".line-qty").val();
-//
-//            if (linetotal == '') {
-//                linetotal = 0;
-//            }
-//            if (lineqty == '') {
-//                lineqty = 0;
-//            }
-//
-//            totalqty = parseFloat(totalqty) + parseFloat(lineqty);
-//            totalall = parseFloat(totalall) + parseFloat(linetotal);
-//        });
-//        $(".qty-sum").text(parseFloat(totalqty).toFixed(2));
-//        $(".total-amount").val(parseFloat(totalall).toFixed(2));
-//
-//        $("#order-total-amt").val(parseFloat(totalall).toFixed(0));
-//  }
 
+ function getCondition(e){
+     var ids = e.val();
+     if(ids){
+        // alert(ids);
+         $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_get_condition",
+              'data': {'id': ids},
+              'success': function(data) {
+                   e.closest('tr').find(".select-condition").html(data);
+              }
+         });
+     }
+ }
  function route_change(e) {
         //var url_to_show_customer = $(".url-customer").attr('data-url');
           //$.post(url_to_show_customer + "&id=" + e.val(), function (data) {
@@ -421,6 +271,17 @@ $js = <<<JS
          //});
          $(".text-car-emp").html("");
          $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_get_price_group",
+              'data': {'route_id': e.val()},
+              'success': function(data) {
+                  $(".list-detail").html(data);
+              }
+         });
+         
+          $.ajax({
               'type':'post',
               'dataType': 'html',
               'async': false,
@@ -483,7 +344,7 @@ $js = <<<JS
               'data': {'id': ids},
               'success': function(data) {
                   //alert(data);
-                  $("#table-sale-list").html(data);
+                  $(".list-detail").html(data);
               }
          });
      }
@@ -506,6 +367,14 @@ $js = <<<JS
          line_total = parseFloat(line_total) + xqty;
          line_sale_price_total = parseFloat(line_sale_price_total) + (xqty * price);
       });
+     // alert(e.val());
+      if(e.val()>0){
+           e.css('background-color', '#33CC00');
+           e.css('color', 'black');
+      }else{
+           e.css('background-color', 'white');
+           e.css('color', 'black');
+      }
       e.closest("tr").find(".line-qty-cal").val(line_total);
       e.closest("tr").find(".line-total-price").val(line_sale_price_total);
       e.closest("tr").find(".line-total-price-cal").val(line_sale_price_total);
@@ -546,12 +415,105 @@ $js = <<<JS
                   }else{
                       $(".text-car-emp").html(data);
                   }
-                  
               }
          });
    }
  }
-
+ 
+   function updatetab(e){
+     checkeditem = [];
+     var ids = e.attr('data-var');
+     $(".current-price-group").val(ids);
+   }
+   
+   function showselectpayment(e){
+        var table_id = e.parent().parent().parent().parent().attr('id');
+        var cnt = 0;
+        var cnt_selected = 0;
+        var cur_id = e.attr('data-var');
+       // alert(table_id);
+        if(typeof(table_id) != 'undefined'){
+               var all_checkbox = $("#"+table_id+ " tbody input[type=checkbox]").length;
+               var cnt_selected = $("#"+table_id+" tbody input:checked").length;
+               if(all_checkbox == cnt_selected){
+                   $(".selected-all-item").prop('checked',true);
+                   $("#"+table_id+ " tbody input[type=checkbox]").each(function(){
+                      $(this).prop('checked',true);
+                      checkeditem.push($(this).attr('data-var'));
+                   });
+               }else{
+                   // $(".selected-all-item").prop('checked',false);
+                   // $("#"+table_id+ " tbody input[type=checkbox]").each(function(){
+                   //    $(this).prop('checked',false);
+                   //    var index = checkeditem.indexOf($(this).attr('data-var'));
+                   //    if (index !== -1) {
+                   //        checkeditem.splice(index, 1);
+                   //    }
+                   // });
+               }
+               
+               if(cnt_selected > 0){
+                 $('.count-selected').html("["+cnt_selected+"] ");   
+               }else{
+                   $('.count-selected').html("");   
+               }
+               
+               console.log(checkeditem);
+           
+           $('.btn-payment').show();
+        }
+        
+    }
+    
+    function showselectpaymentall(e){
+        var table_id = e.parent().parent().parent().parent().attr('id');
+        var cnt = 0;
+        var cnt_selected = 0;
+        if(typeof(table_id) != 'undefined'){
+            var all_checkbox = $("#"+table_id+ " tbody input[type=checkbox]").length;
+            var cnt_selected = $("#"+table_id+" tbody input:checked").length;
+            if(cnt_selected > 0){
+                if(all_checkbox != cnt_selected){
+                    //alert();
+                     $("#"+table_id+ " tbody input[type=checkbox]").each(function(){
+                        $(this).prop('checked',true);
+                     });
+                }else{
+                     $("#"+table_id+ " tbody input[type=checkbox]").each(function(){
+                        $(this).prop('checked',false);
+                     });
+                }
+               
+            }else{
+                $("#"+table_id+ " tbody input[type=checkbox]").each(function(){
+                      $(this).prop('checked',true);
+                });
+            }
+        }
+        
+        $("#"+table_id+ " tbody input[type=checkbox]").each(function(){
+            if(this.checked){
+                // alert($(this).attr('data-var'));
+                checkeditem.push($(this).attr('data-var'));
+            }else{
+                var index = checkeditem.indexOf($(this).attr('data-var'));
+                if (index !== -1) {
+                    checkeditem.splice(index, 1);
+                }
+            }
+                  
+        });
+        
+        if(checkeditem.length > 0){
+            $('.count-selected').html("["+checkeditem.length+"] ");
+            $('.btn-payment').show();
+        }else{
+            $('.count-selected').html("");   
+            $('.btn-payment').hide();
+        }
+        
+    }
+ 
 function addCommas(nStr) {
         nStr += '';
         var x = nStr.split('.');
