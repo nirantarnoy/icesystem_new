@@ -639,8 +639,8 @@ class OrdersController extends Controller
                             <div class="tab-pane fade show ' . $is_active2 . '" id="custom-tabs-one-home' . $price_group_list[$i] . '" role="tabpanel"
                              aria-labelledby="custom-tabs-one-home-tab">';
                         $html .= '<table class="table" id="table-sale-list' . $price_group_list[$i] . '">';
-                        //$html .= $this->gettablelistupdate($price_group_list[$i], $id);
-                        $html.=$price_group_list[$i];
+                        $html .= $this->gettablelistupdate($price_group_list[$i], $id);
+                       // $html.=$price_group_list[$i];
                         $html .= '</table>
                             </div>
                        ';
