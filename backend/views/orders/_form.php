@@ -399,6 +399,7 @@ $js = <<<JS
  function getcaremp(e){
    var ids = e.val();
    var trans_date = $("#order-date").val();
+   //alert(trans_date);
    if(ids){
                $.ajax({
               'type':'post',
