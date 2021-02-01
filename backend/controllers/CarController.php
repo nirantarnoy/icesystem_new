@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\Customer;
 use backend\models\WarehouseSearch;
 use Yii;
 use backend\models\Car;
@@ -9,6 +10,7 @@ use backend\models\CarSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * CarController implements the CRUD actions for Car model.
@@ -73,6 +75,12 @@ class CarController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $emp_list = $model->emp_id;
             // print_r($emp_list);return;
+            $photo = UploadedFile::getInstance($model, 'photo');
+            if (!empty($photo)) {
+                $photo_name = time() . "." . $photo->getExtension();
+                $photo->saveAs(Yii::getAlias('@backend') . '/web/uploads/images/car/' . $photo_name);
+                $model->photo = $photo_name;
+            }
             if ($model->save()) {
                 if (count($emp_list) > 0) {
                     for ($i = 0; $i <= count($emp_list) - 1; $i++) {
@@ -108,6 +116,12 @@ class CarController extends Controller
         }
 //        print_r($model_emp);return;
         if ($model->load(Yii::$app->request->post())) {
+            $photo = UploadedFile::getInstance($model, 'photo');
+            if (!empty($photo)) {
+                $photo_name = time() . "." . $photo->getExtension();
+                $photo->saveAs(Yii::getAlias('@backend') . '/web/uploads/images/car/' . $photo_name);
+                $model->photo = $photo_name;
+            }
             $emp_list = $model->emp_id;
             if ($model->save()) {
                 if ($emp_list != null) {
@@ -150,5 +164,30 @@ class CarController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+    public function actionDeletephoto()
+    {
+        $id = \Yii::$app->request->post('delete_id');
+        if ($id) {
+            $photo = $this->getPhotoName($id);
+            if ($photo != '') {
+                if (unlink('../web/uploads/images/car/' . $photo)) {
+                    Car::updateAll(['photo' => ''], ['id' => $id]);
+                }
+            }
+
+        }
+        return $this->redirect(['car/update', 'id' => $id]);
+    }
+    public function getPhotoName($id)
+    {
+        $photo_name = '';
+        if ($id) {
+            $model = Car::find()->where(['id' => $id])->one();
+            if ($model) {
+                $photo_name = $model->photo;
+            }
+        }
+        return $photo_name;
     }
 }

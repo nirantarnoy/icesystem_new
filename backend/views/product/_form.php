@@ -179,13 +179,13 @@ $stock_type_data = [['id'=>1,'name'=>'ตัดสต๊อก'],['id'=>2,'name'
 //$url_to_delete_photo = \yii\helpers\Url::to(['product/deletephoto'], true);
 $js = <<<JS
   $(function(){
-     $(".product-type-id,.product-group-id").select2({
-       'class': 'form-control'
-     });
+     // $(".product-type-id,.product-group-id").select2({
+     //   'class': 'form-control'
+     // });
 
      $(".btn-delete-photo").click(function (){
         var prodid = $(this).attr('data-var');
-      //  alert(prodid);
+       //alert(prodid);
       swal({
                 title: "ต้องการทำรายการนี้ใช่หรือไม่",
                 text: "",
