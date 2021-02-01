@@ -76,7 +76,8 @@ class CardailySearch extends Cardaily
             $query->andFilterWhere(['sale_group.delivery_route_id'=>$this->route_id]);
         }
         if($this->car_name !=''){
-            $query->andFilterWhere(['OR',['LIKE','car.name', $this->car_name],['LIKE','car.description', $this->car_name]]);
+           // $query->andFilterWhere(['OR',['LIKE','car.name', $this->car_name],['LIKE','car.description', $this->car_name]]);
+            $query->andFilterWhere(['LIKE','car.plate_number', $this->car_name]);
         }
         if($this->trans_date != null){
             $x_date = explode('/', $this->trans_date);
