@@ -39,6 +39,9 @@ use softark\duallistbox\DualListbox;
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Cartype::find()->all(), 'id', 'name'),
                 'options' => [
                     'placeholder' => '--เลือกประเภทรถ--'
+                ],
+                'pluginOptions' =>[
+                    'allowClear'=> true,
                 ]
             ]) ?>
         </div>
@@ -47,6 +50,9 @@ use softark\duallistbox\DualListbox;
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Salegroup::find()->all(), 'id', 'name'),
                 'options' => [
                     'placeholder' => '--เลือกกลุ่มการขาย--'
+                ],
+                'pluginOptions' =>[
+                    'allowClear'=> true,
                 ]
             ]) ?>
         </div>
@@ -60,6 +66,9 @@ use softark\duallistbox\DualListbox;
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Salecom::find()->all(), 'id', 'name'),
                 'options' => [
                     'placeholder' => '--เลือกกลุ่มคอมมิชชั่น--'
+                ],
+                'pluginOptions' =>[
+                    'allowClear'=> true,
                 ]
             ]) ?>
         </div>
@@ -68,6 +77,9 @@ use softark\duallistbox\DualListbox;
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Salecomcon::find()->all(), 'id', 'name'),
                 'options' => [
                     'placeholder' => '--เลือกกลุ่มเงื่อนไขพิเศษ--'
+                ],
+                'pluginOptions' =>[
+                        'allowClear'=> true,
                 ]
             ]) ?>
         </div>
