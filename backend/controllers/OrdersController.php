@@ -982,7 +982,7 @@ class OrdersController extends Controller
         $html = '';
         if (count($customer_paylist_id) > 0 && $order_id > 0) {
             for ($i = 0; $i <= count($customer_paylist_id) - 1; $i++) {
-                $model = \common\models\QuerySaleTransData::find()->select(['customer_id', 'cus_name', 'SUM(qty) as qty', 'SUM(price) as price'])->where(['order_id' => $order_id, 'price_group_id' => $price_group_id, 'customer_id' => $customer_paylist_id[$i]])->groupBy('customer_id', 'price_group_id')->all();
+                $model = \common\models\QuerySaleTransData::find()->select(['customer_id', 'cus_name', 'SUM(qty) as qty', 'SUM(price) as price'])->where(['order_id' => $order_id, 'price_group_id' => $price_group_id, 'customer_id' => $customer_paylist_id[$i]])->andFilterWhere(['>','qty',0])->groupBy('customer_id', 'price_group_id')->all();
                 if ($model != null) {
                     foreach ($model as $value) {
                         $line_total_price = $value->qty * $value->price;
