@@ -95,8 +95,8 @@ use yii\widgets\ActiveForm;
 <div id="paymentModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-xl">
         <!-- Modal content-->
-        <form id="form-payment" action="<?=\yii\helpers\Url::to(['orders/addpayment'],true)?>" method="post">
-            <input type="hidden" class="payment-order-id" name="payment_order_id" value="<?=$model->id?>">
+        <form id="form-payment" action="<?= \yii\helpers\Url::to(['orders/addpayment'], true) ?>" method="post">
+            <input type="hidden" class="payment-order-id" name="payment_order_id" value="<?= $model->id ?>">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="row" style="width: 100%">
@@ -221,6 +221,7 @@ $js = <<<JS
      $(".btn-payment").click(function(){
           var ids = $(".current_id").val();
           var price_group = $(".current-price-group").val();
+          alert(checkeditem.length);
           if(checkeditem.length > 0 && ids >0){
               $.ajax({
               'type':'post',
@@ -440,7 +441,7 @@ $js = <<<JS
                    $(".selected-all-item").prop('checked',true);
                    $("#"+table_id+ " tbody input[type=checkbox]").each(function(){
                       $(this).prop('checked',true);
-                      checkeditem.push($(this).attr('data-var'));
+                   //   checkeditem.push($(this).attr('data-var'));
                    });
                }else{
                    // $(".selected-all-item").prop('checked',false);
@@ -456,11 +457,25 @@ $js = <<<JS
                if(cnt_selected > 0){
                  $('.count-selected').html("["+cnt_selected+"] ");   
                }else{
-                   $('.count-selected').html("");   
+                 $('.count-selected').html("");   
                }
                
                console.log(checkeditem);
-           
+               checkeditem = [];
+               $("#"+table_id+ " tbody input[type=checkbox]").each(function(){
+                    if(this.checked){
+                       // if(cur_id != $(this).attr('data-var')){
+                          //   alert($(this).attr('data-var'));
+                            checkeditem.push($(this).attr('data-var'));
+                       // }
+                    }else{
+                        // var index = checkeditem.indexOf($(this).attr('data-var'));
+                        // if (index !== -1) {
+                        //     checkeditem.splice(index, 1);
+                        // }
+                    }
+                          
+                });
            $('.btn-payment').show();
         }
         

@@ -61,7 +61,7 @@ $model_new = $model_car;
                         <i class="fas fa-truck"></i>
                         <!--                       <img src="../web/uploads/images/streamer/streamer.jpg" width="50%" alt="">-->
                     </div>
-                    <a href="#" data-id="<?=$value->id?>" onclick="showcarinfo($(this))" class="small-box-footer"><i
+                    <a href="#" data-id="<?=$value->id?>" data-var="<?=$value->emp_qty?>" onclick="showcarinfo($(this))" class="small-box-footer"><i
                                 class="fas fa-users"></i> จัดการข้อมูล </a>
                 </div>
             </div>
@@ -92,6 +92,7 @@ $model_new = $model_car;
                 <input type="hidden" class="selected-car" name="selected_car" value="">
                 <input type="hidden" class="selected-route-id" name="selected_route_id" value="">
                 <input type="hidden" class="selected-date-add" name="selected_date" value="">
+                <input type="hidden" class="selected-emp-qty" name="selected_emp_qty" value="">
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-12">
@@ -352,10 +353,14 @@ $js=<<<JS
       var ids = e.attr('data-id');
       var t_date = $("#car-trans-date").val();
       var route_id = $("#route-id").val();
+      var emp_qty = e.attr('data-var');
+      
+     // alert(emp_qty);
       if(ids && t_date != ''){
           $(".selected-car").val(ids);
           $(".selected-route-id").val(route_id);
           $(".selected-date-add").val(t_date);
+          $(".selected-emp-qty").val(emp_qty);
           $.ajax({
               'type':'post',
               'dataType': 'html',
@@ -436,6 +441,17 @@ $js=<<<JS
     }
     $(".btn-emp-selected").click(function () {
         var linenum = 0;
+        var line_count = 0;
+        var emp_qty = $(".selected-emp-qty").val();
+        
+        $("#table-list tbody tr").each(function () {
+            line_count += 1;
+        });
+        if((line_count + selecteditem.length ) > emp_qty){
+            alert('จำนวนพนักงานเกินกว่าที่กำหนด');
+            return;
+        }
+        
         if (selecteditem.length > 0) {
             for (var i = 0; i <= selecteditem.length - 1; i++) {
                 var line_prod_id = selecteditem[i]['id'];
@@ -481,6 +497,10 @@ $js=<<<JS
             $(this).closest("tr").find("td:eq(0)").text(linenum);
             // $(this).closest("tr").find(".line-prod-code").val(line_prod_code);
         });
+        if(linenum > emp_qty){
+            alert('จำนวนพนักงานเกินกว่าที่กำหนด');
+            return;
+        }
         selecteditem.length = 0;
 
         $("#table-find-list tbody tr").each(function () {

@@ -471,7 +471,7 @@ class OrdersController extends Controller
                         $html .= $this->getProducttextfield2($price_group_id);
                         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right"></td>';
                         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"><input type="hidden" class="form-control line-total-price-cal" style="text-align: right"></td>';
-                        $html .= '<td style="text-align: center"><div class="btn btn-danger btn-sm" data-var="" onclick="removeorderline($(this))">ลบ</div></td>';
+                        $html .= '<td style="text-align: center"><div class="btn btn-danger btn-sm" data-var="" onclick="removeorderline($(this))">แก้ไข</div></td>';
                         $html .= '</tr>';
                     }
                     $html .= '</tbody>';
@@ -762,7 +762,7 @@ class OrdersController extends Controller
         }
         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right" value="' . number_format($line_total_qty) . '"></td>';
         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"  value="' . number_format($line_total_price) . '"><input type="hidden" class="form-control line-total-price-cal" style="text-align: right" value="' . $line_total_price . '"></td>';
-        $html .= '<td style="text-align: center"><div class="btn btn-danger btn-sm" data-var="' . $value->customer_id . '" onclick="removeorderline($(this))">ลบ</div></td>';
+        $html .= '<td style="text-align: center"><div class="btn btn-danger btn-sm" data-var="' . $value->customer_id . '" onclick="removeorderline($(this))">แก้ไข</div></td>';
         return $html;
     }
 
@@ -844,7 +844,7 @@ class OrdersController extends Controller
         }
         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right" value="' . number_format($line_total_qty) . '"></td>';
         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"  value="' . number_format($line_total_price) . '"><input type="hidden" class="form-control line-total-price-cal" style="text-align: right" value="' . $line_total_price . '"></td>';
-        $html .= '<td style="text-align: center"><div class="btn btn-danger btn-sm" data-var="' . $value->customer_id . '" onclick="removeorderline($(this))">ลบ</div></td>';
+        $html .= '<td style="text-align: center"><div class="btn btn-danger btn-sm" data-var="' . $value->customer_id . '" onclick="removeorderline($(this))">แก้ไข</div></td>';
         return $html;
     }
 
@@ -987,6 +987,12 @@ class OrdersController extends Controller
                     foreach ($model as $value) {
                         $line_total_price = $value->qty * $value->price;
                         if ($line_total_price <= 0) continue;
+                        $customer_pay_amount = $this->checkpaymentsum($order_id,$value->customer_id);
+                        $line_remain_pay = $line_total_price - $customer_pay_amount;
+                        $customer_success_pay = '';
+                        if($line_remain_pay == 0){
+                            $customer_success_pay = 'readonly';
+                        }
                         $html .= '<tr>
                                 <td>' . \backend\models\Customer::findCode($value->customer_id) . '<input type="hidden" class="line-customer-id" name="line_pay_customer_id[]" value="' . $value->customer_id . '"> </td>
                                 <td>' . $value->cus_name . '</td>
@@ -994,24 +1000,24 @@ class OrdersController extends Controller
                                     <input type="text" class="form-control" readonly value="' . number_format($line_total_price) . '">
                                 </td>
                                 <td>
-                                    <select name="line_payment_id[]" class="form-control" id="" onchange="getCondition($(this))">
+                                    <select name="line_payment_id[]" class="form-control" id="" onchange="getCondition($(this))" required>
                                         <option value="">--วิธีชำระเงิน--</option>
                                         ' . $this->showpayoption() . '
                                     </select>
                                 </td>
                                 <td>
-                                    <select name="line_payment_term_id[]" class="form-control select-condition" id="">
+                                    <select name="line_payment_term_id[]" class="form-control select-condition" id="" required>
                                         <option value="">--เงื่อนไข--</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="line_pay_amount[]" value="">
+                                    <input type="text" class="form-control" name="line_pay_amount[]" value="0" '.$customer_success_pay.'>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" readonly value="' . number_format($line_total_price) . '">
+                                    <input type="text" class="form-control" readonly value="' . number_format($line_remain_pay) . '">
                                 </td>
                                 <td style="text-align: center">
-                                    <div class="btn btn-danger btn-sm">ลบ</div>
+                                <div class="btn btn-danger btn-sm">ลบ</div>
                                 </td>
                             </tr>';
                     }
@@ -1050,6 +1056,22 @@ class OrdersController extends Controller
         return $html;
     }
 
+    public function checkpaymentsum($order_id,$customer_id){
+           $total_pay = 0;
+           if($order_id){
+               $model = \backend\models\Paymenttrans::find()->where(['order_id'=>$order_id])->all();
+               if($model){
+                   foreach ($model as $value){
+                       $model_line = \backend\models\Paymenttransline::find()->where(['customer_id'=>$customer_id])->sum('payment_amount');
+                       if($model_line > 0){
+                           $total_pay = $model_line;
+                       }
+                   }
+               }
+           }
+           return $total_pay;
+    }
+
     public function actionAddpayment()
     {
         $order_id = \Yii::$app->request->post('payment_order_id');
@@ -1068,7 +1090,7 @@ class OrdersController extends Controller
             if ($model->save()) {
                 if (count($customer_id) > 0) {
                     for ($i = 0; $i <= count($customer_id) - 1; $i++) {
-                        if ($customer_id[$i] == '' || $customer_id[$i] == null) continue;
+                        if ($customer_id[$i] == '' || $customer_id[$i] == null || $pay_amount[$i] == null) continue;
 
                         $model_line = new \backend\models\Paymenttransline();
                         $model_line->trans_id = $model->id;
