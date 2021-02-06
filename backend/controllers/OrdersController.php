@@ -1153,7 +1153,7 @@ class OrdersController extends Controller
                 }
             }
         }
-        if (count($removelist) > 0) {
+        if ($removelist != null) {
             $x_ = explode(",",$removelist);
             for ($i = 0; $i <= count($x_) - 1; $i++) {
                 \backend\models\Paymenttransline::deleteAll(['id' => $x_[$i]]);
