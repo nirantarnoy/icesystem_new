@@ -1144,7 +1144,7 @@ class OrdersController extends Controller
         $id = \Yii::$app->request->post('line_trans_id');
         $amt = \Yii::$app->request->post('line_trans_amt');
         $removelist = \Yii::$app->request->post('payment_remove_list');
-        if (count($id) > 0) {
+        if ($id != null) {
             for ($i = 0; $i <= count($id) - 1; $i++) {
                 $model = \backend\models\Paymenttransline::find()->where(['id' => $id[$i]])->one();
                 if ($model) {
