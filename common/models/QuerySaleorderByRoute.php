@@ -43,7 +43,7 @@ class QuerySaleorderByRoute extends \yii\db\ActiveRecord
             [['id', 'payment_method_id', 'product_id', 'car_ref_id', 'customer_id', 'rt_id'], 'integer'],
             [['order_date'], 'safe'],
             [['qty', 'price', 'line_total'], 'number'],
-            [['order_no', 'cus_code', 'cus_name', 'route_code', 'car_code', 'car_name'], 'string', 'max' => 255],
+            [['order_no', 'cus_code', 'cus_name', 'route_code', 'car_code', 'car_name','prod_code','prod_name'], 'string', 'max' => 255],
         ];
     }
 

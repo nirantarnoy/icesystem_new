@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use backend\models\CustomersalehistorySearch;
+use backend\models\CustomersalepaySearch;
 use backend\models\DeliveryrouteSearch;
 use backend\models\Product;
 use Yii;
@@ -60,8 +62,20 @@ class CustomerController extends Controller
      */
     public function actionView($id)
     {
+        $searchModel = new CustomersalehistorySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andFilterWhere(['customer_id'=>$id]);
+
+        $searchModel2 = new CustomersalepaySearch();
+        $dataProvider2 = $searchModel2->search(Yii::$app->request->queryParams);
+        $dataProvider2->query->andFilterWhere(['customer_id'=>$id]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'searchModel2' => $searchModel2,
+            'dataProvider2' => $dataProvider2,
         ]);
     }
 

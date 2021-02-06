@@ -39,7 +39,7 @@ class PaymentTransLine extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['trans_id', 'customer_id', 'payment_method_id', 'payment_term_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['trans_id', 'customer_id', 'payment_method_id', 'payment_term_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','order_ref_id'], 'integer'],
             [['payment_date'], 'safe'],
             [['payment_amount', 'total_amount', 'change_amount'], 'number'],
             [['doc'], 'string', 'max' => 255],

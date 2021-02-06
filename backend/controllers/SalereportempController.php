@@ -50,6 +50,16 @@ class SalereportempController extends Controller
         ]);
     }
 
+    public function actionEmpcomnew(){
+        $view_com_date = \Yii::$app->request->post('com_date');
+        $view_emp_id = \Yii::$app->request->post('emp_id');
+        $searchModel = new SalereportbyempSearch();
+        return $this->render('_newcom', [
+            'view_com_date' => $view_com_date,
+            'view_emp_id' => $view_emp_id
+        ]);
+    }
+
     public function actionExport()
     {
         $type = 'xsl';

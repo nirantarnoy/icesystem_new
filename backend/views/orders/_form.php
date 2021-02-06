@@ -57,6 +57,7 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-lg-3">
+            <?php $model->order_total_amt_text = number_format($model->order_total_amt); ?>
             <?= $form->field($model, 'order_total_amt_text')->textInput(['readonly' => 'readonly', 'id' => 'order-total-amt-text'])->label('ยอดขาย') ?>
         </div>
         <div class="col-lg-3">
@@ -161,6 +162,65 @@ use yii\widgets\ActiveForm;
                                     <th>เงื่อนไข</th>
                                     <th>ยอดชำระ</th>
                                     <th>คงค้าง</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-success btn-paymet-submit" data-dismiss="modalx"><i
+                                class="fa fa-check"></i> ตกลง
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                                class="fa fa-close text-danger"></i> ปิดหน้าต่าง
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="editpaymentModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-xl">
+        <!-- Modal content-->
+        <form id="form-edit-payment" action="<?= \yii\helpers\Url::to(['orders/updatepayment'], true) ?>" method="post">
+            <input type="hidden" class="payment-order-update-id" name="payment_order_id" value="">
+            <input type="hidden" class="payment-remove-list" name="payment_remove_list" value="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row" style="width: 100%">
+                        <div class="col-lg-11">
+                            <h2 style="color: #255985"><i class="fa fa-coins"></i> ประวัติการชำระเงิน</h2>
+                        </div>
+                        <div class="col-lg-1">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h3>เลขที่ใบขาย <span class="text-order-no"
+                                                  style="color: #e0a800"><?= $model->order_no; ?></span></h3>
+                        </div>
+                        <div class="col-lg-6" style="border-left: 1px dashed gray">
+                            <h3>ลูกค้า <span class="text-customer-info"
+                                             style="color: #e0a800"></span></h3>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table class="table table-striped table-bordered table-payment-trans-list" width="100%">
+                                <thead>
+                                <tr>
+                                    <th style="text-align: center">วันที่</th>
+                                    <th style="text-align: center">วิธีชำระเงิน</th>
+                                    <th style="text-align: center">เงื่อนไขชำระเงิน</th>
+                                    <th style="text-align: center;width: 15%">จำนวนเงิน</th>
                                     <th style="text-align: center">-</th>
                                 </tr>
                                 </thead>
@@ -170,10 +230,9 @@ use yii\widgets\ActiveForm;
                             </table>
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-outline-success btn-paymet-submit" data-dismiss="modalx"><i
+                    <button type="submit" class="btn btn-outline-success btn-update-paymet-submit" data-dismiss="modalx"><i
                                 class="fa fa-check"></i> ตกลง
                     </button>
                     <button type="button" class="btn btn-default" data-dismiss="modal"><i
@@ -194,16 +253,18 @@ $url_to_get_car_emp = \yii\helpers\Url::to(['orders/findcarempdaily'], true);
 $url_to_get_term_item = \yii\helpers\Url::to(['orders/find-term-data'], true);
 $url_to_get_payment_list = \yii\helpers\Url::to(['orders/find-payment-list'], true);
 $url_to_get_condition = \yii\helpers\Url::to(['orders/getpaycondition'], true);
+$url_to_get_payment_trans = \yii\helpers\Url::to(['orders/getpaytrans'], true);
 $js = <<<JS
   var removelist = [];
   var selecteditem = [];
   var checkeditem = [];
   var current_row = 0;
+  var payment_remove_list = [];
   $(function(){
      $("#order-date").datepicker({
        'format':'dd/mm/yyyy'
      });
-
+     
      $(".line_qty,.line_price").on("keypress", function (event) {
             $(this).val($(this).val().replace(/[^0-9\.]/g, ""));
             if ((event.which != 46 || $(this).val().indexOf(".") != -1) && (event.which < 48 || event.which > 57)) {
@@ -216,12 +277,12 @@ $js = <<<JS
          var ids = $(".page-status").attr("data-var");
          order_update_data(ids);
      }
-     cal_all();
+    // cal_all();
      
      $(".btn-payment").click(function(){
           var ids = $(".current_id").val();
           var price_group = $(".current-price-group").val();
-          alert(checkeditem.length);
+          alert(price_group);
           if(checkeditem.length > 0 && ids >0){
               $.ajax({
               'type':'post',
@@ -244,8 +305,19 @@ $js = <<<JS
         } 
      });
      
+     checktabs();
+     
   });
-
+  
+  function checktabs(){
+      $("a.cur-tab").each(function(){
+         if($(this).hasClass('active')){
+             $(this).trigger('click');
+         } 
+         
+     });
+  }
+  
  function getCondition(e){
      var ids = e.val();
      if(ids){
@@ -332,7 +404,7 @@ $js = <<<JS
          e.parent().parent().remove();
      }
      $(".remove-list").val(removelist);
-     cal_all();
+     cal_all2();
  }
 
  function order_update_data(ids) {
@@ -349,11 +421,14 @@ $js = <<<JS
               }
          });
      }
-     cal_all();
+     cal_all2();
  }
 
  function line_qty_cal(e){
       var row = e.parent().parent();
+      
+      //var table_id = e.parent().parent().parent().parent();
+     // alert(table_id.attr('id'));
      // var line_price = e.attr('data-var');
       var line_total = 0;
       var line_sale_price_total = 0;
@@ -380,10 +455,24 @@ $js = <<<JS
       e.closest("tr").find(".line-total-price").val(line_sale_price_total);
       e.closest("tr").find(".line-total-price-cal").val(line_sale_price_total);
 
-      cal_all();
+      cal_all2();
+ }
+ 
+ function cal_all2() {
+       var totalall = 0;
+       $("table tbody > tr").each(function () {
+           var linetotal = $(this).closest("tr").find(".line-total-price-cal").val();
+           if (linetotal == '' || isNaN(linetotal)) {
+               linetotal = 0;
+           }
+           totalall = parseFloat(totalall) + parseFloat(linetotal);
+       });
+       
+       $("#order-total-amt").val(parseFloat(totalall).toFixed(0));
+       $("#order-total-amt-text").val(addCommas(parseFloat(totalall).toFixed(0)));
  }
 
-   function cal_all() {
+ function cal_all() {
        var totalall = 0;
        $("#table-sale-list tr").each(function () {
            var linetotal = $(this).closest("tr").find(".line-total-price-cal").val();
@@ -433,7 +522,7 @@ $js = <<<JS
         var cnt = 0;
         var cnt_selected = 0;
         var cur_id = e.attr('data-var');
-       // alert(table_id);
+       //alert(table_id);
         if(typeof(table_id) != 'undefined'){
                var all_checkbox = $("#"+table_id+ " tbody input[type=checkbox]").length;
                var cnt_selected = $("#"+table_id+" tbody input:checked").length;
@@ -530,6 +619,42 @@ $js = <<<JS
         
     }
  
+function showeditpayment(e){
+      var order_id = e.attr('data-id');
+      var customer_id = e.attr('data-var');
+      if(order_id > 0 && customer_id > 0){
+          
+              $.ajax({
+              'type':'post',
+              'dataType': 'json',
+              'async': false,
+              'url': "$url_to_get_payment_trans",
+              'data': {'order_id': order_id, 'customer_id': customer_id},
+              'success': function(data) {
+                  //  alert(data);
+                  if(data.length > 0){
+                       $(".payment-order-update-id").val(order_id);
+                       $(".text-customer-info").html(data[0]['customer_name']);
+                       $(".table-payment-trans-list tbody").html(data[0]['data']);
+                       $("#editpaymentModal").modal('show');
+                  }
+                  
+                 }
+              });
+              
+      }
+}
+function removepayline(e){
+      var ids = e.attr('data-id');
+      if(ids > 0){
+          if(confirm("ต้องการลบรายการนี้ใช่หรือไม่")){
+              e.parent().parent().remove();
+              payment_remove_list.push(ids);
+              alert(ids);
+          }
+      }
+     $(".payment-remove-list").val(payment_remove_list);
+}
 function addCommas(nStr) {
         nStr += '';
         var x = nStr.split('.');

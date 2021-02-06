@@ -2,9 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-
-/* @var $this yii\web\View */
-/* @var $model backend\models\Customer */
+use yii\grid\GridView;
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'ลูกค้า'), 'url' => ['index']];
@@ -63,7 +61,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'location_info',
                     'active_date',
                     'logo',
-                    'shop_photo',
+                    [
+                        'attribute' => 'shop_photo',
+                        'format' => 'raw',
+                        'value' => function ($data) {
+                            return '<img src="../web/uploads/images/customer/' . $data->shop_photo . '" width="20%" />';
+                        }
+                    ],
                     [
                         'attribute' => 'status',
                         'format' => 'raw',
@@ -85,25 +89,101 @@ $this->params['breadcrumbs'][] = $this->title;
             ]) ?>
         </div>
     </div>
-    <br />
+    <br/>
     <div class="row">
         <div class="col-lg-12">
             <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" id="custom-tabs-sale" data-toggle="pill"
-                       href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home"
+                       href="#sale-history" role="tab" aria-controls="custom-tabs-one-home"
                        aria-selected="true" data-var="" onclick="updatetab($(this))">
                         ประวัติการขาย
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-history" data-toggle="pill"
-                       href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home"
+                       href="#payment-history" role="tab" aria-controls="custom-tabs-one-home"
                        aria-selected="true" data-var="" onclick="updatetab($(this))">
                         ประวัติการชำระเงิน
                     </a>
                 </li>
             </ul>
+            <div class="tab-content" id="custom-tabs-one-tabContent">
+                <div class="tab-pane fade show active" id="sale-history" role="tabpanel"
+                     aria-labelledby="custom-tabs-one-home-tab">
+                    <br/>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <?php
+                            echo GridView::widget([
+                                'dataProvider' => $dataProvider,
+                                //'filterModel' => $searchModel,
+                                'emptyCell' => '-',
+                                'layout' => "{items}\n{summary}\n<div class='text-center'>{pager}</div>",
+                                'summary' => "แสดง {begin} - {end} ของทั้งหมด {totalCount} รายการ",
+                                'showOnEmpty' => false,
+                                //    'bordered' => true,
+                                //     'striped' => false,
+                                //    'hover' => true,
+                                'id' => 'product-grid',
+                                //'tableOptions' => ['class' => 'table table-hover'],
+                                'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b> <span> เพิ่มรายการโดยการคลิกที่ปุ่ม </span><span class="text-success">"สร้างใหม่"</span></div>',
+                                'columns' => [
+                                    [
+                                        'class' => 'yii\grid\SerialColumn',
+                                        'headerOptions' => ['style' => 'text-align:center;'],
+                                        'contentOptions' => ['style' => 'text-align: center'],
+                                    ],
+                                    'order_no',
+                                    'order_date',
+                                    'status',]
+                            ]);
+                            ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade show" id="payment-history" role="tabpanel"
+                     aria-labelledby="custom-tabs-one-home-tab">
+                    <br/>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <?php
+                            echo GridView::widget([
+                                'dataProvider' => $dataProvider2,
+                                //'filterModel' => $searchModel,
+                                'emptyCell' => '-',
+                                'layout' => "{items}\n{summary}\n<div class='text-center'>{pager}</div>",
+                                'summary' => "แสดง {begin} - {end} ของทั้งหมด {totalCount} รายการ",
+                                'showOnEmpty' => false,
+                                //    'bordered' => true,
+                                //     'striped' => false,
+                                //    'hover' => true,
+                                'id' => 'product-grid',
+                                //'tableOptions' => ['class' => 'table table-hover'],
+                                'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b> <span> เพิ่มรายการโดยการคลิกที่ปุ่ม </span><span class="text-success">"สร้างใหม่"</span></div>',
+                                'columns' => [
+                                    [
+                                        'class' => 'yii\grid\SerialColumn',
+                                        'headerOptions' => ['style' => 'text-align:center;'],
+                                        'contentOptions' => ['style' => 'text-align: center'],
+                                    ],
+                                    'order_no',
+                                    'payment_date',
+                                    [
+                                        'attribute' => 'payment_method_id',
+                                        'value' => function ($data) {
+                                            return \backend\models\Paymentmethod::findName($data->payment_method_id);
+                                        }
+                                    ],
+                                    'payment_amount',
+//                                    'status',
+                                ]
+                            ]);
+                            ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
