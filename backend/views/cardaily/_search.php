@@ -44,7 +44,7 @@ use yii\widgets\ActiveForm;
 
             ]
         ])->label(false) ?>
-        <button type="submit" class="btn btn-primary" style="margin-left: 5px;"><i class='fa fa-search'></i> ค้นหา
+        <button type="submit" class="btn btn-primary btn-search" style="margin-left: 5px;"><i class='fa fa-search'></i> ค้นหา
         </button>
 
 

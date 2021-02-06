@@ -134,7 +134,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'headerOptions' => ['style' => 'text-align:center;'],
                                         'contentOptions' => ['style' => 'text-align: center'],
                                     ],
-                                    'order_no',
+                                    [
+                                        'attribute' => 'order_no',
+                                        'format' => 'html',
+                                        'value'=>function($data){
+                                            return '<a href="'.\yii\helpers\Url::to(['orders/update','id'=>$data->id],true).'">'.$data->order_no.'</a>';
+                                        }
+                                    ],
                                     'order_date',
                                     'status',]
                             ]);
@@ -167,7 +173,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'headerOptions' => ['style' => 'text-align:center;'],
                                         'contentOptions' => ['style' => 'text-align: center'],
                                     ],
-                                    'order_no',
+                                    [
+                                            'attribute' => 'order_no',
+                                        'format' => 'html',
+                                        'value'=>function($data){
+                                           return '<a href="'.\yii\helpers\Url::to(['orders/update','id'=>$data->order_id],true).'">'.$data->order_no.'</a>';
+                                        }
+                                    ],
                                     'payment_date',
                                     [
                                         'attribute' => 'payment_method_id',

@@ -333,6 +333,7 @@ $js=<<<JS
   var removelist = [];
   var selecteditem = [];
   $(function(){
+     // $(".btn-search").trigger('click');
       $(".btn-search-submit").click(function (){
          var txt = $(".search-item").val();
          $.ajax({
