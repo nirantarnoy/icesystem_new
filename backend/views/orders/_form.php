@@ -15,7 +15,8 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'order_no')->textInput(['value' => $model->isNewRecord ? $model::getLastNo() : $model->order_no, 'readonly' => 'readonly']) ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'order_date')->textInput(['value' => date('d/m/Y'), 'id' => 'order-date']) ?>
+            <?php $model->order_date = $model->isNewRecord?date('d/m/Y'): date('d/m/Y', strtotime($model->order_date));?>
+            <?= $form->field($model, 'order_date')->textInput(['id' => 'order-date']) ?>
         </div>
         <div class="col-lg-3">
             <?php
