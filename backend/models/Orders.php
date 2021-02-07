@@ -105,7 +105,7 @@ class Orders extends \common\models\Orders
 
 
         $pre = "SO";
-        if($model){
+        if($model != null){
 //            $prefix = $pre.substr(date("Y"),2,2);
 //            $cnum = substr((string)$model,4,strlen($model));
 //            $len = strlen($cnum);
@@ -123,7 +123,7 @@ class Orders extends \common\models\Orders
             return $prefix;
         }else{
             $prefix =$pre.'-'.substr(date("Y"),2,2).date('m').date('d').'-';
-            return $prefix.'0001';
+            return $prefix.'0001x';
         }
     }
 
