@@ -282,7 +282,7 @@ $js = <<<JS
      $(".btn-payment").click(function(){
           var ids = $(".current_id").val();
           var price_group = $(".current-price-group").val();
-          alert(price_group);
+        //  alert(price_group);
           if(checkeditem.length > 0 && ids >0){
               $.ajax({
               'type':'post',
@@ -399,7 +399,7 @@ $js = <<<JS
      //var cust_line_id = e.closest('tr').find('.line-customer-id').val();
     var recid = e.attr("data-var");
      if(recid > 0){
-         alert(recid);
+         //alert(recid);
          removelist.push(recid);
          e.parent().parent().remove();
      }
@@ -650,7 +650,7 @@ function removepayline(e){
           if(confirm("ต้องการลบรายการนี้ใช่หรือไม่")){
               e.parent().parent().remove();
               payment_remove_list.push(ids);
-              alert(ids);
+              //alert(ids);
           }
       }
      $(".payment-remove-list").val(payment_remove_list);
