@@ -985,6 +985,7 @@ class OrdersController extends Controller
                                 <td>
                                     <select name="line_payment_term_id[]" class="form-control select-condition" id="" required>
                                         <option value="">--เงื่อนไข--</option>
+                                         ' . $this->showconoption($value->customer_id) . '
                                     </select>
                                 </td>
                                 <td>
@@ -1007,6 +1008,26 @@ class OrdersController extends Controller
         $model_cus = \backend\models\Customer::findPayMethod($customer_id);
         $html = '';
         $model = \backend\models\Paymentmethod::find()->all();
+        if ($model) {
+            foreach ($model as $value) {
+                $selected = '';
+                if ($value->id == $model_cus) {
+                    $selected = 'selected';
+                }
+
+                $html .= '<option value="' . $value->id . '" ' . $selected . '>' . $value->name . '</option>';
+            }
+
+        }
+        return $html;
+    }
+
+    public function showconoption($customer_id)
+    {
+        $method_id = \backend\models\Customer::findPayMethod($customer_id);
+        $model_cus = \backend\models\Customer::findPayTerm($customer_id);
+        $html = '';
+        $model = \backend\models\Paymentterm::find()->where(['payment_method_id'=>$method_id])->all();
         if ($model) {
             foreach ($model as $value) {
                 $selected = '';
