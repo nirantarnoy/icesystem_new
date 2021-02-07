@@ -303,6 +303,12 @@
                                 <p>รายงานคอมมิชชั่น</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="index.php?r=salereportemp/empcomnew" class="nav-link salereportemp">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>รายงานคอมฯใหม่</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item has-treeview has-sub">

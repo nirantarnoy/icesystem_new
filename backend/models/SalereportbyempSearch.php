@@ -24,7 +24,7 @@ class SalereportbyempSearch extends QuerySaleSummaryByEmp2
 //            [['globalSearch'],'string']
 
 //            [['customer_id', 'order_channel_id', 'payment_method_id'], 'integer'],
-            [['emp_id'], 'safe'],
+            [['emp_id','order_channel_id'], 'safe'],
 //            [['product_id'], 'safe']
         ];
     }
@@ -64,7 +64,7 @@ class SalereportbyempSearch extends QuerySaleSummaryByEmp2
         }
 
         // grid filtering conditions
-     //   $query->andFilterWhere([
+        $query->andFilterWhere([
 //            'id' => $this->id,
 //            'status' => $this->status,
 //            'created_at' => $this->created_at,
@@ -74,9 +74,9 @@ class SalereportbyempSearch extends QuerySaleSummaryByEmp2
 //            'product_id' => $this->product_id,
 //            'order_channel_id' => $this->order_channel_id,
 //            'payment_method_id' => $this->payment_method_id,
-            // 'emp_id' => $this->emp_id
-            //'!=','route_code','NULL'
-    //    ]);
+  //           'emp_id' => $this->emp_id
+//            '!=','route_code','NULL'
+        ]);
 
 
         return $dataProvider;

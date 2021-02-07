@@ -53,10 +53,17 @@ class SalereportempController extends Controller
     public function actionEmpcomnew(){
         $view_com_date = \Yii::$app->request->post('com_date');
         $view_emp_id = \Yii::$app->request->post('emp_id');
-        $searchModel = new SalereportbyempSearch();
+        $view_route_id = \Yii::$app->request->post('route_id');
+//        $searchModel = new SalereportbyempSearch();
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+
         return $this->render('_newcom', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
             'view_com_date' => $view_com_date,
-            'view_emp_id' => $view_emp_id
+            'view_emp_id' => $view_emp_id,
+            'view_route_id'=> $view_route_id,
         ]);
     }
 
