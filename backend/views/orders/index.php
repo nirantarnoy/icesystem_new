@@ -82,10 +82,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                    'label' => 'เครดิต/เชื่อ'
+                'label' => 'เครดิต/เชื่อ',
+                'value' => function ($data) {
+                    return \backend\models\Orders::findordercredit($data->id);
+                }
             ],
             [
-                'label' => 'สด'
+                'label' => 'สด',
+                'value' => function ($data) {
+                    return \backend\models\Orders::findordercash($data->id);
+                }
             ],
             [
                 'attribute' => 'order_total_amt',

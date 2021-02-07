@@ -157,6 +157,37 @@ class Orders extends \common\models\Orders
         return $html;
     }
 
+    public function findordercash($order_id){
+        $total = 0;
+        $model = \backend\models\Orderline::find()->where(['order_id'=>$order_id])->all();
+        if($model){
+            foreach ($model as $value){
+                $cus_pay_method = \backend\models\Customer::findPayMethod($value->customer_id);
+                $paymethod_name = \backend\models\Paymentmethod::findName($cus_pay_method);
+                if($paymethod_name == 'เงินสด'){
+                    $total = $total + ($value->qty * $value->price);
+                }
+            }
+
+        }
+        return $total;
+    }
+    public function findordercredit($order_id){
+        $total = 0;
+        $model = \backend\models\Orderline::find()->where(['order_id'=>$order_id])->all();
+        if($model){
+            foreach ($model as $value){
+                $cus_pay_method = \backend\models\Customer::findPayMethod($value->customer_id);
+                $paymethod_name = \backend\models\Paymentmethod::findName($cus_pay_method);
+                if($paymethod_name == 'เงินเชื่อ' || $paymethod_name == 'เครดิต'){
+                    $total = $total + ($value->qty * $value->price);
+                }
+            }
+
+        }
+        return $total;
+    }
+
 //    public function findUnitname($id){
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';
