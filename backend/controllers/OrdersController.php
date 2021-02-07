@@ -973,7 +973,7 @@ class OrdersController extends Controller
                         $html .= '<tr>
                                 <td>' . \backend\models\Customer::findCode($value->customer_id) . '<input type="hidden" class="line-customer-id" name="line_pay_customer_id[]" value="' . $value->customer_id . '"> </td>
                                 <td>' . $value->cus_name . '</td>
-                                <td>
+                                <td style="width: 10%">
                                     <input type="text" class="form-control" readonly value="' . number_format($line_total_price) . '">
                                 </td>
                                 <td>
@@ -988,10 +988,10 @@ class OrdersController extends Controller
                                          ' . $this->showconoption($value->customer_id) . '
                                     </select>
                                 </td>
-                                <td>
+                                <td style="width: 10%">
                                     <input type="text" class="form-control" name="line_pay_amount[]" value="0" ' . $customer_success_pay . '>
                                 </td>
-                                <td>
+                                <td style="width: 10%">
                                     <input type="text" class="form-control" readonly value="' . number_format($line_remain_pay) . '">
                                 </td>
                               
