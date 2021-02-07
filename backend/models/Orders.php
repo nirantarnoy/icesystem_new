@@ -48,7 +48,7 @@ class Orders extends \common\models\Orders
     }
     public static function getLastNo(){
      //   $model = Orders::find()->MAX('order_no');
-        $model = Orders::find()->where(['order_date'=>date('Y-m-d')])->MAX('order_no');
+        $model = Orders::find()->where(['date(order_date)'=>date('Y-m-d')])->MAX('order_no');
 
 //        $model_seq = \backend\models\Sequence::find()->where(['module_id'=>4])->one();
 //        //$pre = \backend\models\Sequence::find()->where(['module_id'=>15])->one();
