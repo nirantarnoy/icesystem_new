@@ -111,7 +111,7 @@ class Orders extends \common\models\Orders
 //            $len = strlen($cnum);
 //            $clen = strlen($cnum + 1);
 //            $loop = $len - $clen;
-            $prefix =$pre.'-'.substr(date("Y"),2,2).date('m').date('d').'-';
+            $prefix =$pre.'-'.substr(date("Y"),2,2).date('m',strtotime($date)).date('d',strtotime($date)).'-';
             $cnum = substr((string)$model, 10, strlen($model));
             $len = strlen($cnum);
             $clen = strlen($cnum + 1);
@@ -122,7 +122,7 @@ class Orders extends \common\models\Orders
             $prefix.=$cnum + 1;
             return $prefix;
         }else{
-            $prefix =$pre.'-'.substr(date("Y"),2,2).date('m').date('d').'-';
+            $prefix =$pre.'-'.substr(date("Y"),2,2).date('m',strtotime($date)).date('d',strtotime($date)).'-';
             return $prefix.'0001';
         }
     }
