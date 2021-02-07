@@ -46,9 +46,9 @@ class Orders extends \common\models\Orders
             ],
         ];
     }
-    public static function getLastNo(){
+    public static function getLastNo($date){
      //   $model = Orders::find()->MAX('order_no');
-        $model = Orders::find()->where(['date(order_date)'=>date('Y-m-d')])->MAX('order_no');
+        $model = Orders::find()->where(['date(order_date)'=>date('Y-m-d',strtotime($date))])->MAX('order_no');
 
 //        $model_seq = \backend\models\Sequence::find()->where(['module_id'=>4])->one();
 //        //$pre = \backend\models\Sequence::find()->where(['module_id'=>15])->one();
@@ -123,7 +123,7 @@ class Orders extends \common\models\Orders
             return $prefix;
         }else{
             $prefix =$pre.'-'.substr(date("Y"),2,2).date('m').date('d').'-';
-            return $prefix.'0001x';
+            return $prefix.'0001';
         }
     }
 
