@@ -8,10 +8,6 @@ use kartik\select2\Select2;
 use toxor88\switchery\Switchery;
 use kartik\checkbox\CheckboxX;
 
-
-/* @var $this yii\web\View */
-/* @var $model backend\models\Sequence */
-/* @var $form yii\widgets\ActiveForm */
 ?>
     <div class="panel panel-headlin">
         <div class="panel-heading">
@@ -187,7 +183,7 @@ $this->registerJs('
             }
             if($("#use_day").val()==1){
                var dt = new Date().getDate();
-               isday = dt;
+               isday = dt < 10?"0"+dt:dt;
             }else{
                isday = "";
             }

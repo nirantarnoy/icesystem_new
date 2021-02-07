@@ -48,23 +48,77 @@ class Orders extends \common\models\Orders
     }
     public static function getLastNo(){
         $model = Orders::find()->MAX('order_no');
+
+        $model_seq = \backend\models\Sequence::find()->where(['module_id'=>4])->one();
         //$pre = \backend\models\Sequence::find()->where(['module_id'=>15])->one();
-        $pre = "SO";
-        if($model){
-            $prefix = $pre.substr(date("Y"),2,2);
-            $cnum = substr((string)$model,4,strlen($model));
-            $len = strlen($cnum);
-            $clen = strlen($cnum + 1);
-            $loop = $len - $clen;
-            for($i=1;$i<=$loop;$i++){
-                $prefix.="0";
+        $pre = '';
+        $prefix = '';
+        if($model_seq){
+            $pre =$model_seq->prefix;
+            if($model){
+                if($model_seq->use_year){
+                    $prefix = $pre.substr(date("Y"),2,2);
+                }
+                if($model_seq->use_month){
+                    $m = date('m');
+                    //if($m < 10){$m="0".$m;}
+                    $prefix = $prefix.$m;
+                }
+                if($model_seq->use_day){
+                    $d = date('d');
+                    //if($d < 10){$d="0".$d;}
+                    $prefix = $prefix.$d;
+                }
+
+                $seq_len = strlen($prefix);
+                $cnum = substr((string)$model,$seq_len,strlen($model));
+                $len = strlen($cnum);
+                $clen = strlen($cnum + 1);
+                $loop = $len - $clen;
+                for($i=1;$i<=$loop;$i++){
+                    $prefix.="0";
+                }
+                $prefix.=$cnum + 1;
+                return $prefix;
+            }else{
+                if($model_seq->use_year){
+                    $prefix = $pre.substr(date("Y"),2,2);
+                }
+                if($model_seq->use_month){
+                    $m = date('m');
+                   // if($m < 10){$m="0".$m;}
+                    $prefix = $prefix.$m;
+                }
+                if($model_seq->use_day){
+                    $d = date('d');
+                  ///  if($d < 10){$d="0".$d;}
+                    $prefix = $prefix.$d;
+                }
+                $seq_len = strlen($model_seq->maximum);
+                for($l=1;$l<=$seq_len-1;$l++){
+                    $prefix.="0";
+                }
+                return $prefix.'1';
             }
-            $prefix.=$cnum + 1;
-            return $prefix;
-        }else{
-            $prefix =$pre.substr(date("Y"),2,2);
-            return $prefix.'000001';
         }
+
+
+//        $pre = "SO";
+//        if($model){
+//            $prefix = $pre.substr(date("Y"),2,2);
+//            $cnum = substr((string)$model,4,strlen($model));
+//            $len = strlen($cnum);
+//            $clen = strlen($cnum + 1);
+//            $loop = $len - $clen;
+//            for($i=1;$i<=$loop;$i++){
+//                $prefix.="0";
+//            }
+//            $prefix.=$cnum + 1;
+//            return $prefix;
+//        }else{
+//            $prefix =$pre.substr(date("Y"),2,2);
+//            return $prefix.'000001';
+//        }
     }
 
     public function findOrderemp($id){
