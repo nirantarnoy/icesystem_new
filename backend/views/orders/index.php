@@ -83,12 +83,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'label' => 'เครดิต/เชื่อ',
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
                     return \backend\models\Orders::findordercredit($data->id);
                 }
             ],
             [
                 'label' => 'สด',
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
                     return \backend\models\Orders::findordercash($data->id);
                 }
