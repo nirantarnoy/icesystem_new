@@ -127,7 +127,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 //    'hover' => true,
                                 'id' => 'product-grid',
                                 //'tableOptions' => ['class' => 'table table-hover'],
-                                'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b> <span> เพิ่มรายการโดยการคลิกที่ปุ่ม </span><span class="text-success">"สร้างใหม่"</span></div>',
+                                'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b></div>',
                                 'columns' => [
                                     [
                                         'class' => 'yii\grid\SerialColumn',
@@ -166,7 +166,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 //    'hover' => true,
                                 'id' => 'product-grid',
                                 //'tableOptions' => ['class' => 'table table-hover'],
-                                'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b> <span> เพิ่มรายการโดยการคลิกที่ปุ่ม </span><span class="text-success">"สร้างใหม่"</span></div>',
+                                'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b></div>',
                                 'columns' => [
                                     [
                                         'class' => 'yii\grid\SerialColumn',
