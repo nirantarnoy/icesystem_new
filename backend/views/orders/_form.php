@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
     <input type="hidden" class="remove-list" name="removelist" value="">
     <div class="row">
         <div class="col-lg-3">
-            <?= $form->field($model, 'order_no')->textInput(['value' => $model->isNewRecord ? $model::getLastNo() : $model->order_no, 'readonly' => 'readonly']) ?>
+            <?= $form->field($model, 'order_no')->textInput(['value' => $model->isNewRecord ? 'Draft': $model->order_no, 'readonly' => 'readonly']) ?>
         </div>
         <div class="col-lg-3">
             <?php $model->order_date = $model->isNewRecord?date('d/m/Y'): date('d/m/Y', strtotime($model->order_date));?>
@@ -119,9 +119,10 @@ use yii\widgets\ActiveForm;
                         <div class="col-lg-6">
                             <div class="label">วันที่</div>
                             <?php
+                           // $order_date = date('d/m/Y',strtotime($model->order_date));
                             echo \kartik\date\DatePicker::widget([
                                 'name' => 'payment_date',
-                                'value' => date('d/m/Y'),
+                                'value' => $model->order_date,
                                 'options' => [
                                     // 'readonly' => true,
                                 ],

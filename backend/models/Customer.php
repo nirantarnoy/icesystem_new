@@ -55,6 +55,10 @@ class Customer extends \common\models\Customer
         $model = Customer::find()->where(['id'=>$id])->one();
         return $model!=null?$model->name:'';
     }
+    public function findPayMethod($id){
+        $model = Customer::find()->where(['id'=>$id])->one();
+        return $model!=null?$model->payment_method_id:0;
+    }
 //    public function findName($id){
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';

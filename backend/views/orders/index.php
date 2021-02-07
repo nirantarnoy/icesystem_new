@@ -81,7 +81,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     return \backend\models\Car::findName($data->car_ref_id);
                 }
             ],
-
+            [
+                    'label' => 'เครดิต/เชื่อ'
+            ],
+            [
+                'label' => 'สด'
+            ],
             [
                 'attribute' => 'order_total_amt',
                 'headerOptions' => ['style' => 'text-align: right'],

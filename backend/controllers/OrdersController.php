@@ -74,6 +74,7 @@ class OrdersController extends Controller
             if (count($x_date) > 1) {
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
+            $model->order_no = $model::getLastNo();
             $model->order_date = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
             $model->sale_channel_id = 1;
@@ -978,7 +979,7 @@ class OrdersController extends Controller
                                 <td>
                                     <select name="line_payment_id[]" class="form-control" id="" onchange="getCondition($(this))" required>
                                         <option value="">--วิธีชำระเงิน--</option>
-                                        ' . $this->showpayoption() . '
+                                        ' . $this->showpayoption($value->customer_id) . '
                                     </select>
                                 </td>
                                 <td>
@@ -1001,14 +1002,15 @@ class OrdersController extends Controller
         return $html;
     }
 
-    public function showpayoption()
+    public function showpayoption($customer_id)
     {
+        $model_cus = \backend\models\Customer::findPayMethod($customer_id);
         $html = '';
         $model = \backend\models\Paymentmethod::find()->all();
         if ($model) {
             foreach ($model as $value) {
                 $selected = '';
-                if ($value->name == 'เงินสด') {
+                if ($value->id == $model_cus) {
                     $selected = 'selected';
                 }
 
@@ -1085,8 +1087,9 @@ class OrdersController extends Controller
             if ($model->save()) {
                 if (count($customer_id) > 0) {
                     for ($i = 0; $i <= count($customer_id) - 1; $i++) {
-                        if ($customer_id[$i] == '' || $customer_id[$i] == null || $pay_amount[$i] == null || $pay_amount[$i] == 0) continue;
-
+                        if ($customer_id[$i] == '' || $customer_id[$i] == null) continue;
+                        $pay_method_name = \backend\models\Paymentmethod::findName($pay_method[$i]);
+                        if($pay_method_name == 'เงินสด' && ($pay_amount[$i] == null || $pay_amount[$i] == 0))continue;
                         $model_line = new \backend\models\Paymenttransline();
                         $model_line->trans_id = $model->id;
                         $model_line->customer_id = $customer_id[$i];
