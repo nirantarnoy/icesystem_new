@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\Car;
 use backend\models\WarehouseSearch;
 use Yii;
 use backend\models\Employee;
@@ -9,6 +10,7 @@ use backend\models\EmployeeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * EmployeeController implements the CRUD actions for Employee model.
@@ -72,6 +74,12 @@ class EmployeeController extends Controller
         $model = new Employee();
 
         if ($model->load(Yii::$app->request->post())) {
+            $photo = UploadedFile::getInstance($model, 'photo');
+            if (!empty($photo)) {
+                $photo_name = time() . "." . $photo->getExtension();
+                $photo->saveAs(Yii::getAlias('@backend') . '/web/uploads/images/employee/' . $photo_name);
+                $model->photo = $photo_name;
+            }
             if($model->save()){
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
@@ -96,6 +104,12 @@ class EmployeeController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
+            $photo = UploadedFile::getInstance($model, 'photo');
+            if (!empty($photo)) {
+                $photo_name = time() . "." . $photo->getExtension();
+                $photo->saveAs(Yii::getAlias('@backend') . '/web/uploads/images/employee/' . $photo_name);
+                $model->photo = $photo_name;
+            }
             if($model->save()){
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
@@ -137,5 +151,30 @@ class EmployeeController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+    public function actionDeletephoto()
+    {
+        $id = \Yii::$app->request->post('delete_id');
+        if ($id) {
+            $photo = $this->getPhotoName($id);
+            if ($photo != '') {
+                if (unlink('../web/uploads/images/employee/' . $photo)) {
+                    Employee::updateAll(['photo' => ''], ['id' => $id]);
+                }
+            }
+
+        }
+        return $this->redirect(['employee/update', 'id' => $id]);
+    }
+    public function getPhotoName($id)
+    {
+        $photo_name = '';
+        if ($id) {
+            $model = Employee::find()->where(['id' => $id])->one();
+            if ($model) {
+                $photo_name = $model->photo;
+            }
+        }
+        return $photo_name;
     }
 }
