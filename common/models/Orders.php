@@ -68,7 +68,7 @@ class Orders extends \yii\db\ActiveRecord
             'customer_id' => Yii::t('app', 'ลูกค้า'),
             'customer_type' => Yii::t('app', 'ประเภทลูกค้า'),
             'customer_name' => Yii::t('app', 'ชื่อลูกค้า'),
-            'order_date' => Yii::t('app', 'วันที่สั่งซื้อ'),
+            'order_date' => Yii::t('app', 'วันที่ขาย'),
             'vat_amt' => Yii::t('app', 'Vat Amt'),
             'vat_per' => Yii::t('app', 'Vat Per'),
             'order_total_amt' => Yii::t('app', 'ยอดรวม'),
