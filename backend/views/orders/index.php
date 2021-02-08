@@ -6,7 +6,7 @@ use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\bootstrap4\LinkPager;
 
-$this->title = Yii::t('app', 'คำสั่งซื้อ');
+$this->title = Yii::t('app', 'ใบสั่งขาย');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="orders-index">
