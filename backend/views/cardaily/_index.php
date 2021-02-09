@@ -1,4 +1,5 @@
 <?php
+
 use kartik\date\DatePicker;
 
 $this->title = 'จัดการข้อมูลรถประจำวัน';
@@ -21,7 +22,8 @@ $model_new = $model_car;
     </div>
     <div class="col-lg-3" style="text-align: right">
         <div class="btn btn-info" onclick="showcopy($(this))"><i class="fa fa-copy"></i> Copy ข้อมูล</div>
-                <div class="btn btn-warning" onclick="showgetdefault($(this))"><i class="fa fa-users-cog"></i> ดึงค่าเริ่มต้น</div>
+        <div class="btn btn-warning" onclick="showgetdefault($(this))"><i class="fa fa-users-cog"></i> ดึงค่าเริ่มต้น
+        </div>
     </div>
 </div>
 <br/>
@@ -41,14 +43,14 @@ $model_new = $model_car;
             $stream_assign_date = '';
             //if ($i <= 10) $status_color = 'bg-success';
             // if (\backend\models\Streamer::getStatus($value->NAME)) $status_color = 'Open';
-        //    print_r($model);
+            //    print_r($model);
             foreach ($model as $value2) {
 
                 if ($value2->car_id == $value->id) {
                     $status_color = 'bg-success';
                 }
             }
-          //  return;
+            //  return;
             ?>
             <div class="col-lg-2 col-3">
                 <!-- small box -->
@@ -61,7 +63,8 @@ $model_new = $model_car;
                         <i class="fas fa-truck"></i>
                         <!--                       <img src="../web/uploads/images/streamer/streamer.jpg" width="50%" alt="">-->
                     </div>
-                    <a href="#" data-id="<?=$value->id?>" data-var="<?=$value->emp_qty?>" onclick="showcarinfo($(this))" class="small-box-footer"><i
+                    <a href="#" data-id="<?= $value->id ?>" data-var="<?= $value->emp_qty ?>"
+                       onclick="showcarinfo($(this))" class="small-box-footer"><i
                                 class="fas fa-users"></i> จัดการข้อมูล </a>
                 </div>
             </div>
@@ -106,23 +109,29 @@ $model_new = $model_car;
                                 </tr>
                                 </thead>
                                 <tbody>
-                                   <tr>
-                                       <td style="text-align: center"></td>
-                                       <td>
-                                           <input type="text" class="form-control line-car-emp-code" name="line_car_emp_code[]" value="" readonly>
-                                       </td>
-                                       <td>
-                                           <input type="text" class="form-control line-car-emp-name" name="line_car_emp_name[]" value="" readonly>
-                                       </td>
-                                       <td>
-                                           <input type="hidden" class="line-car-emp-id" value="" name="line_car_emp_id[]">
-                                           <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i class="fa fa-trash"></i></div>
-                                       </td>
-                                   </tr>
+                                <tr>
+                                    <td style="text-align: center"></td>
+                                    <td>
+                                        <input type="text" class="form-control line-car-emp-code"
+                                               name="line_car_emp_code[]" value="" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control line-car-emp-name"
+                                               name="line_car_emp_name[]" value="" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="hidden" class="line-car-emp-id" value="" name="line_car_emp_id[]">
+                                        <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
+                                                    class="fa fa-trash"></i></div>
+                                    </td>
+                                </tr>
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <td><div class="btn btn-primary" onclick="showempdata($(this))"><i class="fa fa-plus"></i></div></td>
+                                    <td>
+                                        <div class="btn btn-primary" onclick="showempdata($(this))"><i
+                                                    class="fa fa-plus"></i></div>
+                                    </td>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -251,7 +260,7 @@ $model_new = $model_car;
                                 ]
                             ]);
                             ?>
-<!--                            <input type="text" class="form-control new-date" name="to_date" value="" autocomplete="off">-->
+                            <!--                            <input type="text" class="form-control new-date" name="to_date" value="" autocomplete="off">-->
                         </div>
                         <div class="col-lg-2">
                             <div class="btn btn-warning">วันนี้</div>
@@ -329,7 +338,7 @@ $model_new = $model_car;
 $url_to_find_item = \yii\helpers\Url::to(['orders/empdata'], true);
 $url_to_find_emp_item = \yii\helpers\Url::to(['orders/findempdata'], true);
 $url_to_delete_emp_item = \yii\helpers\Url::to(['orders/deletecaremp'], true);
-$js=<<<JS
+$js = <<<JS
   var removelist = [];
   var selecteditem = [];
   $(function(){
@@ -444,13 +453,18 @@ $js=<<<JS
         var linenum = 0;
         var line_count = 0;
         var emp_qty = $(".selected-emp-qty").val();
+        //alert(emp_qty);
         
         $("#table-list tbody tr").each(function () {
-            line_count += 1;
+            if($(this).closest('tr').find('.line-car-emp-code').val()  != ''){
+                // alert($(this).closest('tr').find('.line-car-emp-code').val());
+             line_count += 1;   
+            }
         });
+       // alert(line_count);
         if((line_count + selecteditem.length ) > emp_qty){
             alert('จำนวนพนักงานเกินกว่าที่กำหนด');
-            return;
+            return false;
         }
         
         if (selecteditem.length > 0) {
@@ -494,11 +508,14 @@ $js=<<<JS
         //  cal_num();
         }
         $("#table-list tbody tr").each(function () {
-            linenum += 1;
+             if($(this).closest('tr').find('.line-find-emp-code').val()  != ''){
+             line_count += 1;   
+            }
+           linenum += 1;
             $(this).closest("tr").find("td:eq(0)").text(linenum);
             // $(this).closest("tr").find(".line-prod-code").val(line_prod_code);
         });
-        if(linenum > emp_qty){
+        if(line_count > emp_qty){
             alert('จำนวนพนักงานเกินกว่าที่กำหนด');
             return;
         }
@@ -546,6 +563,11 @@ $js=<<<JS
         });   
           }
       }
+      var linenum = 0;
+       $("#table-list tbody tr").each(function () {
+            linenum += 1;
+        });
+       $(".selected-emp-qty").val(linenum);
   }  
   
   function showcopy(e){
@@ -559,5 +581,5 @@ $js=<<<JS
   }
     
 JS;
-$this->registerJs($js,static::POS_END);
+$this->registerJs($js, static::POS_END);
 ?>

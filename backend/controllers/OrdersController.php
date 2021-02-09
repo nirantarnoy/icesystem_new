@@ -1190,4 +1190,11 @@ class OrdersController extends Controller
 
         return $this->redirect(['orders/update','id'=>$order_id]);
     }
+
+    public function actionGetproductinorder(){
+        $order_id =\Yii::$app->request->post('order_id');
+        if($order_id){
+
+        }
+    }
 }

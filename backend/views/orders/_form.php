@@ -64,6 +64,11 @@ use yii\widgets\ActiveForm;
         <div class="col-lg-3">
             <?= $form->field($model, 'status')->textInput(['readonly' => 'readonly', 'value' => $model->isNewRecord ? 'Open' : \backend\helpers\OrderStatus::getTypeById($model->status)]) ?>
         </div>
+        <div class="col-lg-3">
+            <label class="label" style="color: white">ยืม</label>
+            <br>
+            <div class="btn btn-info btn-transfer" onclick="showtransfer($(this))">โอนย้ายสินค้า</div>
+        </div>
     </div>
     <br>
     <?php
@@ -245,6 +250,61 @@ use yii\widgets\ActiveForm;
         </form>
     </div>
 </div>
+
+<div id="transferModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-xl">
+        <!-- Modal content-->
+        <form id="form-payment" action="<?= \yii\helpers\Url::to(['orders/addpayment'], true) ?>" method="post">
+            <input type="hidden" class="payment-order-id" name="payment_order_id" value="<?= $model->id ?>">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row" style="width: 100%">
+                        <div class="col-lg-11">
+                            <h2 style="color: #255985"><i class="fa fa-truck-loading"></i> บันทึกโอนย้ายสินค้าระหว่างทาง</h2>
+                        </div>
+                        <div class="col-lg-1">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                    </div>
+
+                </div>
+                <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+                <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table class="table table-striped table-bordered table-transfer-list">
+                                <thead>
+                                <tr>
+                                    <th>รหัสสินค้า</th>
+                                    <th>ชื่อสินค้า</th>
+                                    <th>ราคาขาย</th>
+                                    <th>จำนวน</th>
+                                    <th>สายส่ง</th>
+                                    <th>จำนวน</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-success btn-paymet-submit" data-dismiss="modalx"><i
+                                class="fa fa-check"></i> ตกลง
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                                class="fa fa-close text-danger"></i> ปิดหน้าต่าง
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <?php
 $url_to_find_item = \yii\helpers\Url::to(['pricegroup/productdata'], true);
 $url_to_get_sale_item = \yii\helpers\Url::to(['orders/find-saledata'], true);
@@ -657,6 +717,12 @@ function removepayline(e){
       }
      $(".payment-remove-list").val(payment_remove_list);
 }
+
+function showtransfer(e){
+      $("#transferModal").modal('show');
+}
+
+
 function addCommas(nStr) {
         nStr += '';
         var x = nStr.split('.');

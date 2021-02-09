@@ -169,6 +169,7 @@ $date1 = date_create($f_date);
 $date2 = date_create($t_date);
 $diff = date_diff($date1, $date2);
 $cnt = $diff->format("%a");
+$max_product_list = [];
 //echo $cnt;
 //echo $diff->format("%R%a days");
 ?>
@@ -208,7 +209,8 @@ $cnt = $diff->format("%a");
                     <?php
                     if (count($prod_cnt) > 0) {
                         foreach ($prod_cnt as $val):?>
-                            <td style="text-align: center"><?= $val->prod_code ?></td>
+                            <?php array_push($max_product_list,$val->product_id);?>
+                            <td style="text-align: center;background-color: #e4606d"><?= $val->prod_code ?></td>
                         <?php endforeach;
                     } else {
                         ?>
@@ -230,7 +232,7 @@ $cnt = $diff->format("%a");
                 <!--                <td>K</td>-->
             </tr>
             <?php
-            echo findCustomer($view_route_id, $f_date, $t_date, $cnt, 0, count($prod_cnt));
+            echo findCustomer($view_route_id, $f_date, $t_date, $cnt, 0, $max_product_list);
             ?>
             </tbody>
         </table>
@@ -238,7 +240,7 @@ $cnt = $diff->format("%a");
 </div>
 
 <?php
-function findCustomer($route_id, $f_date, $t_date, $cnt, $emp_id, $header_count)
+function findCustomer($route_id, $f_date, $t_date, $cnt, $emp_id, $max_product_list)
 {
     $html = '';
     $model = \common\models\QuerySaleorderByRoute::find()->where(['between', 'order_date', $f_date, $t_date])->andFilterWhere(['rt_id' => $route_id])->all();
@@ -247,7 +249,7 @@ function findCustomer($route_id, $f_date, $t_date, $cnt, $emp_id, $header_count)
         foreach ($model as $value) {
             $i += 1;
             $html .= '<tr>';
-            $html .= '<td style="vertical-align: center">' . $i . '</td>';
+            $html .= '<td style="text-align: center">' . $i . '</td>';
             $html .= '<td>' . $value->branch_no . '</td>';
             $html .= '<td>' . $value->cus_name . '</td>';
             $html .= '<td style="text-align: center">' . $value->rt_id . '</td>';
@@ -256,18 +258,19 @@ function findCustomer($route_id, $f_date, $t_date, $cnt, $emp_id, $header_count)
                 $date1 = date_create($f_date);
                 $date2 = date_create($t_date);
                 date_add($date1, date_interval_create_from_date_string("$x days"));
-                $prod_cnt = gettopcountproduct2(date_format($date1, "Y-m-d"), date_format($date2, "Y-m-d"), $value->customer_id);
 
-                if (count($prod_cnt) > 0) {
-                    foreach ($prod_cnt as $val) {
-                        $html .= '<td style="text-align: center">' . $val->qty . '</td>';
-                    }
-                } else {
-                    $html .= '<td></td>';
-                }
-//                for ($l = 0; $l <= $header_count - 1; $l++) {
-//
-//                }
+
+                    $prod_cnt = gettopcountproduct2(date_format($date1, "Y-m-d"), date_format($date2, "Y-m-d"), $value->customer_id,$max_product_list);
+                    $html.= $prod_cnt;
+//                    if (count($prod_cnt) > 0) {
+//                        foreach ($prod_cnt as $val) {
+//                            $html .= '<td style="text-align: center">' . $val->qty . '</td>';
+//                        }
+//                    } else {
+//                        $html .= '<td></td>';continue;
+//                    }
+
+
 
             }
             $html .= '</tr>';
@@ -285,14 +288,36 @@ function gettopcountproduct($fdate, $tdate)
     return $cnt;
 }
 
-function gettopcountproduct2($fdate, $tdate, $customer_id)
+function gettopcountproduct2($fdate, $tdate, $customer_id,$product_id)
 {
-    $cnt = null;
+    $cnt = '';
+
     if ($fdate != null) {
-     //   $cnt = \common\models\QuerySaleorderByRoute::find()->select('qty')->where(['between', 'order_date', $fdate, $fdate])->andFilterWhere(['customer_id' => $customer_id])->groupBy('product_id')->all();
-        $cnt = \common\models\QuerySaleorderByRoute::find()->select('qty')->where(['between', 'order_date', $fdate, $fdate])->groupBy('product_id')->all();
+        $has_order = \common\models\QuerySaleorderByRoute::find()->where(['between', 'order_date', $fdate, $fdate])->andFilterWhere(['customer_id' => $customer_id])->groupBy('product_id')->sum('qty');
+        if($has_order >0){
+            for($i=0;$i<=count($product_id)-1;$i++) {
+                $model = \common\models\QuerySaleorderByRoute::find()->select('qty')->where(['between', 'order_date', $fdate, $fdate])->andFilterWhere(['customer_id' => $customer_id, 'product_id' => $product_id[$i]])->groupBy('product_id')->one();
+                if($model){
+                    $cnt.='<td style="text-align: center">'.$model->qty.'</td>';
+                }else{
+                    $cnt.='<td style="text-align: center">0</td>';
+                }
+            }
+        }else{
+            $cnt.='<td style="text-align: center">0</td>';
+        }
+
     }
     return $cnt;
 }
+//function gettopcountproduct2($fdate, $tdate, $customer_id,$product_id)
+//{
+//    $cnt = null;
+//    if ($fdate != null) {
+//        $cnt = \common\models\QuerySaleorderByRoute::find()->select('qty')->where(['between', 'order_date', $fdate, $fdate])->andFilterWhere(['customer_id' => $customer_id,'product_id'=>$product_id])->groupBy('product_id')->all();
+////        $cnt = \common\models\QuerySaleorderByRoute::find()->select('qty')->where(['between', 'order_date', $fdate, $fdate])->groupBy('product_id')->all();
+//    }
+//    return $cnt;
+//}
 
 ?>
