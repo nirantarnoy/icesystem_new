@@ -488,6 +488,7 @@ $js = <<<JS
 
  function line_qty_cal(e){
       var row = e.parent().parent();
+      var line_price = e.attr('data-var');
       
       //var table_id = e.parent().parent().parent().parent();
      // alert(table_id.attr('id'));
@@ -496,7 +497,8 @@ $js = <<<JS
       var line_sale_price_total = 0;
       row.find(':input[type=number]').each(function(){
          var qty = parseFloat($(this).val());
-         var price = $(this).attr('data-var');
+       //  var price = $(this).attr('data-var');
+         var price = line_price;
          alert(price);
          var xqty = 0;
         // alert(qty);
