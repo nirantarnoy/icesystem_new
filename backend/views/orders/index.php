@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
-                    return \backend\models\Orders::findordercredit($data->id);
+                    return number_format(\backend\models\Orders::findordercredit($data->id));
                 }
             ],
             [
@@ -94,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
-                    return \backend\models\Orders::findordercash($data->id);
+                    return number_format(\backend\models\Orders::findordercash($data->id));
                 }
             ],
             [

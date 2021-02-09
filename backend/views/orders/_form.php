@@ -497,6 +497,7 @@ $js = <<<JS
       row.find(':input[type=number]').each(function(){
          var qty = parseFloat($(this).val());
          var price = $(this).attr('data-var');
+         alert(price);
          var xqty = 0;
         // alert(qty);
          if(!isNaN(qty)){
