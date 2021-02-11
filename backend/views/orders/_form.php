@@ -489,22 +489,23 @@ $js = <<<JS
  function line_qty_cal(e){
       var row = e.parent().parent();
       var line_price = e.attr('data-var');
-      alert(line_price);
-      //var table_id = e.parent().parent().parent().parent();
-     // alert(table_id.attr('id'));
-     // var line_price = e.attr('data-var');
+      
+      //alert(line_price);
+    
       var line_total = 0;
       var line_sale_price_total = 0;
       row.find(':input[type=number]').each(function(){
          var qty = parseFloat($(this).val());
-       //  var price = $(this).attr('data-var');
-         var price = line_price;
+        var price = $(this).attr('data-var');
+       //  var price = line_price;
          
          var xqty = 0;
         // alert(qty);
          if(!isNaN(qty)){
              xqty = qty;
          }
+         // alert(xqty);
+         // alert(price);
          line_total = parseFloat(line_total) + xqty;
          line_sale_price_total = parseFloat(line_sale_price_total) + (xqty * price);
       });

@@ -387,10 +387,7 @@ $js = <<<JS
                  $("#empModal").modal('show');
                  }
         });
-          
-         
       }
-     
   }
   
   function showempdata(e){
@@ -461,9 +458,10 @@ $js = <<<JS
              line_count += 1;   
             }
         });
-       // alert(line_count);
+      // alert(selecteditem.length + line_count);
+      // alert(emp_qty);
         if((line_count + selecteditem.length ) > emp_qty){
-            alert('จำนวนพนักงานเกินกว่าที่กำหนด');
+            alert('จำนวนพนักงานเกินกว่าที่กำหนดcc');
             return false;
         }
         
@@ -508,18 +506,12 @@ $js = <<<JS
         //  cal_num();
         }
         $("#table-list tbody tr").each(function () {
-             if($(this).closest('tr').find('.line-find-emp-code').val()  != ''){
-             line_count += 1;   
-            }
            linenum += 1;
             $(this).closest("tr").find("td:eq(0)").text(linenum);
             // $(this).closest("tr").find(".line-prod-code").val(line_prod_code);
         });
-        if(line_count > emp_qty){
-            alert('จำนวนพนักงานเกินกว่าที่กำหนด');
-            return;
-        }
-        selecteditem.length = 0;
+      
+        selecteditem = [];
 
         $("#table-find-list tbody tr").each(function () {
             $(this).closest("tr").find(".btn-line-select").removeClass('btn-success');
@@ -534,7 +526,7 @@ $js = <<<JS
   function check_dup(prod_id){
       var _has = 0;
       $("#table-list tbody tr").each(function(){
-          var p_id = $(this).closest('tr').find('.line-prod-id').val();
+          var p_id = $(this).closest('tr').find('.line-car-emp-id').val();
          // alert(p_id + " = " + prod_id);
           if(p_id == prod_id){
               _has = 1;
@@ -545,6 +537,8 @@ $js = <<<JS
   
   function removeline(e){
       var ids = e.closest('tr').find('.line-car-daily-id').val();
+      var row = e.parent().parent();
+      
       if(ids){
           if(confirm('ต้องการลบรายการนี้ใช่หรือไม่ ?')){
            $.ajax({
@@ -556,18 +550,33 @@ $js = <<<JS
               'success': function(data) {
                   //  alert(data);
                    if(data > 0){
-                       e.parent().parent().remove();
+                       if($(".table-car-emp tbody tr").length == 1){
+                           row.closest("tr").find(".line-car-emp-code").val('');
+                           row.closest("tr").find(".line-car-emp-name").val('');
+                           row.closest("tr").find(".line-car-emp-id").val('');
+                       }else{
+                            e.parent().parent().remove();
+                       }
+                      
                    }
                   // $("#findModal").modal("show");
                  }
         });   
           }
+      }else{
+         if($(".table-car-emp tbody tr").length == 1){
+                           row.closest("tr").find(".line-car-emp-code").val('');
+                           row.closest("tr").find(".line-car-emp-name").val('');
+                           row.closest("tr").find(".line-car-emp-id").val('');
+                       }else{
+                            e.parent().parent().remove();
+                       }
       }
       var linenum = 0;
        $("#table-list tbody tr").each(function () {
             linenum += 1;
-        });
-       $(".selected-emp-qty").val(linenum);
+       });
+       //$(".selected-emp-qty").val(linenum);
   }  
   
   function showcopy(e){

@@ -37,7 +37,7 @@ class OrdersController extends Controller
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new OrdersSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->setSort(['defaultOrder'=>['order_date'=>SORT_DESC,'order_no'=>SORT_DESC]]);
+        $dataProvider->setSort(['defaultOrder' => ['order_date' => SORT_DESC, 'order_no' => SORT_DESC]]);
         $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render('index', [
@@ -69,6 +69,8 @@ class OrdersController extends Controller
 //            print "</pre>";
             // return;
 
+          //  echo count($price_group_list_arr);return;
+
             $x_date = explode('/', $model->order_date);
             $sale_date = date('Y-m-d');
             if (count($x_date) > 1) {
@@ -80,6 +82,7 @@ class OrdersController extends Controller
             $model->sale_channel_id = 1;
             if ($model->save()) {
                 if (count($price_group_list_arr) > 0) {
+                   // echo count($price_group_list_arr);return;
                     for ($x = 0; $x <= count($price_group_list_arr) - 1; $x++) {
                         if ($price_group_list_arr[$x] == '') {
                             continue;
@@ -97,7 +100,7 @@ class OrdersController extends Controller
                                         // $prod_line = \Yii::$app->request->post($prods->code);
                                         $prod_line_qty = \Yii::$app->request->post('line_qty_' . $prods->code . $price_list_loop);
                                         $line_sale_price = \Yii::$app->request->post('line_sale_price_' . $prods->code . $price_list_loop);
-                                        // print_r($prod_line_qty);return;
+                                       //  print_r($prod_line_qty);return;
 
                                         //  if(count($prod_line) > 0){
                                         // for($x=0;$x<=count($prod_line)-1;$x++){
@@ -461,6 +464,30 @@ class OrdersController extends Controller
         return $html;
     }
 
+    public function getProductcolumn22($order_id,$price_group_id)
+    {
+        $html = '';
+        $model_price = \common\models\PriceGroupLine::find()->where(['price_group_id' => $price_group_id])->all();
+        $sql = 'SELECT COUNT(DISTINCT product_id) as cnt FROM order_line WHERE order_id='.$order_id.' AND price_group_id='.$price_group_id;
+        $query = \Yii::$app->db->createCommand($sql)->queryAll();
+        $order_prod_cnt =  $query[0]['cnt'];
+        if( count($model_price) > $order_prod_cnt){
+            foreach ($model_price as $value) {
+                $new_price = '<span style="color: red">' . $value->sale_price . '</span>';
+                $html .= '<th style="text-align: center">' . \backend\models\Product::findCode($value->product_id) . ' ( ' . $new_price . ' ) ' . '</th>';
+            }
+        }else{
+            $modelx = \common\models\OrderLine::find()->where(['price_group_id' => $price_group_id,'order_id'=>$order_id])->distinct('product_id','price')->groupBy('product_id')->all();
+            foreach ($modelx as $value) {
+                $new_price = '<span style="color: red">' . $value->price . '</span>';
+                $html .= '<th style="text-align: center">' . \backend\models\Product::findCode($value->product_id) . ' ( ' . $new_price . ' ) ' . '</th>';
+            }
+        }
+
+
+        return $html;
+    }
+
     public function getProducttextfield2($price_group_id)
     {
         $html = '';
@@ -665,7 +692,8 @@ class OrdersController extends Controller
             $html .= '<th style="width: 5%;text-align: center">#</th>';
             $html .= '<th style="width: 8%">รหัสลูกค้า</th>';
             $html .= '<th style="width: 15%">ชื่อลูกค้า</th>';
-            $html .= $this->getProductcolumn2($price_group_id);
+            $html .= $this->getProductcolumn22($order_id, $price_group_id); // getProductcolumn2
+//            $html .= $this->getProductcolumn2($price_group_id); // getProductcolumn2
             $html .= '<th style="width: 8%;text-align: right">รวมจำนวน</th>';
             $html .= '<th style="text-align: right">รวมเงิน</th>';
             $html .= '<th style="text-align: center">-</th>';
@@ -686,7 +714,7 @@ class OrdersController extends Controller
                     $html .= '<tr>';
                     $html .= '<td style="text-align: center"><input type="checkbox" data-var="' . $value->customer_id . '" class="selected-line-item" onchange="showselectpayment($(this))"></td>';
                     $html .= '<td style="text-align: center' . $payment_color . '">' . $i . '</td>';
-                    $html .= '<td style="' . $payment_color . '"><a href="'.Url::to(['customer/view','id'=>$value->customer_id],true).'">' . $value->code . '</a><input type="hidden" class="line-customer-id" name="line_customer_id' . $price_group_id . '[]" value="' . $value->customer_id . '"></td>';
+                    $html .= '<td style="' . $payment_color . '"><a href="' . Url::to(['customer/view', 'id' => $value->customer_id], true) . '">' . $value->code . '</a><input type="hidden" class="line-customer-id" name="line_customer_id' . $price_group_id . '[]" value="' . $value->customer_id . '"></td>';
                     $html .= '<td style="' . $payment_color . '">' . $value->name . '</td>';
                     $html .= $this->getProducttextfieldUpdate2($order_id, $value->customer_id, $price_group_id, $has_payment);
                     $html .= '</tr>';
@@ -701,42 +729,112 @@ class OrdersController extends Controller
     public function getProducttextfieldUpdate2($order_id, $customer_id, $price_group_id, $has_payment)
     {
         $html = '';
-        $model = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id])->all();
-        $i = 0;
-        $line_total_qty = 0;
-        $line_total_price = 0;
-        foreach ($model as $value) {
-            $i += 1;
-            $line_prod_code = \backend\models\Product::findCode($value->product_id) . $price_group_id . "[]";
-            $input_name = "line_qty_" . $line_prod_code . $price_group_id . "[]";
-            $input_name_price = "line_sale_price_" . $line_prod_code . $price_group_id . "[]";
 
-            $line_total_qty = $line_total_qty + $value->qty;
-            $line_total_price = $line_total_price + ($value->qty * $value->price);
+        $model_price = \common\models\PriceGroupLine::find()->where(['price_group_id' => $price_group_id])->all();
+//        $model_order_product = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'price_group_id' => $price_group_id])->distinct('product_id')->count();
+        $sql = 'SELECT COUNT(DISTINCT product_id) as cnt FROM order_line WHERE order_id='.$order_id.' AND price_group_id='.$price_group_id;
+        $query = \Yii::$app->db->createCommand($sql)->queryAll();
+        $model_order_product =  $query[0]['cnt'];
+        if (count($model_price) > $model_order_product) {
+            if ($model_price) {
+                $i = 0;
+                $line_total_qty = 0;
+                $line_total_price = 0;
+                foreach ($model_price as $price_value) {
+                    // for after add product_id to price group
+                    $std_price = $price_value->sale_price;
+                    $line_prod_code = \backend\models\Product::findCode($price_value->product_id) . $price_group_id . "[]";
+                    $input_name = "line_qty_" . $line_prod_code;
+                    $input_name_price = "line_sale_price_" . $line_prod_code;
+                    $bg_color = ';background-color:white;color: black';
 
-            $bg_color = '';
-            $btn_edit = '';
+                    //  $model = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id])->all();
+                    $model = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id, 'product_id' => $price_value->product_id])->one();
+                    if ($model) {
+                        //  foreach ($model as $value) {
+                        $i += 1;
+//                    $line_prod_code = \backend\models\Product::findCode($model->product_id) . $price_group_id . "[]";
+//                    $input_name = "line_qty_" . $line_prod_code . $price_group_id . "[]";
+//                    $input_name_price = "line_sale_price_" . $line_prod_code . $price_group_id . "[]";
 
-            if ($value->qty > 0) {
-                $bg_color = ';background-color:#33CC00;color: black';
-            } else {
-                $bg_color = ';background-color:white;color: black';
+                        $line_total_qty = $line_total_qty + $model->qty;
+                        $line_total_price = $line_total_price + ($model->qty * $model->price);
+
+                        $bg_color = '';
+                        $btn_edit = '';
+
+                        if ($model->qty > 0) {
+                            $bg_color = ';background-color:#33CC00;color: black';
+                        } else {
+                            $bg_color = ';background-color:white;color: black';
+                        }
+
+                        if ($has_payment) {
+                            $btn_edit = '<div class="btn btn-info btn-sm" data-id="' . $order_id . '" data-var="' . $model->customer_id . '" onclick="showeditpayment($(this))">แก้ไข</div>';
+                        }
+
+                        $html .= '<td>
+                       <input type="hidden" class="line-qty-">
+                       <input type="hidden" class="line-product-code" name="' . $line_prod_code . '" value="' . $line_prod_code . '">
+                       <input type="hidden" class="line-sale-price" name="' . $input_name_price . '" value="' . $model->price . '">
+                       <input type="number" name="' . $input_name . '" data-var="' . $model->price . '" style="text-align: center' . $bg_color . '" value="' . $model->qty . '" class="form-control" min="0" onchange="line_qty_cal($(this))">
+                  </td>';
+                        //  }
+
+                    } else {
+                        $html .= '<td>
+                       <input type="hidden" class="line-qty-">
+                       <input type="hidden" class="line-product-code" name="' . $line_prod_code . '" value="' . $line_prod_code . '">
+                       <input type="hidden" class="line-sale-price" name="' . $input_name_price . '" value="' . $std_price . '">
+                       <input type="number" name="' . $input_name . '" data-var="' . $std_price . '" style="text-align: center' . $bg_color . '" value="0" class="form-control" min="0" onchange="line_qty_cal($(this))">
+                  </td>';
+                    }
+                }
+                $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right" value="' . number_format($line_total_qty) . '"></td>';
+                $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"  value="' . number_format($line_total_price) . '"><input type="hidden" class="form-control line-total-price-cal" style="text-align: right" value="' . $line_total_price . '"></td>';
+                $html .= '<td style="text-align: center">' . $btn_edit . '</td>';
             }
+        } else {
+            $model = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id])->all();
+            $i = 0;
+            $line_total_qty = 0;
+            $line_total_price = 0;
+            foreach ($model as $value) {
+                $i += 1;
+                $line_prod_code = \backend\models\Product::findCode($value->product_id) . $price_group_id . "[]";
+                $input_name = "line_qty_" . $line_prod_code . $price_group_id . "[]";
+                $input_name_price = "line_sale_price_" . $line_prod_code . $price_group_id . "[]";
 
-            if ($has_payment) {
-                $btn_edit = '<div class="btn btn-info btn-sm" data-id="' . $order_id . '" data-var="' . $value->customer_id . '" onclick="showeditpayment($(this))">แก้ไข</div>';
-            }
+                $line_total_qty = $line_total_qty + $value->qty;
+                $line_total_price = $line_total_price + ($value->qty * $value->price);
 
-            $html .= '<td>
+                $bg_color = '';
+                $btn_edit = '';
+
+                if ($value->qty > 0) {
+                    $bg_color = ';background-color:#33CC00;color: black';
+                } else {
+                    $bg_color = ';background-color:white;color: black';
+                }
+
+                if ($has_payment) {
+                    $btn_edit = '<div class="btn btn-info btn-sm" data-id="' . $order_id . '" data-var="' . $value->customer_id . '" onclick="showeditpayment($(this))">แก้ไข</div>';
+                }
+
+                $html .= '<td>
                        <input type="hidden" class="line-qty-' . $i . '">
                        <input type="hidden" class="line-product-code" name="' . $line_prod_code . '" value="' . $line_prod_code . '">
                        <input type="hidden" class="line-sale-price" name="' . $input_name_price . '" value="' . $value->price . '">
                        <input type="number" name="' . $input_name . '" data-var="' . $value->price . '" style="text-align: center' . $bg_color . '" value="' . $value->qty . '" class="form-control" min="0" onchange="line_qty_cal($(this))">
                   </td>';
+            }
+            $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right" value="' . number_format($line_total_qty) . '"></td>';
+            $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"  value="' . number_format($line_total_price) . '"><input type="hidden" class="form-control line-total-price-cal" style="text-align: right" value="' . $line_total_price . '"></td>';
+            $html .= '<td style="text-align: center">' . $btn_edit . '</td>';
+
         }
-        $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right" value="' . number_format($line_total_qty) . '"></td>';
-        $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"  value="' . number_format($line_total_price) . '"><input type="hidden" class="form-control line-total-price-cal" style="text-align: right" value="' . $line_total_price . '"></td>';
-        $html .= '<td style="text-align: center">' . $btn_edit . '</td>';
+
+
         return $html;
     }
 
@@ -957,8 +1055,8 @@ class OrdersController extends Controller
         $html = '';
         if (count($customer_paylist_id) > 0 && $order_id > 0) {
             for ($i = 0; $i <= count($customer_paylist_id) - 1; $i++) {
-             //   $model = \common\models\QuerySaleTransData::find()->select(['order_id','customer_id', 'cus_name', 'SUM(qty) as qty', 'SUM(price) as price'])->where(['order_id' => $order_id, 'price_group_id' => $price_group_id, 'customer_id' => $customer_paylist_id[$i]])->andFilterWhere(['>', 'qty', 0])->groupBy('order_id','customer_id', 'price_group_id')->all();
-                $model = \common\models\QuerySaleTransData::find()->select(['order_id','customer_id', 'cus_name', 'SUM(line_total_amt) as line_total_amt'])->where(['order_id' => $order_id, 'price_group_id' => $price_group_id, 'customer_id' => $customer_paylist_id[$i]])->andFilterWhere(['>', 'qty', 0])->groupBy('order_id','customer_id', 'price_group_id')->all();
+                //   $model = \common\models\QuerySaleTransData::find()->select(['order_id','customer_id', 'cus_name', 'SUM(qty) as qty', 'SUM(price) as price'])->where(['order_id' => $order_id, 'price_group_id' => $price_group_id, 'customer_id' => $customer_paylist_id[$i]])->andFilterWhere(['>', 'qty', 0])->groupBy('order_id','customer_id', 'price_group_id')->all();
+                $model = \common\models\QuerySaleTransData::find()->select(['order_id', 'customer_id', 'cus_name', 'SUM(line_total_amt) as line_total_amt'])->where(['order_id' => $order_id, 'price_group_id' => $price_group_id, 'customer_id' => $customer_paylist_id[$i]])->andFilterWhere(['>', 'qty', 0])->groupBy('order_id', 'customer_id', 'price_group_id')->all();
                 if ($model != null) {
                     foreach ($model as $value) {
                         //$line_total_price = $value->qty * $value->price;
@@ -1027,7 +1125,7 @@ class OrdersController extends Controller
         $method_id = \backend\models\Customer::findPayMethod($customer_id);
         $model_cus = \backend\models\Customer::findPayTerm($customer_id);
         $html = '';
-        $model = \backend\models\Paymentterm::find()->where(['payment_method_id'=>$method_id])->all();
+        $model = \backend\models\Paymentterm::find()->where(['payment_method_id' => $method_id])->all();
         if ($model) {
             foreach ($model as $value) {
                 $selected = '';
@@ -1080,10 +1178,10 @@ class OrdersController extends Controller
 //            $model = \backend\models\Paymenttrans::find()->where(['order_id' => $order_id])->all();
 //            if ($model) {
 //                foreach ($model as $value) {
-                    $model_line = \backend\models\Paymenttransline::find()->where(['customer_id' => $customer_id, 'order_ref_id' => $order_id])->sum('payment_amount');
-                    if ($model_line > 0) {
-                        $total_pay = $model_line;
-                    }
+            $model_line = \backend\models\Paymenttransline::find()->where(['customer_id' => $customer_id, 'order_ref_id' => $order_id])->sum('payment_amount');
+            if ($model_line > 0) {
+                $total_pay = $model_line;
+            }
 //                }
 //            }
         }
@@ -1110,7 +1208,7 @@ class OrdersController extends Controller
                     for ($i = 0; $i <= count($customer_id) - 1; $i++) {
                         if ($customer_id[$i] == '' || $customer_id[$i] == null) continue;
                         $pay_method_name = \backend\models\Paymentmethod::findName($pay_method[$i]);
-                        if($pay_method_name == 'เงินสด' && ($pay_amount[$i] == null || $pay_amount[$i] == 0))continue;
+                        if ($pay_method_name == 'เงินสด' && ($pay_amount[$i] == null || $pay_amount[$i] == 0)) continue;
                         $model_line = new \backend\models\Paymenttransline();
                         $model_line->trans_id = $model->id;
                         $model_line->customer_id = $customer_id[$i];
@@ -1182,18 +1280,19 @@ class OrdersController extends Controller
             }
         }
         if ($removelist != null) {
-            $x_ = explode(",",$removelist);
+            $x_ = explode(",", $removelist);
             for ($i = 0; $i <= count($x_) - 1; $i++) {
                 \backend\models\Paymenttransline::deleteAll(['id' => $x_[$i]]);
             }
         }
 
-        return $this->redirect(['orders/update','id'=>$order_id]);
+        return $this->redirect(['orders/update', 'id' => $order_id]);
     }
 
-    public function actionGetproductinorder(){
-        $order_id =\Yii::$app->request->post('order_id');
-        if($order_id){
+    public function actionGetproductinorder()
+    {
+        $order_id = \Yii::$app->request->post('order_id');
+        if ($order_id) {
 
         }
     }
