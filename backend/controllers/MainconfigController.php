@@ -287,7 +287,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($name != '') {
-            $model = \backend\models\Customertype::find()->where(['name' => $name])->one();
+            $model = \backend\models\Customertype::find()->where(['code' => $name])->one();
             if ($model) {
                 $id = $model->id;
             } else {
@@ -296,7 +296,7 @@ class MainconfigController extends Controller
                 $model_new->name = $name;
                 $model_new->description = $name;
                 $model_new->status = 1;
-                if ($model_new->save()) {
+                if ($model_new->save(false)) {
                     $id = $model_new->id;
                 }
             }
