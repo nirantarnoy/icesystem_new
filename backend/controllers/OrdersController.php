@@ -1205,7 +1205,7 @@ class OrdersController extends Controller
 
         print_r(Yii::$app->request->post());
 //        echo '<br />';
-//        print_r($customer_id);
+        print_r($customer_id);
 //
         return false;
 
