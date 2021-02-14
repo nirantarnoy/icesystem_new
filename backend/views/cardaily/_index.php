@@ -45,7 +45,6 @@ $model_new = $model_car;
             // if (\backend\models\Streamer::getStatus($value->NAME)) $status_color = 'Open';
             //    print_r($model);
             foreach ($model as $value2) {
-
                 if ($value2->car_id == $value->id) {
                     $status_color = 'bg-success';
                 }

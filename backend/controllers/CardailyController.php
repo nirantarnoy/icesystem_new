@@ -60,7 +60,6 @@ class CardailyController extends Controller
         if (isset(Yii::$app->request->queryParams['CardailySearch'])) {
             $car_name = Yii::$app->request->queryParams['CardailySearch']['car_name'];
         }
-
         $car_search_text = \Yii::$app->request->post('car_name');
 
         $searchModel = new CardailySearch();

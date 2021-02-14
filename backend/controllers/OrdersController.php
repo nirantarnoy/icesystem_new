@@ -1197,7 +1197,7 @@ class OrdersController extends Controller
         $pay_amount = \Yii::$app->request->post('line_pay_amount');
 
         $res = 0;
-        if ($order_id > 0 && count($customer_id) > 0) {
+        if ($order_id > 0 && $customer_id != null) {
             $model = new \backend\models\Paymenttrans();
             $model->trans_no = $model->getLastNo();
             $model->trans_date = date('Y-m-d H:i:s');
