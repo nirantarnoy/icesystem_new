@@ -1172,6 +1172,8 @@ class OrdersController extends Controller
                 foreach ($model as $value) {
                     $html .= '<option value="' . $value->id . '">' . $value->name . '</option>';
                 }
+            }else{
+                $html .= '<option value="0">--</option>';
             }
         }
 
