@@ -90,7 +90,7 @@ class OrdersController extends Controller
                         }
                         $customer_id = \Yii::$app->request->post('line_customer_id' . $price_group_list_arr[$x]);
                         if (count($customer_id) > 0) {
-                            echo "has data";return;
+                          //  echo "has data";return;
                             $product_list = \backend\models\Product::find()->all();
                             for ($i = 0; $i <= count($customer_id) - 1; $i++) {
                                 $cust_id = $customer_id[$i];
