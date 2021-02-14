@@ -83,7 +83,7 @@ class OrdersController extends Controller
             $model->sale_channel_id = 1;
             if ($model->save(false)) {
                 if ($price_group_list_arr != null) {
-                   // echo count($price_group_list_arr);return;
+                    echo count($price_group_list_arr);return;
                     for ($x = 0; $x <= count($price_group_list_arr) - 1; $x++) {
                         if ($price_group_list_arr[$x] == '') {
                             continue;
@@ -1075,6 +1075,14 @@ class OrdersController extends Controller
                         if ($line_remain_pay == 0) {
                             $customer_success_pay = 'readonly';
                         }
+                        $cust_pay_type = $this->getCuspaymenttype($value->customer_id);
+                        $show_order_pay = 0;
+
+                        $xx = substr($cust_pay_type,3,2);
+
+                        if($xx == 'สด'){
+                            $show_order_pay = $line_remain_pay;
+                        }
                         $html .= '<tr>
                                 <td>' . \backend\models\Customer::findCode($value->customer_id) . '<input type="hidden" class="line-customer-id" name="line_pay_customer_id[]" value="' . $value->customer_id . '"> </td>
                                 <td>' . $value->cus_name . '</td>
@@ -1094,7 +1102,7 @@ class OrdersController extends Controller
                                     </select>
                                 </td>
                                 <td style="width: 10%">
-                                    <input type="text" class="form-control" name="line_pay_amount[]" value="0" ' . $customer_success_pay . '>
+                                    <input type="text" class="form-control" name="line_pay_amount[]" value="'.$show_order_pay.'" ' . $customer_success_pay . '>
                                 </td>
                                 <td style="width: 10%">
                                     <input type="text" class="form-control" readonly value="' . number_format($line_remain_pay) . '">
@@ -1107,7 +1115,16 @@ class OrdersController extends Controller
         }
         return $html;
     }
-
+    public function getCuspaymenttype($customer_id){
+        $name = '';
+        if($customer_id > 0){
+            $model = \backend\models\Customer::find()->where(['id'=>$customer_id])->one();
+            if($model){
+                $name = $model->findPayMethod($model->payment_method_id);
+            }
+        }
+        return $name;
+    }
     public function showpayoption($customer_id)
     {
         $model_cus = \backend\models\Customer::findPayMethod($customer_id);
