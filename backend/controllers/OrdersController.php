@@ -102,7 +102,7 @@ class OrdersController extends Controller
                                         // $prod_line = \Yii::$app->request->post($prods->code);
                                         $prod_line_qty = \Yii::$app->request->post('line_qty_' . $prods->code . $price_list_loop);
                                         $line_sale_price = \Yii::$app->request->post('line_sale_price_' . $prods->code . $price_list_loop);
-                                       //  print_r($prod_line_qty);return;
+                                         print_r($prod_line_qty);return;
 
                                         //  if(count($prod_line) > 0){
                                         // for($x=0;$x<=count($prod_line)-1;$x++){
