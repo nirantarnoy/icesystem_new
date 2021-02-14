@@ -179,7 +179,7 @@ use yii\widgets\ActiveForm;
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-outline-success btn-paymet-submit" data-dismiss="modalx"><i
+                    <button class="btn btn-outline-success btn-payment-submit" data-dismiss="modalx"><i
                                 class="fa fa-check"></i> ตกลง
                     </button>
                     <button type="button" class="btn btn-default" data-dismiss="modal"><i
@@ -367,6 +367,11 @@ $js = <<<JS
         } 
      });
      
+     $(".btn-payment-submit").click(function(){
+        if(confirm('คุณมันใจที่จะทำรายการนี้ใช่หรือไม่ ?')){
+            $("form#form-order-payment").submit();
+        } 
+     });
      checktabs();
      
   });
