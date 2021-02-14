@@ -41,7 +41,7 @@ class OrdersSearch extends Orders
      */
     public function search($params)
     {
-        $query = Orders::find()->join('inner join','car','orders.car_ref_id = car.id');
+        $query = Orders::find()->join('inner join', 'car', 'orders.car_ref_id = car.id');
 
         // add conditions that should always apply here
 
@@ -62,7 +62,7 @@ class OrdersSearch extends Orders
             'id' => $this->id,
             'customer_id' => $this->customer_id,
             'customer_type' => $this->customer_type,
-         //   'order_date' => $this->order_date,
+            //   'order_date' => $this->order_date,
             'vat_amt' => $this->vat_amt,
             'vat_per' => $this->vat_per,
             'order_total_amt' => $this->order_total_amt,
@@ -78,19 +78,26 @@ class OrdersSearch extends Orders
             'updated_by' => $this->updated_by,
         ]);
 
-        $x_date = explode('/', $this->order_date);
-        $sale_date = date('Y-m-d');
-        if (count($x_date) > 1) {
-            $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
+
+//        if($this->order_date == null){
+//            $this->order_date = date('Y-m-d');
+//        }
+        $sale_date = null;
+        if ($this->order_date != null) {
+            $x_date = explode('/', $this->order_date);
+            $sale_date = date('Y-m-d');
+            if (count($x_date) > 1) {
+                $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
+            }
+            $this->order_date = date('Y-m-d', strtotime($sale_date));
+            $query->andFilterWhere(['order_date' => date('Y-m-d', strtotime($sale_date))]);
         }
 
-        $this->order_date = date('Y-m-d',strtotime($sale_date));
-        $query->andFilterWhere(['order_date'=>date('Y-m-d',strtotime($sale_date))]);
 
         if ($this->globalSearch != '') {
             $query->orFilterWhere(['like', 'order_no', $this->globalSearch])
                 ->orFilterWhere(['like', 'customer_name', $this->globalSearch])
-            ->orFilterWhere(['like', 'car.name', $this->globalSearch]);
+                ->orFilterWhere(['like', 'car.name', $this->globalSearch]);
         }
 
 
