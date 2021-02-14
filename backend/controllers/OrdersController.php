@@ -57,7 +57,6 @@ class OrdersController extends Controller
     public function actionCreate()
     {
         $model = new Orders();
-
         if ($model->load(Yii::$app->request->post())) {
             $price_group_list_arr = null;
             $line_customer_id = \Yii::$app->request->post('line_customer_id');
@@ -65,10 +64,10 @@ class OrdersController extends Controller
             $price_group_list = \Yii::$app->request->post('price_group_list');
             $price_group_list_arr = explode(',', $price_group_list);
             // print_r($price_group_list);return;
-            print "<pre>";
-            print_r(\Yii::$app->request->post());
-            print "</pre>";
-             return;
+//            print "<pre>";
+//            print_r(\Yii::$app->request->post());
+//            print "</pre>";
+//            return;
            // print_r(\Yii::$app->request->post());
            // echo count($price_group_list_arr);return;
 

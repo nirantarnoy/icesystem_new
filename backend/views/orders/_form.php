@@ -83,7 +83,6 @@ use yii\widgets\ActiveForm;
             </div>
         </div>
     </div>
-
     <hr>
     <div class="list-detail">
 
