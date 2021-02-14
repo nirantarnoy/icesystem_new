@@ -383,7 +383,7 @@ $js = <<<JS
  function getCondition(e){
      var ids = e.val();
      if(ids){
-        // alert(ids);
+         alert(ids);
          $.ajax({
               'type':'post',
               'dataType': 'html',
