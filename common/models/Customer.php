@@ -44,7 +44,7 @@ class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['code'],'unique'],
+            [['code','name'],'unique'],
             [['customer_group_id', 'delivery_route_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['active_date'], 'safe'],
             [['code', 'name', 'description', 'location_info', 'logo', 'shop_photo','address','address2','phone','branch_no'], 'string', 'max' => 255],
