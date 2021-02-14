@@ -404,6 +404,7 @@ $js = <<<JS
            //alert(data);
            //  $("#table-sale-list tbody").html(data);
          //});
+         alert(e.val());
          $(".text-car-emp").html("");
          $.ajax({
               'type':'post',

@@ -349,6 +349,7 @@ class OrdersController extends Controller
         $html = '';
         $route_id = \Yii::$app->request->post('route_id');
         $price_group_list = [];
+
         if ($route_id > 0) {
             $model = \backend\models\Customer::find()->select(['customer_type_id'])->where(['delivery_route_id' => $route_id])->groupBy('customer_type_id')->all();
             if ($model) {
