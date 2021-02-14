@@ -1089,7 +1089,7 @@ class OrdersController extends Controller
                                 </td>
                                 <td>
                                     <select name="line_payment_term_id[]" class="form-control select-condition" id="" required>
-                                        <option value="">--เงื่อนไข--</option>
+                                        <option value="0">--เงื่อนไข--</option>
                                          ' . $this->showconoption($value->customer_id) . '
                                     </select>
                                 </td>
