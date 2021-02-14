@@ -1196,6 +1196,12 @@ class OrdersController extends Controller
         $pay_term = \Yii::$app->request->post('line_payment_term_id');
         $pay_amount = \Yii::$app->request->post('line_pay_amount');
 
+        print_r($order_id);
+        echo '<br />';
+        print_r($customer_id);
+
+        return false;
+
         $res = 0;
         if ($order_id > 0 && $customer_id != null) {
             $model = new \backend\models\Paymenttrans();
