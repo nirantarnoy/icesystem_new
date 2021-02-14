@@ -1098,7 +1098,7 @@ class OrdersController extends Controller
                 }
             }
         }
-        return $html;
+        echo $html;
     }
 
     public function showpayoption($customer_id)
