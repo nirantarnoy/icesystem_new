@@ -392,6 +392,7 @@ $js = <<<JS
               'data': {'id': ids},
               'success': function(data) {
                    e.closest('tr').find(".select-condition").html(data);
+                   alert(e.closest('tr').find('.line-customer-id').val());
               }
          });
      }
