@@ -41,7 +41,7 @@ class OrdersSearch extends Orders
      */
     public function search($params)
     {
-        $query = Orders::find();
+        $query = Orders::find()->join('inner join','car','orders.car_ref_id = car.id');
 
         // add conditions that should always apply here
 
@@ -79,7 +79,8 @@ class OrdersSearch extends Orders
         ]);
         if ($this->globalSearch != '') {
             $query->orFilterWhere(['like', 'order_no', $this->globalSearch])
-                ->orFilterWhere(['like', 'customer_name', $this->globalSearch]);
+                ->orFilterWhere(['like', 'customer_name', $this->globalSearch])
+            ->orFilterWhere(['like', 'car.name', $this->globalSearch]);
         }
 
 
