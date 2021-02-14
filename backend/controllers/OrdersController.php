@@ -1231,6 +1231,8 @@ class OrdersController extends Controller
                 echo 'error';
                 return;
             }
+        }else{
+            echo "erorr";return false;
         }
         return $this->redirect(['orders/update', 'id' => $order_id]);
 
