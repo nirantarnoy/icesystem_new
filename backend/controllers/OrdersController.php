@@ -90,7 +90,7 @@ class OrdersController extends Controller
                         //echo count($price_group_list_arr);return;
                         $customer_id = \Yii::$app->request->post('line_customer_id' . $price_group_list_arr[$x]);
                         if (count($customer_id) > 0) {
-                          //  echo "has data";return;
+                            echo "has data= ".count($customer_id);return;
                             $product_list = \backend\models\Product::find()->all();
                             for ($i = 0; $i <= count($customer_id) - 1; $i++) {
                                 $cust_id = $customer_id[$i];
@@ -102,7 +102,7 @@ class OrdersController extends Controller
                                         // $prod_line = \Yii::$app->request->post($prods->code);
                                         $prod_line_qty = \Yii::$app->request->post('line_qty_' . $prods->code . $price_list_loop);
                                         $line_sale_price = \Yii::$app->request->post('line_sale_price_' . $prods->code . $price_list_loop);
-                                         print_r($prod_line_qty);return;
+                                        print_r($prod_line_qty);return;
 
                                         //  if(count($prod_line) > 0){
                                         // for($x=0;$x<=count($prod_line)-1;$x++){
