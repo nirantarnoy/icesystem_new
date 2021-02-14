@@ -28,14 +28,14 @@ class Paymenttrans extends \common\models\PaymentTrans
                 'attributes'=>[
                     ActiveRecord::EVENT_BEFORE_INSERT=>'created_by',
                 ],
-                'value'=> Yii::$app->user->identity->id,
+                'value'=> Yii::$app->user->id,
             ],
             'timestamuby'=>[
                 'class'=> \yii\behaviors\AttributeBehavior::className(),
                 'attributes'=>[
                     ActiveRecord::EVENT_BEFORE_UPDATE=>'updated_by',
                 ],
-                'value'=> Yii::$app->user->identity->id,
+                'value'=> Yii::$app->user->id,
             ],
             'timestampupdate'=>[
                 'class'=> \yii\behaviors\AttributeBehavior::className(),

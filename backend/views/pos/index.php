@@ -15,14 +15,14 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
         </div>
         <hr style="border-top: 1px dashed gray">
         <div class="row">
-            <div class="col-lg-9">
+            <div class="col-lg-8">
                 <div class="btn btn-group group-customer-type">
                     <button class="btn btn-outline-secondary btn-sm" disabled>ประเภทลูกค้า</button>
                     <button id="btn-general-customer" class="btn btn-success btn-sm active">ลูกค้าทั่วไป</button>
                     <button id="btn-fix-customer" class="btn btn-outline-secondary btn-sm">ระบุลูกค้า</button>
                 </div>
             </div>
-            <div class="col-lg-3" style="text-align: right;">
+            <div class="col-lg-4" style="text-align: right;">
                 <span style="font-size: 20px;display: none;" class="text-price-type"><div
                             class="badge badge-primary badge-text-price-type"
                             style="vertical-align: middle"></div></span>
@@ -42,6 +42,9 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
                             'placeholder' => '--เลือกลูกค้า--',
                             'onchange' => 'getproduct_price($(this))'
                         ],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ]
                     ]);
                     ?>
                     <!--                    <button class="btn btn-primary"><i class="fa fa-search"></i></button>-->
@@ -75,13 +78,13 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
                                     <div style="height: 10px;"></div>
                                     <div class="row">
                                         <div class="col-lg-12">
-                                            <input type="hidden" class="list-item-id-<?= $i ?>"
+                                            <input type="hidden" class="list-item-product-id list-item-id-<?= $i ?>"
                                                    value="<?= $value->id ?>">
                                             <input type="hidden" class="list-item-code-<?= $i ?>"
                                                    value="<?= $value->code ?>">
                                             <input type="hidden" class="list-item-name-<?= $i ?>"
                                                    value="<?= $value->name ?>">
-                                            <input type="hidden" class="list-item-price-<?= $i ?>"
+                                            <input type="hidden" class="list-item-price list-item-price-<?= $i ?>"
                                                    value="<?= $value->sale_price ?>">
                                             <div class="btn-group" style="width: 100%">
                                                 <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"
@@ -437,7 +440,41 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
     </div>
 </div>
 
+<div id="historyModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #2b669a">
+                <div class="row" style="text-align: center;width: 100%;color: white">
+                    <div class="col-lg-12">
+                        <span><h3 class="popup-product" style="color: white"></h3></span>
+                        <input type="hidden" class="popup-product-id" value="">
+                        <input type="hidden" class="popup-product-code" value="">
+                    </div>
+                </div>
+            </div>
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+
+            <div class="modal-body">
+
+            </div>
+
+<!--            <div class="modal-footer">-->
+<!--                <button class="btn btn-outline-success btn-add-cart" data-dismiss="modalx" onclick="addcart($(this))"><i-->
+<!--                            class="fa fa-check"></i> บันทึกรายการ-->
+<!--                </button>-->
+<!--                <button type="button" class="btn btn-default" data-dismiss="modal"><i-->
+<!--                            class="fa fa-close text-danger"></i> ยกเลิก-->
+<!--                </button>-->
+<!--            </div>-->
+        </div>
+
+    </div>
+</div>
+
 <?php
+$url_to_get_origin_price = \yii\helpers\Url::to(['pos/getoriginprice'], true);
 $url_to_get_price = \yii\helpers\Url::to(['pos/getcustomerprice'], true);
 $js = <<<JS
  $(function(){
@@ -502,6 +539,42 @@ $js = <<<JS
      });
      
       $("#btn-general-customer").click(function(){
+          price_group_name = '';
+          $.ajax({
+              type: "post",
+              dataType: "json",
+              url: "$url_to_get_origin_price",
+              data: {},
+              success: function(data){
+                  if(data.length > 0){
+                      var i = -1;
+                      $(".product-items").each(function(){
+                          i++;
+                          var line_product_id = $(this).find(".list-item-product-id").val();
+                          if(line_product_id == data[i]['product_id']){
+                              $(".card").css("background-color","white"); 
+                              $(this).find(".list-item-price").val(data[i]['sale_price']);
+                              $(this).find(".item-price").html(data[i]['sale_price']);
+                          }
+                      });
+                          
+                  }else{
+                      alert('no price');
+                  }
+               },
+               error: function(err) {
+                  alert('eror');
+               }
+             });
+        
+          if(price_group_name !=''){
+              $(".text-price-type").show();
+              $(".badge-text-price-type").html(price_group_name);
+          }else{
+              $(".text-price-type").hide();
+              $(".badge-text-price-type").html('');
+          }
+          
         $(this).removeClass('btn-outline-secondary');
         $(this).addClass('btn-success');
         
@@ -572,7 +645,7 @@ function calpayprice(e){
 function getproduct_price(e){
     var ids = e.val();
     if(ids > 0){
-        alert(ids);
+       // alert(ids);
         $(".sale-customer-id").val(ids);
          $.ajax({
               type: "post",
@@ -581,13 +654,13 @@ function getproduct_price(e){
               data: {customer_id: ids},
               success: function(data){
                   if(data.length > 0){
-                     // alert(data[0][0]['product_id']);
                           var i = -1;
                           var price_group_name = '';
                           if(data[0][0] != null){
                               $(".product-items").each(function(){
+                                //  alert();
                                      i++;
-                                     var line_product_id = $(this).find(".list-item-id").val();
+                                     var line_product_id = $(this).find(".list-item-product-id").val();
                                          if(data[0][i]!= null){
                                             // alert(data[0][i]['product_id']);
                                                  if(line_product_id == data[0][i]['product_id']){
@@ -596,16 +669,18 @@ function getproduct_price(e){
                                                      $(this).find(".item-price").html(data[0][i]['sale_price']);
                                                  }
                                               price_group_name = data[0][i]['price_name'];
-                                             // alert(price_group_name);
-                                     }else{
-                                              $(this).find(".card").css("background-color","white"); 
-                                     }
+                                             //alert(line_product_id);
+                                         }else{
+                                                 $(this).find(".card").css("background-color","white"); 
+                                                 $(this).find(".list-item-price").val(data[1][i]['sale_price']);
+                                                 $(this).find(".item-price").html(data[1][i]['sale_price']); 
+                                         }
                                
                               });
                           }else{
                               $(".product-items").each(function(){
                                      i+=1;
-                                     var line_product_id = $(this).find(".list-item-id").val();
+                                     var line_product_id = $(this).find(".list-item-product-id").val();
                                      if(line_product_id == data[1][i]['product_id']){
                                          $(".card").css("background-color","white"); 
                                          $(this).find(".list-item-price").val(data[1][i]['sale_price']);
@@ -613,7 +688,6 @@ function getproduct_price(e){
                                      }
                               });
                           }
-                         
                           if(price_group_name !=''){
                               $(".text-price-type").show();
                               $(".badge-text-price-type").html(price_group_name);
@@ -623,8 +697,11 @@ function getproduct_price(e){
                           }
                             
                   }else{
-                      alert();
+                      alert('no price');
                   }
+               },
+               error: function(err) {
+                  alert('eror');
                }
              });
     }
