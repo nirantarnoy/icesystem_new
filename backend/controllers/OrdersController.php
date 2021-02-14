@@ -1196,7 +1196,7 @@ class OrdersController extends Controller
         $pay_term = \Yii::$app->request->post('line_payment_term_id');
         $pay_amount = \Yii::$app->request->post('line_pay_amount');
 
-        print_r($order_id);
+        print_r(Yii::$app->request->post());
         echo '<br />';
         print_r($customer_id);
 

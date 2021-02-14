@@ -176,7 +176,6 @@ $model_new = $model_car;
             <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
 
             <div class="modal-body">
-
                 <div class="row">
                     <div class="col-lg-12" style="text-align: right">
                         <button class="btn btn-outline-success btn-emp-selected" data-dismiss="modalx" disabled><i
