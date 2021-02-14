@@ -41,7 +41,7 @@ class OrdersSearch extends Orders
      */
     public function search($params)
     {
-        $query = Orders::find()->join('inner join', 'car', 'orders.car_ref_id = car.id');
+        $query = Orders::find()->join('left join', 'car', 'orders.car_ref_id = car.id')->join('left join', 'delivery_route', 'orders.order_channel_id=delivery_route.id');
 
         // add conditions that should always apply here
 
@@ -77,7 +77,7 @@ class OrdersSearch extends Orders
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
         ]);
-
+        $query->andFilterWhere(['sale_channel_id' => 1]);
 
 //        if($this->order_date == null){
 //            $this->order_date = date('Y-m-d');
@@ -93,11 +93,11 @@ class OrdersSearch extends Orders
             $query->andFilterWhere(['order_date' => date('Y-m-d', strtotime($sale_date))]);
         }
 
-
         if ($this->globalSearch != '') {
             $query->orFilterWhere(['like', 'order_no', $this->globalSearch])
                 ->orFilterWhere(['like', 'customer_name', $this->globalSearch])
-                ->orFilterWhere(['like', 'car.name', $this->globalSearch]);
+                ->orFilterWhere(['like', 'car.name', $this->globalSearch])
+                ->orFilterWhere(['like', 'delivery_route.code', $this->globalSearch]);
         }
 
 
