@@ -1207,9 +1207,9 @@ class OrdersController extends Controller
 
       //  print_r(Yii::$app->request->post());
 //        echo '<br />';
-        print_r($pay_term);
+      //  print_r($pay_term);
 //
-        return false;
+     //   return false;
 
         $res = 0;
         if ($order_id > 0 && $customer_id != null) {
