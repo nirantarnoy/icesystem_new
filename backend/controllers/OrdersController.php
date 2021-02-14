@@ -83,11 +83,11 @@ class OrdersController extends Controller
             $model->sale_channel_id = 1;
             if ($model->save(false)) {
                 if ($price_group_list_arr != null) {
-                    echo count($price_group_list_arr);return;
                     for ($x = 0; $x <= count($price_group_list_arr) - 1; $x++) {
                         if ($price_group_list_arr[$x] == '') {
                             continue;
                         }
+                        echo count($price_group_list_arr);return;
                         $customer_id = \Yii::$app->request->post('line_customer_id' . $price_group_list_arr[$x]);
                         if (count($customer_id) > 0) {
                           //  echo "has data";return;
