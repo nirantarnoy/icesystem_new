@@ -1220,7 +1220,7 @@ class OrdersController extends Controller
                 if (count($customer_id) > 0) {
                     for ($i = 0; $i <= count($customer_id) - 1; $i++) {
                         if ($customer_id[$i] == '' || $customer_id[$i] == null) continue;
-                        $pay_method_name = \backend\models\Paymentmethod::findName($pay_method[$i]);
+                        //$pay_method_name = \backend\models\Paymentmethod::findName($pay_method[$i]);
                       //  if ($pay_method_name == 'เงินสด' && ($pay_amount[$i] == null || $pay_amount[$i] == 0)) continue;
                         //if ($pay_method_name == 'เงินสด' && ($pay_amount[$i] == null || $pay_amount[$i] == 0)) continue;
                         $model_line = new \backend\models\Paymenttransline();
