@@ -102,7 +102,7 @@ use yii\widgets\ActiveForm;
 <div id="paymentModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-xl">
         <!-- Modal content-->
-        <form id="form-payment" action="<?= \yii\helpers\Url::to(['orders/addpayment'], true) ?>" method="post">
+        <form id="form-order-payment" action="<?= \yii\helpers\Url::to(['orders/addpayment'], true) ?>" method="post">
             <input type="hidden" class="payment-order-id" name="payment_order_id" value="<?= $model->id ?>">
             <div class="modal-content">
                 <div class="modal-header">
