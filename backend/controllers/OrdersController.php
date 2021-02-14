@@ -80,8 +80,8 @@ class OrdersController extends Controller
             $model->order_date = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
             $model->sale_channel_id = 1;
-            if ($model->save()) {
-                if (count($price_group_list_arr) > 0) {
+            if ($model->save(false)) {
+                if ($price_group_list_arr != null) {
                    // echo count($price_group_list_arr);return;
                     for ($x = 0; $x <= count($price_group_list_arr) - 1; $x++) {
                         if ($price_group_list_arr[$x] == '') {
