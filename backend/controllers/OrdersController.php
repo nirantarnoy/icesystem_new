@@ -59,11 +59,12 @@ class OrdersController extends Controller
         $model = new Orders();
 
         if ($model->load(Yii::$app->request->post())) {
+            $price_group_list_arr = null;
             $line_customer_id = \Yii::$app->request->post('line_customer_id');
             $line_price = \Yii::$app->request->post('line_qty_cal');
             $price_group_list = \Yii::$app->request->post('price_group_list');
             $price_group_list_arr = explode(',', $price_group_list);
-            // print_r($price_group_list_arr);return;
+             print_r($price_group_list_arr);return;
 //            print "<pre>";
 //            print_r($_POST);
 //            print "</pre>";
