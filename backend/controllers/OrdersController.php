@@ -125,6 +125,8 @@ class OrdersController extends Controller
                             echo "not have data";return;
                         }
                     }
+                }else{
+                    echo "not have price group";return;
                 }
 //                if (count($line_customer_id) > 0) {
 //                    $product_list = \backend\models\Product::find()->all();
