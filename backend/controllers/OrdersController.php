@@ -402,13 +402,14 @@ class OrdersController extends Controller
                         $html .= '
                             <div class="tab-pane fade show ' . $is_active2 . '" id="custom-tabs-one-home' . $price_group_list[$i] . '" role="tabpanel"
                              aria-labelledby="custom-tabs-one-home-tab">';
+                        $html .= '<input type="hidden" name="price_group_list" value="' . $list . '">';
                         $html .= '<table class="table" id="table-sale-list' . $price_group_list[$i] . '">';
                         $html .= $this->gettablelist($price_group_list[$i]);
                         $html .= '</table>
                             </div>
                        ';
                     }
-                    $html .= '<input type="hidden" name="price_group_list" value="' . $list . '">';
+//                    $html .= '<input type="hidden" name="price_group_list" value="' . $list . '">';
                     $html .= '</div>';
                 }
             }
