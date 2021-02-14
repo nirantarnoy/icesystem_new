@@ -69,7 +69,7 @@ class OrdersController extends Controller
 //            print_r($_POST);
 //            print "</pre>";
             // return;
-            print_r($price_group_list);
+            print_r(\Yii::$app->request->post());
             echo count($price_group_list_arr);return;
 
             $x_date = explode('/', $model->order_date);
