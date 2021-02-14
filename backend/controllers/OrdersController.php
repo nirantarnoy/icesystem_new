@@ -1241,7 +1241,7 @@ class OrdersController extends Controller
                     }
                 }
             } else {
-                echo 'error';
+                echo 'error2';
                 return;
             }
         }else{
