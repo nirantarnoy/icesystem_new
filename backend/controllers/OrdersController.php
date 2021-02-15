@@ -64,10 +64,10 @@ class OrdersController extends Controller
             $price_group_list = \Yii::$app->request->post('price_group_list');
             $price_group_list_arr = explode(',', $price_group_list);
             // print_r($price_group_list);return;
-            print "<pre>";
-            print_r($_POST);
-            print "</pre>";
-            return;
+//            print "<pre>";
+//            print_r(\Yii::$app->request->post('line_qty_PS73'));
+//            print "</pre>";
+//            return;
            // print_r(\Yii::$app->request->post());
            // echo count($price_group_list_arr);return;
 
