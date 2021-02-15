@@ -58,6 +58,7 @@ class OrdersController extends Controller
     {
         $model = new Orders();
         if ($model->load(Yii::$app->request->post())) {
+            set_time_limit(0);
             $price_group_list_arr = null;
             $line_customer_id = \Yii::$app->request->post('line_customer_id');
             $line_price = \Yii::$app->request->post('line_qty_cal');
