@@ -1079,7 +1079,7 @@ class OrdersController extends Controller
                     foreach ($model as $value) {
                         //$line_total_price = $value->qty * $value->price;
                         $line_total_price = $value->line_total_amt;
-                        if ($line_total_price <= 0 && $value->qty > 0) continue;
+                        if ($line_total_price <= 0 && $value->qty <= 0) continue;
                         $customer_pay_amount = $this->checkpaymentsum($order_id, $value->customer_id);
                         $line_remain_pay = $line_total_price - $customer_pay_amount;
                         $customer_success_pay = '';
