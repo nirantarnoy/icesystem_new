@@ -346,7 +346,7 @@ $js = <<<JS
      $(".btn-payment").click(function(){
           var ids = $(".current_id").val();
           var price_group = $(".current-price-group").val();
-          alert(checkeditem.length);
+          //alert(checkeditem.length);
           if(checkeditem.length > 0 && ids >0){
               $.ajax({
               'type':'post',
