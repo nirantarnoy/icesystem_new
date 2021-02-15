@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 ?>
 <div class="orders-form">
     <input type="hidden" class="page-status" data-var="<?= $model->id ?>" value="<?= $model->isNewRecord ? 0 : 1 ?>">
-    <?php $form = ActiveForm::begin(['id' => 'order-form', 'method' => 'post']); ?>
+    <?php $form = ActiveForm::begin(['id' => 'order-form', 'method' => 'post','options' => ['enctype'=>'multipart/form-data']]); ?>
     <input type="hidden" class="current_id" value="<?= $model->id ?>">
     <input type="hidden" class="current-price-group" value="">
     <input type="hidden" class="remove-list" name="removelist" value="">
