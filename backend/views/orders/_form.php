@@ -12,15 +12,15 @@ use yii\widgets\ActiveForm;
     <input type="hidden" class="remove-list" name="removelist" value="">
     <div class="row">
         <div class="col-lg-3">
-            <?= $form->field($model, 'order_no')->textInput(['value' => $model->isNewRecord ? 'Draft': $model->order_no, 'readonly' => 'readonly']) ?>
+            <?= $form->field($model, 'order_no')->textInput(['value' => $model->isNewRecord ? 'Draft' : $model->order_no, 'readonly' => 'readonly']) ?>
         </div>
         <div class="col-lg-3">
-            <?php $model->order_date = $model->isNewRecord?date('d/m/Y'): date('d/m/Y', strtotime($model->order_date));?>
+            <?php $model->order_date = $model->isNewRecord ? date('d/m/Y') : date('d/m/Y', strtotime($model->order_date)); ?>
             <?= $form->field($model, 'order_date')->textInput(['id' => 'order-date']) ?>
         </div>
         <div class="col-lg-3">
             <?php
-            $x_disabled = !$model->isNewRecord ? "disabled" : '';
+            $x_disabled = !$model->isNewRecord ? true : false;
 
             ?>
             <?= $form->field($model, 'order_channel_id')->Widget(\kartik\select2\Select2::className(), [
@@ -31,8 +31,9 @@ use yii\widgets\ActiveForm;
                     'placeholder' => '--เลือกสายส่ง--',
                     'onchange' => '
                            route_change($(this));
-                        '
-                ]
+                        ',
+                    'disabled' => $x_disabled,
+                ],
             ]) ?>
         </div>
         <div class="col-lg-3">
@@ -123,7 +124,7 @@ use yii\widgets\ActiveForm;
                         <div class="col-lg-6">
                             <div class="label">วันที่</div>
                             <?php
-                           // $order_date = date('d/m/Y',strtotime($model->order_date));
+                            // $order_date = date('d/m/Y',strtotime($model->order_date));
                             echo \kartik\date\DatePicker::widget([
                                 'name' => 'payment_date',
                                 'value' => $model->order_date,
@@ -238,7 +239,8 @@ use yii\widgets\ActiveForm;
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-outline-success btn-update-paymet-submit" data-dismiss="modalx"><i
+                    <button type="submit" class="btn btn-outline-success btn-update-paymet-submit"
+                            data-dismiss="modalx"><i
                                 class="fa fa-check"></i> ตกลง
                     </button>
                     <button type="button" class="btn btn-default" data-dismiss="modal"><i
@@ -259,7 +261,8 @@ use yii\widgets\ActiveForm;
                 <div class="modal-header">
                     <div class="row" style="width: 100%">
                         <div class="col-lg-11">
-                            <h2 style="color: #255985"><i class="fa fa-truck-loading"></i> บันทึกโอนย้ายสินค้าระหว่างทาง</h2>
+                            <h2 style="color: #255985"><i class="fa fa-truck-loading"></i> บันทึกโอนย้ายสินค้าระหว่างทาง
+                            </h2>
                         </div>
                         <div class="col-lg-1">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
