@@ -106,13 +106,17 @@ class OrdersController extends Controller
 
                                         //  if(count($prod_line) > 0){
                                         // for($x=0;$x<=count($prod_line)-1;$x++){
+
+                                        $line_x_qty = $prod_line_qty[$i] == null?0:$prod_line_qty[$i];
+                                        $line_x_price = $line_sale_price[$i] == null?0:$line_sale_price[$i];
+
                                         $model_line = new \backend\models\Orderline();
                                         $model_line->order_id = $model->id;
                                         $model_line->customer_id = $customer_id[$i];
                                         $model_line->product_id = $prods->id;
-                                        $model_line->qty = $prod_line_qty[$i];
-                                        $model_line->price = $line_sale_price[$i];
-                                        $model_line->line_total = $prod_line_qty[$i] * $line_sale_price[$i];
+                                        $model_line->qty = $line_x_qty;
+                                        $model_line->price = $line_x_price;
+                                        $model_line->line_total = ($line_x_qty * $line_x_price);
                                         $model_line->price_group_id = $price_list_loop;
                                         $model_line->save(false);
                                         // }
@@ -220,20 +224,24 @@ class OrdersController extends Controller
 
                                         //  if(count($prod_line) > 0){
                                         // for($x=0;$x<=count($prod_line)-1;$x++){
+
+                                        $line_x_qty = $prod_line_qty[$i] == null?0:$prod_line_qty[$i];
+                                        $line_x_price = $line_sale_price[$i] == null?0:$line_sale_price[$i];
+
                                         $model_has = $this->check_has_line($id, $customer_id[$i], $prods->id, $price_list_loop);
                                         if ($model_has != null) {
-                                            $model_has->qty = $prod_line_qty[$i];
-                                            $model_has->price = $line_sale_price[$i];
-                                            $model_has->line_total = ($prod_line_qty[$i] * $line_sale_price[$i]);
+                                            $model_has->qty = $line_x_qty;
+                                            $model_has->price = $line_x_price;
+                                            $model_has->line_total = ($line_x_qty * $line_x_price);
                                             $model_has->save(false);
                                         } else {
                                             $model_line = new \backend\models\Orderline();
                                             $model_line->order_id = $model->id;
                                             $model_line->customer_id = $customer_id[$i];
                                             $model_line->product_id = $prods->id;
-                                            $model_line->qty = $prod_line_qty[$i];
-                                            $model_line->price = $line_sale_price[$i];
-                                            $model_line->line_total = $prod_line_qty[$i] * $line_sale_price[$i];
+                                            $model_has->qty = $line_x_qty;
+                                            $model_has->price = $line_x_price;
+                                            $model_has->line_total = ($line_x_qty * $line_x_price);
                                             $model_line->price_group_id = $price_list_loop;
                                             $model_line->save(false);
                                         }
