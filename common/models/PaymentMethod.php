@@ -35,7 +35,7 @@ class PaymentMethod extends \yii\db\ActiveRecord
         return [
             [['code','name'],'required'],
             [['code'],'unique'],
-            [['status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['status', 'created_at', 'created_by', 'updated_at', 'updated_by','pay_type'], 'integer'],
             [['code', 'name', 'note'], 'string', 'max' => 255],
         ];
     }

@@ -163,10 +163,16 @@ class Orders extends \common\models\Orders
         if($model){
             foreach ($model as $value){
                 $cus_pay_method = \backend\models\Customer::findPayMethod($value->customer_id);
-                $paymethod_name = \backend\models\Paymentmethod::findName($cus_pay_method);
-                if($paymethod_name == 'เงินสด'){
-                    $total = $total + ($value->qty * $value->price);
+                $paymethod_id = \backend\models\Paymentmethod::find()->where(['id'=>$cus_pay_method])->one();
+                if($paymethod_id){
+                    if($paymethod_id->pay_type == 1){
+                        $total = $total + ($value->qty * $value->price);
+                    }
                 }
+//                $paymethod_name = \backend\models\Paymentmethod::findName($cus_pay_method);
+//                if($paymethod_name == 'เงินสด'){
+//                    $total = $total + ($value->qty * $value->price);
+//                }
             }
 
         }
@@ -178,10 +184,17 @@ class Orders extends \common\models\Orders
         if($model){
             foreach ($model as $value){
                 $cus_pay_method = \backend\models\Customer::findPayMethod($value->customer_id);
-                $paymethod_name = \backend\models\Paymentmethod::findName($cus_pay_method);
-                if($paymethod_name == 'เงินเชื่อ' || $paymethod_name == 'เครดิต'){
-                    $total = $total + ($value->qty * $value->price);
+//                $paymethod_name = \backend\models\Paymentmethod::findName($cus_pay_method);
+//                if($paymethod_name == 'เงินเชื่อ' || $paymethod_name == 'เครดิต'){
+//                    $total = $total + ($value->qty * $value->price);
+//                }
+                $paymethod_id = \backend\models\Paymentmethod::find()->where(['id'=>$cus_pay_method])->one();
+                if($paymethod_id){
+                    if($paymethod_id->pay_type == 2){
+                        $total = $total + ($value->qty * $value->price);
+                    }
                 }
+
             }
 
         }
