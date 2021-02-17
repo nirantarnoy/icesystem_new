@@ -4,32 +4,7 @@ namespace common\models;
 
 use Yii;
 
-/**
- * This is the model class for table "orders".
- *
- * @property int $id
- * @property string|null $order_no
- * @property int|null $customer_id
- * @property int|null $customer_type
- * @property string|null $customer_name
- * @property string|null $order_date
- * @property float|null $vat_amt
- * @property float|null $vat_per
- * @property float|null $order_total_amt
- * @property int|null $emp_sale_id
- * @property int|null $car_ref_id
- * @property int|null $order_channel_id
- * @property int|null $status
- * @property int|null $company_id
- * @property int|null $branch_id
- * @property int|null $created_at
- * @property int|null $updated_at
- * @property int|null $created_by
- * @property int|null $updated_by
- *
- * @property Branch $branch
- * @property Company $company
- */
+
 class Orders extends \yii\db\ActiveRecord
 {
     public $order_total_amt_text;
@@ -75,6 +50,7 @@ class Orders extends \yii\db\ActiveRecord
             'emp_sale_id' => Yii::t('app', 'Emp Sale ID'),
             'car_ref_id' => Yii::t('app', 'รหัสรถ'),
             'order_channel_id' => Yii::t('app', 'สายส่ง'),
+            'issue_id' => 'ใบเบิก',
             'status' => Yii::t('app', 'สถานะ'),
             'payment_method_id' => Yii::t('app', 'วิธีชำระเงิน'),
             'payment_term_id' => Yii::t('app', 'เงื่อนไขชำระเงิน'),

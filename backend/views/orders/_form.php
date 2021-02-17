@@ -59,6 +59,16 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-lg-3">
+            <?= $form->field($model, 'issue_id')->Widget(\kartik\select2\Select2::className(), [
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Journalissue::find()->all(), 'id', 'journal_no'),
+                'options' => [
+                    'id' => 'issue-id',
+                    'disabled' => 'disabled',
+                    'placeholder' => '--เลือกใบเบิก--'
+                ]
+            ]) ?>
+        </div>
+        <div class="col-lg-3">
             <?php $model->order_total_amt_text = number_format($model->order_total_amt); ?>
             <?= $form->field($model, 'order_total_amt_text')->textInput(['readonly' => 'readonly', 'id' => 'order-total-amt-text'])->label('ยอดขาย') ?>
         </div>
@@ -312,6 +322,7 @@ $url_to_find_item = \yii\helpers\Url::to(['pricegroup/productdata'], true);
 $url_to_get_sale_item = \yii\helpers\Url::to(['orders/find-saledata'], true);
 $url_to_get_price_group = \yii\helpers\Url::to(['orders/find-pricegroup'], true);
 $url_to_get_car_item = \yii\helpers\Url::to(['orders/find-car-data'], true);
+$url_to_get_issue_item = \yii\helpers\Url::to(['orders/find-issue-data'], true);
 $url_to_get_sale_item_update = \yii\helpers\Url::to(['orders/find-saledata-update'], true);
 $url_to_get_car_emp = \yii\helpers\Url::to(['orders/findcarempdaily'], true);
 $url_to_get_term_item = \yii\helpers\Url::to(['orders/find-term-data'], true);
@@ -446,6 +457,20 @@ $js = <<<JS
                  // alert();
                  $("#car-ref-id").html(data);
                  $("#car-ref-id").prop("disabled","");
+                 $("#issue-id").prop("disabled","");
+              }
+         });
+         
+         $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_get_issue_item",
+              'data': {'id': e.val()},
+              'success': function(data) {
+                 // alert();
+                 $("#issue-id").html(data);
+                 $("#issue-id").prop("disabled","");
               }
          });
 

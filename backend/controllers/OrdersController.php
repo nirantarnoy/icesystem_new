@@ -89,6 +89,7 @@ class OrdersController extends Controller
                         }
                         //echo count($price_group_list_arr);return;
                         $customer_id = \Yii::$app->request->post('line_customer_id' . $price_group_list_arr[$x]);
+                        $customer_line_bill = \Yii::$app->request->post('line_bill_no' . $price_group_list_arr[$x]);
                         if (count($customer_id) > 0) {
                             // echo "has data= ".count($customer_id);return;
                             $product_list = \backend\models\Product::find()->all();
@@ -210,6 +211,7 @@ class OrdersController extends Controller
                             continue;
                         }
                         $customer_id = \Yii::$app->request->post('line_customer_id' . $price_group_list_arr[$x]);
+                        $customer_line_bill = \Yii::$app->request->post('line_bill_no' . $price_group_list_arr[$x]);
                         if (count($customer_id) > 0) {
                             $product_list = \backend\models\Product::find()->all();
                             for ($i = 0; $i <= count($customer_id) - 1; $i++) {
@@ -335,6 +337,26 @@ class OrdersController extends Controller
 
     }
 
+    public function actionFindIssueData()
+    {
+        $id = \Yii::$app->request->post('id');
+        if ($id) {
+            $model = \common\models\JournalIssue::find()->where(['delivery_route_id' => $id])->all();
+            if ($model) {
+//                $model_car = \backend\models\Car::find()->where(['sale_group_id' => $model->id])->all();
+//                echo "<option value=''>--เลือกใบเบิก--</option>";
+                foreach ($model as $value) {
+                    echo "<option value='" . $value->id . "'>$value->name</option>";
+                }
+            } else {
+                echo "<option></option>";
+            }
+        } else {
+            echo "<option></option>";
+        }
+
+    }
+
     public function actionFindTermData()
     {
         $id = \Yii::$app->request->post('id');
@@ -438,6 +460,7 @@ class OrdersController extends Controller
             $html .= '<th style="width: 5%;text-align: center">#</th>';
             $html .= '<th style="width: 8%">รหัสลูกค้า</th>';
             $html .= '<th style="width: 15%">ชื่อลูกค้า</th>';
+            $html .= '<th style="width: 8%;text-align: center">เลขที่บิล</th>';
             $html .= $this->getProductcolumn2($price_group_id);
             $html .= '<th style="width: 8%;text-align: right">รวมจำนวน</th>';
             $html .= '<th style="text-align: right">รวมเงิน</th>';
@@ -457,6 +480,7 @@ class OrdersController extends Controller
                         $html .= '<td style="text-align: center">' . $i . '</td>';
                         $html .= '<td>' . \backend\models\Customer::findCode($val->id) . '<input type="hidden" class="line-customer-id" name="line_customer_id' . $price_group_id . '[]" value="' . $val->id . '"></td>';
                         $html .= '<td>' . \backend\models\Customer::findName($val->id) . '</td>';
+                        $html .= '<td><input type="text" style="background-color: #258faf;color: white" class="form-control" name="line_bill_no' . $price_group_id . '[]" value=""></td>';
                         $html .= $this->getProducttextfield2($price_group_id);
                         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right"></td>';
                         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"><input type="hidden" class="form-control line-total-price-cal" style="text-align: right"></td>';
@@ -734,6 +758,7 @@ class OrdersController extends Controller
                     $html .= '<td style="text-align: center' . $payment_color . '">' . $i . '</td>';
                     $html .= '<td style="' . $payment_color . '"><a href="' . Url::to(['customer/view', 'id' => $value->customer_id], true) . '">' . $value->code . '</a><input type="hidden" class="line-customer-id" name="line_customer_id' . $price_group_id . '[]" value="' . $value->customer_id . '"></td>';
                     $html .= '<td style="' . $payment_color . '">' . $value->name . '</td>';
+                    $html .= '<td><input type="text" style="background-color: #258faf;color: white" class="form-control" name="line_bill_no' . $price_group_id . '[]" value="'.$value->bill_no.'"></td>';
                     $html .= $this->getProducttextfieldUpdate2($order_id, $value->customer_id, $price_group_id, $has_payment);
                     $html .= '</tr>';
                 }
