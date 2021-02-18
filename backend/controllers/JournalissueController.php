@@ -98,6 +98,7 @@ class JournalissueController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model_line = \backend\models\Journalissueline::find()->where(['issue_id'=>$id])->all();
 
         if ($model->load(Yii::$app->request->post())) {
             $prod_id = \Yii::$app->request->post('line_prod_id');
@@ -110,6 +111,7 @@ class JournalissueController extends Controller
             }
 
             $model->trans_date = date('Y-m-d',strtotime($sale_date));
+            $model->status = 1;
             if ($model->save()) {
                 if (count($prod_id) > 0) {
                     for ($i = 0; $i <= count($prod_id) - 1; $i++) {
@@ -135,6 +137,7 @@ class JournalissueController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'model_line' => $model_line
         ]);
     }
 

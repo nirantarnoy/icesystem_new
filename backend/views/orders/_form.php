@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 ?>
 <div class="orders-form">
     <input type="hidden" class="page-status" data-var="<?= $model->id ?>" value="<?= $model->isNewRecord ? 0 : 1 ?>">
-    <?php $form = ActiveForm::begin(['id' => 'order-form', 'method' => 'post','options' => ['enctype'=>'multipart/form-data']]); ?>
+    <?php $form = ActiveForm::begin(['id' => 'order-form', 'method' => 'post', 'options' => ['enctype' => 'multipart/form-data']]); ?>
     <input type="hidden" class="current_id" value="<?= $model->id ?>">
     <input type="hidden" class="current-price-group" value="">
     <input type="hidden" class="remove-list" name="removelist" value="">
@@ -323,6 +323,7 @@ $url_to_get_sale_item = \yii\helpers\Url::to(['orders/find-saledata'], true);
 $url_to_get_price_group = \yii\helpers\Url::to(['orders/find-pricegroup'], true);
 $url_to_get_car_item = \yii\helpers\Url::to(['orders/find-car-data'], true);
 $url_to_get_issue_item = \yii\helpers\Url::to(['orders/find-issue-data'], true);
+$url_to_get_issue_detail= \yii\helpers\Url::to(['orders/find-issue-detail'], true);
 $url_to_get_sale_item_update = \yii\helpers\Url::to(['orders/find-saledata-update'], true);
 $url_to_get_car_emp = \yii\helpers\Url::to(['orders/findcarempdaily'], true);
 $url_to_get_term_item = \yii\helpers\Url::to(['orders/find-term-data'], true);
@@ -757,7 +758,25 @@ function removepayline(e){
 }
 
 function showtransfer(e){
-      $("#transferModal").modal('show');
+      var issue_id = $("#issue-id").val();
+      if(issue_id > 0){
+          $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_get_issue_detail",
+              'data': {'issue_id': issue_id},
+              'success': function(data) {
+                  //  alert(data);
+                  if(data != ''){
+                      $(".table-transfer-list tbody").html(data);
+                      $("#transferModal").modal('show');
+                  }
+                  
+                 }
+              });
+      }
+     
 }
 
 

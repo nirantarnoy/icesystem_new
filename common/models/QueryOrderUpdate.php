@@ -32,6 +32,7 @@ class QueryOrderUpdate extends \yii\db\ActiveRecord
         return [
             [['customer_id', 'order_id', 'price_group_id', 'id'], 'integer'],
             [['name', 'code'], 'string', 'max' => 255],
+            [['bill_no'],'string']
         ];
     }
 
