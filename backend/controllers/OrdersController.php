@@ -1271,7 +1271,7 @@ class OrdersController extends Controller
         return $total_pay;
     }
 
-    public function actionAdpayment()
+    public function actionAddpayment()
     {
         $order_id = \Yii::$app->request->post('payment_order_id');
         $customer_id = \Yii::$app->request->post('line_pay_customer_id');
