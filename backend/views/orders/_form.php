@@ -79,6 +79,7 @@ use yii\widgets\ActiveForm;
             <label class="label" style="color: white">ยืม</label>
             <br>
             <div class="btn-group">
+                <?php if(0>1):?>
                 <?php if ($model->issue_id > 0): ?>
                     <div class="btn btn-info btn-transfer" onclick="showtransfer($(this))">โอนย้ายสินค้า</div>
                 <?php endif; ?>
@@ -86,6 +87,7 @@ use yii\widgets\ActiveForm;
                     <div class="btn btn-warning btn-show-has-transfer" onclick="showtransfersale($(this))">
                         รายการยืมสินค้า
                     </div>
+                <?php endif; ?>
                 <?php endif; ?>
             </div>
         </div>
