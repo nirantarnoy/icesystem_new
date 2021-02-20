@@ -5,25 +5,27 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "journal_issue".
+ * This is the model class for table "journal_transfer".
  *
  * @property int $id
- * @property string|null $journal_no
+ * @property string|null $journ_no
  * @property string|null $trans_date
+ * @property int|null $order_ref_id
+ * @property int|null $order_target_id
  * @property int|null $status
  * @property int|null $created_at
  * @property int|null $created_by
- * @property int|null $updated_at
+ * @property int|null $update_at
  * @property int|null $updated_by
  */
-class JournalIssue extends \yii\db\ActiveRecord
+class JournalTransfer extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'journal_issue';
+        return 'journal_transfer';
     }
 
     /**
@@ -32,11 +34,10 @@ class JournalIssue extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['delivery_route_id'], 'required'],
+            [['journal_no'],'unique'],
             [['trans_date'], 'safe'],
-            [['created_at', 'created_by', 'updated_at', 'updated_by', 'delivery_route_id', 'car_ref_id', 'order_ref_id'], 'integer'],
+            [['order_ref_id', 'order_target_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['journal_no'], 'string', 'max' => 255],
-            [['status',], 'safe']
         ];
     }
 
@@ -47,14 +48,14 @@ class JournalIssue extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'journal_no' => 'เลขที่ใบเบิก',
-            'trans_date' => 'วันที่',
-            'delivery_route_id' => 'สายส่ง',
-            'order_ref_id' => 'เลขที่ขาย',
-            'status' => 'สถานะ',
+            'journal_no' => 'Journal No',
+            'trans_date' => 'Trans Date',
+            'order_ref_id' => 'Order Ref ID',
+            'order_target_id' => 'Order Target ID',
+            'status' => 'Status',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
-            'updated_at' => 'Updated At',
+            'updated_at' => 'Update At',
             'updated_by' => 'Updated By',
         ];
     }

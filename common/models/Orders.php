@@ -20,7 +20,7 @@ class Orders extends \yii\db\ActiveRecord
     {
         return [
             [['order_no'],'unique'],
-            [['order_no','order_date','order_channel_id','car_ref_id'],'required'],
+            [['order_no','order_date','order_channel_id','car_ref_id','issue_id'],'required'],
             [['customer_id', 'customer_type', 'emp_sale_id','payment_status', 'car_ref_id', 'order_channel_id', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by','issue_id'], 'integer'],
             [['order_date','status','order_total_amt_text'], 'safe'],
             [['vat_amt', 'vat_per', 'order_total_amt'], 'number'],

@@ -78,7 +78,16 @@ use yii\widgets\ActiveForm;
         <div class="col-lg-3">
             <label class="label" style="color: white">ยืม</label>
             <br>
-            <div class="btn btn-info btn-transfer" onclick="showtransfer($(this))">โอนย้ายสินค้า</div>
+            <div class="btn-group">
+                <?php if ($model->issue_id > 0): ?>
+                    <div class="btn btn-info btn-transfer" onclick="showtransfer($(this))">โอนย้ายสินค้า</div>
+                <?php endif; ?>
+                <?php if ($model_has_transfer != null): ?>
+                    <div class="btn btn-warning btn-show-has-transfer" onclick="showtransfersale($(this))">
+                        รายการยืมสินค้า
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
     <br>
@@ -265,8 +274,8 @@ use yii\widgets\ActiveForm;
 <div id="transferModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-xl">
         <!-- Modal content-->
-        <form id="form-payment" action="<?= \yii\helpers\Url::to(['orders/addpayment'], true) ?>" method="post">
-            <input type="hidden" class="payment-order-id" name="payment_order_id" value="<?= $model->id ?>">
+        <form id="form-transfer" action="<?= \yii\helpers\Url::to(['orders/addtransfer'], true) ?>" method="post">
+            <input type="hidden" class="transfer-order-id" name="transfer_order_id" value="<?= $model->id ?>">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="row" style="width: 100%">
@@ -285,6 +294,19 @@ use yii\widgets\ActiveForm;
 
                 <div class="modal-body">
                     <div class="row">
+                        <div class="col-lg-4">
+                            <div class="label">โอนย้ายไปยังใบขายเลขที่</div>
+                            <?php
+                            echo \kartik\select2\Select2::widget([
+                                'name' => 'order_target',
+                                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Orders::find()->where(['status' => 1])->all(), 'id', function ($data) {
+                                    return $data->order_no . ' (' . \backend\models\Deliveryroute::findName($data->order_channel_id) . ')';
+                                })
+                            ])
+                            ?>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
                         <div class="col-lg-12">
                             <table class="table table-striped table-bordered table-transfer-list">
                                 <thead>
@@ -292,9 +314,9 @@ use yii\widgets\ActiveForm;
                                     <th>รหัสสินค้า</th>
                                     <th>ชื่อสินค้า</th>
                                     <th>ราคาขาย</th>
-                                    <th>จำนวน</th>
-                                    <th>สายส่ง</th>
-                                    <th>จำนวน</th>
+                                    <th>จำนวนทั้งหมด</th>
+                                    <!--                                    <th>สายส่ง</th>-->
+                                    <th>จำนวนโอนย้าย</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -305,7 +327,45 @@ use yii\widgets\ActiveForm;
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-outline-success btn-paymet-submit" data-dismiss="modalx"><i
+                    <button class="btn btn-outline-success btn-transfer-submit" data-dismiss="modalx"><i
+                                class="fa fa-check"></i> ตกลง
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                                class="fa fa-close text-danger"></i> ปิดหน้าต่าง
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="transferIssueModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-xl">
+        <!-- Modal content-->
+        <form id="form-transfer-sale" action="<?= \yii\helpers\Url::to(['orders/addtransfersale'], true) ?>"
+              method="post">
+            <input type="hidden" class="transfer-order-id" name="transfer_order_id" value="<?= $model->id ?>">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row" style="width: 100%">
+                        <div class="col-lg-11">
+                            <h2 style="color: #255985"><i class="fa fa-cart-arrow-down"></i> บันทึกขายสินค้ารับโอน
+                            </h2>
+                        </div>
+                        <div class="col-lg-1">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                    </div>
+
+                </div>
+                <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+                <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-success btn-transfer-sale-submit" data-dismiss="modalx"><i
                                 class="fa fa-check"></i> ตกลง
                     </button>
                     <button type="button" class="btn btn-default" data-dismiss="modal"><i
@@ -323,13 +383,14 @@ $url_to_get_sale_item = \yii\helpers\Url::to(['orders/find-saledata'], true);
 $url_to_get_price_group = \yii\helpers\Url::to(['orders/find-pricegroup'], true);
 $url_to_get_car_item = \yii\helpers\Url::to(['orders/find-car-data'], true);
 $url_to_get_issue_item = \yii\helpers\Url::to(['orders/find-issue-data'], true);
-$url_to_get_issue_detail= \yii\helpers\Url::to(['orders/find-issue-detail'], true);
+$url_to_get_issue_detail = \yii\helpers\Url::to(['orders/find-issue-detail'], true);
 $url_to_get_sale_item_update = \yii\helpers\Url::to(['orders/find-saledata-update'], true);
 $url_to_get_car_emp = \yii\helpers\Url::to(['orders/findcarempdaily'], true);
 $url_to_get_term_item = \yii\helpers\Url::to(['orders/find-term-data'], true);
 $url_to_get_payment_list = \yii\helpers\Url::to(['orders/find-payment-list'], true);
 $url_to_get_condition = \yii\helpers\Url::to(['orders/getpaycondition'], true);
 $url_to_get_payment_trans = \yii\helpers\Url::to(['orders/getpaytrans'], true);
+$url_to_get_transfer_sale_item = \yii\helpers\Url::to(['orders/gettransfer-sale-item'], true);
 $js = <<<JS
   var removelist = [];
   var selecteditem = [];
@@ -386,6 +447,13 @@ $js = <<<JS
             $("form#form-order-payment").submit();
         } 
      });
+     
+      $(".btn-transfer-submit").click(function(){
+        if(confirm('คุณมันใจที่จะทำรายการนี้ใช่หรือไม่ ?')){
+            $("form#form-transfer").submit();
+        } 
+     });
+     
      checktabs();
      
   });
@@ -776,6 +844,29 @@ function showtransfer(e){
                  }
               });
       }
+     
+}
+function showtransfersale(e){
+//      var issue_id = $("#issue-id").val();
+//      if(issue_id > 0){
+//          $.ajax({
+//              'type':'post',
+//              'dataType': 'html',
+//              'async': false,
+//              'url': "$url_to_get_issue_detail",
+//              'data': {'issue_id': issue_id},
+//              'success': function(data) {
+//                  //  alert(data);
+//                  if(data != ''){
+//                      $(".table-transfer-list tbody").html(data);
+//                      $("#transferModal").modal('show');
+//                  }
+//                  
+//                 }
+//              });
+//      }
+
+$("#transferIssueModal").modal('show');
      
 }
 

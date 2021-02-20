@@ -63,6 +63,7 @@ class JournalissueController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $prod_id = \Yii::$app->request->post('line_prod_id');
             $line_qty = \Yii::$app->request->post('line_qty');
+            $line_issue_price = \Yii::$app->request->post('line_issue_line_price');
 
             $x_date = explode('/', $model->trans_date);
             $sale_date = date('Y-m-d');
@@ -70,7 +71,7 @@ class JournalissueController extends Controller
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
             $model->journal_no = $model->getLastNo($sale_date);
-            $model->trans_date = date('Y-m-d',strtotime($sale_date));
+            $model->trans_date = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
             if ($model->save()) {
                 if (count($prod_id) > 0) {
@@ -81,6 +82,7 @@ class JournalissueController extends Controller
                         $model_line->issue_id = $model->id;
                         $model_line->product_id = $prod_id[$i];
                         $model_line->qty = $line_qty[$i];
+                        $model_line->sale_price = $line_issue_price[$i];
                         $model_line->status = 1;
                         $model_line->save();
                     }
@@ -98,11 +100,12 @@ class JournalissueController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model_line = \backend\models\Journalissueline::find()->where(['issue_id'=>$id])->all();
+        $model_line = \backend\models\Journalissueline::find()->where(['issue_id' => $id])->all();
 
         if ($model->load(Yii::$app->request->post())) {
             $prod_id = \Yii::$app->request->post('line_prod_id');
             $line_qty = \Yii::$app->request->post('line_qty');
+            $line_issue_price = \Yii::$app->request->post('line_issue_line_price');
 
             $x_date = explode('/', $model->trans_date);
             $sale_date = date('Y-m-d');
@@ -110,7 +113,7 @@ class JournalissueController extends Controller
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
 
-            $model->trans_date = date('Y-m-d',strtotime($sale_date));
+            $model->trans_date = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
             if ($model->save()) {
                 if (count($prod_id) > 0) {
@@ -126,6 +129,7 @@ class JournalissueController extends Controller
                             $model_line->issue_id = $model->id;
                             $model_line->product_id = $prod_id[$i];
                             $model_line->qty = $line_qty[$i];
+                            $model_line->sale_price = $line_issue_price[$i];
                             $model_line->status = 1;
                             $model_line->save();
                         }
@@ -141,29 +145,15 @@ class JournalissueController extends Controller
         ]);
     }
 
-    /**
-     * Deletes an existing Journalissue model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionDelete($id)
     {
-        if($this->findModel($id)->delete()){
-            \backend\models\Journalissueline::deleteAll(['issue_id'=>$id]);
+        if ($this->findModel($id)->delete()) {
+            \backend\models\Journalissueline::deleteAll(['issue_id' => $id]);
         }
 
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Journalissue model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Journalissue the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Journalissue::findOne($id)) !== null) {
@@ -171,5 +161,44 @@ class JournalissueController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionFindPricegroup()
+    {
+        $html = '';
+        $route_id = \Yii::$app->request->post('route_id');
+        $price_group_list = [];
+
+        if ($route_id > 0) {
+            $model = \backend\models\Customer::find()->select(['customer_type_id'])->where(['delivery_route_id' => $route_id])->groupBy('customer_type_id')->one();
+            if ($model) {
+                $model_prod_price = \common\models\QueryCategoryPrice::find()->where(['customer_type_id' => $model->customer_type_id])->all();
+                if ($model_prod_price) {
+                    foreach ($model_prod_price as $value) {
+                        $html .= '<tr>';
+                        $html .= '<td>
+                                <input type="hidden" class="line-prod-id" name="line_prod_id[]"
+                                       value="' . $value->product_id . '">
+                                ' . $value->code . '
+                            </td>';
+                        $html .= ' <td>' . $value->name . '</td>';
+                        $html .= '
+                                <td>
+                                <input type="hidden" class="line-issue-sale-price" name="line_issue_line_price[]" value="'.$value->sale_price.'">
+                                <input type="number" class="line-qty form-control" name="line_qty[]" value="0" min="0">
+                                </td>
+                                <td style="text-align: center">
+                                    <div class="btn btn-danger btn-sm" onclick="deleteline($(this))"><i
+                                                class="fa fa-trash"></i>
+                                    </div>
+                                </td>
+                                ';
+                        $html .= '</tr>';
+                    }
+                }
+            }
+        }
+
+        return $html;
     }
 }

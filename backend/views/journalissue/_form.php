@@ -31,7 +31,8 @@ $prod_data = \backend\models\Product::find()->all();
             <?= $form->field($model, 'delivery_route_id')->widget(Select2::className(), [
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(), 'id', 'name'),
                 'options' => [
-                    'placeholder' => '--เลือกสายส่ง--'
+                    'placeholder' => '--เลือกสายส่ง--',
+                    'onchange'=>'route_change($(this))'
                 ]
             ]) ?>
         </div>
@@ -44,7 +45,7 @@ $prod_data = \backend\models\Product::find()->all();
     <!--    <hr>-->
     <div class="row">
         <div class="col-lg-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-issue-line">
                 <thead>
                 <tr>
                     <th>รหัสสินค้า</th>
@@ -56,24 +57,7 @@ $prod_data = \backend\models\Product::find()->all();
                 <tbody>
                 <?php foreach ($prod_data as $value): ?>
                     <?php if ($model->isNewRecord): ?>
-                        <tr>
-                            <td>
-                                <input type="hidden" class="line-prod-id" name="line_prod_id[]"
-                                       value="<?= $value->id; ?>">
-                                <?= $value->code ?>
-                            </td>
-                            <td>
-                                <?= $value->name ?>
-                            </td>
-                            <td>
-                                <input type="number" class="line-qty form-control" name="line_qty[]" value="0" min="0">
-                            </td>
-                            <td style="text-align: center">
-                                <div class="btn btn-danger btn-sm" onclick="deleteline($(this))"><i
-                                            class="fa fa-trash"></i>
-                                </div>
-                            </td>
-                        </tr>
+
                     <?php else: ?>
                     <?php foreach ($model_line as $value2):?>
                           <?php if($value->id == $value2->product_id):?>
@@ -86,6 +70,7 @@ $prod_data = \backend\models\Product::find()->all();
                                     <?= \backend\models\Product::findName($value2->product_id); ?>
                                 </td>
                                 <td>
+                                    <input type="hidden" class="line-issue-sale-price" name="line_issue_line_price[]" value="<?=$value2->sale_price?>">
                                     <input type="number" class="line-qty form-control" name="line_qty[]" value="<?=$value2->qty?>" min="0">
                                 </td>
                                 <td style="text-align: center">
@@ -110,3 +95,29 @@ $prod_data = \backend\models\Product::find()->all();
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+$url_to_get_price_group = \yii\helpers\Url::to(['journalissue/find-pricegroup'], true);
+$js=<<<JS
+$(function (){
+    
+});
+
+function route_change(e) {
+         //alert(e.val());
+         //$(".text-car-emp").html("");
+         $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_get_price_group",
+              'data': {'route_id': e.val()},
+              'success': function(data) {
+                  //alert(data);
+                  $(".table-issue-line tbody").html(data);
+              }
+         });
+ }
+JS;
+$this->registerJs($js,static::POS_END);
+?>
