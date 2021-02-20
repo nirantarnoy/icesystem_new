@@ -105,6 +105,7 @@ class CustomerController extends Controller
                 $model->shop_photo = $photo_name;
             }
 
+            $model->code = $model->getLastNo();
 
             if($model->save(false)){
                 $session = Yii::$app->session;
