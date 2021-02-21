@@ -74,7 +74,7 @@ class JournalissueController extends Controller
             $model->trans_date = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
             if ($model->save()) {
-                if (count($prod_id) > 0) {
+                if ($prod_id != null) {
                     for ($i = 0; $i <= count($prod_id) - 1; $i++) {
                         if ($prod_id[$i] == '') continue;
 
@@ -116,7 +116,7 @@ class JournalissueController extends Controller
             $model->trans_date = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
             if ($model->save()) {
-                if (count($prod_id) > 0) {
+                if ($prod_id != null) {
                     for ($i = 0; $i <= count($prod_id) - 1; $i++) {
                         if ($prod_id[$i] == '') continue;
 
