@@ -31,7 +31,7 @@ class PosController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index', 'getcustomerprice', 'getoriginprice', 'closesale','salehistory'],
+                        'actions' => ['logout', 'index', 'getcustomerprice', 'getoriginprice', 'closesale', 'salehistory'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -66,7 +66,6 @@ class PosController extends Controller
                     array_push($data_cus_price, ['product_id' => $value->product_id, 'sale_price' => $value->sale_price, 'price_name' => $value->name]);
                 }
             }
-
         }
         $model_basic_price = \backend\models\Product::find()->all();
         if ($model_basic_price) {
@@ -190,11 +189,12 @@ class PosController extends Controller
         }
     }
 
-    public function actionSalehistory(){
+    public function actionSalehistory()
+    {
         $searchModel = new OrdersposSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
-     //  $dataProvider->pagination->pageSize = $pageSize;
+        //  $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render('_history', [
             'searchModel' => $searchModel,
@@ -202,7 +202,8 @@ class PosController extends Controller
         ]);
     }
 
-    public function actionPrint(){
+    public function actionPrint()
+    {
 
     }
 }
