@@ -660,16 +660,16 @@ function getproduct_price(e){
                    data: {'product_id': line_product_id, 'customer_id': ids},
                    success: function(data){
                        if(data.length > 0){
-                           alert(data.length);
-                              // if(data[0]['sale_price'] != null){
-                              //      _this.find(".card").css("background-color","#66CCFF");
-                              //      _this.find(".list-item-price").val(data[0]['sale_price']);
-                              //      _this.find(".item-price").html(data[0]['sale_price']); 
-                              // }else{
-                              //      _this.find(".card").css("background-color","white");
-                              //      _this.find(".list-item-price").val(data[0]['basic_price']);
-                              //      _this.find(".item-price").html(data[0]['basic_price']); 
-                              // }
+                           //alert(data.length);
+                              if(data[0]['sale_price'] != null){
+                                   _this.find(".card").css("background-color","#66CCFF");
+                                   _this.find(".list-item-price").val(data[0]['sale_price']);
+                                   _this.find(".item-price").html(data[0]['sale_price']); 
+                              }else{
+                                   _this.find(".card").css("background-color","white");
+                                   _this.find(".list-item-price").val(data[0]['basic_price']);
+                                   _this.find(".item-price").html(data[0]['basic_price']); 
+                              }
                              
                        }
                                          
