@@ -91,13 +91,22 @@ class PosController extends Controller
 
     public function actionGetbasicprice()
     {
+        $customer_id = \Yii::$app->request->post('customer_id');
         $id = \Yii::$app->request->post('id');
         $data = [];
-        if ($id > 0) {
-            $model_basic_price = \backend\models\Product::find()->where(['id' => $id])->one();
-            if ($model_basic_price) {
-                array_push($data, ['sale_price' => $model_basic_price->sale_price]);
+        $basic_price = 0;
+        $sale_price = null;
+        if ($id > 0 && $customer_id > 0) {
+            $model_sale_price = \common\models\QueryCustomerPrice::find()->where(['cus_id' => $customer_id, 'product_id' => $id])->one();
+            if ($model_sale_price) {
+                $sale_price = $model_sale_price->sale_price;
+            } else {
+                $model = \backend\models\Product::find()->where(['id'=>$id])->one();
+                if($model){
+                    $basic_price = $model->sale_price;
+                }
             }
+            array_push($data, ['sale_price' => $sale_price, 'basic_price' => $basic_price]);
         }
 
         return json_encode($data);
