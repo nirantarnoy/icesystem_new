@@ -97,15 +97,15 @@ class PosController extends Controller
         $basic_price = 0;
         $sale_price = 0;
         if ($id > 0 && $customer_id > 0) {
-            $model_sale_price = \common\models\QueryCustomerPrice::find()->where(['cus_id' => $customer_id, 'product_id' => $id])->one();
-            if ($model_sale_price) {
-                $sale_price = $model_sale_price->sale_price;
-            } else {
-                $model = \backend\models\Product::find()->where(['id'=>$id])->one();
-                if($model){
-                    $basic_price = $model->sale_price;
-                }
-            }
+//            $model_sale_price = \common\models\QueryCustomerPrice::find()->where(['cus_id' => $customer_id, 'product_id' => $id])->one();
+//            if ($model_sale_price) {
+//                $sale_price = $model_sale_price->sale_price;
+//            } else {
+//                $model = \backend\models\Product::find()->where(['id'=>$id])->one();
+//                if($model){
+//                    $basic_price = $model->sale_price;
+//                }
+//            }
             array_push($data, ['sale_price' => $sale_price, 'basic_price' => $basic_price]);
         }
 
