@@ -657,16 +657,14 @@ function getproduct_price(e){
                           var i = -1;
                           var price_group_name = '';
                           if(data[0][0] != null){
-                              alert(data[0][0]['product_id']);
-                              return false;
                               $(".product-items").each(function(){
                                 //  alert();
                                      i++;
                                      var line_product_id = $(this).find(".list-item-product-id").val();
                                          if(data[0][i]!= null){
-                                             
-                                             for(var x =0;x<= data[0][i].length -1;x++){
-                                                 if(parseInt(line_product_id) == parseInt(data[0][i]['product_id'])){
+                                             alert('has');
+                                             for(var x =0;x<= data[0].length -1;x++){
+                                                 if(parseInt(line_product_id) == parseInt(data[0][x]['product_id'])){
                                                      alert("OKKK");
                                                  }
                                              }
