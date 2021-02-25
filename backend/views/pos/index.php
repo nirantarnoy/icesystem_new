@@ -664,6 +664,7 @@ function getproduct_price(e){
                                          if(data[0][i]!= null){
                                              alert(data[0].length);
                                              for(var x =0;x<= data[0].length -1;x++){
+                                                 alert('product = '+ data[0][x]['product_id']);
                                                  if(parseInt(line_product_id) == parseInt(data[0][x]['product_id'])){
                                                      alert("OKKK");
                                                  }
