@@ -654,16 +654,16 @@ function getproduct_price(e){
               data: {customer_id: ids},
               success: function(data){
                   if(data.length > 0){
-                       alert("has");
                           var i = -1;
                           var price_group_name = '';
                           if(data[0][0] != null){
+                              alert("has");
                               $(".product-items").each(function(){
                                 //  alert();
                                      i++;
                                      var line_product_id = $(this).find(".list-item-product-id").val();
                                          if(data[0][i]!= null){
-                                            // alert(data[0][i]['product_id']);
+                                             alert(data[0][i]['product_id']);
                                                  if(line_product_id == data[0][i]['product_id']){
                                                      $(this).find(".card").css("background-color","#66CCFF");
                                                      $(this).find(".list-item-price").val(data[0][i]['sale_price']);
