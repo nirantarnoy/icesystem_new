@@ -664,12 +664,12 @@ function getproduct_price(e){
                                      alert(line_product_id);
                                         // if(data[0][i]!= null){
                                             // alert(data[0].length);
-                                             for(var x =0;x<= data[0].length -1;x++){
-                                                 alert('product = '+ data[0][x]['product_id']);
-                                                 if(parseInt(line_product_id) == parseInt(data[0][x]['product_id'])){
-                                                     alert("OKKK");
-                                                 }
-                                             }
+                                            //  for(var x =0;x<= data[0].length -1;x++){
+                                            //      alert('product = '+ data[0][x]['product_id']);
+                                            //      if(parseInt(line_product_id) == parseInt(data[0][x]['product_id'])){
+                                            //          alert("OKKK");
+                                            //      }
+                                            //  }
                                              
                                              // alert('line_id= '+line_product_id + ' AND ' +data[0][i]['product_id']);
                                              //     if(parseInt(line_product_id) == parseInt(data[0][i]['product_id'])){
