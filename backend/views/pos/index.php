@@ -663,8 +663,9 @@ function getproduct_price(e){
                                      i++;
                                      var line_product_id = $(this).find(".list-item-product-id").val();
                                          if(data[0][i]!= null){
-                                             alert(data[0][i]['product_id']);
-                                                 if(line_product_id == data[0][i]['product_id']){
+                                             alert('line_id= '+line_product_id + ' AND ' +data[0][i]['product_id']);
+                                                 if(parseInt(line_product_id) == parseInt(data[0][i]['product_id'])){
+                                                     alert("equal");
                                                      $(this).find(".card").css("background-color","#66CCFF");
                                                      $(this).find(".list-item-price").val(data[0][i]['sale_price']);
                                                      $(this).find(".item-price").html(data[0][i]['sale_price']);
