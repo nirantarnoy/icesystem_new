@@ -734,8 +734,8 @@ function loop_item_price(data){
          i++;
          var line_product_id = $(this).find(".list-item-product-id").val();
          alert(line_product_id);
-         if(data[0][i]!= null){
-             alert(data[0].length);
+         if(data[0][0]!= null){
+             //alert(data[0].length);
              for(var x =0;x<= data[0].length -1;x++){
                  alert('product = '+ data[0][x]['product_id']);
                 if(parseInt(line_product_id) == parseInt(data[0][x]['product_id'])){
