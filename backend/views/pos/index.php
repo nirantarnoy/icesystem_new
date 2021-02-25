@@ -656,7 +656,6 @@ function getproduct_price(e){
           $.ajax({
                    type: "post",
                    dataType: "json",
-                   async: true,
                    url: "$url_to_get_basic_price",
                    data: {'product_id': line_product_id, 'customer_id': ids},
                    success: function(data){
