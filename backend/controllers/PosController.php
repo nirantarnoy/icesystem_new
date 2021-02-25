@@ -95,7 +95,7 @@ class PosController extends Controller
         $id = \Yii::$app->request->post('product_id');
         $data = [];
         $basic_price = 0;
-        $sale_price = 0;
+        $sale_price = null;
         if ($id > 0 && $customer_id > 0) {
             $model_sale_price = \common\models\QueryCustomerPrice::find()->where(['cus_id' => $customer_id, 'product_id' => $id])->one();
             if ($model_sale_price) {
