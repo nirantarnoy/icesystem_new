@@ -657,7 +657,7 @@ function getproduct_price(e){
                           var i = -1;
                           var price_group_name = '';
                           if(data[0][0] != null){
-                              $(".product-items").each(function(){
+                              $("div.product-items").each(function(){
                                 //  alert();
                                      i++;
                                      var line_product_id = $(this).find(".list-item-product-id").val();
