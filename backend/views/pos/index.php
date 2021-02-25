@@ -734,7 +734,7 @@ function loop_item_price(data){
          i++;
          var line_product_id = $(this).find(".list-item-product-id").val();
          alert(line_product_id);
-       //  if(data[0][0]!= null){
+         if(data[0][0]!= null){
              //alert(data[0].length);
              for(var x =0;x<= data[0].length -1;x++){
                  alert('product = '+ data[0][x]['product_id']);
@@ -756,7 +756,7 @@ function loop_item_price(data){
                                          //         $(this).find(".card").css("background-color","white"); 
                                          //         $(this).find(".list-item-price").val(data[1][i]['sale_price']);
                                          //         $(this).find(".item-price").html(data[1][i]['sale_price']); 
-      //   }
+         }
                                
      });
 }
