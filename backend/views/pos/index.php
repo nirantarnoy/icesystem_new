@@ -729,7 +729,7 @@ funtion loop_item_price(){
      alert($("div.product-items").length);
      $("div.product-items").each(function(){
          alert();
-     }
+     });
 }
 
 function showadditem(e){
