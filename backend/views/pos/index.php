@@ -654,6 +654,7 @@ function getproduct_price(e){
               data: {customer_id: ids},
               success: function(data){
                   if(data.length > 0){
+                       alert("has");
                           var i = -1;
                           var price_group_name = '';
                           if(data[0][0] != null){
