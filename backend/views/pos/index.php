@@ -657,19 +657,27 @@ function getproduct_price(e){
                           var i = -1;
                           var price_group_name = '';
                           if(data[0][0] != null){
-                              alert("has");
+                              alert(data[0][0]['product_id']);
+                              return false;
                               $(".product-items").each(function(){
                                 //  alert();
                                      i++;
                                      var line_product_id = $(this).find(".list-item-product-id").val();
                                          if(data[0][i]!= null){
-                                             alert('line_id= '+line_product_id + ' AND ' +data[0][i]['product_id']);
+                                             
+                                             for(var x =0;x<= data[0][i].length -1;x++){
                                                  if(parseInt(line_product_id) == parseInt(data[0][i]['product_id'])){
-                                                     alert("equal");
-                                                     $(this).find(".card").css("background-color","#66CCFF");
-                                                     $(this).find(".list-item-price").val(data[0][i]['sale_price']);
-                                                     $(this).find(".item-price").html(data[0][i]['sale_price']);
+                                                     alert("OKKK");
                                                  }
+                                             }
+                                             
+                                             // alert('line_id= '+line_product_id + ' AND ' +data[0][i]['product_id']);
+                                             //     if(parseInt(line_product_id) == parseInt(data[0][i]['product_id'])){
+                                             //         alert("equal");
+                                             //         $(this).find(".card").css("background-color","#66CCFF");
+                                             //         $(this).find(".list-item-price").val(data[0][i]['sale_price']);
+                                             //         $(this).find(".item-price").html(data[0][i]['sale_price']);
+                                             //     }
                                               price_group_name = data[0][i]['price_name'];
                                              //alert(line_product_id);
                                          }else{
