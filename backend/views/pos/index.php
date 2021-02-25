@@ -652,6 +652,7 @@ function getproduct_price(e){
         $("div.product-items").each(function(){
          // alert();
          var _this = $(this);
+         var line_product_id = $(this).find(".list-item-product-id").val();
           $.ajax({
                    type: "post",
                    dataType: "json",
