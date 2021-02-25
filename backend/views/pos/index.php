@@ -176,7 +176,8 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
             </div>
             <div class="row">
                 <div class="col-lg-6" style="text-align: left">
-                    <a href="index.php?r=pos/salehistory" class="btn btn-outline-info btn-history-cart" style="display: noneผ">
+                    <a href="index.php?r=pos/salehistory" class="btn btn-outline-info btn-history-cart"
+                       style="display: noneผ">
                         ประวัติการขาย
                     </a>
                 </div>
@@ -192,7 +193,7 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
                     <div class="btn btn-group">
                         <div class="btn btn-outline-success btn-lg btn-pay-cash">ชำระเงินสด</div>
                         <!--                    <div class="btn btn-outline-primary btn-lg btn-pay-credit">ชำระเงินเชื่อ</div>-->
-<!--                        <div class="btn btn-outline-warning btn-lg btn-pay-credit-card">ชำระบัตรเครดิต</div>-->
+                        <!--                        <div class="btn btn-outline-warning btn-lg btn-pay-credit-card">ชำระบัตรเครดิต</div>-->
                     </div>
                 </div>
             </div>
@@ -460,14 +461,14 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
 
             </div>
 
-<!--            <div class="modal-footer">-->
-<!--                <button class="btn btn-outline-success btn-add-cart" data-dismiss="modalx" onclick="addcart($(this))"><i-->
-<!--                            class="fa fa-check"></i> บันทึกรายการ-->
-<!--                </button>-->
-<!--                <button type="button" class="btn btn-default" data-dismiss="modal"><i-->
-<!--                            class="fa fa-close text-danger"></i> ยกเลิก-->
-<!--                </button>-->
-<!--            </div>-->
+            <!--            <div class="modal-footer">-->
+            <!--                <button class="btn btn-outline-success btn-add-cart" data-dismiss="modalx" onclick="addcart($(this))"><i-->
+            <!--                            class="fa fa-check"></i> บันทึกรายการ-->
+            <!--                </button>-->
+            <!--                <button type="button" class="btn btn-default" data-dismiss="modal"><i-->
+            <!--                            class="fa fa-close text-danger"></i> ยกเลิก-->
+            <!--                </button>-->
+            <!--            </div>-->
         </div>
 
     </div>
@@ -658,9 +659,10 @@ function getproduct_price(e){
                           var i = -1;
                           var price_group_name = '';
                           if(data[0][0] != null){
-                              alert($("div.product-items").length);
+                              loop_item_price();
+                              //alert($("div.product-items").length);
                               $("div.product-items").each(function(){
-                                 alert();
+                                // alert();
                                      i++;
                                      // var line_product_id = $(this).find(".list-item-product-id").val();
                                      // alert(line_product_id);
@@ -721,6 +723,13 @@ function getproduct_price(e){
     //   // console.log($(this).find(".list-item-price").val());
     //    $(".popup-price").val($(this).find(".list-item-price").val());
     // });
+}
+
+funtion loop_item_price(){
+     alert($("div.product-items").length);
+     $("div.product-items").each(function(){
+         alert();
+     }
 }
 
 function showadditem(e){
