@@ -476,7 +476,9 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
 
 <?php
 $url_to_get_origin_price = \yii\helpers\Url::to(['pos/getoriginprice'], true);
+$url_to_get_basic_price = \yii\helpers\Url::to(['pos/getbasicprice'], true);
 $url_to_get_price = \yii\helpers\Url::to(['pos/getcustomerprice'], true);
+
 $js = <<<JS
  $(function(){
      
@@ -731,6 +733,7 @@ function loop_item_price(data){
      var price_group_name = '';
      $("div.product-items").each(function(){
          // alert();
+         var _this = $(this);
          i++;
          var line_product_id = $(this).find(".list-item-product-id").val();
          //alert(line_product_id);
@@ -743,6 +746,22 @@ function loop_item_price(data){
                              $(this).find(".card").css("background-color","#66CCFF");
                              $(this).find(".list-item-price").val(data[0][x]['sale_price']);
                              $(this).find(".item-price").html(data[0][x]['sale_price']);
+               }else{
+                             $(this).find(".card").css("background-color","white");
+                             $.ajax({
+                                      type: "post",
+                                      dataType: "json",
+                                      async: true,
+                                      url: "$url_to_get_basic_price",
+                                      data: {id: line_product_id},
+                                      success: function(data){
+                                          if(data.length > 0){
+                                               _this.find(".list-item-price").val(data[0]['sale_price']);
+                                               _this.find(".item-price").html(data[0]['sale_price']); 
+                                          }
+                                         
+                                      }
+                             });
                }
              }
          }

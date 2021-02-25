@@ -89,6 +89,20 @@ class PosController extends Controller
         return json_encode($data);
     }
 
+    public function actionGetbasicprice()
+    {
+        $id = \Yii::$app->request->post('id');
+        $data = [];
+        if ($id > 0) {
+            $model_basic_price = \backend\models\Product::find()->where(['id' => $id])->one();
+            if ($model_basic_price) {
+                array_push($data, ['sale_price' => $model_basic_price->sale_price]);
+            }
+        }
+
+        return json_encode($data);
+    }
+
     public function actionClosesale()
     {
         $pay_total_amount = \Yii::$app->request->post('sale_total_amount');
