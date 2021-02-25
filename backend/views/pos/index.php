@@ -659,38 +659,38 @@ function getproduct_price(e){
                           var i = -1;
                           var price_group_name = '';
                           if(data[0][0] != null){
-                              loop_item_price();
+                              loop_item_price(data);
                               //alert($("div.product-items").length);
-                              $("div.product-items").each(function(){
-                                // alert();
-                                     i++;
-                                     // var line_product_id = $(this).find(".list-item-product-id").val();
-                                     // alert(line_product_id);
-                                        // if(data[0][i]!= null){
-                                            // alert(data[0].length);
-                                            //  for(var x =0;x<= data[0].length -1;x++){
-                                            //      alert('product = '+ data[0][x]['product_id']);
-                                            //      if(parseInt(line_product_id) == parseInt(data[0][x]['product_id'])){
-                                            //          alert("OKKK");
-                                            //      }
-                                            //  }
-                                             
-                                             // alert('line_id= '+line_product_id + ' AND ' +data[0][i]['product_id']);
-                                             //     if(parseInt(line_product_id) == parseInt(data[0][i]['product_id'])){
-                                             //         alert("equal");
-                                             //         $(this).find(".card").css("background-color","#66CCFF");
-                                             //         $(this).find(".list-item-price").val(data[0][i]['sale_price']);
-                                             //         $(this).find(".item-price").html(data[0][i]['sale_price']);
-                                             //     }
-                                              price_group_name = data[0][i]['price_name'];
-                                             //alert(line_product_id);
-                                         // }else{
-                                         //         $(this).find(".card").css("background-color","white"); 
-                                         //         $(this).find(".list-item-price").val(data[1][i]['sale_price']);
-                                         //         $(this).find(".item-price").html(data[1][i]['sale_price']); 
-                                         // }
-                               
-                              });
+//                              $("div.product-items").each(function(){
+//                                // alert();
+//                                     i++;
+//                                     // var line_product_id = $(this).find(".list-item-product-id").val();
+//                                     // alert(line_product_id);
+//                                        // if(data[0][i]!= null){
+//                                            // alert(data[0].length);
+//                                            //  for(var x =0;x<= data[0].length -1;x++){
+//                                            //      alert('product = '+ data[0][x]['product_id']);
+//                                            //      if(parseInt(line_product_id) == parseInt(data[0][x]['product_id'])){
+//                                            //          alert("OKKK");
+//                                            //      }
+//                                            //  }
+//                                             
+//                                             // alert('line_id= '+line_product_id + ' AND ' +data[0][i]['product_id']);
+//                                             //     if(parseInt(line_product_id) == parseInt(data[0][i]['product_id'])){
+//                                             //         alert("equal");
+//                                             //         $(this).find(".card").css("background-color","#66CCFF");
+//                                             //         $(this).find(".list-item-price").val(data[0][i]['sale_price']);
+//                                             //         $(this).find(".item-price").html(data[0][i]['sale_price']);
+//                                             //     }
+//                                              price_group_name = data[0][i]['price_name'];
+//                                             //alert(line_product_id);
+//                                         // }else{
+//                                         //         $(this).find(".card").css("background-color","white"); 
+//                                         //         $(this).find(".list-item-price").val(data[1][i]['sale_price']);
+//                                         //         $(this).find(".item-price").html(data[1][i]['sale_price']); 
+//                                         // }
+//                               
+//                              });
                           }else{
                               $(".product-items").each(function(){
                                      i+=1;
@@ -725,10 +725,39 @@ function getproduct_price(e){
     // });
 }
 
-function loop_item_price(){
-     alert($("div.product-items").length);
+function loop_item_price(data){
+     //alert($("div.product-items").length);
+     var i = -1;
+     var price_group_name = '';
      $("div.product-items").each(function(){
-         alert();
+         // alert();
+         i++;
+         var line_product_id = $(this).find(".list-item-product-id").val();
+         alert(line_product_id);
+         if(data[0][i]!= null){
+             alert(data[0].length);
+             for(var x =0;x<= data[0].length -1;x++){
+                 alert('product = '+ data[0][x]['product_id']);
+                if(parseInt(line_product_id) == parseInt(data[0][x]['product_id'])){
+                    alert("OKKK");
+               }
+             }
+                                             
+                                             // alert('line_id= '+line_product_id + ' AND ' +data[0][i]['product_id']);
+                                             //     if(parseInt(line_product_id) == parseInt(data[0][i]['product_id'])){
+                                             //         alert("equal");
+                                             //         $(this).find(".card").css("background-color","#66CCFF");
+                                             //         $(this).find(".list-item-price").val(data[0][i]['sale_price']);
+                                             //         $(this).find(".item-price").html(data[0][i]['sale_price']);
+                                             //     }
+                                              price_group_name = data[0][i]['price_name'];
+                                             //alert(line_product_id);
+                                         // }else{
+                                         //         $(this).find(".card").css("background-color","white"); 
+                                         //         $(this).find(".list-item-price").val(data[1][i]['sale_price']);
+                                         //         $(this).find(".item-price").html(data[1][i]['sale_price']); 
+         }
+                               
      });
 }
 
