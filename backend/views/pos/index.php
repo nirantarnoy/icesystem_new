@@ -733,13 +733,16 @@ function loop_item_price(data){
          // alert();
          i++;
          var line_product_id = $(this).find(".list-item-product-id").val();
-         alert(line_product_id);
+         //alert(line_product_id);
          if(data[0][0]!= null){
              //alert(data[0].length);
              for(var x =0;x<= data[0].length -1;x++){
-                 alert('product = '+ data[0][x]['product_id']);
+               //  alert('product = '+ data[0][x]['product_id']);
                 if(parseInt(line_product_id) == parseInt(data[0][x]['product_id'])){
-                    alert("OKKK");
+                    //alert("OKKK");
+                             $(this).find(".card").css("background-color","#66CCFF");
+                             $(this).find(".list-item-price").val(data[0][x]['sale_price']);
+                             $(this).find(".item-price").html(data[0][x]['sale_price']);
                }
              }
          }
