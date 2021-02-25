@@ -650,7 +650,7 @@ function getproduct_price(e){
          $.ajax({
               type: "post",
               dataType: "json",
-              async: false,
+              async: true,
               url: "$url_to_get_price",
               data: {customer_id: ids},
               success: function(data){
