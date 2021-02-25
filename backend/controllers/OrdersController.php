@@ -1412,7 +1412,7 @@ class OrdersController extends Controller
 //                                         ' . $this->showrouteoption() . '
 //                                    </select>
 //                          </td>';
-                $html .= '<td><input type="number" class="line-trans-qty form-control" name="line_trans_qty[]" min="0" value="0"></td>';
+                $html .= '<td><input type="number" class="line-trans-qty form-control" name="line_trans_qty[]" min="0" value="0" onchange="issueqtychange($(this))"></td>';
                 $html .= '</tr>';
             }
         }
@@ -1471,79 +1471,96 @@ class OrdersController extends Controller
         }
         return $this->redirect(['orders/update', 'id' => $order_id]);
     }
+
     public function actionGettransferSaleItem()
     {
-        $order_id = \Yii::$app->request->post('target_order_id');
+        $order_id = \Yii::$app->request->post('order_id');
         $html = '';
-        if($order_id){
-            $model = \backend\models\Journaltransfer::find()->where(['target_order_id'=>$order_id,'status'=>1])->one();
-            if($model){
-                $model_line = \backend\models\Transferline::find()->where(['transfer_id'=>$model->id])->all();
-                foreach($model_line as $value){
-                    $html.='<tr>';
-                    $html.='<td>
-                           <input type="hidden" class="line_transfer_sale_id[]" value="'.$value->id.'">
+        if ($order_id) {
+            $model = \backend\models\Journaltransfer::find()->where(['order_target_id' => $order_id, 'status' => 1])->one();
+            if ($model) {
+                $model_line = \backend\models\Transferline::find()->where(['transfer_id' => $model->id])->all();
+                foreach ($model_line as $value) {
+                    $a_qty = $value->qty;
+                    $s_qty = $this->checkTransferOnhand($model->id,$value->product_id);
+                    $a_qty = $a_qty - $s_qty;
+
+                    $html .= '<tr>';
+                    $html .= '<td>
+                           <input type="hidden" class="line-transfer-order-id" name="line_transfer_order_id[]" value="' . $model->id . '">
+                           <input type="hidden" class="line-transfer-sale-line-id" name="line_transfer_sale_line_id[]" value="' . $value->id . '">
+                           ' . \backend\models\Product::findCode($value->product_id) . '
+                            <input type="hidden" class="line-transfer-sale-product-id" name="line_transfer_sale_product_id[]" value="' . $value->id . '">
                     </td>';
-                    $html.='<td><input type="text" class="form-control line_transfer_issue_qty[]" value="'.number_format($value->qty).'"></td>';
-                    $html.='<td></td>';
-                    $html.='<td><input type="number" class="form-control line_transfer_sale_qty[]" value="0" min="0"></td>';
-                    $html.='</tr>';
+                    $html .= '<td><input type="text" class="form-control line-transfer-issue-qty" name="line_transfer_issue_qty[]" value="' . number_format($a_qty) . '" readonly></td>';
+                    $html .= '<td><select class="form-control select-transfer-sale-customer-id" name="transfer_sale_customer_id[]">
+                            <option value="0">--เลือกลูกค้า--</option>
+                            ' . $this->getCustomerOption($order_id) . '
+                     </select></td>';
+                    $html .= '<td><input type="number" class="form-control line-transfer-sale-qty" name="line_transfer_sale_qty[]" value="0" min="0" onchange="transfersaleqtychange($(this))"></td>';
+                    $html .= '</tr>';
                 }
             }
         }
-//        if (count($customer_paylist_id) > 0 && $order_id > 0) {
-//            for ($i = 0; $i <= count($customer_paylist_id) - 1; $i++) {
-//                //   $model = \common\models\QuerySaleTransData::find()->select(['order_id','customer_id', 'cus_name', 'SUM(qty) as qty', 'SUM(price) as price'])->where(['order_id' => $order_id, 'price_group_id' => $price_group_id, 'customer_id' => $customer_paylist_id[$i]])->andFilterWhere(['>', 'qty', 0])->groupBy('order_id','customer_id', 'price_group_id')->all();
-//                $model = \common\models\QuerySaleTransData::find()->select(['order_id', 'customer_id', 'cus_name', 'SUM(qty) as qty', 'SUM(line_total_amt) as line_total_amt'])->where(['order_id' => $order_id, 'price_group_id' => $price_group_id, 'customer_id' => $customer_paylist_id[$i]])->andFilterWhere(['>', 'qty', 0])->groupBy('order_id', 'customer_id', 'price_group_id')->all();
-//                if ($model != null) {
-//                    foreach ($model as $value) {
-//                        //$line_total_price = $value->qty * $value->price;
-//                        $line_total_price = $value->line_total_amt;
-//                        if ($line_total_price <= 0 && $value->qty <= 0) continue;
-//                        $customer_pay_amount = $this->checkpaymentsum($order_id, $value->customer_id);
-//                        $line_remain_pay = $line_total_price - $customer_pay_amount;
-//                        $customer_success_pay = '';
-//                        if ($line_remain_pay == 0) {
-//                            $customer_success_pay = 'readonly';
-//                        }
-//                        $cust_pay_type = $this->getCuspaymenttype($value->customer_id);
-//                        $show_order_pay = 0;
-//
-//                        $xx = substr($cust_pay_type, 3, 2);
-//
-//                        if ($xx == 'สด') {
-//                            $show_order_pay = $line_remain_pay;
-//                        }
-//                        $html .= '<tr>
-//                                <td>' . \backend\models\Customer::findCode($value->customer_id) . '<input type="hidden" class="line-customer-id" name="line_pay_customer_id[]" value="' . $value->customer_id . '"> </td>
-//                                <td>' . $value->cus_name . '</td>
-//                                <td style="width: 10%">
-//                                    <input type="text" class="form-control" readonly value="' . number_format($line_total_price) . '">
-//                                </td>
-//                                <td>
-//                                    <select name="line_payment_id[]" class="form-control" id="" onchange="getCondition($(this))" required>
-//                                        <option value="">--วิธีชำระเงิน--</option>
-//                                        ' . $this->showpayoption($value->customer_id) . '
-//                                    </select>
-//                                </td>
-//                                <td>
-//                                    <select name="line_payment_term_id[]" class="form-control select-condition" id="" required>
-//                                        <option value="0" selected>--เงื่อนไข--</option>
-//                                         ' . $this->showconoption($value->customer_id) . '
-//                                    </select>
-//                                </td>
-//                                <td style="width: 10%">
-//                                    <input type="text" class="form-control" name="line_pay_amount[]" value="' . $show_order_pay . '" ' . $customer_success_pay . '>
-//                                </td>
-//                                <td style="width: 10%">
-//                                    <input type="text" class="form-control" readonly value="' . number_format($line_remain_pay) . '">
-//                                </td>
-//
-//                            </tr>';
-//                    }
-//                }
-//            }
-//        }
+
         return $html;
     }
+
+    public function getCustomerOption($order_id)
+    {
+        $html = '';
+        if ($order_id > 0) {
+            $model = \common\models\QueryCustomerInOrder::find()->where(['order_id' => $order_id])->all();
+            if ($model) {
+                foreach ($model as $value) {
+                    $html .= '<option value="' . $value->customer_id . '">' . \backend\models\Customer::findName($value->customer_id) . '</option>';
+                }
+            }
+        }
+
+        return $html;
+    }
+
+    public function checkTransferOnhand($tranfer_id,$product_id){
+        $sale_qty = 0;
+        if($tranfer_id && $product_id){
+            $model = \common\models\OrderTransferSale::find()->where(['transfer_id'=>$tranfer_id,'product_id'=>$product_id])->sum('qty');
+            if($model != null){
+                $sale_qty = $model;
+            }
+        }
+        return $sale_qty;
+    }
+
+    public function actionSavetransfersale()
+    {
+        $order_id = \Yii::$app->request->post('order_id');
+        $transfer_id = \Yii::$app->request->post('line_transfer_order_id');
+        $customer_list = \Yii::$app->request->post('transfer_sale_customer_id');
+        $product_list = \Yii::$app->request->post('line_transfer_sale_product_id');
+        $line_qty = \Yii::$app->request->post('line_transfer_sale_qty');
+
+        $res = 0;
+
+        if ($order_id) {
+            if ($product_list != null) {
+                for ($i = 0; $i <= count($product_list) - 1; $i++) {
+                    if($line_qty[$i]==0 || $line_qty[$i] == null)continue;
+                    $model = new \common\models\OrderTransferSale();
+                    $model->order_id = $order_id;
+                    $model->transfer_id = $transfer_id[$i];
+                    $model->customer_id = $customer_list[$i];
+                    $model->product_id = $product_list[$i];
+                    $model->qty = $line_qty[$i];
+                    if ($model->save()) {
+                        $res += 1;
+                    }
+                }
+            }
+        }
+        if ($res) {
+            return $this->redirect(['orders/update', 'id' => $order_id]);
+        }
+    }
+
 }

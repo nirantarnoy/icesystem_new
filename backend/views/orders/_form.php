@@ -79,7 +79,7 @@ use yii\widgets\ActiveForm;
             <label class="label" style="color: white">ยืม</label>
             <br>
             <div class="btn-group">
-                <?php if(0>1):?>
+                <?php //if(0>1):?>
                 <?php if ($model->issue_id > 0): ?>
                     <div class="btn btn-info btn-transfer" onclick="showtransfer($(this))">โอนย้ายสินค้า</div>
                 <?php endif; ?>
@@ -88,7 +88,7 @@ use yii\widgets\ActiveForm;
                         รายการยืมสินค้า
                     </div>
                 <?php endif; ?>
-                <?php endif; ?>
+                <?php //endif; ?>
             </div>
         </div>
     </div>
@@ -344,9 +344,10 @@ use yii\widgets\ActiveForm;
 <div id="transferIssueModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-xl">
         <!-- Modal content-->
-        <form id="form-transfer-sale" action="<?= \yii\helpers\Url::to(['orders/addtransfersale'], true) ?>"
+        <form id="form-transfer-sale" action="<?= \yii\helpers\Url::to(['orders/savetransfersale'], true) ?>"
               method="post">
-            <input type="hidden" class="transfer-order-id" name="transfer_order_id" value="<?= $model->id ?>">
+            <input type="hidden" class="order-id" name="order_id" value="<?= $model->id ?>">
+            <input type="hidden" class="transfer-order-id" name="transfer_order_id" value="0">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="row" style="width: 100%">
@@ -364,7 +365,19 @@ use yii\widgets\ActiveForm;
                 <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
 
                 <div class="modal-body">
+                   <table class="table table-bordered table-striped table-transfer-sale-list">
+                       <thead>
+                       <tr>
+                           <th>สินค้า</th>
+                           <th style="width: 15%">จำนวนคงคลัง</th>
+                           <th>ลูกค้า</th>
+                           <th>จำนวนขาย</th>
+                       </tr>
+                       </thead>
+                       <tbody>
 
+                       </tbody>
+                   </table>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-outline-success btn-transfer-sale-submit" data-dismiss="modalx"><i
@@ -849,29 +862,46 @@ function showtransfer(e){
      
 }
 function showtransfersale(e){
-//      var issue_id = $("#issue-id").val();
-//      if(issue_id > 0){
-//          $.ajax({
-//              'type':'post',
-//              'dataType': 'html',
-//              'async': false,
-//              'url': "$url_to_get_issue_detail",
-//              'data': {'issue_id': issue_id},
-//              'success': function(data) {
-//                  //  alert(data);
-//                  if(data != ''){
-//                      $(".table-transfer-list tbody").html(data);
-//                      $("#transferModal").modal('show');
-//                  }
-//                  
-//                 }
-//              });
-//      }
-
-$("#transferIssueModal").modal('show');
+      var order_id = $(".current_id").val();
+      if(order_id > 0){
+          alert(order_id);
+          $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_get_transfer_sale_item",
+              'data': {'order_id': order_id},
+              'success': function(data) {
+                  //  alert(data);
+                  if(data != ''){
+                      $(".table-transfer-sale-list tbody").html(data);
+                      $("#transferIssueModal").modal('show');
+                  }
+                 }
+              });
+      }
      
 }
 
+function issueqtychange(e){
+      var a_qty = e.closest('tr').find('.line-issue-qty').val();
+      var t_qty = e.val();
+      if(parseFloat(t_qty) > parseFloat(a_qty)){
+          alert('จำนวนเบิกมากกว่าจำนวนที่ใช้ได้');
+          e.val(a_qty);
+          return false;
+      }
+}
+
+function transfersaleqtychange(e){
+      var a_qty = e.closest('tr').find('.line-transfer-issue-qty').val();
+      var t_qty = e.val();
+      if(parseFloat(t_qty) > parseFloat(a_qty)){
+          alert('จำนวนขายมากกว่าจำนวนที่ใช้ได้');
+          e.val(a_qty);
+          return false;
+      }
+}
 
 function addCommas(nStr) {
         nStr += '';

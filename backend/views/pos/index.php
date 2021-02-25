@@ -176,9 +176,9 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
             </div>
             <div class="row">
                 <div class="col-lg-6" style="text-align: left">
-                    <div class="btn btn-outline-info btn-history-cart" style="display: noneผ">
+                    <a href="index.php?r=pos/salehistory" class="btn btn-outline-info btn-history-cart" style="display: noneผ">
                         ประวัติการขาย
-                    </div>
+                    </a>
                 </div>
                 <div class="col-lg-6" style="text-align: right">
                     <div class="btn btn-outline-secondary btn-cancel-cart" style="display: none">
@@ -192,7 +192,7 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
                     <div class="btn btn-group">
                         <div class="btn btn-outline-success btn-lg btn-pay-cash">ชำระเงินสด</div>
                         <!--                    <div class="btn btn-outline-primary btn-lg btn-pay-credit">ชำระเงินเชื่อ</div>-->
-                        <div class="btn btn-outline-warning btn-lg btn-pay-credit-card">ชำระบัตรเครดิต</div>
+<!--                        <div class="btn btn-outline-warning btn-lg btn-pay-credit-card">ชำระบัตรเครดิต</div>-->
                     </div>
                 </div>
             </div>
