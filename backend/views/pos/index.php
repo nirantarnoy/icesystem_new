@@ -657,7 +657,7 @@ function getproduct_price(e){
                    dataType: "json",
                    async: true,
                    url: "$url_to_get_basic_price",
-                   data: {id: line_product_id, customer_id: ids},
+                   data: {'id': line_product_id, 'customer_id': ids},
                    success: function(data){
                        if(data.length > 0){
                               if(data[0]['sale_price'] != null){
@@ -673,45 +673,7 @@ function getproduct_price(e){
                        }
                                          
                    }
-          });
-         
-         
-         
-         
-         
-         
-//         i++;
-//         var line_product_id = $(this).find(".list-item-product-id").val();
-//         //alert(line_product_id);
-//         if(data[0][0]!= null){
-//             //alert(data[0].length);
-//             for(var x =0;x<= data[0].length -1;x++){
-//               //  alert('product = '+ data[0][x]['product_id']);
-//                if(parseInt(line_product_id) == parseInt(data[0][x]['product_id'])){
-//                    //alert("OKKK");
-//                             _this.find(".card").css("background-color","#66CCFF");
-//                             _this.find(".list-item-price").val(data[0][x]['sale_price']);
-//                             _this.find(".item-price").html(data[0][x]['sale_price']);
-//               }else{
-//                             _this.find(".card").css("background-color","white");
-//                             $.ajax({
-//                                      type: "post",
-//                                      dataType: "json",
-//                                      async: true,
-//                                      url: "$url_to_get_basic_price",
-//                                      data: {id: line_product_id},
-//                                      success: function(data){
-//                                          if(data.length > 0){
-//                                               _this.find(".list-item-price").val(data[0]['sale_price']);
-//                                               _this.find(".item-price").html(data[0]['sale_price']); 
-//                                          }
-//                                         
-//                                      }
-//                             });
-//               }
-//             }
-//         }
-                               
+          });                               
      });
     }
 }
