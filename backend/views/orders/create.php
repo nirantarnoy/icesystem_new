@@ -12,7 +12,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="orders-create">
     <?= $this->render('_form', [
         'model' => $model,
-        'model_line' => null
+        'model_line' => null,
+        'model_has_transfer' =>null,
     ]) ?>
 
 </div>
