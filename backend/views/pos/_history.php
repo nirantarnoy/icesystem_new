@@ -222,7 +222,7 @@ $this->title = 'ประวัติการขาย POS';
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
+                                <td style="text-align: right"><span class="total-all"></span></td>
                             </tr>
                             </tfoot>
                         </table>
@@ -264,6 +264,13 @@ function showorderedit(e){
                         $(".txt-customer-name").html(data[0]['customer_name']);
                         $(".txt-payment-method").html(data[0]['payment_data']);
                         $(".table-order-history tbody").html(data[0]['html']);
+                        
+                        var total_all = 0;
+                        $(".table-order-history tbody tr").each(function(){
+                            var line_total = $(this).closest('tr').find('.line-total').val();
+                            total_all = total_all + parseFloat(line_total);
+                        });
+                        $(".total-all").html(parseFloat(total_all));
                         $("#poseditModal").modal("show");
                    }
                  }
