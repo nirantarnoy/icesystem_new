@@ -108,6 +108,7 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
             <input type="hidden" class="sale-customer-id" name="customer_id" value="">
             <input type="hidden" class="sale-total-amount" name="sale_total_amount" value="">
             <input type="hidden" class="sale-pay-amount" name="sale_pay_amount" value="">
+            <input type="hidden" class="sale-pay-date" name="sale_pay_date" value="">
             <input type="hidden" class="sale-pay-change" name="sale_pay_change" value="">
             <input type="hidden" class="sale-pay-type" name="sale_pay_type" value="">
             <div class="row">
@@ -283,11 +284,30 @@ $this->title = '<p style="color: #255985">ทำรายการขายห�
             <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
 
             <div class="modal-body">
-                <!--                <div class="row">-->
-                <!--                    <div class="col-lg-12">-->
-                <!--                        <p>เลขที่ <b>POS20010002</b></p>-->
-                <!--                    </div>-->
-                <!--                </div>-->
+                                <div class="row">
+                                    <div class="col-lg-3" style="text-align: right">
+                                        <h4>วันที่ขาย</h4>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <?php
+                                        // $order_date = date('d/m/Y',strtotime($model->order_date));
+                                        echo \kartik\date\DatePicker::widget([
+                                            'name' => 'pos_date',
+                                            'value' => date('d/m/Y'),
+                                            'options' => [
+                                                    'class'=>'pos-date',
+                                                    'onchange'=>'$(".sale-pay-date").val($(this).val());'
+                                                // 'readonly' => true,
+                                            ],
+                                            'pluginOptions' => [
+                                                'format' => 'dd/mm/yyyy',
+                                                'todayHighlight' => true
+                                            ],
+                                        ]);
+                                        ?>
+                                    </div>
+                                </div>
+                <hr>
                 <!--                <hr style="border-top: 1px dashed gray">-->
                 <div class="row">
                     <div class="col-lg-8">
@@ -617,7 +637,6 @@ $js = <<<JS
      $(".btn-pay-submit").click(function(){
          $("form#form-close-sale").submit();
      });
-      
  });
 
 function calpayprice(e){
@@ -633,6 +652,10 @@ function calpayprice(e){
     if(price_val == 0){ price_change = 0;}
     $(".pay-amount").val(new_pay);
     $(".pay-change").val(price_change);
+    
+    //alert($(".pos-date").val());
+    
+    $(".sale-pay-date").val($(".pos-date").val());
     
     $(".sale-pay-amount").val(new_pay);
     $(".sale-pay-change").val(price_change);

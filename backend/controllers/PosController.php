@@ -125,15 +125,18 @@ class PosController extends Controller
         $line_qty = \Yii::$app->request->post('cart_qty');
         $line_price = \Yii::$app->request->post('cart_price');
 
-        // echo $pay_amount;return;
+        $pos_date = \Yii::$app->request->post('sale_pay_date');
+
+        // echo $pos_date;return;
         $sale_date = date('Y-m-d');
-//        if (count($x_date) > 1) {
-//            $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
-//        }
+        $x_date = explode('/',$pos_date);
+        if (count($x_date) > 1) {
+            $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
+        }
         if ($customer_id) {
             $model_order = new \backend\models\Orders();
             $model_order->order_no = $model_order->getLastNo($sale_date);
-            $model_order->order_date = date('Y-m-d');
+            $model_order->order_date = date('Y-m-d', strtotime($sale_date));
             $model_order->customer_id = $customer_id;
             $model_order->sale_channel_id = 2; // pos
             $model_order->payment_status = 0;
