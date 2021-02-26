@@ -3,7 +3,7 @@
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 
-$this->title = '<p style="color: #255985">ทำรายการขายหน้าร้าน POS</p>';
+//$this->title = '<p style="color: #255985">ทำรายการขายหน้าร้าน POS</p>';
 
 ?>
 <div class="row">

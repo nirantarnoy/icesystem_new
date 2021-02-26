@@ -4,12 +4,14 @@ namespace backend\controllers;
 
 use backend\models\JournalissueSearch;
 use backend\models\Orderline;
+use backend\models\Orders;
 use backend\models\OrdersposSearch;
 use backend\models\WarehouseSearch;
 use Yii;
 use backend\models\Car;
 use backend\models\CarSearch;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -32,7 +34,7 @@ class PosController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index', 'getcustomerprice', 'getoriginprice', 'closesale', 'salehistory','getbasicprice','delete'],
+                        'actions' => ['logout', 'index', 'getcustomerprice', 'getoriginprice', 'closesale', 'salehistory', 'getbasicprice', 'delete', 'orderedit'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -130,7 +132,7 @@ class PosController extends Controller
 
         // echo $pos_date;return;
         $sale_date = date('Y-m-d');
-        $x_date = explode('/',$pos_date);
+        $x_date = explode('/', $pos_date);
         if (count($x_date) > 1) {
             $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
         }
@@ -229,13 +231,53 @@ class PosController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+
     public function actionDelete($id)
     {
         Orderline::deleteAll(['order_id' => $id]);
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['pos/salehistory']);
     }
+
+    protected function findModel($id)
+    {
+        if (($model = Orders::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    public function actionOrderedit()
+    {
+        $id = \Yii::$app->request->post('order_id');
+        $data = [];
+        $html = '';
+
+        if ($id) {
+            $model = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
+            if ($model) {
+                foreach ($model as $value) {
+                    $html .= '<tr>';
+                    $html .= '<td style="text-align: center">' . \backend\models\Product::findCode($value->product_id) . '</td>';
+                    $html .= '<td>' . \backend\models\Product::findName($value->product_id) . '</td>';
+                    $html .= '<td><input type="number" style="text-align: right" class="form-control line-qty" name="line_qty[]" value="' . $value->qty . '"></td>';
+                    $html .= '<td style="text-align: right"><input type="number" style="text-align: right" class="form-control line-price" name="line_price[]" value="' . $value->price . '"></td>';
+                    $html .= '<td style="text-align: right"><input type="hidden" class="line-total" value="' . $value->qty * $value->price . '">' . number_format($value->qty * $value->price) . '</td>';
+                    $html .= '</tr>';
+                }
+            }
+        }
+        $model_order = \backend\models\Orders::find()->where(['id' => $id])->one();
+        if ($model_order) {
+            $customer_name = \backend\models\Customer::findName($model_order->customer_id);
+            $payment_data = \backend\models\Paymentmethod::findName($model_order->payment_method_id);
+            array_push($data, ['order_id' => $id, 'order_no' => $model_order->order_no, 'order_date' => $model_order->order_date, 'customer_name' => $customer_name, 'payment_method' => $payment_data,'html'=>$html]);
+        }
+        return json_encode($data);
+    }
+
     public function actionPrint()
     {
 
