@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\JournalissueSearch;
+use backend\models\Orderline;
 use backend\models\OrdersposSearch;
 use backend\models\WarehouseSearch;
 use Yii;
@@ -31,7 +32,7 @@ class PosController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index', 'getcustomerprice', 'getoriginprice', 'closesale', 'salehistory','getbasicprice'],
+                        'actions' => ['logout', 'index', 'getcustomerprice', 'getoriginprice', 'closesale', 'salehistory','getbasicprice','delete'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -228,7 +229,13 @@ class PosController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    public function actionDelete($id)
+    {
+        Orderline::deleteAll(['order_id' => $id]);
+        $this->findModel($id)->delete();
 
+        return $this->redirect(['index']);
+    }
     public function actionPrint()
     {
 
