@@ -6,8 +6,8 @@ date_default_timezone_set('Asia/Bangkok');
 // เพิ่ม Font ให้กับ mPDF
 $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
 $fontData = $defaultFontConfig['fontdata'];
-//$mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp',
-$mpdf = new \Mpdf\Mpdf([
+$mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp',
+//$mpdf = new \Mpdf\Mpdf([
     //'tempDir' => '/tmp',
     'mode' => 'utf-8', 'format' => [80, 120],
     'fontdata' => $fontData + [
