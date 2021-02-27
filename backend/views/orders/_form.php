@@ -872,14 +872,14 @@ function showtransfersale(e){
               'url': "$url_to_get_transfer_sale_item",
               'data': {'order_id': order_id},
               'success': function(data) {
-                   alert(data);
+                 //  alert(data);
                   if(data != ''){
                       $(".table-transfer-sale-list tbody").html(data);
                       $("#transferIssueModal").modal('show');
                   }
               },
               'error': function(err){
-                  alert(err);
+                  alert('Data error');
               }
                  
               });
