@@ -206,7 +206,7 @@ $mpdf->AddPageByArray([
     // $(function(){
     //    alert('');
     // });
-   // window.print();
+     //window.print();
 </script>
 </body>
 </html>

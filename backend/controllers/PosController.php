@@ -202,7 +202,6 @@ class PosController extends Controller
                 }
             }
         }
-
         return $this->redirect(['pos/index']);
     }
 
@@ -318,7 +317,7 @@ class PosController extends Controller
         if ($id) {
             $model = \backend\models\Orders::find()->where(['id' => $id])->one();
             $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
-            return $this->render('_print', ['model' => $model, 'model_line' => $model_line]);
+            return $this->render('_printindex', ['model' => $model, 'model_line' => $model_line]);
         }
 
     }
