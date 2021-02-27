@@ -162,81 +162,79 @@ $this->title = 'ประวัติการขาย POS';
     <div class="modal-dialog modal-xl">
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header" style="background-color: #2b669a">
-                <div class="row" style="text-align: center;width: 100%;color: white">
-                    <div class="col-lg-12">
-                        <span><h3 class="popup-payment" style="color: white"><i class="fa fa-shopping-cart"></i> แก้ไขรายการขาย</h3></span>
-                        <input type="hidden" class="popup-product-id" value="">
-                        <input type="hidden" class="popup-product-code" value="">
+            <form id="form-pos-edit" action="<?= \yii\helpers\Url::to(['pos/posupdate'], true); ?>" method="post">
+                <div class="modal-header" style="background-color: #2b669a">
+                    <div class="row" style="text-align: center;width: 100%;color: white">
+                        <div class="col-lg-12">
+                            <span><h3 class="popup-payment" style="color: white"><i class="fa fa-shopping-cart"></i> แก้ไขรายการขาย</h3></span>
+                            <input type="hidden" class="order-id" name="order_id" value="">
+                        </div>
                     </div>
-                </div>
 
-            </div>
-            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
-            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+                </div>
+                <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+                <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
 
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <h5>เลขที่ขาย <small>
-                                <div class="badge badge-warning txt-order-no"></div>
-                            </small></h5>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h5>เลขที่ขาย <small>
+                                    <div class="badge badge-warning txt-order-no"></div>
+                                </small></h5>
+                        </div>
+                        <div class="col-lg-6" style="border-left: 1px dashed black">
+                            <h5>ลูกค้า <small>
+                                    <div class="badge badge-warning txt-customer-name">ป้าไพ</div>
+                                </small></h5>
+                        </div>
                     </div>
-                    <div class="col-lg-6" style="border-left: 1px dashed black">
-                        <h5>ลูกค้า <small>
-                                <div class="badge badge-warning txt-customer-name">ป้าไพ</div>
-                            </small></h5>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h5>วันที่ <small>
+                                    <div class="badge badge-warning txt-order-date">26/02/2021</div>
+                                </small></h5>
+                        </div>
+                        <div class="col-lg-6" style="border-left: 1px dashed black">
+                            <h5>วิธีชำระเงิน <small>
+                                    <div class="badge badge-success txt-payment-method">เงินสด</div>
+                                </small></h5>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <h5>วันที่ <small>
-                                <div class="badge badge-warning txt-order-date">26/02/2021</div>
-                            </small></h5>
-                    </div>
-                    <div class="col-lg-6" style="border-left: 1px dashed black">
-                        <h5>วิธีชำระเงิน <small>
-                                <div class="badge badge-success txt-payment-method">เงินสด</div>
-                            </small></h5>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <table class="table table-bordered table-striped table-order-history">
-                            <thead>
-                            <tr>
-                                <th style="text-align: center;width: 10%">รหัสสินค้า</th>
-                                <th style="text-align: center;">ชื่อสินค้า</th>
-                                <th style="text-align: right;width: 15%">จำนวน</th>
-                                <th style="text-align: right;width: 15%">ราคา</th>
-                                <th style="text-align: right;width: 15%">ยอดรวม</th>
-                            </tr>
-                            </thead>
-                            <tbody>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table class="table table-bordered table-striped table-order-history">
+                                <thead>
+                                <tr>
+                                    <th style="text-align: center;width: 10%">รหัสสินค้า</th>
+                                    <th style="text-align: center;">ชื่อสินค้า</th>
+                                    <th style="text-align: right;width: 15%">จำนวน</th>
+                                    <th style="text-align: right;width: 15%">ราคา</th>
+                                    <th style="text-align: right;width: 15%">ยอดรวม</th>
+                                </tr>
+                                </thead>
+                                <tbody>
 
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td style="text-align: right"><span class="total-all"></span></td>
-                            </tr>
-                            </tfoot>
-                        </table>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="4" style="text-align: right"><b>ยอดรวม</b></td>
+                                    <td style="text-align: right"><b><span class="total-all"></span></b></td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline-success btn-pos-edit-submit" data-dismiss="modalx"><i
-                            class="fa fa-check"></i> ตกลง
-                </button>
-                <button type="button" class="btn btn-default" data-dismiss="modal"><i
-                            class="fa fa-close text-danger"></i> ปิดหน้าต่าง
-                </button>
-            </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-success btn-pos-edit-submit" data-dismiss="modalx"><i
+                                class="fa fa-check"></i> ตกลง
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                                class="fa fa-close text-danger"></i> ปิดหน้าต่าง
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -259,6 +257,7 @@ function showorderedit(e){
                   //  alert(data);
                    if(data.length > 0){
                         //alert();
+                        $(".order-id").val(ids);
                         $(".txt-order-no").html(data[0]['order_no']);
                         $(".txt-order-date").html(data[0]['order_date']);
                         $(".txt-customer-name").html(data[0]['customer_name']);
@@ -277,6 +276,19 @@ function showorderedit(e){
               });
         
     }
+    
+    $(".btn-pos-edit-submit").click(function(){
+       if(confirm('คุณมั่นใจที่จะทำรายการนี้ใช่หรือใม่')){
+           $("form#form-pos-edit").submit();
+       } 
+    });
+}
+function calline(e){
+    var qty = e.closest('tr').find('.line-qty').val();
+    var price = e.closest('tr').find('.line-price').val();
+    var line_total = parseFloat(qty) * parseFloat(price);
+    
+    $(".total-all").html(parseFloat(line_total));
 }
 JS;
 $this->registerJs($js, static::POS_END);

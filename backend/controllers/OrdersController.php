@@ -1430,10 +1430,8 @@ class OrdersController extends Controller
 //                if ($value->id == $model_cus) {
 //                    $selected = 'selected';
 //                }
-
                 $html .= '<option value="' . $value->id . '" >' . $value->name . '</option>';
             }
-
         }
         return $html;
     }

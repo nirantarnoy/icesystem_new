@@ -34,7 +34,7 @@ class PosController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index', 'getcustomerprice', 'getoriginprice', 'closesale', 'salehistory', 'getbasicprice', 'delete', 'orderedit'],
+                        'actions' => ['logout', 'index', 'getcustomerprice', 'getoriginprice', 'closesale', 'salehistory', 'getbasicprice', 'delete', 'orderedit','posupdate'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -260,10 +260,10 @@ class PosController extends Controller
             if ($model) {
                 foreach ($model as $value) {
                     $html .= '<tr>';
-                    $html .= '<td style="text-align: center">' . \backend\models\Product::findCode($value->product_id) . '</td>';
+                    $html .= '<td style="text-align: center"><input type="hidden" class="order-line-id" name="order_line_id[]" value="' . $value->id . '">' . \backend\models\Product::findCode($value->product_id) . '</td>';
                     $html .= '<td>' . \backend\models\Product::findName($value->product_id) . '</td>';
-                    $html .= '<td><input type="number" style="text-align: right" class="form-control line-qty" name="line_qty[]" value="' . $value->qty . '"></td>';
-                    $html .= '<td style="text-align: right"><input type="number" style="text-align: right" class="form-control line-price" name="line_price[]" value="' . $value->price . '"></td>';
+                    $html .= '<td><input type="number" min="0" style="text-align: right" class="form-control line-qty" name="line_qty[]" onchange="calline($(this))" value="' . $value->qty . '"></td>';
+                    $html .= '<td style="text-align: right"><input type="number" min="0" style="text-align: right" class="form-control line-price" name="line_price[]" onchange="calline($(this))" value="' . $value->price . '"></td>';
                     $html .= '<td style="text-align: right"><input type="hidden" class="line-total" value="' . $value->qty * $value->price . '">' . number_format($value->qty * $value->price) . '</td>';
                     $html .= '</tr>';
                 }
@@ -276,6 +276,39 @@ class PosController extends Controller
             array_push($data, ['order_id' => $id, 'order_no' => $model_order->order_no, 'order_date' => $model_order->order_date, 'customer_name' => $customer_name, 'payment_method' => $payment_data,'html'=>$html]);
         }
         return json_encode($data);
+    }
+
+    public function actionPosupdate(){
+        $order_id = \Yii::$app->request->post('order_id');
+        $line_id = \Yii::$app->request->post('order_line_id');
+        $line_qty = \Yii::$app->request->post('line_qty');
+        $line_price = \Yii::$app->request->post('line_price');
+
+        if($order_id && $line_id != null){
+            $new_total = 0;
+            for($i=0;$i<=count($line_id)-1;$i++){
+                $model = \backend\models\Orderline::find()->where(['id'=>$line_id[$i]])->one();
+                if($model){
+                   // echo "hol";return;
+                    $new_total = $new_total + ($line_qty[$i] * $line_price[$i]);
+                    $model->qty = $line_qty[$i] == null?0:$line_qty[$i];
+                    $model->price = $line_price[$i] == null?0:$line_price[$i];
+                    $model->save(false);
+                }
+            }
+            $this->updateOrder($order_id,$new_total);
+        }
+        return $this->redirect(['pos/index']);
+    }
+
+    public function updateOrder($id,$total){
+        if($id){
+            $model = \backend\models\Orders::find()->where(['id'=>$id])->one();
+            if($model){
+                $model->order_total_amt = $total;
+                $model->save(false);
+            }
+        }
     }
 
     public function actionPrint()
