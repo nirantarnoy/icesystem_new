@@ -42,6 +42,7 @@ $mpdf->AddPageByArray([
     <style>
         body {
             font-family: sarabun;
+            /*font-family: garuda;*/
             font-size: 14px;
         }
 
