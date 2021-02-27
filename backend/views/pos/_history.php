@@ -288,8 +288,30 @@ function calline(e){
     var price = e.closest('tr').find('.line-price').val();
     var line_total = parseFloat(qty) * parseFloat(price);
     
-    $(".total-all").html(parseFloat(line_total));
+    e.closest('tr').find('.line-total').val(parseFloat(line_total));
+    e.closest('tr').find('td:eq(4)').html(addCommas(parseFloat(line_total)));
+  calall();
 }
+function calall(){
+   var total_all = 0;
+    $(".table-order-history tbody tr").each(function(){
+          var qty = $(this).closest('tr').find('.line-qty').val();
+          var price = $(this).closest('tr').find('.line-price').val();
+         total_all = total_all + (parseFloat(qty) * parseFloat(price));
+    });
+     $(".total-all").html(addCommas(parseFloat(total_all)));
+}
+function addCommas(nStr) {
+        nStr += '';
+        var x = nStr.split('.');
+        var x1 = x[0];
+        var x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+ }
 JS;
 $this->registerJs($js, static::POS_END);
 ?>
