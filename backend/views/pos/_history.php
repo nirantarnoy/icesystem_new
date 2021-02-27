@@ -116,9 +116,10 @@ $this->title = 'ประวัติการขาย POS';
                                 'title' => Yii::t('yii', 'Print'),
                                 'aria-label' => Yii::t('yii', 'Print'),
                                 'data-pjax' => '0',
+                                'data-id' => $data->id
                             ];
                             return Html::a(
-                                '<span class="fas fa-print btn btn-xs btn-default"></span>', $url, $options);
+                                '<span class="fas fa-list-alt btn btn-xs btn-default"></span>', $url, $options);
                         },
                         'update' => function ($url, $data, $index) {
                             $options = array_merge([

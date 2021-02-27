@@ -34,7 +34,7 @@ class PosController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index', 'getcustomerprice', 'getoriginprice', 'closesale', 'salehistory', 'getbasicprice', 'delete', 'orderedit','posupdate'],
+                        'actions' => ['logout', 'index', 'print', 'getcustomerprice', 'getoriginprice', 'closesale', 'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -273,46 +273,53 @@ class PosController extends Controller
         if ($model_order) {
             $customer_name = \backend\models\Customer::findName($model_order->customer_id);
             $payment_data = \backend\models\Paymentmethod::findName($model_order->payment_method_id);
-            array_push($data, ['order_id' => $id, 'order_no' => $model_order->order_no, 'order_date' => $model_order->order_date, 'customer_name' => $customer_name, 'payment_method' => $payment_data,'html'=>$html]);
+            array_push($data, ['order_id' => $id, 'order_no' => $model_order->order_no, 'order_date' => $model_order->order_date, 'customer_name' => $customer_name, 'payment_method' => $payment_data, 'html' => $html]);
         }
         return json_encode($data);
     }
 
-    public function actionPosupdate(){
+    public function actionPosupdate()
+    {
         $order_id = \Yii::$app->request->post('order_id');
         $line_id = \Yii::$app->request->post('order_line_id');
         $line_qty = \Yii::$app->request->post('line_qty');
         $line_price = \Yii::$app->request->post('line_price');
 
-        if($order_id && $line_id != null){
+        if ($order_id && $line_id != null) {
             $new_total = 0;
-            for($i=0;$i<=count($line_id)-1;$i++){
-                $model = \backend\models\Orderline::find()->where(['id'=>$line_id[$i]])->one();
-                if($model){
-                   // echo "hol";return;
+            for ($i = 0; $i <= count($line_id) - 1; $i++) {
+                $model = \backend\models\Orderline::find()->where(['id' => $line_id[$i]])->one();
+                if ($model) {
+                    // echo "hol";return;
                     $new_total = $new_total + ($line_qty[$i] * $line_price[$i]);
-                    $model->qty = $line_qty[$i] == null?0:$line_qty[$i];
-                    $model->price = $line_price[$i] == null?0:$line_price[$i];
+                    $model->qty = $line_qty[$i] == null ? 0 : $line_qty[$i];
+                    $model->price = $line_price[$i] == null ? 0 : $line_price[$i];
                     $model->save(false);
                 }
             }
-            $this->updateOrder($order_id,$new_total);
+            $this->updateOrder($order_id, $new_total);
         }
         return $this->redirect(['pos/salehistory']);
     }
 
-    public function updateOrder($id,$total){
-        if($id){
-            $model = \backend\models\Orders::find()->where(['id'=>$id])->one();
-            if($model){
+    public function updateOrder($id, $total)
+    {
+        if ($id) {
+            $model = \backend\models\Orders::find()->where(['id' => $id])->one();
+            if ($model) {
                 $model->order_total_amt = $total;
                 $model->save(false);
             }
         }
     }
 
-    public function actionPrint()
+    public function actionPrint($id)
     {
+        if ($id) {
+            $model = \backend\models\Orders::find()->where(['id' => $id])->one();
+            $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
+            return $this->render('_print', ['model' => $model, 'model_line' => $model_line]);
+        }
 
     }
 }
