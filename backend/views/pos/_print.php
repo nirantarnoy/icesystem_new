@@ -8,7 +8,7 @@ $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
 $fontData = $defaultFontConfig['fontdata'];
 //$mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp',
 $mpdf = new \Mpdf\Mpdf([
-    'tempDir' => '/tmp',
+    //'tempDir' => '/tmp',
     'mode' => 'utf-8', 'format' => [80, 120],
     'fontdata' => $fontData + [
             'sarabun' => [ // ส่วนที่ต้องเป็น lower case ครับ
