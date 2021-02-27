@@ -298,7 +298,7 @@ class PosController extends Controller
             }
             $this->updateOrder($order_id,$new_total);
         }
-        return $this->redirect(['pos/index']);
+        return $this->redirect(['pos/salehistory']);
     }
 
     public function updateOrder($id,$total){
