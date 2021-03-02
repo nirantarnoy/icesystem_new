@@ -33,7 +33,7 @@ class QueryCustomerPrice extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'customer_type_id', 'cus_id', 'product_id'], 'integer'],
+            [['id', 'customer_type_id', 'cus_id', 'product_id','delivery_route_id'], 'integer'],
             [['sale_price'], 'number'],
             [['code', 'name', 'cus_code', 'cus_name'], 'string', 'max' => 255],
         ];

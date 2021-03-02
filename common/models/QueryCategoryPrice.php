@@ -29,9 +29,9 @@ class QueryCategoryPrice extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_type_id', 'product_id'], 'integer'],
+            [['customer_type_id', 'product_id','delivery_route_id'], 'integer'],
             [['sale_price'], 'number'],
-            [['code', 'name'], 'string', 'max' => 255],
+            [['code', 'name','price_group_name'], 'string', 'max' => 255],
         ];
     }
 

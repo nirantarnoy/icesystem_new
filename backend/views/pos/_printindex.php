@@ -106,102 +106,105 @@ $mpdf->AddPageByArray([
     <!--    <script type="text/javascript" src="js/ThaiBath-master/thaibath.js"></script>-->
 </head>
 <body>
-<table class="table-header" style="width: 100%;font-size: 18px;" border="0">
+<div style="width: 400px;">
+    <table class="table-header" style="width: 100%;font-size: 18px;" border="0">
 
-</table>
-<table class="table-header" width="100%">
-    <tr>
-        <td style="font-size: 18px;text-align: center;vertical-align: bottom">
-            <h5>น้ำแข็ง</h5>
-        </td>
-    </tr>
-    <tr>
-        <td style="font-size: 18px;text-align: center;vertical-align: top">
-            <h5>ใบสั่งจ่าย</h5>
-        </td>
-    </tr>
-
-</table>
-<table class="table-header" width="100%">
-    <tr>
-        <td style="font-size: 16px;text-align: left">
-            เลขที่ <span><?= $model->order_no; ?></span>
-        </td>
-        <td style="font-size: 16px;text-align: left">
-            วันที่ <span><?= date('d/m/Y', strtotime($model->order_date)); ?></span>
-        </td>
-    </tr>
-    <tr>
-        <td style="font-size: 16px;text-align: left">
-            ลูกค้า <span><?= \backend\models\Customer::findName($model->customer_id); ?></span>
-        </td>
-        <td style="font-size: 16px;text-align: left">
-            เวลา <span><?= date('H:i:s', strtotime($model->order_date)); ?></span>
-        </td>
-    </tr>
-
-</table>
-<table class="table-title">
-    <tr>
-        <td style="border-top: 1px dotted gray;border-bottom: 1px dotted gray"><b>รายการ</b></td>
-        <td style="text-align: center;border-top: 1px dotted gray;border-bottom: 1px dotted gray"><b>จำนวน</b></td>
-        <td style="text-align: center;border-top: 1px dotted gray;border-bottom: 1px dotted gray"><b>ราคา</b></td>
-        <td style="text-align: right;border-top: 1px dotted gray;border-bottom: 1px dotted gray"><b>รวม</b></td>
-    </tr>
-    <?php
-    $total_qty = 0;
-    $total_amt = 0;
-    $discount = 0;
-    $change = 0;
-    ?>
-    <?php foreach ($model_line as $value): ?>
-        <?php
-        $total_qty = $total_qty + $value->qty;
-        $total_amt = $total_amt + ($value->qty * $value->price);
-        ?>
+    </table>
+    <table class="table-header" width="100%">
         <tr>
-            <td><?= \backend\models\Product::findName($value->product_id); ?></td>
-            <td style="text-align: center"><?= $value->qty ?></td>
-            <td style="text-align: center"><?= number_format($value->price) ?></td>
-            <td style="text-align: right"><?= number_format($value->qty * $value->price); ?></td>
+            <td style="font-size: 18px;text-align: center;vertical-align: bottom">
+                <h5>น้ำแข็ง</h5>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: 18px;text-align: center;vertical-align: top">
+                <h5>ใบสั่งจ่าย</h5>
+            </td>
         </tr>
 
-    <?php endforeach; ?>
-    <tfoot>
-    <tr>
-        <td style="font-size: 16px;border-top: 1px dotted gray">จำนวนรายการ</td>
-        <td style="font-size: 16px;border-top: 1px dotted gray;text-align: center"><?= number_format($total_qty) ?></td>
-        <td style="font-size: 16px;border-top: 1px dotted gray;text-align: center"></td>
-        <td style="font-size: 16px;border-top: 1px dotted gray;text-align: right"><?= number_format($total_amt) ?></td>
-    </tr>
-    <tr>
-        <td style="font-size: 16px;">ส่วนลด</td>
-        <td></td>
-        <td></td>
-        <td style="font-size: 16px;text-align: right"><?= number_format($discount) ?></td>
-    </tr>
-    <tr>
-        <td style="font-size: 16px;">จำนวนสุทธิ</td>
-        <td></td>
-        <td></td>
-        <td style="font-size: 16px;text-align: right"> <?= number_format($total_amt - $discount) ?></td>
-    </tr>
-    <tr>
-        <td style="font-size: 16px;">ทอนเงิน</td>
-        <td></td>
-        <td></td>
-        <td style="font-size: 16px;text-align: right"> <?= number_format($change) ?></td>
-    </tr>
-    </tfoot>
-</table>
-<table class="table-header">
+    </table>
+    <table class="table-header" width="100%">
+        <tr>
+            <td style="font-size: 16px;text-align: left">
+                เลขที่ <span><?= $model->order_no; ?></span>
+            </td>
+            <td style="font-size: 16px;text-align: left">
+                วันที่ <span><?= date('d/m/Y', strtotime($model->order_date)); ?></span>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: 16px;text-align: left">
+                ลูกค้า <span><?= \backend\models\Customer::findName($model->customer_id); ?></span>
+            </td>
+            <td style="font-size: 16px;text-align: left">
+                เวลา <span><?= date('H:i:s', strtotime($model->order_date)); ?></span>
+            </td>
+        </tr>
 
-</table>
-<table class="table-header">
-    <tr>
-        <td style="font-size: 16px;">แคชเชียร์ .......................................................</td>
-    </tr>
-</table>
+    </table>
+    <table class="table-title">
+        <tr>
+            <td style="border-top: 1px dotted gray;border-bottom: 1px dotted gray"><b>รายการ</b></td>
+            <td style="text-align: center;border-top: 1px dotted gray;border-bottom: 1px dotted gray"><b>จำนวน</b></td>
+            <td style="text-align: center;border-top: 1px dotted gray;border-bottom: 1px dotted gray"><b>ราคา</b></td>
+            <td style="text-align: right;border-top: 1px dotted gray;border-bottom: 1px dotted gray"><b>รวม</b></td>
+        </tr>
+        <?php
+        $total_qty = 0;
+        $total_amt = 0;
+        $discount = 0;
+        $change = 0;
+        ?>
+        <?php foreach ($model_line as $value): ?>
+            <?php
+            $total_qty = $total_qty + $value->qty;
+            $total_amt = $total_amt + ($value->qty * $value->price);
+            ?>
+            <tr>
+                <td><?= \backend\models\Product::findName($value->product_id); ?></td>
+                <td style="text-align: center"><?= $value->qty ?></td>
+                <td style="text-align: center"><?= number_format($value->price) ?></td>
+                <td style="text-align: right"><?= number_format($value->qty * $value->price); ?></td>
+            </tr>
+
+        <?php endforeach; ?>
+        <tfoot>
+        <tr>
+            <td style="font-size: 16px;border-top: 1px dotted gray">จำนวนรายการ</td>
+            <td style="font-size: 16px;border-top: 1px dotted gray;text-align: center"><?= number_format($total_qty) ?></td>
+            <td style="font-size: 16px;border-top: 1px dotted gray;text-align: center"></td>
+            <td style="font-size: 16px;border-top: 1px dotted gray;text-align: right"><?= number_format($total_amt) ?></td>
+        </tr>
+        <tr>
+            <td style="font-size: 16px;">ส่วนลด</td>
+            <td></td>
+            <td></td>
+            <td style="font-size: 16px;text-align: right"><?= number_format($discount) ?></td>
+        </tr>
+        <tr>
+            <td style="font-size: 16px;">จำนวนสุทธิ</td>
+            <td></td>
+            <td></td>
+            <td style="font-size: 16px;text-align: right"> <?= number_format($total_amt - $discount) ?></td>
+        </tr>
+        <tr>
+            <td style="font-size: 16px;">ทอนเงิน</td>
+            <td></td>
+            <td></td>
+            <td style="font-size: 16px;text-align: right"> <?= number_format($change) ?></td>
+        </tr>
+        </tfoot>
+    </table>
+    <table class="table-header">
+
+    </table>
+    <table class="table-header">
+        <tr>
+            <td style="font-size: 16px;">แคชเชียร์ .......................................................</td>
+        </tr>
+    </table>
+</div>
+
 <script src="../web/plugins/jquery/jquery.min.js"></script>
 <script>
     $(function(){

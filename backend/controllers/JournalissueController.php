@@ -170,9 +170,9 @@ class JournalissueController extends Controller
         $price_group_list = [];
 
         if ($route_id > 0) {
-            $model = \backend\models\Customer::find()->select(['customer_type_id'])->where(['delivery_route_id' => $route_id])->groupBy('customer_type_id')->one();
+            $model = \backend\models\Customer::find()->select(['delivery_route_id'])->where(['delivery_route_id' => $route_id])->groupBy('delivery_route_id')->one();
             if ($model) {
-                $model_prod_price = \common\models\QueryCategoryPrice::find()->where(['customer_type_id' => $model->customer_type_id])->all();
+                $model_prod_price = \common\models\QueryCategoryPrice::find()->where(['delivery_route_id' => $model->delivery_route_id])->orderBy(['price_group_name'=>SORT_ASC,'product_id'=>SORT_ASC])->all();
                 if ($model_prod_price) {
                     foreach ($model_prod_price as $value) {
                         $html .= '<tr>';
@@ -182,6 +182,7 @@ class JournalissueController extends Controller
                                 ' . $value->code . '
                             </td>';
                         $html .= ' <td>' . $value->name . '</td>';
+                        $html .= ' <td>' . $value->price_group_name . '</td>';
                         $html .= '
                                 <td>
                                 <input type="hidden" class="line-issue-sale-price" name="line_issue_line_price[]" value="'.$value->sale_price.'">

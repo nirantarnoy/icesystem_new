@@ -32,7 +32,7 @@ $prod_data = \backend\models\Product::find()->all();
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(), 'id', 'name'),
                 'options' => [
                     'placeholder' => '--เลือกสายส่ง--',
-                    'onchange'=>'route_change($(this))'
+                    'onchange' => 'route_change($(this))'
                 ]
             ]) ?>
         </div>
@@ -50,6 +50,7 @@ $prod_data = \backend\models\Product::find()->all();
                 <tr>
                     <th>รหัสสินค้า</th>
                     <th>ชื่อสินค้า</th>
+                    <th>กลุ่มราคามาตรฐาน</th>
                     <th style="width: 15%">จำนวนเบิก</th>
                     <th style="width: 10%"></th>
                 </tr>
@@ -59,28 +60,34 @@ $prod_data = \backend\models\Product::find()->all();
                     <?php if ($model->isNewRecord): ?>
 
                     <?php else: ?>
-                    <?php foreach ($model_line as $value2):?>
-                          <?php if($value->id == $value2->product_id):?>
-                            <tr>
-                                <td>
-                                    <input type="hidden" class="line-prod-id" name="line_prod_id[]" value="<?= $value2->product_id; ?>">
-                                    <?= \backend\models\Product::findCode($value2->product_id); ?>
-                                </td>
-                                <td>
-                                    <?= \backend\models\Product::findName($value2->product_id); ?>
-                                </td>
-                                <td>
-                                    <input type="hidden" class="line-issue-sale-price" name="line_issue_line_price[]" value="<?=$value2->sale_price?>">
-                                    <input type="number" class="line-qty form-control" name="line_qty[]" value="<?=$value2->qty?>" min="0">
-                                </td>
-                                <td style="text-align: center">
-                                    <div class="btn btn-danger btn-sm" onclick="deleteline($(this))"><i
-                                                class="fa fa-trash"></i>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endif;?>
-                    <?php endforeach;?>
+                        <?php foreach ($model_line as $value2): ?>
+                            <?php if ($value->id == $value2->product_id): ?>
+                                <tr>
+                                    <td>
+                                        <input type="hidden" class="line-prod-id" name="line_prod_id[]"
+                                               value="<?= $value2->product_id; ?>">
+                                        <?= \backend\models\Product::findCode($value2->product_id); ?>
+                                    </td>
+                                    <td>
+                                        <?= \backend\models\Product::findName($value2->product_id); ?>
+                                    </td>
+                                    <td>
+                                        <?php //echo $value2->price_group_name ?>
+                                    </td>
+                                    <td>
+                                        <input type="hidden" class="line-issue-sale-price"
+                                               name="line_issue_line_price[]" value="<?= $value2->sale_price ?>">
+                                        <input type="number" class="line-qty form-control" name="line_qty[]"
+                                               value="<?= $value2->qty ?>" min="0">
+                                    </td>
+                                    <td style="text-align: center">
+                                        <div class="btn btn-danger btn-sm" onclick="deleteline($(this))"><i
+                                                    class="fa fa-trash"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
                     <?php endif; ?>
                 <?php endforeach; ?>
                 </tbody>
@@ -98,7 +105,7 @@ $prod_data = \backend\models\Product::find()->all();
 
 <?php
 $url_to_get_price_group = \yii\helpers\Url::to(['journalissue/find-pricegroup'], true);
-$js=<<<JS
+$js = <<<JS
 $(function (){
     
 });
@@ -119,5 +126,5 @@ function route_change(e) {
          });
  }
 JS;
-$this->registerJs($js,static::POS_END);
+$this->registerJs($js, static::POS_END);
 ?>
