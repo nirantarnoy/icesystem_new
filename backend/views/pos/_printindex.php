@@ -202,11 +202,13 @@ $mpdf->AddPageByArray([
         <td style="font-size: 16px;">แคชเชียร์ .......................................................</td>
     </tr>
 </table>
+<script src="../web/plugins/jquery/jquery.min.js"></script>
 <script>
-    // $(function(){
-    //    alert('');
-    // });
-     //window.print();
+    $(function(){
+       alert('');
+        window.print();
+    });
+
 </script>
 </body>
 </html>
@@ -215,13 +217,13 @@ $mpdf->AddPageByArray([
 ?>
 <?php
 
-$html = ob_get_contents(); // ทำการเก็บค่า HTML จากคำสั่ง ob_start()
-$mpdf->WriteHTML($html); // ทำการสร้าง PDF ไฟล์
-//$mpdf->Output( 'Packing02.pdf','F'); // ให้ทำการบันทึกโค้ด HTML เป็น PDF โดยบันทึกเป็นไฟล์ชื่อ MyPDF.pdf
-ob_clean();
-$mpdf->SetJS('this.print();');
-$mpdf->Output('transaction.pdf', 'I');
-ob_end_flush();
+//$html = ob_get_contents(); // ทำการเก็บค่า HTML จากคำสั่ง ob_start()
+//$mpdf->WriteHTML($html); // ทำการสร้าง PDF ไฟล์
+////$mpdf->Output( 'Packing02.pdf','F'); // ให้ทำการบันทึกโค้ด HTML เป็น PDF โดยบันทึกเป็นไฟล์ชื่อ MyPDF.pdf
+//ob_clean();
+//$mpdf->SetJS('this.print();');
+//$mpdf->Output('transaction.pdf', 'I');
+//ob_end_flush();
 
 //header("location: system_stock/report_pdf/Packing.pdf");
 

@@ -458,8 +458,9 @@ $js = <<<JS
         });
       // alert(selecteditem.length + line_count);
       // alert(emp_qty);
-        if((line_count + selecteditem.length ) > emp_qty){
-            alert('จำนวนพนักงานเกินกว่าที่กำหนดcc');
+       // if((line_count + selecteditem.length ) > emp_qty){
+       if((line_count + selecteditem.length ) > 2){
+            alert('จำนวนพนักงานเกินกว่าที่กำหนด');
             return false;
         }
         

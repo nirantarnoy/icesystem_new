@@ -14,7 +14,10 @@ return [
     'modules' => [
         'gridview' =>  [
             'class' => '\kartik\grid\Module'
-        ]
+        ],
+        'api' => [
+            'class' => 'backend\modules\api\Api',
+        ],
     ],
     'timeZone' => 'Asia/Bangkok',
 //    'aliases'=>[
