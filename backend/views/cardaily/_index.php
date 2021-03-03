@@ -75,7 +75,7 @@ $model_new = $model_car;
             <div class="col-lg-2 col-3">
                 <!-- small box -->
                 <div class="small-box <?= $status_color ?>">
-                    <div class="inner" style="text-align: center">
+                    <div class="inner" style="text-align: right">
                         <h6><b><?= $value->name ?></b></h6>
                         <p><?php echo $route_name ?></p>
                     </div>
