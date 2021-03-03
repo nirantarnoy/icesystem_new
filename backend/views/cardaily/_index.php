@@ -83,7 +83,10 @@ $model_new = $model_car;
                         <i class="fas fa-truck"></i>
                         <!--                       <img src="../web/uploads/images/streamer/streamer.jpg" width="50%" alt="">-->
                     </div>
-                    <p style="color: #fddfdf"><?=$emp_daily_name?></p>
+                    <div style="text-align: center">
+                        <p style="color: #fddfdf"><?=$emp_daily_name?></p>
+                    </div>
+
                     <a href="#" data-id="<?= $value->id ?>" data-var="<?= $value->emp_qty ?>"
                        onclick="showcarinfo($(this))" class="small-box-footer"><i
                                 class="fas fa-users"></i> จัดการข้อมูล </a>
