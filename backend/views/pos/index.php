@@ -177,7 +177,7 @@ use yii\helpers\ArrayHelper;
             </div>
             <div class="row">
                 <div class="col-lg-6" style="text-align: left">
-                    <a href="index.php?r=pos/salehistory" class="btn btn-outline-info btn-history-cart"
+                    <a href="index.php?r=pos/salehistory&print_src=" class="btn btn-outline-info btn-history-cart"
                        style="display: noneผ">
                         ประวัติการขาย
                     </a>

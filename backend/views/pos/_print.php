@@ -23,8 +23,8 @@ $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp',
 //$mpdf->SetMargins(-10, 1, 1);
 //$mpdf->SetDisplayMode('fullpage');
 $mpdf->AddPageByArray([
-    'margin-left' => 0,
-    'margin-right' => 0,
+    'margin-left' => 2,
+    'margin-right' => 3,
     'margin-top' => 0,
     'margin-bottom' => 1,
 ]);
@@ -202,12 +202,17 @@ $mpdf->AddPageByArray([
         <td style="font-size: 16px;">แคชเชียร์ .......................................................</td>
     </tr>
 </table>
-<script>
-    // $(function(){
-    //    alert('');
-    // });
-   // window.print();
-</script>
+<!--<script src="../web/plugins/jquery/jquery.min.js"></script>-->
+<!--<script>-->
+<!--    $(function(){-->
+<!--       alert('');-->
+<!--    });-->
+<!--   window.print();-->
+<!--</script>-->
+<?php
+//echo '<script src="../web/plugins/jquery/jquery.min.js"></script>';
+//echo '<script type="text/javascript">alert();</script>';
+?>
 </body>
 </html>
 <?php
@@ -219,8 +224,9 @@ $html = ob_get_contents(); // ทำการเก็บค่า HTML จา�
 $mpdf->WriteHTML($html); // ทำการสร้าง PDF ไฟล์
 //$mpdf->Output( 'Packing02.pdf','F'); // ให้ทำการบันทึกโค้ด HTML เป็น PDF โดยบันทึกเป็นไฟล์ชื่อ MyPDF.pdf
 ob_clean();
+//$mpdf->SetJS('this.print();');
 $mpdf->SetJS('this.print();');
-$mpdf->Output('transaction.pdf', 'I');
+$mpdf->Output('../web/uploads/slip/slip.pdf', 'F');
 ob_end_flush();
 
 //header("location: system_stock/report_pdf/Packing.pdf");

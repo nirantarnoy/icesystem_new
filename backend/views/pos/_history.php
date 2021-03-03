@@ -5,7 +5,14 @@ use kartik\grid\GridView;
 
 $this->title = 'ประวัติการขาย POS';
 
+$filename = "empty";
+if (file_exists('../web/uploads/slip/slip.pdf')) {
+    $filename = "../web/uploads/slip/slip.pdf";
+}
+//unlink('../web/uploads/slip/slip.pdf');
+
 ?>
+<input type="hidden" class="slip-print" value="<?= $filename ?>">
 <div class="row">
     <div class="col-lg-12">
         <a href="index.php?r=pos/index" class="btn btn-primary"><i class="fa fa-arrow-left"></i> กลับหน้า POS </a>
@@ -116,7 +123,8 @@ $this->title = 'ประวัติการขาย POS';
                                 'title' => Yii::t('yii', 'Print'),
                                 'aria-label' => Yii::t('yii', 'Print'),
                                 'data-pjax' => '0',
-                                'data-id' => $data->id
+                                'data-id' => $data->id,
+//                                'target' => '_blank',
                             ];
                             return Html::a(
                                 '<span class="fas fa-list-alt btn btn-xs btn-default"></span>', $url, $options);
@@ -239,13 +247,22 @@ $this->title = 'ประวัติการขาย POS';
         </div>
     </div>
 </div>
-
+<iframe id="iFramePdf" src="<?= $filename ?>" style="display:none;"></iframe>
 <?php
 $url_to_find_item = \yii\helpers\Url::to(['pos/orderedit'], true);
 $js = <<<JS
  $(function(){
-     
+      var xx = $(".slip-print").val();
+        //alert(xx);
+        if(xx !="empty"){
+           myPrint();
+         }
  });
+function myPrint(){
+        var getMyFrame = document.getElementById('iFramePdf');
+        getMyFrame.focus();
+        getMyFrame.contentWindow.print();
+}
 function showorderedit(e){
     var ids = e.attr("data-id");
     if(ids){

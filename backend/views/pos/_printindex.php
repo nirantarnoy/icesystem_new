@@ -106,7 +106,7 @@ $mpdf->AddPageByArray([
     <!--    <script type="text/javascript" src="js/ThaiBath-master/thaibath.js"></script>-->
 </head>
 <body>
-<div style="width: 400px;">
+<div id="slip-print" style="width: 500px;height: 500px;">
     <table class="table-header" style="width: 100%;font-size: 18px;" border="0">
 
     </table>
@@ -209,7 +209,19 @@ $mpdf->AddPageByArray([
 <script>
     $(function(){
        alert('');
-        window.print();
+       // window.print();
+        function printData()
+        {
+            var divToPrint=document.getElementById("slip-print");
+            newWin= window.open("");
+            newWin.document.write(divToPrint.innerHTML);
+            newWin.print();
+            newWin.close();
+        }
+
+       // $('button').on('click',function(){
+            printData();
+       // })
     });
 
 </script>

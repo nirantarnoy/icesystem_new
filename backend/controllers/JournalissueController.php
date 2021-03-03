@@ -107,6 +107,8 @@ class JournalissueController extends Controller
             $line_qty = \Yii::$app->request->post('line_qty');
             $line_issue_price = \Yii::$app->request->post('line_issue_line_price');
 
+            $removelist = \Yii::$app->request->post('removelist');
+
             $x_date = explode('/', $model->trans_date);
             $sale_date = date('Y-m-d');
             if (count($x_date) > 1) {
@@ -135,6 +137,17 @@ class JournalissueController extends Controller
                         }
                     }
                 }
+
+                if ($removelist != '') {
+                    $x = explode(',', $removelist);
+                    if (count($x) > 0) {
+                        for ($m = 0; $m <= count($x) - 1; $m++) {
+                            \common\models\Journalissueline::deleteAll(['id' => $x[$m]]);
+                        }
+                    }
+
+                }
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
@@ -172,7 +185,7 @@ class JournalissueController extends Controller
         if ($route_id > 0) {
             $model = \backend\models\Customer::find()->select(['delivery_route_id'])->where(['delivery_route_id' => $route_id])->groupBy('delivery_route_id')->one();
             if ($model) {
-                $model_prod_price = \common\models\QueryCategoryPrice::find()->where(['delivery_route_id' => $model->delivery_route_id])->orderBy(['price_group_name'=>SORT_ASC,'product_id'=>SORT_ASC])->all();
+                $model_prod_price = \common\models\QueryCategoryPrice::find()->where(['delivery_route_id' => $model->delivery_route_id])->orderBy(['price_group_name' => SORT_ASC, 'product_id' => SORT_ASC])->all();
                 if ($model_prod_price) {
                     foreach ($model_prod_price as $value) {
                         $html .= '<tr>';
@@ -185,7 +198,7 @@ class JournalissueController extends Controller
                         $html .= ' <td>' . $value->price_group_name . '</td>';
                         $html .= '
                                 <td>
-                                <input type="hidden" class="line-issue-sale-price" name="line_issue_line_price[]" value="'.$value->sale_price.'">
+                                <input type="hidden" class="line-issue-sale-price" name="line_issue_line_price[]" value="' . $value->sale_price . '">
                                 <input type="number" class="line-qty form-control" name="line_qty[]" value="0" min="0">
                                 </td>
                                 <td style="text-align: center">

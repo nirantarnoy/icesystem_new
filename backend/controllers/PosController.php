@@ -15,6 +15,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use kartik\mpdf\Pdf;
 
 /**
  * CarController implements the CRUD actions for Car model.
@@ -189,6 +190,7 @@ class PosController extends Controller
                             $model_line->payment_date = date('Y-m-d H:i:s');
                             $model_line->payment_amount = $pay_amount;
                             $model_line->total_amount = 0;
+                            $model_line->change_amount = $pay_change;
                             $model_line->order_ref_id = $model_order->id;
                             $model_line->status = 1;
                             $model_line->doc = '';
@@ -218,8 +220,12 @@ class PosController extends Controller
         }
     }
 
-    public function actionSalehistory()
+    public function actionSalehistory($print_src)
     {
+        if(file_exists('../web/uploads/slip/slip.pdf')){
+          //  unlink('../web/uploads/slip/slip.pdf');
+        }
+
         $searchModel = new OrdersposSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
@@ -317,7 +323,9 @@ class PosController extends Controller
         if ($id) {
             $model = \backend\models\Orders::find()->where(['id' => $id])->one();
             $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
-            return $this->render('_printindex', ['model' => $model, 'model_line' => $model_line]);
+             $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
+         //   $content =  $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
+             $this->redirect(['pos/salehistory','print_src'=>'slip.pdf']);
         }
 
     }

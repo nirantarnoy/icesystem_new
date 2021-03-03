@@ -49,6 +49,7 @@ $cururl = Yii::$app->controller->id;
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 
   <link rel="stylesheet" href="css/sweetalert.css">
+
   <style>
     @font-face {
       font-family: 'Kanit-Regular';
@@ -916,6 +917,8 @@ $cururl = Yii::$app->controller->id;
 <script src="plugins/toastr/toastr.min.js"></script>
 
 <script src="js/sweetalert.min.js"></script>
+
+
 
 <script>
   var cururl = $("#current-url").val();
