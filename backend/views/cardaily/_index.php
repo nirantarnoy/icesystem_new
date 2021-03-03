@@ -46,11 +46,18 @@ $model_new = $model_car;
             // if (\backend\models\Streamer::getStatus($value->NAME)) $status_color = 'Open';
             //    print_r($model);
             $emp_daily_name = '';
+            $xi = 0;
             foreach ($model as $value2) {
-                  $emp_daily_name = $emp_daily_name.','. \backend\models\Employee::findName2($value2->employee_id);
                 if ($value2->car_id == $value->id) {
                     $status_color = 'bg-success';
+                    if($xi == 0){
+                        $emp_daily_name = \backend\models\Employee::findName2($value2->employee_id);
+                    }else{
+                        $emp_daily_name = $emp_daily_name.','. \backend\models\Employee::findName2($value2->employee_id);
+                    }
+
                 }
+                $xi +=1;
             }
             //  return;
             ?>
