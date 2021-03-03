@@ -4,7 +4,7 @@ use Yii;
 use yii\db\ActiveRecord;
 date_default_timezone_set('Asia/Bangkok');
 
-class Employee extends \common\models\Employee
+class Carmeterdaily extends \common\models\CarMeterDaily
 {
     public function behaviors()
     {
@@ -51,18 +51,10 @@ class Employee extends \common\models\Employee
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';
 //    }
-    public function findCode($id){
-        $model = Employee::find()->where(['id'=>$id])->one();
-        return $model !=null?$model->code:'';
-    }
-    public function findFullName($id){
-        $model = Employee::find()->where(['id'=>$id])->one();
-        return $model !=null?$model->fname. ' '.$model->lname:'';
-    }
-    public function findName2($id){
-        $model = Employee::find()->where(['id'=>$id])->one();
-        return $model !=null?$model->fname:'';
-    }
+//    public function findName($id){
+//        $model = Car::find()->where(['id'=>$id])->one();
+//        return $model!=null?$model->name:'';
+//    }
 //    public function findUnitid($code){
 //        $model = Unit::find()->where(['name'=>$code])->one();
 //        return count($model)>0?$model->id:0;

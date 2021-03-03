@@ -2,6 +2,20 @@
 
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
+use yii\web\Session;
+
+
+
+$filename = "empty";
+
+if(!empty(\Yii::$app->session->getFlash('msg')) && !empty(\Yii::$app->session->getFlash('after-save'))){
+    $f_name = \Yii::$app->session->getFlash('msg');
+   // echo $f_name;
+    if (file_exists('../web/uploads/slip/'.$f_name)) {
+        $filename = "../web/uploads/slip/".$f_name;
+    }
+}
+
 
 //$this->title = '<p style="color: #255985">ทำรายการขายหน้าร้าน POS</p>';
 
@@ -29,7 +43,7 @@ use yii\helpers\ArrayHelper;
             </div>
         </div>
         <div class="row div-customer-search" style="display: none;">
-            <div class="col-lg-6">
+            <div class="col-lg-8">
                 <div class="input-group" style="margin-left: 10px;">
                     <!--                    <input type="text" class="form-control find-customer" value="">-->
                     <?php echo Select2::widget([
@@ -177,7 +191,7 @@ use yii\helpers\ArrayHelper;
             </div>
             <div class="row">
                 <div class="col-lg-6" style="text-align: left">
-                    <a href="index.php?r=pos/salehistory&print_src=" class="btn btn-outline-info btn-history-cart"
+                    <a href="index.php?r=pos/salehistory" class="btn btn-outline-info btn-history-cart"
                        style="display: noneผ">
                         ประวัติการขาย
                     </a>
@@ -493,7 +507,8 @@ use yii\helpers\ArrayHelper;
 
     </div>
 </div>
-
+<input type="hidden" class="slip-print" value="<?= $filename ?>">
+<iframe id="iFramePdf" src="<?= $filename ?>" style="display:none;"></iframe>
 <?php
 $url_to_get_origin_price = \yii\helpers\Url::to(['pos/getoriginprice'], true);
 $url_to_get_basic_price = \yii\helpers\Url::to(['pos/getbasicprice'], true);
@@ -501,7 +516,11 @@ $url_to_get_price = \yii\helpers\Url::to(['pos/getcustomerprice'], true);
 
 $js = <<<JS
  $(function(){
-     
+        var xx = $(".slip-print").val();
+        //alert(xx);
+        if(xx !="empty"){
+           myPrint();
+        }
      setInterval(function (){
           var dt = new Date();
           var time = dt.getHours() + ":" + dt.getMinutes();
@@ -1080,6 +1099,13 @@ function addCommas(nStr) {
         }
         return x1 + x2;
 }
+
+function myPrint(){
+        var getMyFrame = document.getElementById('iFramePdf');
+        getMyFrame.focus();
+        getMyFrame.contentWindow.print();
+}
+
 JS;
 $this->registerJs($js, static::POS_END);
 ?>

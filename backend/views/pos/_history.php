@@ -6,8 +6,13 @@ use kartik\grid\GridView;
 $this->title = 'ประวัติการขาย POS';
 
 $filename = "empty";
-if (file_exists('../web/uploads/slip/slip.pdf')) {
-    $filename = "../web/uploads/slip/slip.pdf";
+
+if(!empty(\Yii::$app->session->getFlash('msg')) && !empty(\Yii::$app->session->getFlash('after-print'))){
+    $f_name = \Yii::$app->session->getFlash('msg');
+    echo $f_name;
+    if (file_exists('../web/uploads/slip/'.$f_name)) {
+        $filename = "../web/uploads/slip/".$f_name;
+    }
 }
 //unlink('../web/uploads/slip/slip.pdf');
 

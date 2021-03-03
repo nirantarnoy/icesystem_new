@@ -7,6 +7,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $model = $dataProvider->getModels();
 $model_new = null;
+$emp_daily_name = '';
 //if($model == null){
 $model_new = $model_car;
 
@@ -45,6 +46,7 @@ $model_new = $model_car;
             // if (\backend\models\Streamer::getStatus($value->NAME)) $status_color = 'Open';
             //    print_r($model);
             foreach ($model as $value2) {
+                  $emp_daily_name = $emp_daily_name.','. \backend\models\Employee::findName2($value2->employee_id);
                 if ($value2->car_id == $value->id) {
                     $status_color = 'bg-success';
                 }
@@ -62,6 +64,7 @@ $model_new = $model_car;
                         <i class="fas fa-truck"></i>
                         <!--                       <img src="../web/uploads/images/streamer/streamer.jpg" width="50%" alt="">-->
                     </div>
+                    <p style="color: #fddfdf"><?=$emp_daily_name?></p>
                     <a href="#" data-id="<?= $value->id ?>" data-var="<?= $value->emp_qty ?>"
                        onclick="showcarinfo($(this))" class="small-box-footer"><i
                                 class="fas fa-users"></i> จัดการข้อมูล </a>
@@ -136,7 +139,19 @@ $model_new = $model_car;
                             </table>
                         </div>
                     </div>
-                    <br/>
+                    <hr>
+                    <div class="row">
+                        <div class="col-lg-3"></div>
+                        <div class="col-lg-3" style="text-align: center">
+                            <div class="label">เลขไมล์</div>
+                            <input type="text" style="text-align: center" class="form-control meter-last" value="0" readonly>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="label" style="text-align: center">เลขไมล์วันนี้</div>
+                            <input type="text"  style="text-align: center"  class="form-control meter-today" value="0">
+                        </div>
+                        <div class="col-lg-3"></div>
+                    </div>
                 </div>
 
                 <div class="modal-footer">
@@ -199,6 +214,7 @@ $model_new = $model_car;
                     <tbody>
                     </tbody>
                 </table>
+
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-success btn-emp-selected" data-dismiss="modalx" disabled><i

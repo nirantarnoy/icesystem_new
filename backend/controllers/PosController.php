@@ -16,6 +16,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use kartik\mpdf\Pdf;
+use yii\web\Session;
 
 /**
  * CarController implements the CRUD actions for Car model.
@@ -35,7 +36,7 @@ class PosController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index', 'print', 'getcustomerprice', 'getoriginprice', 'closesale', 'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate'],
+                        'actions' => ['logout', 'index', 'print', 'printindex', 'getcustomerprice', 'getoriginprice', 'closesale', 'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -52,6 +53,9 @@ class PosController extends Controller
 
     public function actionIndex()
     {
+//        if (file_exists('../web/uploads/slip/slip_index.pdf')) {
+//            unlink('../web/uploads/slip/slip_index.pdf');
+//        }
         return $this->render('index', [
             'model' => null
         ]);
@@ -133,6 +137,7 @@ class PosController extends Controller
 
         // echo $pos_date;return;
         $sale_date = date('Y-m-d');
+        $sale_time = date('H:i:s');
         $x_date = explode('/', $pos_date);
         if (count($x_date) > 1) {
             $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
@@ -140,7 +145,7 @@ class PosController extends Controller
         if ($customer_id) {
             $model_order = new \backend\models\Orders();
             $model_order->order_no = $model_order->getLastNo($sale_date);
-            $model_order->order_date = date('Y-m-d', strtotime($sale_date));
+            $model_order->order_date = date('Y-m-d H:i:s', strtotime($sale_date.' '.$sale_time));
             $model_order->customer_id = $customer_id;
             $model_order->sale_channel_id = 2; // pos
             $model_order->payment_status = 0;
@@ -202,8 +207,21 @@ class PosController extends Controller
                     }
                     $this->updateorderpayment($model_order->id, $pay_total_amount, $pay_amount);
                 }
+
+                //  if($this->printindex(31)){
+                if ($model_order->id != null) {
+                    $model = \backend\models\Orders::find()->where(['id' => $model_order->id])->one();
+                    $model_line = \backend\models\Orderline::find()->where(['order_id' => $model_order->id])->all();
+                    $change_amt = \backend\models\Paymenttransline::find()->where(['order_ref_id' => $model_order->id])->one();
+                    $this->render('_printtoindex', ['model' => $model, 'model_line' => $model_line,'change_amount'=>$change_amt->change_amount]);
+
+                    $session = \Yii::$app->session;
+                    $session->setFlash('msg', 'slip_index.pdf');
+                    $session->setFlash('after-save', true);
+                }
             }
         }
+
         return $this->redirect(['pos/index']);
     }
 
@@ -220,10 +238,10 @@ class PosController extends Controller
         }
     }
 
-    public function actionSalehistory($print_src)
+    public function actionSalehistory()
     {
-        if(file_exists('../web/uploads/slip/slip.pdf')){
-          //  unlink('../web/uploads/slip/slip.pdf');
+        if (file_exists('../web/uploads/slip/slip.pdf')) {
+            //  unlink('../web/uploads/slip/slip.pdf');
         }
 
         $searchModel = new OrdersposSearch();
@@ -323,10 +341,33 @@ class PosController extends Controller
         if ($id) {
             $model = \backend\models\Orders::find()->where(['id' => $id])->one();
             $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
-             $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
-         //   $content =  $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
-             $this->redirect(['pos/salehistory','print_src'=>'slip.pdf']);
+            $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
+            //   $content =  $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
+            $session = \Yii::$app->session;
+            $session->setFlash('msg', 'slip.pdf');
+            $session->setFlash('after-print', true);
+            $this->redirect(['pos/salehistory']);
         }
+
+    }
+
+    public function printindex($id)
+    {
+        if ($id) {
+            $model = \backend\models\Orders::find()->where(['id' => $id])->one();
+            $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
+            $change_amt = \backend\models\Paymenttransline::find()->where(['order_ref_id' => $id])->one();
+            $this->render('_printtoindex', [
+                'model' => $model,
+                'model_line' => $model_line,
+                'change_amount' => $change_amt->change_amount
+              ]);
+//            $session = \Yii::$app->session;
+//            $session->setFlash('msg', 'slip_index.pdf');
+            //$this->redirect(['pos/index']);
+            return true;
+        }
+        return false;
 
     }
 }
