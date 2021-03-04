@@ -37,6 +37,8 @@ $cururl = Yii::$app->controller->id;
     <style>
         @font-face {
             font-family: 'Kanit-Regular';
+            /*font-family: 'TH-Sarabun-New';*/
+            /*src: url('fonts/THSarabunNew.ttf') format('truetype');*/
             src: url('fonts/Kanit-Regular.ttf') format('truetype');
             /*src: url('../../backend/web/fonts/Kanit-Regular.ttf') format('truetype');*/
             /* src: url('../fonts/thsarabunnew-webfont.eot?#iefix') format('embedded-opentype'),

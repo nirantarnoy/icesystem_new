@@ -136,7 +136,7 @@ if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->sess
                 </div>
                 <div class="col-lg-5" style="text-align: right">
                     <input type="hidden" class="total-value-top" value="0">
-                    <h5> ยอดขาย <span style="color: red" class="total-text-top">0</span></h5>
+                    <h5> ยอดขาย <span style="color: red" class="total-text-top">0</span> <span> บาท</span></h5>
                 </div>
             </div>
             <hr style="border-top: 1px dashed gray">
