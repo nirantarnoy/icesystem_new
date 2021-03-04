@@ -87,12 +87,20 @@ $cururl = Yii::$app->controller->id;
     <!-- Content Wrapper. Contains page content -->
     <div class="content">
         <div class="row">
-            <div class="col-lg-12">
-                <a href="<?=\yii\helpers\Url::to(['site/index'],true)?>" class="btn btn-default">กลับระบบหลัก</a>
-                <div class="btn btn-secondary" id="btnFullscreen">Full screen</div>
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4" style="text-align: center;padding-top: 10px;">
+                <h1 style="color: #44ab7d">ICE-POS</h1>
             </div>
+            <div class="col-lg-4" style="text-align: right;padding-top: 10px;">
+                <div class="btn-group">
+                    <a href="<?=\yii\helpers\Url::to(['site/index'],true)?>" class="btn btn-success"><i class="fa fa-home"></i></a>
+                    <div class="btn btn-secondary" id="btnFullscreen"><i class="fa fa-arrows-alt"></i></div>
+                </div>
+
+            </div>
+
         </div>
-        <br>
+        <hr>
         <!-- Content Header (Page header) -->
         <!-- Main content -->
         <?php $this->beginBody() ?>
