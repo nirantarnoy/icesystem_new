@@ -78,7 +78,7 @@ if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->sess
                         <div class="col-lg-3 product-items">
                             <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
                             <div class="card" style="heightc: 200px;">
-                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">
+<!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
                                 <!--                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="">-->
                                 <div class="card-body">
                                     <p class="card-text"
