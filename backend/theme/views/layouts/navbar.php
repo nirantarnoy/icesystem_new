@@ -25,7 +25,7 @@ use yii\helpers\Html;
     <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
-                Administrator
+                <?= \backend\models\User::findName(\Yii::$app->user->id)?>
                 <!--                    <span class="badge badge-danger navbar-badge">3</span>-->
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">

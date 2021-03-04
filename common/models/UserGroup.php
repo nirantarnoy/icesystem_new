@@ -34,6 +34,7 @@ class UserGroup extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['name'], 'required'],
             [['car_type_id', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['code', 'name', 'description'], 'string', 'max' => 255],
         ];
