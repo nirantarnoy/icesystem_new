@@ -56,6 +56,7 @@ class PosController extends Controller
 //        if (file_exists('../web/uploads/slip/slip_index.pdf')) {
 //            unlink('../web/uploads/slip/slip_index.pdf');
 //        }
+        $this->layout = 'main_pos';
         return $this->render('index', [
             'model' => null
         ]);

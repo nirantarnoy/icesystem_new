@@ -4,7 +4,7 @@ use yii\widgets\Breadcrumbs;
 use backend\assets\AppAsset;
 
 AppAsset::register($this);
-
+$assetDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
 $cururl = Yii::$app->controller->id;
 ?>
 <?php $this->beginPage()?>
@@ -105,10 +105,13 @@ $cururl = Yii::$app->controller->id;
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
     <!-- Content Wrapper. Contains page content -->
+    <?php //echo $this->render('navbar', ['assetDir' => $assetDir]) ?>
     <div class="content">
         <!-- Content Header (Page header) -->
         <!-- Main content -->
         <?php $this->beginBody() ?>
+        <!-- Navbar -->
+
         <section class="content" style="background-color: #ffffff;">
             <div class="container-fluid">
                 <?php echo $content ?>
