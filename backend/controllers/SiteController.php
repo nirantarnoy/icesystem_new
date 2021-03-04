@@ -67,7 +67,17 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $prod_cnt = \backend\models\Product::find()->count();
+        $route_cnt = \backend\models\Deliveryroute::find()->count();
+        $car_cnt = \backend\models\Car::find()->count();
+        $order_cnt = \backend\models\Orders::find()->count();
+
+        return $this->render('index',[
+            'prod_cnt' => $prod_cnt,
+            'route_cnt' => $route_cnt,
+            'car_cnt' => $car_cnt,
+            'order_cnt' => $order_cnt,
+        ]);
     }
 
     /**

@@ -1,26 +1,39 @@
 <?php
 
-/* @var $this yii\web\View */
+use yii\helpers\Url;
 
 $this->title = 'ภาพรวมระบบ';
 ?>
 <br/>
 <div class="site-index">
     <div class="body-content">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="label">เลือกดูตามช่วงวันที่</div>
+                <?php
+                echo \kartik\daterange\DateRangePicker::widget([
+                   'name' => 'dashboard_date',
+                    'pluginOptions' => [
 
+                    ]
+                ]);
+                ?>
+            </div>
+        </div>
+        <br>
         <div class="row">
             <div class="col-lg-3 col-6">
                 <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3><?= number_format(9) ?></h3>
+                        <h3><?= number_format($prod_cnt) ?></h3>
 
-                        <p>จำนวนใบสั่งขายทั้งหมด</p>
+                        <p>จำนวนสินค้าทั้งหมด</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-bag"></i>
                     </div>
-                    <a href="#" class="small-box-footer">เพิ่มเติม <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?=Url::to(['product/index'],true)?>" class="small-box-footer">ไปยังสินค้า <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -28,15 +41,14 @@ $this->title = 'ภาพรวมระบบ';
                 <!-- small box -->
                 <div class="small-box bg-success">
                     <div class="inner">
-                        <h3><?= number_format(10) ?></h3>
+                        <h3><?= number_format($route_cnt) ?></h3>
                         <!--                        <sup style="font-size: 20px">%</sup>-->
-
-                        <p>จำนวนใบสั่งขายเดือนนี้</p>
+                        <p>จำนวนสายส่ง</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-stats-bars"></i>
                     </div>
-                    <a href="#" class="small-box-footer">เพิ่มเติม <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?=Url::to(['deliveryroute/index'],true)?>" class="small-box-footer">ไปยังสายส่ง <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -44,29 +56,27 @@ $this->title = 'ภาพรวมระบบ';
                 <!-- small box -->
                 <div class="small-box bg-warning">
                     <div class="inner">
-                        <h3><?= number_format(3) ?></h3>
-
-                        <p>จำนวนใบสั่งขายอาทิตย์นี้</p>
+                        <h3><?= number_format($car_cnt) ?></h3>
+                        <p>จำนวนรถ</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-person-add"></i>
                     </div>
-                    <a href="#" class="small-box-footer">เพิ่มเติม <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?=Url::to(['car/index'],true)?>" class="small-box-footer">ไปยังข้อมูลรถ <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
             <div class="col-lg-3 col-6">
                 <!-- small box -->
-                <div class="small-box bg-danger">
+                <div class="small-box bg-fuchsia">
                     <div class="inner">
-                        <h3><?= number_format(3) ?></h3>
-
-                        <p>จำนวนใบสั่งขายวันนี้</p>
+                        <h3><?= number_format($order_cnt) ?></h3>
+                        <p>จำนวนใบสั่งขาย</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-pie-graph"></i>
                     </div>
-                    <a href="#" class="small-box-footer">เพิ่มเติม <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?=Url::to(['orders/index'],true)?>" class="small-box-footer">ไปยังรายการขาย <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
