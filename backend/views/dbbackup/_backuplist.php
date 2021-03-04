@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = '/ '.$this->title;
                         <tr>
                             <td><?= basename($file) ?></td>
                             <td><?= date('d/m/Y H:m:s', filectime($file)) ?></td>
-                            <td><?= number_format(filesize($file) / 1024, 2).'MB' ?></td>
+                            <td><?= number_format(filesize($file) / 1024, 2). 'KB' ?></td>
                             <td>
                                 <a href="<?=\yii\helpers\Url::to(['dbbackup/downloadbak','id'=>basename($file)],true)?>" class="btn btn-success"> <i class="fa fa-download"></i> ดาวน์โหลดไฟล์</a>
                             </td>
