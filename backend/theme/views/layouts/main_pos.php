@@ -4,6 +4,10 @@ use yii\widgets\Breadcrumbs;
 use backend\assets\AppAsset;
 
 AppAsset::register($this);
+
+\hail812\adminlte3\assets\FontAwesomeAsset::register($this);
+\hail812\adminlte3\assets\AdminLteAsset::register($this);
+
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
 $cururl = Yii::$app->controller->id;
 ?>
@@ -101,6 +105,12 @@ $cururl = Yii::$app->controller->id;
     <!-- Bootstrap Switch -->
     <script src="plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 
+    <!-- OPTIONAL SCRIPTS -->
+    <script src="plugins/chart.js/Chart.min.js"></script>
+    <script src="dist/js/demo.js"></script>
+    <script src="dist/js/pages/dashboard3.js"></script>
+
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -146,12 +156,6 @@ $cururl = Yii::$app->controller->id;
 
     });
 </script>
-
-
-<!-- OPTIONAL SCRIPTS -->
-<script src="plugins/chart.js/Chart.min.js"></script>
-<script src="dist/js/demo.js"></script>
-<script src="dist/js/pages/dashboard3.js"></script>
 
 </body>
 </html>
