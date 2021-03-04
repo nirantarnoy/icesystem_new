@@ -304,7 +304,7 @@ if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->sess
                                     <div class="col-lg-3" style="text-align: right">
                                         <h4>วันที่ขาย</h4>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-8">
                                         <?php
                                         // $order_date = date('d/m/Y',strtotime($model->order_date));
                                         echo \kartik\date\DatePicker::widget([
@@ -334,7 +334,7 @@ if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->sess
                             </div>
                             <div class="col-lg-4"></div>
                         </div>
-                        <br/>
+                        <div style="height: 10px;"></div>
                         <div class="row">
                             <div class="col-lg-3"></div>
                             <div class="col-lg-6">
@@ -351,7 +351,7 @@ if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->sess
                             </div>
                             <div class="col-lg-4"></div>
                         </div>
-                        <br/>
+                        <div style="height: 10px;"></div>
                         <div class="row">
                             <div class="col-lg-3"></div>
                             <div class="col-lg-6">
@@ -374,7 +374,7 @@ if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->sess
 
                             </div>
                         </div>
-                        <br/>
+                        <div style="height: 10px;"></div>
                         <div class="row">
                             <div class="col-lg-3"></div>
                             <div class="col-lg-6">
