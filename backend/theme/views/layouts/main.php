@@ -23,6 +23,8 @@ $cururl = Yii::$app->controller->id;
     <title><?= "vorapat" ?></title>
     <link rel="shortcut icon" href="<?php echo Yii::$app->getUrlManager()->baseUrl; ?>/sst.ico" type="image/x-icon"/>
 
+    <link rel="stylesheet" href="plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+
     <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
@@ -118,6 +120,12 @@ $cururl = Yii::$app->controller->id;
 
 <script src="js/sweetalert.min.js"></script>
 
+<!-- OPTIONAL SCRIPTS -->
+<script src="plugins/chart.js/Chart.min.js"></script>
+<script src="dist/js/demo.js"></script>
+<script src="dist/js/pages/dashboard3.js"></script>
+<script src="js/module_index_delete.js"></script>
+
 <script>
     var cururl = $("#current-url").val();
     $(function () {
@@ -157,9 +165,9 @@ $cururl = Yii::$app->controller->id;
         $("#btn-show-alert").click(function () {
             var msg = $(".alert-msg").val();
             var msg_error = $(".alert-msg-error").val();
-            // alert(msg);
+             //alert(msg);
             if (msg != '' && typeof (msg) !== "undefined") {
-               // alert(msg);
+               //alert(msg);
                 Toast.fire({
                     type: 'success',
                     title: msg
@@ -180,11 +188,7 @@ $cururl = Yii::$app->controller->id;
 
 
 </script>
-<!-- OPTIONAL SCRIPTS -->
-<script src="plugins/chart.js/Chart.min.js"></script>
-<script src="dist/js/demo.js"></script>
-<script src="dist/js/pages/dashboard3.js"></script>
-<script src="js/module_index_delete.js"></script>
+
 </body>
 </html>
 <?php $this->endPage() ?>

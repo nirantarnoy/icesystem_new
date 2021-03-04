@@ -8,8 +8,8 @@ use yii\web\Session;
 
 $filename = "empty";
 
-if(!empty(\Yii::$app->session->getFlash('msg')) && !empty(\Yii::$app->session->getFlash('after-save'))){
-    $f_name = \Yii::$app->session->getFlash('msg');
+if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->session->getFlash('after-save'))){
+    $f_name = \Yii::$app->session->getFlash('msg-index');
    // echo $f_name;
     if (file_exists('../web/uploads/slip/'.$f_name)) {
         $filename = "../web/uploads/slip/".$f_name;

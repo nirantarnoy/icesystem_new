@@ -216,12 +216,13 @@ class PosController extends Controller
                     $this->render('_printtoindex', ['model' => $model, 'model_line' => $model_line,'change_amount'=>$change_amt->change_amount]);
 
                     $session = \Yii::$app->session;
-                    $session->setFlash('msg', 'slip_index.pdf');
+                    $session->setFlash('msg-index', 'slip_index.pdf');
                     $session->setFlash('after-save', true);
                 }
             }
         }
-
+        $session = \Yii::$app->session;
+        $session->setFlash('msg', 'บันทึกรายการเรียบร้อย');
         return $this->redirect(['pos/index']);
     }
 
@@ -344,7 +345,7 @@ class PosController extends Controller
             $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
             //   $content =  $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
             $session = \Yii::$app->session;
-            $session->setFlash('msg', 'slip.pdf');
+            $session->setFlash('msg-index', 'slip.pdf');
             $session->setFlash('after-print', true);
             $this->redirect(['pos/salehistory']);
         }

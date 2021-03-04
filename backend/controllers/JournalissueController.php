@@ -87,6 +87,8 @@ class JournalissueController extends Controller
                         $model_line->save();
                     }
                 }
+                $session = \Yii::$app->session;
+                $session->setFlash('msg', 'บันทึกรายการเรียบร้อย');
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
@@ -147,7 +149,8 @@ class JournalissueController extends Controller
                     }
 
                 }
-
+                $session = \Yii::$app->session;
+                $session->setFlash('msg', 'บันทึกรายการเรียบร้อย');
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
