@@ -32,7 +32,7 @@ if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->sess
             <div class="col-lg-8">
                 <div class="btn btn-group group-customer-type">
                     <button class="btn btn-outline-secondary btn-sm" disabled>ประเภทลูกค้า</button>
-                    <button id="btn-general-customer" class="btn btn-success btn-sm active">ลูกค้าทั่วไป</button>
+                    <button id="btn-general-customer" class="btn btn-success btn-sm active">ขายสด</button>
                     <button id="btn-fix-customer" class="btn btn-outline-secondary btn-sm">ระบุลูกค้า</button>
                 </div>
             </div>
@@ -71,7 +71,8 @@ if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->sess
                 <div class="row">
                     <?php $i = 0; ?>
                     <?php $list = ['PB','PS','PC','T1','T2']; ?>
-                    <?php $product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
+                    <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
+                    <?php $product_data = \backend\models\Product::find()->all(); ?>
                     <?php foreach ($product_data as $value): ?>
                         <?php $i += 1; ?>
                         <div class="col-lg-2 product-items">
