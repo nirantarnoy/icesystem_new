@@ -75,7 +75,7 @@ if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->sess
                     <?php $product_data = \backend\models\Product::find()->all(); ?>
                     <?php foreach ($product_data as $value): ?>
                         <?php $i += 1; ?>
-                        <div class="col-lg-2 product-items">
+                        <div class="col-lg-3 product-items">
                             <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
                             <div class="card" style="heightc: 200px;">
                                 <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">
