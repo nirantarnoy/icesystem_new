@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'employee_ref_id',
                 'label'=>'พนักงาน',
                 'headerOptions' => ['style' => 'text-align: center'],
-                'contentOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: left'],
                 'value' => function ($data) {
                     return \backend\models\Employee::findFullName($data->employee_ref_id);
                 }
