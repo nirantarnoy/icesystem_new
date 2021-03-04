@@ -33,7 +33,8 @@
     "kartik-v/yii2-date-range": "dev-master",
     "kartik-v/yii2-icons": "@dev",
     "kartik-v/yii2-widget-datepicker": "dev-master",
-    "kartik-v/yii2-widget-timepicker": "dev-master"
+    "kartik-v/yii2-widget-timepicker": "dev-master",
+    "miloschuman/yii2-highcharts-widget": "^8.0"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "~2.1.0",
