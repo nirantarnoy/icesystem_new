@@ -67,7 +67,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
         </div>
         <br/>
         <div class="row">
-            <div class="col-lg-12" style="overflow-x: hidden">
+            <div class="col-lg-12" style="height: 800px;overflow-x: hidden">
                 <div class="row">
                     <?php $i = 0; ?>
                     <?php $list = ['PB', 'PS', 'PC', 'T1', 'T2']; ?>
