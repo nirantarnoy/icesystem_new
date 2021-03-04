@@ -12,7 +12,7 @@ $this->title = 'ภาพรวมระบบ';
                 <div class="label">เลือกดูตามช่วงวันที่</div>
                 <?php
                 echo \kartik\daterange\DateRangePicker::widget([
-                   'name' => 'dashboard_date',
+                    'name' => 'dashboard_date',
                     'pluginOptions' => [
 
                     ]
@@ -33,7 +33,8 @@ $this->title = 'ภาพรวมระบบ';
                     <div class="icon">
                         <i class="ion ion-bag"></i>
                     </div>
-                    <a href="<?=Url::to(['product/index'],true)?>" class="small-box-footer">ไปยังสินค้า <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?= Url::to(['product/index'], true) ?>" class="small-box-footer">ไปยังสินค้า <i
+                                class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -48,7 +49,8 @@ $this->title = 'ภาพรวมระบบ';
                     <div class="icon">
                         <i class="ion ion-stats-bars"></i>
                     </div>
-                    <a href="<?=Url::to(['deliveryroute/index'],true)?>" class="small-box-footer">ไปยังสายส่ง <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?= Url::to(['deliveryroute/index'], true) ?>" class="small-box-footer">ไปยังสายส่ง <i
+                                class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -62,7 +64,8 @@ $this->title = 'ภาพรวมระบบ';
                     <div class="icon">
                         <i class="ion ion-person-add"></i>
                     </div>
-                    <a href="<?=Url::to(['car/index'],true)?>" class="small-box-footer">ไปยังข้อมูลรถ <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?= Url::to(['car/index'], true) ?>" class="small-box-footer">ไปยังข้อมูลรถ <i
+                                class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -76,7 +79,8 @@ $this->title = 'ภาพรวมระบบ';
                     <div class="icon">
                         <i class="ion ion-pie-graph"></i>
                     </div>
-                    <a href="<?=Url::to(['orders/index'],true)?>" class="small-box-footer">ไปยังรายการขาย <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?= Url::to(['orders/index'], true) ?>" class="small-box-footer">ไปยังรายการขาย <i
+                                class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -125,6 +129,39 @@ $this->title = 'ภาพรวมระบบ';
                         </div>
                     </div>
                     <!-- /.card -->
+                    <div class="card">
+                        <div class="card-header border-0">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">ยอดขายแยกประเภทขาย</h3>
+                                <a href="javascript:void(0);">รายละเอียด</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">18,230.00</span>
+                                    <span>มูลค่า</span>
+                                </p>
+                            </div>
+                            <!-- /.d-flex -->
+
+                            <div class="position-relative mb-4">
+                                <canvas id="salesx-chart" height="200"></canvas>
+                            </div>
+
+                            <div class="d-flex flex-row justify-content-end">
+                  <span class="mr-2">
+                    <i class="fas fa-square text-primary"></i> POS
+                  </span>
+
+                                <span>
+                    <i class="fas fa-square text-gray"></i> MOBILE
+                  </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--                     -------->
 
                     <div class="card">
                         <div class="card-header border-0">
@@ -244,7 +281,7 @@ $this->title = 'ภาพรวมระบบ';
                         <div class="card-body">
                             <div class="d-flex">
                                 <p class="d-flex flex-column">
-                                    <span class="text-bold text-lg">$18,230.00</span>
+                                    <span class="text-bold text-lg">18,230.00</span>
                                     <span>มูลค่า</span>
                                 </p>
                                 <p class="ml-auto d-flex flex-column text-right">
@@ -292,7 +329,7 @@ $this->title = 'ภาพรวมระบบ';
                                 </p>
                                 <p class="d-flex flex-column text-right">
                     <span class="font-weight-bold">
-                      <i class="ion ion-android-arrow-up text-success"></i> 12%
+                      <i class="ion ion-android-arrow-up text-success"></i> <?= number_format($order_pos_cnt) ?>
                     </span>
                                     <span class="text-muted">POS</span>
                                 </p>

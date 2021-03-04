@@ -71,12 +71,16 @@ class SiteController extends Controller
         $route_cnt = \backend\models\Deliveryroute::find()->count();
         $car_cnt = \backend\models\Car::find()->count();
         $order_cnt = \backend\models\Orders::find()->count();
+        $order_pos_cnt = \backend\models\Orders::find()->where(['sale_channel_id'=>2])->count();
+        $order_normal_cnt = \backend\models\Orders::find()->where(['sale_channel_id'=>1])->count();
 
         return $this->render('index',[
             'prod_cnt' => $prod_cnt,
             'route_cnt' => $route_cnt,
             'car_cnt' => $car_cnt,
             'order_cnt' => $order_cnt,
+            'order_pos_cnt' => $order_pos_cnt,
+            'order_normal_cnt' => $order_normal_cnt
         ]);
     }
 
