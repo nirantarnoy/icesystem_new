@@ -26,7 +26,7 @@ class SiteController extends Controller
 //                        'allow' => false,
 //                    ],
                     [
-                        'actions' => ['login', 'error','createadmin'],
+                        'actions' => ['login', 'error','createadmin','changepassword'],
                         'allow' => true,
                     ],
                     [
