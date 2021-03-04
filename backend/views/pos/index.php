@@ -19,7 +19,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
 //$this->title = '<p style="color: #255985">ทำรายการขายหน้าร้าน POS</p>';
 
 ?>
-<div class="btn" id="btnFullscreen">clikc</div>
+
 <div class="row">
     <div class="col-lg-6" style="border-right: 1px dashed gray ">
         <div class="row">
@@ -129,9 +129,9 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
             <input type="hidden" class="sale-pay-type" name="sale_pay_type" value="">
             <div class="row">
                 <div class="col-lg-4">
-                    <h5 style="color: #258faf"><i class="fa fa-calendar"></i> <?= date('d/m/Y') ?> <span
+                    <h4 style="color: #258faf"><i class="fa fa-calendar"></i> <?= date('d/m/Y') ?> <span
                                 class="c-time"><?= date('H:i') ?></span>
-                    </h5>
+                    </h4>
                 </div>
                 <div class="col-lg-3">
 
@@ -532,8 +532,7 @@ $js = <<<JS
         document.getElementById('btnFullscreen').addEventListener('click', function() {
             toggleFullscreen();
         });
-    
-     
+        
      $(".customer-id").select2({
      dropdownAutoWidth : true
      });

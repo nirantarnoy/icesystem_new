@@ -88,7 +88,8 @@ $cururl = Yii::$app->controller->id;
     <div class="content">
         <div class="row">
             <div class="col-lg-12">
-                <div class="btn btn-default">กลับระบบหลัก</div>
+                <a href="<?=\yii\helpers\Url::to(['site/index'],true)?>" class="btn btn-default">กลับระบบหลัก</a>
+                <div class="btn btn-secondary" id="btnFullscreen">Full screen</div>
             </div>
         </div>
         <br>
