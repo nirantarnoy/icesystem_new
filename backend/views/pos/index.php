@@ -5,14 +5,13 @@ use yii\helpers\ArrayHelper;
 use yii\web\Session;
 
 
-
 $filename = "empty";
 
-if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->session->getFlash('after-save'))){
+if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
     $f_name = \Yii::$app->session->getFlash('msg-index');
-   // echo $f_name;
-    if (file_exists('../web/uploads/slip/'.$f_name)) {
-        $filename = "../web/uploads/slip/".$f_name;
+    // echo $f_name;
+    if (file_exists('../web/uploads/slip/' . $f_name)) {
+        $filename = "../web/uploads/slip/" . $f_name;
     }
 }
 
@@ -20,6 +19,7 @@ if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->sess
 //$this->title = '<p style="color: #255985">ทำรายการขายหน้าร้าน POS</p>';
 
 ?>
+<div class="btn" id="btnFullscreen">clikc</div>
 <div class="row">
     <div class="col-lg-6" style="border-right: 1px dashed gray ">
         <div class="row">
@@ -70,7 +70,7 @@ if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->sess
             <div class="col-lg-12" style="overflow-x: hidden">
                 <div class="row">
                     <?php $i = 0; ?>
-                    <?php $list = ['PB','PS','PC','T1','T2']; ?>
+                    <?php $list = ['PB', 'PS', 'PC', 'T1', 'T2']; ?>
                     <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
                     <?php $product_data = \backend\models\Product::find()->all(); ?>
                     <?php foreach ($product_data as $value): ?>
@@ -78,7 +78,7 @@ if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->sess
                         <div class="col-lg-3 product-items">
                             <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
                             <div class="card" style="heightc: 200px;">
-<!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
+                                <!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
                                 <!--                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="">-->
                                 <div class="card-body">
                                     <p class="card-text"
@@ -300,29 +300,29 @@ if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->sess
             <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
 
             <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-lg-3" style="text-align: right">
-                                        <h4>วันที่ขาย</h4>
-                                    </div>
-                                    <div class="col-lg-8">
-                                        <?php
-                                        // $order_date = date('d/m/Y',strtotime($model->order_date));
-                                        echo \kartik\date\DatePicker::widget([
-                                            'name' => 'pos_date',
-                                            'value' => date('d/m/Y'),
-                                            'options' => [
-                                                    'class'=>'pos-date',
-                                                    'onchange'=>'$(".sale-pay-date").val($(this).val());'
-                                                // 'readonly' => true,
-                                            ],
-                                            'pluginOptions' => [
-                                                'format' => 'dd/mm/yyyy',
-                                                'todayHighlight' => true
-                                            ],
-                                        ]);
-                                        ?>
-                                    </div>
-                                </div>
+                <div class="row">
+                    <div class="col-lg-3" style="text-align: right">
+                        <h4>วันที่ขาย</h4>
+                    </div>
+                    <div class="col-lg-8">
+                        <?php
+                        // $order_date = date('d/m/Y',strtotime($model->order_date));
+                        echo \kartik\date\DatePicker::widget([
+                            'name' => 'pos_date',
+                            'value' => date('d/m/Y'),
+                            'options' => [
+                                'class' => 'pos-date',
+                                'onchange' => '$(".sale-pay-date").val($(this).val());'
+                                // 'readonly' => true,
+                            ],
+                            'pluginOptions' => [
+                                'format' => 'dd/mm/yyyy',
+                                'todayHighlight' => true
+                            ],
+                        ]);
+                        ?>
+                    </div>
+                </div>
                 <hr>
                 <!--                <hr style="border-top: 1px dashed gray">-->
                 <div class="row">
@@ -528,6 +528,10 @@ $js = <<<JS
           var time = dt.getHours() + ":" + dt.getMinutes();
           $(".c-time").html(time);
      },60000);
+        
+        document.getElementById('btnFullscreen').addEventListener('click', function() {
+            toggleFullscreen();
+        });
     
      
      $(".customer-id").select2({
@@ -659,6 +663,34 @@ $js = <<<JS
          $("form#form-close-sale").submit();
      });
  });
+
+function toggleFullscreen(elem) {
+  elem = elem || document.documentElement;
+  if (!document.fullscreenElement && !document.mozFullScreenElement &&
+    !document.webkitFullscreenElement && !document.msFullscreenElement) {
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+      elem.msRequestFullscreen();
+    } else if (elem.mozRequestFullScreen) {
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) {
+      elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
+}
+
+
 
 function calpayprice(e){
     var price_val = e.attr('data-var');
