@@ -70,7 +70,8 @@ if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->sess
             <div class="col-lg-12" style="overflow-x: hidden">
                 <div class="row">
                     <?php $i = 0; ?>
-                    <?php $product_data = \backend\models\Product::find()->all(); ?>
+                    <?php $list = ['PB','PS','PC','T1','T2']; ?>
+                    <?php $product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
                     <?php foreach ($product_data as $value): ?>
                         <?php $i += 1; ?>
                         <div class="col-lg-2 product-items">
