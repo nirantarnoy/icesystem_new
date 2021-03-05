@@ -96,7 +96,6 @@ $cururl = Yii::$app->controller->id;
                     <a href="<?=\yii\helpers\Url::to(['site/index'],true)?>" class="btn btn-success"><i class="fa fa-home"></i></a>
                     <div class="btn btn-warning" id="btnFullscreen"><i class="fa fa-arrows-alt"></i></div>
                 </div>
-
             </div>
 
         </div>

@@ -142,7 +142,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                 </div>
             </div>
             <hr style="border-top: 1px dashed gray">
-            <div class="row">
+            <div class="row" style="height: 600px;overflow-x: hidden">
                 <div class="col-lg-12">
                     <table class="table table-striped table-bordered table-cart">
                         <thead>
@@ -173,7 +173,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                                 <input type="hidden" class="cart-price" name="cart_price[]" value="">
                                 <input type="hidden" class="cart-total-price" name="cart_total_price[]" value="">
                                 <div class="btn btn-danger btn-sm removecart-item" onclick="removecartitem($(this))"><i
-                                            class="fa fa-trash"></i></div>
+                                            class="fa fa-minus"></i></div>
                             </td>
                         </tr>
 
@@ -191,29 +191,32 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                     </table>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-6" style="text-align: left">
-                    <a href="index.php?r=pos/salehistory" class="btn btn-outline-info btn-history-cart"
-                       style="display: noneผ">
-                        ประวัติการขาย
-                    </a>
-                </div>
-                <div class="col-lg-6" style="text-align: right">
-                    <div class="btn btn-outline-secondary btn-cancel-cart" style="display: none">
-                        ยกเลิกการขาย
+<!--            <div class="footer-cart" style="height: 250px;position: fixed;bottom: 0px;">-->
+                <div class="row">
+                    <div class="col-lg-6" style="text-align: left">
+                        <a href="index.php?r=pos/salehistory" class="btn btn-outline-info btn-history-cart"
+                           style="display: noneผ">
+                            ประวัติการขาย
+                        </a>
+                    </div>
+                    <div class="col-lg-6" style="text-align: right">
+                        <div class="btn btn-outline-secondary btn-cancel-cart" style="display: none">
+                            ยกเลิกการขาย
+                        </div>
                     </div>
                 </div>
-            </div>
-            <hr>
-            <div class="row div-payment" style="display: none">
-                <div class="col-lg-12" style="text-align: center">
-                    <div class="btn btn-group">
-                        <div class="btn btn-outline-success btn-lg btn-pay-cash">ชำระเงินสด</div>
-                        <!--                    <div class="btn btn-outline-primary btn-lg btn-pay-credit">ชำระเงินเชื่อ</div>-->
-                        <!--                        <div class="btn btn-outline-warning btn-lg btn-pay-credit-card">ชำระบัตรเครดิต</div>-->
+                <hr>
+                <div class="row div-payment" style="display: none">
+                    <div class="col-lg-12" style="text-align: center">
+                        <div class="btn btn-group">
+                            <div class="btn btn-success btn-lg btn-pay-cash">ชำระเงินสด</div>
+                            <div class="btn btn-primary btn-lg btn-pay-credit">ชำระเงินเชื่อ</div>
+                            <!--                        <div class="btn btn-outline-warning btn-lg btn-pay-credit-card">ชำระบัตรเครดิต</div>-->
+                        </div>
                     </div>
                 </div>
-            </div>
+<!--            </div>-->
+
     </div>
 </div>
 
