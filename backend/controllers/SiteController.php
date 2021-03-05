@@ -98,7 +98,7 @@ class SiteController extends Controller
         $data_prod_data = [];
         for ($i = 0; $i <= count($query2) - 1; $i++) {
             array_push($data_prod_data, [
-                'name' => $query2[$i]['code'],
+                'name' => $query2[$i]['name'],
                 'y' => (float)$query2[$i]['total_amount'],
                 'selected' => false
             ]);
