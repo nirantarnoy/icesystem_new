@@ -1,4 +1,5 @@
 <?php
+
 namespace backend\controllers;
 
 use Yii;
@@ -26,7 +27,7 @@ class SiteController extends Controller
 //                        'allow' => false,
 //                    ],
                     [
-                        'actions' => ['login', 'error','createadmin','changepassword'],
+                        'actions' => ['login', 'error', 'createadmin', 'changepassword'],
                         'allow' => true,
                     ],
                     [
@@ -39,7 +40,7 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post','get'],
+                    'logout' => ['post', 'get'],
                 ],
             ],
         ];
@@ -71,8 +72,8 @@ class SiteController extends Controller
         $route_cnt = \backend\models\Deliveryroute::find()->count();
         $car_cnt = \backend\models\Car::find()->count();
         $order_cnt = \backend\models\Orders::find()->count();
-        $order_pos_cnt = \backend\models\Orders::find()->where(['sale_channel_id'=>2])->count();
-        $order_normal_cnt = \backend\models\Orders::find()->where(['sale_channel_id'=>1])->count();
+        $order_pos_cnt = \backend\models\Orders::find()->where(['sale_channel_id' => 2])->count();
+        $order_normal_cnt = \backend\models\Orders::find()->where(['sale_channel_id' => 1])->count();
 
 
         $sql = "select * from query_sale_amount_by_sale_type";
@@ -91,7 +92,39 @@ class SiteController extends Controller
             ]);
         }
 
-        return $this->render('index',[
+        $sql2 = "select * from query_sale_amount_by_product";
+        $query2 = \Yii::$app->db->createCommand($sql2)->queryAll();
+        $data_by_prod_type = [];
+        $data_prod_data = [];
+        for ($i = 0; $i <= count($query2) - 1; $i++) {
+            array_push($data_prod_data, [
+                'name' => $query2[$i]['code'],
+                'y' => (float)$query2[$i]['total_amount'],
+                'selected' => false
+            ]);
+
+        }
+
+        array_push($data_by_prod_type, [
+                'name' => 'ยอดขาย',
+                'data' =>
+                    $data_prod_data
+
+
+            ]
+        );
+//        ['name' => 'Test',
+//            'data' => [
+//                ['name' => 'Chrome',
+//                    'y' => 60.0,
+//                    'selected' => true,],
+//                ['name' => 'IE',
+//                    'y' => 69.0,
+//                    'selected' => false,]
+//            ]
+//        ]
+
+        return $this->render('index', [
             'prod_cnt' => $prod_cnt,
             'route_cnt' => $route_cnt,
             'car_cnt' => $car_cnt,
@@ -99,8 +132,8 @@ class SiteController extends Controller
             'order_pos_cnt' => $order_pos_cnt,
             'order_normal_cnt' => $order_normal_cnt,
             'data_by_type' => $data_by_type,
-           // 'data_by_prod_type' => $data_by_prod_type,
-            'category'=>$category
+            'data_by_prod_type' => $data_by_prod_type,
+            'category' => $category
         ]);
     }
 
@@ -142,42 +175,46 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    public function actionChangepassword(){
-        $model=new \backend\models\Resetform();
-        if($model->load(Yii::$app->request->post())){
+    public function actionChangepassword()
+    {
+        $model = new \backend\models\Resetform();
+        if ($model->load(Yii::$app->request->post())) {
 
-            $model_user = \backend\models\User::find()->where(['id'=>Yii::$app->user->id])->one();
-            if($model->oldpw != '' && $model->newpw != '' && $model->confirmpw !=''){
-                if($model->confirmpw != $model->newpw){
+            $model_user = \backend\models\User::find()->where(['id' => Yii::$app->user->id])->one();
+            if ($model->oldpw != '' && $model->newpw != '' && $model->confirmpw != '') {
+                if ($model->confirmpw != $model->newpw) {
                     $session = Yii::$app->session;
-                    $session->setFlash('msg_err','รหัสยืนยันไม่ตรงกับรหัสใหม่');
-                }else{
-                    if($model_user->validatePassword($model->oldpw)){
+                    $session->setFlash('msg_err', 'รหัสยืนยันไม่ตรงกับรหัสใหม่');
+                } else {
+                    if ($model_user->validatePassword($model->oldpw)) {
                         $model_user->setPassword($model->confirmpw);
-                        if($model_user->save()){
+                        if ($model_user->save()) {
                             $session = Yii::$app->session;
-                            $session->setFlash('msg_success','ทำการเปลี่ยนรหัสผ่านเรียบร้อยแล้ว');
+                            $session->setFlash('msg_success', 'ทำการเปลี่ยนรหัสผ่านเรียบร้อยแล้ว');
                             return $this->redirect(['site_/logout']);
                         }
-                    }else{
+                    } else {
                         $session = Yii::$app->session;
-                        $session->setFlash('msg_err','รหัสผ่านเดิมไม่ถูกต้อง');
+                        $session->setFlash('msg_err', 'รหัสผ่านเดิมไม่ถูกต้อง');
                     }
                 }
 
-            }else{
+            } else {
                 $session = Yii::$app->session;
-                $session->setFlash('msg_err','กรุณาป้อนข้อมูลให้ครบ');
+                $session->setFlash('msg_err', 'กรุณาป้อนข้อมูลให้ครบ');
             }
 
         }
-        return $this->render('_setpassword',[
-            'model'=>$model
+        return $this->render('_setpassword', [
+            'model' => $model
         ]);
     }
-    public function actionForgetpassword(){
+
+    public function actionForgetpassword()
+    {
 
     }
+
     public function actionRequestPasswordReset()
     {
         $model = new PasswordResetRequestForm();
@@ -200,7 +237,8 @@ class SiteController extends Controller
         ]);
     }
 
-    public function sendReset($email){
+    public function sendReset($email)
+    {
         $is_send = 0;
 
         $user = \common\models\User::findOne([
@@ -220,9 +258,9 @@ class SiteController extends Controller
         }
         $token = $user->password_reset_token;
 
-        $mesg = 'สวัสดี คุณ'.'test' .'<br />';
-        $mesg = $mesg.'คุณสามารถดำเนินการเปลี่ยนรหัสผ่านได้ที่ Link ด้านล่างนี้ '.'<br />';
-        $mesg = $mesg.'<p><a href="https://www.ngansorn.com/tutor/site_/reset-password/token/'.$token.'">เปลี่ยนรหัสผ่าน</a> </p>';
+        $mesg = 'สวัสดี คุณ' . 'test' . '<br />';
+        $mesg = $mesg . 'คุณสามารถดำเนินการเปลี่ยนรหัสผ่านได้ที่ Link ด้านล่างนี้ ' . '<br />';
+        $mesg = $mesg . '<p><a href="https://www.ngansorn.com/tutor/site_/reset-password/token/' . $token . '">เปลี่ยนรหัสผ่าน</a> </p>';
 
 
         $mail = new PHPMailer();
@@ -242,14 +280,14 @@ class SiteController extends Controller
         $mail->Password = "tpmcaakvxdibfxwq";            // App Password not Gmail password
         /* ------------------------------------------------------------------------------------------------------------- */
 
-        $mail->setFrom('ngansorntutor@gmail.com','Ngansorn.com');
+        $mail->setFrom('ngansorntutor@gmail.com', 'Ngansorn.com');
         $mail->AddAddress($email);
         $mail->AddReplyTo('system');
         $mail->Subject = 'ดำเนินการเปลี่ยนรหัสผ่าน';
-        $mail->Body     = $mesg;
+        $mail->Body = $mesg;
         $mail->WordWrap = 50;
 //
-        if($mail->Send()) {
+        if ($mail->Send()) {
             $is_send = 1;
         }
         return $is_send;
@@ -286,8 +324,8 @@ class SiteController extends Controller
      * Verify email address
      *
      * @param string $token
-     * @throws BadRequestHttpException
      * @return yii\web\Response
+     * @throws BadRequestHttpException
      */
     public function actionVerifyEmail($token)
     {
@@ -328,22 +366,24 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionCreateadmin(){
+    public function actionCreateadmin()
+    {
         $model = new \common\models\User();
         $model->username = 'iceadmin';
         $model->setPassword('123456');
         $model->generateAuthKey();
         $model->email = 'admin@icesystem.com';
-        if($model->save()){
+        if ($model->save()) {
             \Yii::$app->session->set('login_worker', $model->username);
             echo "ok";
         }
 
     }
 
-    public function actionApiLogin(){
+    public function actionApiLogin()
+    {
         if (!Yii::$app->user->isGuest) {
-            return ['status'=> false,'data'=>'Not permission'];
+            return ['status' => false, 'data' => 'Not permission'];
         }
 
         \Yii::$app->response->format = \Yii\web\Response::FORMAT_JSON;
@@ -352,9 +392,9 @@ class SiteController extends Controller
         $model->username = $attributes['username'];
         $model->password = $attributes['password'];
         if ($model->login()) {
-            return ['status'=> true,'data'=>'login successfully'];
+            return ['status' => true, 'data' => 'login successfully'];
         } else {
-            return ['status'=> false,'data'=>'login fail'];
+            return ['status' => false, 'data' => 'login fail'];
         }
 //        $member = \common\models\Member::find()->where(['id'=>$attributes['id']])->one();
 //

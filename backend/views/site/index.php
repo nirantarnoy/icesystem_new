@@ -92,43 +92,43 @@ $this->title = 'ภาพรวมระบบ';
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-6">
-<!--                    <div class="card">-->
-<!--                        <div class="card-header border-0">-->
-<!--                            <div class="d-flex justify-content-between">-->
-<!--                                <h3 class="card-title">กราฟแสดงรายรับ-รายจ่าย</h3>-->
-<!--                                <a href="javascript:void(0);">รายละเอียด</a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="card-body">-->
-<!--                            <div class="d-flex">-->
-<!--                                <p class="d-flex flex-column">-->
-<!--                                    <span class="text-bold text-lg">82,000</span>-->
-<!--                                    <span>มูลค่า</span>-->
-<!--                                </p>-->
-<!--                                <p class="ml-auto d-flex flex-column text-right">-->
-<!--                    <span class="text-success">-->
-<!--                      <i class="fas fa-arrow-up"></i> 12.5%-->
-<!--                    </span>-->
-<!--                                    <span class="text-muted">Since last week</span>-->
-<!--                                </p>-->
-<!--                            </div>-->
-<!--                            <!-- /.d-flex -->
-<!---->
-<!--                            <div class="position-relative mb-4">-->
-<!--                                <canvas id="visitors-chart" height="200"></canvas>-->
-<!--                            </div>-->
-<!---->
-<!--                            <div class="d-flex flex-row justify-content-end">-->
-<!--                  <span class="mr-2">-->
-<!--                    <i class="fas fa-square text-primary"></i> เดือนนี้-->
-<!--                  </span>-->
-<!---->
-<!--                                <span>-->
-<!--                    <i class="fas fa-square text-gray"></i> เดือนที่แล้ว-->
-<!--                  </span>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <!--                    <div class="card">-->
+                    <!--                        <div class="card-header border-0">-->
+                    <!--                            <div class="d-flex justify-content-between">-->
+                    <!--                                <h3 class="card-title">กราฟแสดงรายรับ-รายจ่าย</h3>-->
+                    <!--                                <a href="javascript:void(0);">รายละเอียด</a>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="card-body">-->
+                    <!--                            <div class="d-flex">-->
+                    <!--                                <p class="d-flex flex-column">-->
+                    <!--                                    <span class="text-bold text-lg">82,000</span>-->
+                    <!--                                    <span>มูลค่า</span>-->
+                    <!--                                </p>-->
+                    <!--                                <p class="ml-auto d-flex flex-column text-right">-->
+                    <!--                    <span class="text-success">-->
+                    <!--                      <i class="fas fa-arrow-up"></i> 12.5%-->
+                    <!--                    </span>-->
+                    <!--                                    <span class="text-muted">Since last week</span>-->
+                    <!--                                </p>-->
+                    <!--                            </div>-->
+                    <!--                            <!-- /.d-flex -->
+                    <!---->
+                    <!--                            <div class="position-relative mb-4">-->
+                    <!--                                <canvas id="visitors-chart" height="200"></canvas>-->
+                    <!--                            </div>-->
+                    <!---->
+                    <!--                            <div class="d-flex flex-row justify-content-end">-->
+                    <!--                  <span class="mr-2">-->
+                    <!--                    <i class="fas fa-square text-primary"></i> เดือนนี้-->
+                    <!--                  </span>-->
+                    <!---->
+                    <!--                                <span>-->
+                    <!--                    <i class="fas fa-square text-gray"></i> เดือนที่แล้ว-->
+                    <!--                  </span>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
                     <!-- /.card -->
                     <div class="card">
                         <div class="card-header border-0">
@@ -138,12 +138,12 @@ $this->title = 'ภาพรวมระบบ';
                             </div>
                         </div>
                         <div class="card-body">
-<!--                            <div class="d-flex">-->
-<!--                                <p class="d-flex flex-column">-->
-<!--                                    <span class="text-bold text-lg">18,230.00</span>-->
-<!--                                    <span>มูลค่า</span>-->
-<!--                                </p>-->
-<!--                            </div>-->
+                            <!--                            <div class="d-flex">-->
+                            <!--                                <p class="d-flex flex-column">-->
+                            <!--                                    <span class="text-bold text-lg">18,230.00</span>-->
+                            <!--                                    <span>มูลค่า</span>-->
+                            <!--                                </p>-->
+                            <!--                            </div>-->
                             <!-- /.d-flex -->
 
                             <div class="position-relative mb-12">
@@ -151,7 +151,7 @@ $this->title = 'ภาพรวมระบบ';
                                 echo Highcharts::widget([
                                     'options' => [
                                         'title' => ['text' => ''],
-                                        'subtitle'=>['text'=>''],
+                                        'subtitle' => ['text' => ''],
                                         'xAxis' => [
                                             'categories' => $category
                                         ],
@@ -285,36 +285,41 @@ $this->title = 'ภาพรวมระบบ';
                             </div>
                         </div>
                         <div class="card-body">
-<!--                            <div class="d-flex">-->
-<!--                                <p class="d-flex flex-column">-->
-<!--                                    <span class="text-bold text-lg">18,230.00</span>-->
-<!--                                    <span>มูลค่า</span>-->
-<!--                                </p>-->
-<!--                                <p class="ml-auto d-flex flex-column text-right">-->
-<!--                    <span class="text-success">-->
-<!--                      <i class="fas fa-arrow-up"></i> 33.1%-->
-<!--                    </span>-->
-<!--                                    <span class="text-muted">Since last month</span>-->
-<!--                                </p>-->
-<!--                            </div>-->
+                            <!--                            <div class="d-flex">-->
+                            <!--                                <p class="d-flex flex-column">-->
+                            <!--                                    <span class="text-bold text-lg">18,230.00</span>-->
+                            <!--                                    <span>มูลค่า</span>-->
+                            <!--                                </p>-->
+                            <!--                                <p class="ml-auto d-flex flex-column text-right">-->
+                            <!--                    <span class="text-success">-->
+                            <!--                      <i class="fas fa-arrow-up"></i> 33.1%-->
+                            <!--                    </span>-->
+                            <!--                                    <span class="text-muted">Since last month</span>-->
+                            <!--                                </p>-->
+                            <!--                            </div>-->
                             <!-- /.d-flex -->
 
                             <div class="position-relative mb-4">
                                 <?php
+                              //  print_r($data_by_prod_type);
                                 echo Highcharts::widget([
                                     'options' => [
                                         'chart' => [
-                                            'type' => 'column',
+                                            'type' => 'pie',
                                         ],
+                                        'allowPointSelect' => true,
                                         'title' => ['text' => ''],
-                                        'subtitle'=>['text'=>''],
+                                        'subtitle' => ['text' => ''],
+                                        'showInLegend' => true,
                                         'xAxis' => [
                                             'categories' => ''
                                         ],
                                         'yAxis' => [
                                             'title' => ['text' => 'ยอดเงิน']
                                         ],
-                                        'series' => $data_by_type
+                                        'series' => [
+                                            $data_by_prod_type[0]
+                                        ]
                                     ]
                                 ]);
                                 ?>
