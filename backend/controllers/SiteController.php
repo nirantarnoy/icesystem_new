@@ -99,6 +99,7 @@ class SiteController extends Controller
             'order_pos_cnt' => $order_pos_cnt,
             'order_normal_cnt' => $order_normal_cnt,
             'data_by_type' => $data_by_type,
+           // 'data_by_prod_type' => $data_by_prod_type,
             'category'=>$category
         ]);
     }

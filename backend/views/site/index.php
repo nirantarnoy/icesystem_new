@@ -285,33 +285,41 @@ $this->title = 'ภาพรวมระบบ';
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="d-flex">
-                                <p class="d-flex flex-column">
-                                    <span class="text-bold text-lg">18,230.00</span>
-                                    <span>มูลค่า</span>
-                                </p>
-                                <p class="ml-auto d-flex flex-column text-right">
-                    <span class="text-success">
-                      <i class="fas fa-arrow-up"></i> 33.1%
-                    </span>
-                                    <span class="text-muted">Since last month</span>
-                                </p>
-                            </div>
+<!--                            <div class="d-flex">-->
+<!--                                <p class="d-flex flex-column">-->
+<!--                                    <span class="text-bold text-lg">18,230.00</span>-->
+<!--                                    <span>มูลค่า</span>-->
+<!--                                </p>-->
+<!--                                <p class="ml-auto d-flex flex-column text-right">-->
+<!--                    <span class="text-success">-->
+<!--                      <i class="fas fa-arrow-up"></i> 33.1%-->
+<!--                    </span>-->
+<!--                                    <span class="text-muted">Since last month</span>-->
+<!--                                </p>-->
+<!--                            </div>-->
                             <!-- /.d-flex -->
 
                             <div class="position-relative mb-4">
-                                <canvas id="sales-chart" height="200"></canvas>
+                                <?php
+                                echo Highcharts::widget([
+                                    'options' => [
+                                        'chart' => [
+                                            'type' => 'column',
+                                        ],
+                                        'title' => ['text' => ''],
+                                        'subtitle'=>['text'=>''],
+                                        'xAxis' => [
+                                            'categories' => ''
+                                        ],
+                                        'yAxis' => [
+                                            'title' => ['text' => 'ยอดเงิน']
+                                        ],
+                                        'series' => $data_by_type
+                                    ]
+                                ]);
+                                ?>
                             </div>
 
-                            <div class="d-flex flex-row justify-content-end">
-                  <span class="mr-2">
-                    <i class="fas fa-square text-primary"></i> น้ำแข็งแพ็ค
-                  </span>
-
-                                <span>
-                    <i class="fas fa-square text-gray"></i> B น้ำแข็งหลอดใหญ่
-                  </span>
-                            </div>
                         </div>
                     </div>
                     <!-- /.card -->
