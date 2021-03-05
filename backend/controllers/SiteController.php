@@ -75,6 +75,21 @@ class SiteController extends Controller
         $order_normal_cnt = \backend\models\Orders::find()->where(['sale_channel_id'=>1])->count();
 
 
+        $sql = "select * from query_sale_amount_by_sale_type";
+        $query = \Yii::$app->db->createCommand($sql)->queryAll();
+        $category = ['มค.', 'กพ.', 'มีค.', 'เมษ.', 'พค.', 'มิย.', 'กค', 'สค', 'กย', 'ตค', 'พย', 'ธค'];
+        $data_by_type = [];
+        for ($i = 0; $i <= count($query) - 1; $i++) {
+            array_push($data_by_type, [
+                //  'type' => 'column',
+                'name' => $query[$i]['sale_channel_type'],
+                'data' => [
+                    ($query[$i]['m1'] * 1), ($query[$i]['m2'] * 1), ($query[$i]['m3'] * 1), ($query[$i]['m4'] * 1),
+                    ($query[$i]['m5'] * 1), ($query[$i]['m6'] * 1), ($query[$i]['m7'] * 1), ($query[$i]['m8'] * 1),
+                    ($query[$i]['m9'] * 1), ($query[$i]['m10'] * 1), ($query[$i]['m11'] * 1), ($query[$i]['m12'] * 1)
+                ]
+            ]);
+        }
 
         return $this->render('index',[
             'prod_cnt' => $prod_cnt,
@@ -82,7 +97,9 @@ class SiteController extends Controller
             'car_cnt' => $car_cnt,
             'order_cnt' => $order_cnt,
             'order_pos_cnt' => $order_pos_cnt,
-            'order_normal_cnt' => $order_normal_cnt
+            'order_normal_cnt' => $order_normal_cnt,
+            'data_by_type' => $data_by_type,
+            'category'=>$category
         ]);
     }
 

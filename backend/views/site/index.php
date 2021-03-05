@@ -138,12 +138,12 @@ $this->title = 'ภาพรวมระบบ';
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="d-flex">
-                                <p class="d-flex flex-column">
-                                    <span class="text-bold text-lg">18,230.00</span>
-                                    <span>มูลค่า</span>
-                                </p>
-                            </div>
+<!--                            <div class="d-flex">-->
+<!--                                <p class="d-flex flex-column">-->
+<!--                                    <span class="text-bold text-lg">18,230.00</span>-->
+<!--                                    <span>มูลค่า</span>-->
+<!--                                </p>-->
+<!--                            </div>-->
                             <!-- /.d-flex -->
 
                             <div class="position-relative mb-12">
@@ -151,16 +151,14 @@ $this->title = 'ภาพรวมระบบ';
                                 echo Highcharts::widget([
                                     'options' => [
                                         'title' => ['text' => ''],
+                                        'subtitle'=>['text'=>''],
                                         'xAxis' => [
-                                            'categories' => ['มค.', 'กพ.', 'มีค.']
+                                            'categories' => $category
                                         ],
                                         'yAxis' => [
-                                            'title' => ['text' => 'ยอดขาย(บาท)']
+                                            'title' => ['text' => 'ยอดเงิน']
                                         ],
-                                        'series' => [
-                                            ['name' => 'POS', 'data' => [1900, 2900, 4000]],
-                                            ['name' => 'Mobile', 'data' => [5000, 7590, 3400]]
-                                        ]
+                                        'series' => $data_by_type
                                     ]
                                 ]);
                                 ?>
