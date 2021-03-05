@@ -349,21 +349,9 @@ $this->title = 'ภาพรวมระบบ';
                                 </p>
                                 <p class="d-flex flex-column text-right">
                     <span class="font-weight-bold">
-                      <i class="ion ion-android-arrow-up text-warning"></i> 0.8%
+                      <i class="ion ion-android-arrow-up text-warning"></i> <?= number_format($order_normal_cnt) ?>
                     </span>
                                     <span class="text-muted">ขายหน่วยรถ</span>
-                                </p>
-                            </div>
-                            <!-- /.d-flex -->
-                            <div class="d-flex justify-content-between align-items-center mb-0">
-                                <p class="text-danger text-xl">
-                                    <i class="ion ion-ios-people-outline"></i>
-                                </p>
-                                <p class="d-flex flex-column text-right">
-                    <span class="font-weight-bold">
-                      <i class="ion ion-android-arrow-down text-danger"></i> 1%
-                    </span>
-                                    <span class="text-muted">ลูกค้า VIP</span>
                                 </p>
                             </div>
                             <!-- /.d-flex -->

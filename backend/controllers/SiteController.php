@@ -74,6 +74,8 @@ class SiteController extends Controller
         $order_pos_cnt = \backend\models\Orders::find()->where(['sale_channel_id'=>2])->count();
         $order_normal_cnt = \backend\models\Orders::find()->where(['sale_channel_id'=>1])->count();
 
+
+
         return $this->render('index',[
             'prod_cnt' => $prod_cnt,
             'route_cnt' => $route_cnt,
