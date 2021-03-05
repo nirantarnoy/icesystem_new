@@ -194,10 +194,17 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
 <!--            <div class="footer-cart" style="height: 250px;position: fixed;bottom: 0px;">-->
                 <div class="row">
                     <div class="col-lg-6" style="text-align: left">
-                        <a href="index.php?r=pos/salehistory" class="btn btn-outline-info btn-history-cart"
-                           style="display: noneผ">
-                            ประวัติการขาย
-                        </a>
+                        <div class="btn-group">
+                            <a href="index.php?r=pos/salehistory" class="btn btn-outline-info btn-history-cart"
+                               style="display: noneผ">
+                                ประวัติการขาย
+                            </a>
+                            <a href="#" class="btn btn-outline-info btn-history-cart"
+                               style="display: noneผ">
+                                สรุปยอดขายประจำวัน
+                            </a>
+                        </div>
+
                     </div>
                     <div class="col-lg-6" style="text-align: right">
                         <div class="btn btn-outline-secondary btn-cancel-cart" style="display: none">
