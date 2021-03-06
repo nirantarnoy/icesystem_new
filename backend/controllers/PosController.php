@@ -402,7 +402,7 @@ class PosController extends Controller
         $dataProvider2 = $searchModel2->search(Yii::$app->request->queryParams);
         $dataProvider2->query->select(['code', 'name', 'SUM(payment_amount) as payment_amount']);
         $dataProvider2->query->andFilterWhere(['>', 'payment_amount', 0]);
-        $dataProvider2->query->andFilterWhere(['date(payment_date)' => $t_date]);
+        $dataProvider2->query->andFilterWhere(['date(order_date)' => $t_date]);
         $dataProvider2->query->groupBy(['code', 'name','sale_channel_id']);
         $dataProvider2->setSort([
             'defaultOrder' => ['code' => SORT_ASC]
