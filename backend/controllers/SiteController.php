@@ -73,19 +73,23 @@ class SiteController extends Controller
 
         $dash_board = \Yii::$app->request->post('dashboard_date');
         $x_date = explode('-', trim($dash_board));
-        if (count($x_date) > 1) {
-            $ff_date = $x_date[0];
-            $tt_date = $x_date[1];
+        if($x_date != null){
+            if (count($x_date) > 1) {
+                $ff_date = $x_date[0];
+                $tt_date = $x_date[1];
 
-            $fff_date = explode('/', trim($ff_date));
-            if (count($fff_date) > 0) {
-                $f_date = $fff_date[2] . '-' . $fff_date[1] . '-' . $fff_date[0];
-            }
-            $ttt_date = explode('/', trim($tt_date));
-            if (count($ttt_date) > 0) {
-                $t_date = $ttt_date[2]. '-' . $ttt_date[1] . '-' . $ttt_date[0];
+                $fff_date = explode('/', trim($ff_date));
+                if (count($fff_date) > 0) {
+                    $f_date = $fff_date[2] . '-' . $fff_date[1] . '-' . $fff_date[0];
+                }
+                $ttt_date = explode('/', trim($tt_date));
+                if (count($ttt_date) > 0) {
+                    $t_date = $ttt_date[2]. '-' . $ttt_date[1] . '-' . $ttt_date[0];
+                }
             }
         }
+
+        echo $f_date.' and '.$t_date;return;
 
         $prod_cnt = \backend\models\Product::find()->count();
         $route_cnt = \backend\models\Deliveryroute::find()->count();
