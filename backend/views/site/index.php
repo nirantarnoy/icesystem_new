@@ -4,23 +4,38 @@ use yii\helpers\Url;
 use miloschuman\highcharts\Highcharts;
 
 $this->title = 'ภาพรวมระบบ';
+$dash_date = null;
+if ($f_date != null && $t_date != null) {
+    $dash_date = date('d/m/Y', strtotime($f_date)) . ' - ' . date('d/m/Y', strtotime($t_date));
+}
+
 ?>
 <br/>
 <div class="site-index">
     <div class="body-content">
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="label">เลือกดูตามช่วงวันที่</div>
-                <?php
-                echo \kartik\daterange\DateRangePicker::widget([
-                    'name' => 'dashboard_date',
-                    'pluginOptions' => [
-
-                    ]
-                ]);
-                ?>
+        <form id="form-dashboard" action="<?= Url::to(['site/index'], true) ?>" method="post">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="label">เลือกดูตามช่วงวันที่</div>
+                    <?php
+                    echo \kartik\daterange\DateRangePicker::widget([
+                        'name' => 'dashboard_date',
+                        'value' => $dash_date,
+                        'pluginOptions' => [
+                            'format' => 'DD/MM/YYYY',
+                            'locale' => [
+                                'format' => 'DD/MM/YYYY'
+                            ],
+                        ],
+                        'options' => [
+                            'class' => 'form-control',
+                            'onchange' => '$("#form-dashboard").submit();'
+                        ]
+                    ]);
+                    ?>
+                </div>
             </div>
-        </div>
+        </form>
         <br>
         <div class="row">
             <div class="col-lg-3 col-6">
@@ -301,7 +316,7 @@ $this->title = 'ภาพรวมระบบ';
 
                             <div class="position-relative mb-4">
                                 <?php
-                              //  print_r($data_by_prod_type);
+                                //  print_r($data_by_prod_type);
                                 echo Highcharts::widget([
                                     'options' => [
                                         'chart' => [

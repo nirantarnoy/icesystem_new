@@ -68,6 +68,25 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $f_date = null;
+        $t_date = null;
+
+        $dash_board = \Yii::$app->request->post('dashboard_date');
+        $x_date = explode('-', trim($dash_board));
+        if (count($x_date) > 0) {
+            $ff_date = $x_date[0];
+            $tt_date = $x_date[1];
+
+            $fff_date = explode('/', trim($ff_date));
+            if (count($fff_date) > 0) {
+                $f_date = $fff_date[2] . '-' . $fff_date[1] . '-' . $fff_date[0];
+            }
+            $ttt_date = explode('/', trim($tt_date));
+            if (count($ttt_date) > 0) {
+                $t_date = $ttt_date[2]. '-' . $ttt_date[1] . '-' . $ttt_date[0];
+            }
+        }
+
         $prod_cnt = \backend\models\Product::find()->count();
         $route_cnt = \backend\models\Deliveryroute::find()->count();
         $car_cnt = \backend\models\Car::find()->count();
@@ -77,6 +96,11 @@ class SiteController extends Controller
 
 
         $sql = "select * from query_sale_amount_by_sale_type";
+        if ($f_date != null && $t_date != null) {
+            $sql .= " where date(order_date) >='" . date('Y-m-d', strtotime($f_date)) . "' and date(order_date) <='" . date('Y-m-d', strtotime($t_date))."'";
+        }
+//        echo $sql;
+//        return;
         $query = \Yii::$app->db->createCommand($sql)->queryAll();
         $category = ['มค.', 'กพ.', 'มีค.', 'เมษ.', 'พค.', 'มิย.', 'กค', 'สค', 'กย', 'ตค', 'พย', 'ธค'];
         $data_by_type = [];
@@ -93,6 +117,9 @@ class SiteController extends Controller
         }
 
         $sql2 = "select * from query_sale_amount_by_product";
+        if ($f_date != null && $t_date != null) {
+            $sql2 .= " where date(order_date) >='" . date('Y-m-d', strtotime($f_date)) . "' and date(order_date) <='" . date('Y-m-d', strtotime($t_date))."'";
+        }
         $query2 = \Yii::$app->db->createCommand($sql2)->queryAll();
         $data_by_prod_type = [];
         $data_prod_data = [];
@@ -133,7 +160,9 @@ class SiteController extends Controller
             'order_normal_cnt' => $order_normal_cnt,
             'data_by_type' => $data_by_type,
             'data_by_prod_type' => $data_by_prod_type,
-            'category' => $category
+            'category' => $category,
+            'f_date' => $f_date,
+            't_date' => $t_date
         ]);
     }
 
