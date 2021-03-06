@@ -99,11 +99,12 @@ class SiteController extends Controller
         $order_normal_cnt = \backend\models\Orders::find()->where(['sale_channel_id' => 1])->count();
 
 
-        $sql = "select * from query_sale_amount_by_sale_type";
+        $sql = "select sale_channel_type,sum(m1) as m1 ,sum(m2) as m2,sum(m3) as m3,sum(m4) as m4,sum(m5) as m5,sum(m6) as m6,sum(m7) as m7,sum(m8) as m8,sum(m9) as m9,sum(m10) as m10,sum(m11) as m11,sum(m12) as m12 from query_sale_amount_by_sale_type";
         if ($f_date != null && $t_date != null) {
             $sql .= " where date(order_date) >='" . date('Y-m-d', strtotime($f_date)) . "' and date(order_date) <='" . date('Y-m-d', strtotime($t_date))."'";
         }
-echo $sql;return;
+        $sql.=" group by sale_channel_type";
+//echo $sql;return;
         $query = \Yii::$app->db->createCommand($sql)->queryAll();
         $category = ['มค.', 'กพ.', 'มีค.', 'เมษ.', 'พค.', 'มิย.', 'กค', 'สค', 'กย', 'ตค', 'พย', 'ธค'];
         $data_by_type = [];
