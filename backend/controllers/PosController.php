@@ -422,6 +422,7 @@ class PosController extends Controller
             'dataProvider' => $dataProvider,
             'searchModel2' => $searchModel2,
             'dataProvider2' => $dataProvider2,
+            'show_pos_date' => $t_date
         ]);
     }
 }

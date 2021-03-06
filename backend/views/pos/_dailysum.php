@@ -5,7 +5,10 @@ use yii\helpers\Html;
 use yii\widgets\LinkPager;
 
 $this->title = 'สรุปยอดขายประจำวัน';
-
+$pos_date = date('d/m/Y');
+if($show_pos_date != null){
+    $pos_date = date('d/m/Y',strtotime($show_pos_date));
+}
 ?>
 <form action="<?=\yii\helpers\Url::to(['pos/dailysum'],true)?>" method="post">
     <div class="row">
@@ -16,7 +19,7 @@ $this->title = 'สรุปยอดขายประจำวัน';
                 <?php
                 echo \kartik\date\DatePicker::widget([
                     'name' => 'pos_date',
-                    'value' => date('d/m/Y'),
+                    'value' => $pos_date,
                     'pluginOptions' => [
                         'format' => 'dd/mm/yyyy',
                         'todayHighlight' => true
