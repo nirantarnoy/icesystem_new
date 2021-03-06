@@ -385,9 +385,9 @@ class PosController extends Controller
 
         $searchModel2 = new \backend\models\SalepospaySearch();
         $dataProvider2 = $searchModel2->search(Yii::$app->request->queryParams);
-        $dataProvider2->query->select(['code','SUM(payment_amount) as payment_amount']);
+        $dataProvider2->query->select(['code','name','SUM(payment_amount) as payment_amount']);
         $dataProvider2->query->andFilterWhere(['>','payment_amount',0]);
-        $dataProvider2->query->groupBy(['code']);
+        $dataProvider2->query->groupBy(['code','name']);
         $dataProvider2->setSort([
             'defaultOrder'=>['code'=>SORT_ASC]
         ]);

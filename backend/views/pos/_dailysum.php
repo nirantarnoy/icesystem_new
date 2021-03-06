@@ -88,6 +88,7 @@ $this->title = 'สรุปยอดขายประจำวัน';
                     'contentOptions' => ['style' => 'text-align: center'],
                 ],
                 'code',
+                'name',
                 [
                     'attribute' => 'payment_amount',
                     'headerOptions' => ['style' => 'text-align: right'],
