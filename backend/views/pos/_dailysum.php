@@ -8,6 +8,30 @@ $this->title = 'สรุปยอดขายประจำวัน';
 
 ?>
 <div class="row">
+    <form action="">
+        <div class="col-lg-3">
+            <div class="label">เลือกดูตามวันที่</div>
+            <div class="input-group">
+                <?php
+                echo \kartik\date\DatePicker::widget([
+                    'name' => 'pos_date',
+                    'value' => date('d/m/Y'),
+                    'pluginOptions' => [
+
+                    ]
+                ]);
+                ?>
+            </div>
+
+        </div>
+        <div class="col-lg-2">
+            <div class="label" style="color: white">ค้นหา</div>
+            <div class="btn btn-primary">ค้นหา</div>
+        </div>
+    </form>
+</div>
+<br/>
+<div class="row">
     <div class="col-lg-12">
         <h4 class="text-success">รายการขาย</h4>
     </div>
@@ -55,7 +79,7 @@ $this->title = 'สรุปยอดขายประจำวัน';
                     'format' => ['decimal', 0],
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_SUM,
-                    'pageSummaryOptions' => ['class' => 'text-right','style'=>'background-color: #6699FF'],
+                    'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
                 ],
                 [
                     'attribute' => 'line_total',
@@ -68,7 +92,7 @@ $this->title = 'สรุปยอดขายประจำวัน';
                     'format' => ['decimal', 0],
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_SUM,
-                    'pageSummaryOptions' => ['class' => 'text-right','style'=>'background-color: #6699FF'],
+                    'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
                 ],
             ],
             'pager' => ['class' => LinkPager::className()],
@@ -103,18 +127,18 @@ $this->title = 'สรุปยอดขายประจำวัน';
                     'class' => 'yii\grid\SerialColumn',
                     'headerOptions' => ['style' => 'text-align: center'],
                     'contentOptions' => ['style' => 'text-align: center;'],
-                    'footerOptions' => ['style'=>'background: white'],
+                    'footerOptions' => ['style' => 'background: white'],
                 ],
                 [
                     'attribute' => 'code',
                     'label' => 'รหัส',
-                    'pageSummaryOptions' => ['class' => 'text-right','style'=>'background-color: '],
+                    'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: '],
                 ],
                 [
                     'attribute' => 'name',
                     'label' => 'ประเภทชำระเงิน',
                     'pageSummary' => false,
-                    'pageSummaryOptions' => ['class' => 'text-right','style'=>'background-color: '],
+                    'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: '],
                 ],
                 [
                     'attribute' => 'payment_amount',
@@ -127,7 +151,7 @@ $this->title = 'สรุปยอดขายประจำวัน';
                     'format' => ['decimal', 0],
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_SUM,
-                    'pageSummaryOptions' => ['class' => 'text-right','style'=>'background-color: #6699FF'],
+                    'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
                 ]
             ],
             'pager' => ['class' => LinkPager::className()],
