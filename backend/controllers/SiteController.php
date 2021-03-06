@@ -120,10 +120,11 @@ class SiteController extends Controller
             ]);
         }
 
-        $sql2 = "select * from query_sale_amount_by_product";
+        $sql2 = "select code,name,sum(total_amount) as total_amount from query_sale_amount_by_product";
         if ($f_date != null && $t_date != null) {
             $sql2 .= " where date(order_date) >='" . date('Y-m-d', strtotime($f_date)) . "' and date(order_date) <='" . date('Y-m-d', strtotime($t_date))."'";
         }
+        $sql2.=" group by code";
 //        echo $sql2;
 //        return;
         $query2 = \Yii::$app->db->createCommand($sql2)->queryAll();
