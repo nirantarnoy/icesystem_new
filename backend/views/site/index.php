@@ -27,6 +27,7 @@ if ($f_date != null && $t_date != null) {
                                 'format' => 'DD/MM/YYYY'
                             ],
                         ],
+                        'presetDropdown'=>true,
                         'options' => [
                             'class' => 'form-control',
                             'onchange' => '$("#form-dashboard").submit();'
