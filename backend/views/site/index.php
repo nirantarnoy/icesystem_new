@@ -186,7 +186,7 @@ if ($f_date != null && $t_date != null) {
 
                     <div class="card">
                         <div class="card-header border-0">
-                            <h3 class="card-title">แนวโน้วยอดขายเปรียบเทียบรายเดือน</h3>
+                            <h3 class="card-title">รายการขายล่าสุด</h3>
                             <div class="card-tools">
                                 <a href="#" class="btn btn-tool btn-sm">
                                     <i class="fas fa-download"></i>
@@ -200,90 +200,21 @@ if ($f_date != null && $t_date != null) {
                             <table class="table table-striped table-valign-middle">
                                 <thead>
                                 <tr>
-                                    <th>รหัสสินค้า</th>
-                                    <th>จำนวนเงิน</th>
-                                    <th>Sales</th>
-                                    <th>More</th>
+                                    <th>เลขที่ขาย</th>
+                                    <th>วันที่</th>
+                                    <th>ลูกค้า</th>
+                                    <th>ยอดรวม</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>
-                                        <img src="dist/img/default-150x150.png" alt="Product 1"
-                                             class="img-circle img-size-32 mr-2">
-                                        PB หลอดใหญ่
-                                    </td>
-                                    <td>1,300</td>
-                                    <td>
-                                        <small class="text-success mr-1">
-                                            <i class="fas fa-arrow-up"></i>
-                                            12%
-                                        </small>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="text-muted">
-                                            <i class="fas fa-search"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <img src="dist/img/default-150x150.png" alt="Product 1"
-                                             class="img-circle img-size-32 mr-2">
-                                        PB หลอดเล็ก
-                                    </td>
-                                    <td>29,000</td>
-                                    <td>
-                                        <small class="text-warning mr-1">
-                                            <i class="fas fa-arrow-down"></i>
-                                            0.5%
-                                        </small>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="text-muted">
-                                            <i class="fas fa-search"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <img src="dist/img/default-150x150.png" alt="Product 1"
-                                             class="img-circle img-size-32 mr-2">
-                                        PC แพ็คโม่
-                                    </td>
-                                    <td>1,230</td>
-                                    <td>
-                                        <small class="text-danger mr-1">
-                                            <i class="fas fa-arrow-down"></i>
-                                            3%
-                                        </small>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="text-muted">
-                                            <i class="fas fa-search"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <img src="dist/img/default-150x150.png" alt="Product 1"
-                                             class="img-circle img-size-32 mr-2">
-                                        P2KG น้ำแข็งแพ็ค2กก.
-                                        <span class="badge bg-danger">สินค้าขายดี</span>
-                                    </td>
-                                    <td>19,900</td>
-                                    <td>
-                                        <small class="text-success mr-1">
-                                            <i class="fas fa-arrow-up"></i>
-                                            63%
-                                        </small>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="text-muted">
-                                            <i class="fas fa-search"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                                <?php foreach ($order_lastest as $value): ?>
+                                    <tr>
+                                        <td><?= $value->order_no ?></td>
+                                        <td><?= date('d/m/Y', strtotime($value->order_date)) ?></td>
+                                        <td><?= $value->name ?></td>
+                                        <td><?= number_format($value->order_total_amt) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
                                 </tbody>
                             </table>
                         </div>

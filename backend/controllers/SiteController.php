@@ -97,6 +97,7 @@ class SiteController extends Controller
         $order_cnt = \backend\models\Orders::find()->count();
         $order_pos_cnt = \backend\models\Orders::find()->where(['sale_channel_id' => 2])->count();
         $order_normal_cnt = \backend\models\Orders::find()->where(['sale_channel_id' => 1])->count();
+        $order_lastest = \common\models\QuerySaleLastest::find()->all();
 
 
         $sql = "select sale_channel_type,sum(m1) as m1 ,sum(m2) as m2,sum(m3) as m3,sum(m4) as m4,sum(m5) as m5,sum(m6) as m6,sum(m7) as m7,sum(m8) as m8,sum(m9) as m9,sum(m10) as m10,sum(m11) as m11,sum(m12) as m12 from query_sale_amount_by_sale_type";
@@ -166,7 +167,8 @@ class SiteController extends Controller
             'data_by_prod_type' => $data_by_prod_type,
             'category' => $category,
             'f_date' => $f_date,
-            't_date' => $t_date
+            't_date' => $t_date,
+            'order_lastest' => $order_lastest,
         ]);
     }
 
