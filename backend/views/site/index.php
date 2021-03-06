@@ -202,15 +202,25 @@ if ($f_date != null && $t_date != null) {
                                 <tr>
                                     <th>เลขที่ขาย</th>
                                     <th>วันที่</th>
+                                    <th>ประเภทการขาย</th>
                                     <th>ลูกค้า</th>
                                     <th>ยอดรวม</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <?php foreach ($order_lastest as $value): ?>
+                                    <?php
+                                    $sale_channel = '';
+                                    if ($value->sale_channel_id == 1) {
+                                        $sale_channel = '<div class="badge badge-warning">ใบสั่งขาย</div>';
+                                    } else if ($value->sale_channel_id == 2) {
+                                        $sale_channel = '<div class="badge badge-success">POS</div>';
+                                    }
+                                    ?>
                                     <tr>
                                         <td><?= $value->order_no ?></td>
                                         <td><?= date('d/m/Y', strtotime($value->order_date)) ?></td>
+                                        <td><?= $sale_channel ?></td>
                                         <td><?= $value->name ?></td>
                                         <td><?= number_format($value->order_total_amt) ?></td>
                                     </tr>
