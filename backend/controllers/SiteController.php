@@ -73,7 +73,7 @@ class SiteController extends Controller
 
         $dash_board = \Yii::$app->request->post('dashboard_date');
         $x_date = explode('-', trim($dash_board));
-        if (count($x_date) > 0) {
+        if (count($x_date) > 1) {
             $ff_date = $x_date[0];
             $tt_date = $x_date[1];
 
