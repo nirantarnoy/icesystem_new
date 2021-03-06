@@ -175,7 +175,7 @@ if ($f_date != null && $t_date != null) {
                                         'title' => ['text' => ''],
                                         'subtitle' => ['text' => ''],
                                         'tooltip' => [
-                                            'pointFormat' => "{point.y:,.0f} บาท"
+                                            'pointFormat' => "<b style='color: red;font-weight: bold'>{point.y:,.0f}</b> บาท"
                                         ],
                                         'xAxis' => [
                                             'categories' => $category
@@ -280,7 +280,7 @@ if ($f_date != null && $t_date != null) {
                                             'type' => 'pie',
                                         ],
                                         'tooltip' => [
-                                            'pointFormat' => "{point.y:,.0f} บาท"
+                                            'pointFormat' => "<b style='color: red;font-weight: bold'>{point.y:,.0f}</b> บาท"
                                         ],
                                         'allowPointSelect' => true,
                                         'title' => ['text' => ''],
