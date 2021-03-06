@@ -7,8 +7,9 @@ use yii\widgets\LinkPager;
 $this->title = 'สรุปยอดขายประจำวัน';
 
 ?>
-<div class="row">
-    <form action="">
+<form action="">
+    <div class="row">
+
         <div class="col-lg-3">
             <div class="label">เลือกดูตามวันที่</div>
             <div class="input-group">
@@ -28,8 +29,9 @@ $this->title = 'สรุปยอดขายประจำวัน';
             <div class="label" style="color: white">ค้นหา</div>
             <div class="btn btn-primary">ค้นหา</div>
         </div>
-    </form>
-</div>
+
+    </div>
+</form>
 <br/>
 <div class="row">
     <div class="col-lg-12">
