@@ -374,8 +374,10 @@ class PosController extends Controller
     }
 
     public function actionDailysum(){
-        $x = '2021-03-03';
-        $t_date = date('Y-m-d',strtotime($x));
+       // $x = '2021-03-03';
+       // $t_date = date('Y-m-d',strtotime($x));
+
+        $t_date = date('Y-m-d');
 
         $searchModel = new \backend\models\SaleposdataSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
