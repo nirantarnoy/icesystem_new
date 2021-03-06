@@ -382,7 +382,7 @@ $this->title = 'ภาพรวมระบบ';
 
 $js = <<<JS
 $(function(){
-    aleret();
+    //aleret();
 })
 JS;
 

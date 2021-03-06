@@ -18,7 +18,8 @@ $this->title = 'สรุปยอดขายประจำวัน';
                     'name' => 'pos_date',
                     'value' => date('d/m/Y'),
                     'pluginOptions' => [
-                        'format' => 'DD/MM/YYYY',
+                        'format' => 'dd/mm/yyyy',
+                        'todayHighlight' => true
                     ]
                 ]);
                 ?>

@@ -3,14 +3,14 @@
 namespace backend\models;
 
 use common\models\QuerySalePosData;
-use common\models\QuerySalePosPayDaily;
+use common\models\QuerySalePosPay;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
  * SalegroupSearch represents the model behind the search form of `backend\models\Salegroup`.
  */
-class SalepospaySearch extends QuerySalePosPayDaily
+class SalepospaySearch extends QuerySalePosPay
 {
     public $globalSearch;
 
@@ -30,7 +30,7 @@ class SalepospaySearch extends QuerySalePosPayDaily
 
     public function search($params)
     {
-        $query = QuerySalePosPayDaily::find();
+        $query = QuerySalePosPay::find();
 
         // add conditions that should always apply here
 

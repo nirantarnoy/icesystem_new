@@ -1279,6 +1279,14 @@ class OrdersController extends Controller
         $pay_method = \Yii::$app->request->post('line_payment_id');
         $pay_term = \Yii::$app->request->post('line_payment_term_id');
         $pay_amount = \Yii::$app->request->post('line_pay_amount');
+        $pay_date = \Yii::$app->request->post('payment_date');
+
+
+        $order_pay_date = date('Y-m-d H:i:s');
+        $x_date = explode('/', $pay_date);
+        if (count($x_date) > 1) {
+            $order_pay_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
+        }
 
         //  print_r(Yii::$app->request->post());
 //        echo '<br />';
@@ -1290,7 +1298,7 @@ class OrdersController extends Controller
         if ($order_id > 0 && $customer_id != null) {
             $model = new \backend\models\Paymenttrans();
             $model->trans_no = $model->getLastNo();
-            $model->trans_date = date('Y-m-d H:i:s');
+            $model->trans_date = date('Y-m-d H:i:s',strtotime($order_pay_date.' H:i:s'));
             $model->order_id = $order_id;
             $model->status = 0;
             if ($model->save(false)) {
@@ -1305,7 +1313,7 @@ class OrdersController extends Controller
                         $model_line->customer_id = $customer_id[$i];
                         $model_line->payment_method_id = $pay_method[$i];
                         $model_line->payment_term_id = $pay_term[$i] == null ? 0 : $pay_term[$i];
-                        $model_line->payment_date = date('Y-m-d H:i:s');
+                        $model_line->payment_date = date('Y-m-d H:i:s',strtotime($order_pay_date.' H:i:s'));
                         $model_line->payment_amount = $pay_amount[$i];
                         $model_line->total_amount = 0;
                         $model_line->order_ref_id = $order_id;

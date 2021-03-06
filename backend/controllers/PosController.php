@@ -195,7 +195,7 @@ class PosController extends Controller
                             //   $model_line->payment_term_id = $pay_term[$i] == null ? 0 : $pay_term[$i];
                             $model_line->payment_date = date('Y-m-d H:i:s');
                             $model_line->payment_amount = $pay_amount;
-                            $model_line->total_amount = 0;
+                            $model_line->total_amount = $pay_total_amount;
                             $model_line->change_amount = $pay_change;
                             $model_line->order_ref_id = $model_order->id;
                             $model_line->status = 1;
@@ -402,11 +402,20 @@ class PosController extends Controller
         $dataProvider2 = $searchModel2->search(Yii::$app->request->queryParams);
         $dataProvider2->query->select(['code', 'name', 'SUM(payment_amount) as payment_amount']);
         $dataProvider2->query->andFilterWhere(['>', 'payment_amount', 0]);
-        $dataProvider2->query->andFilterWhere(['date(payment_date)' => date('Y-m-d')]);
-        $dataProvider2->query->groupBy(['code', 'name']);
+        $dataProvider2->query->andFilterWhere(['date(payment_date)' => $t_date]);
+        $dataProvider2->query->groupBy(['code', 'name','sale_channel_id']);
         $dataProvider2->setSort([
             'defaultOrder' => ['code' => SORT_ASC]
         ]);
+//        $searchModel2 = new \backend\models\SalepospaySearch();
+//        $dataProvider2 = $searchModel2->search(Yii::$app->request->queryParams);
+//        $dataProvider2->query->select(['code', 'name', 'SUM(payment_amount) as payment_amount']);
+//        $dataProvider2->query->andFilterWhere(['>', 'payment_amount', 0]);
+//        $dataProvider2->query->andFilterWhere(['date(payment_date)' => $t_date]);
+//        $dataProvider2->query->groupBy(['code', 'name']);
+//        $dataProvider2->setSort([
+//            'defaultOrder' => ['code' => SORT_ASC]
+//        ]);
 
         return $this->render('_dailysum', [
             'searchModel' => $searchModel,
