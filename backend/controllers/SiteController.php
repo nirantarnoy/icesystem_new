@@ -103,7 +103,7 @@ class SiteController extends Controller
         if ($f_date != null && $t_date != null) {
             $sql .= " where date(order_date) >='" . date('Y-m-d', strtotime($f_date)) . "' and date(order_date) <='" . date('Y-m-d', strtotime($t_date))."'";
         }
-
+echo $sql;return;
         $query = \Yii::$app->db->createCommand($sql)->queryAll();
         $category = ['มค.', 'กพ.', 'มีค.', 'เมษ.', 'พค.', 'มิย.', 'กค', 'สค', 'กย', 'ตค', 'พย', 'ธค'];
         $data_by_type = [];
