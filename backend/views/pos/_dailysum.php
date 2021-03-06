@@ -40,7 +40,7 @@ $this->title = 'สรุปยอดขายประจำวัน';
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
                     'value' => function ($data) {
-                        return number_format($data->qty);
+                        return $data->qty;
                     }
                 ],
                 [
@@ -48,7 +48,7 @@ $this->title = 'สรุปยอดขายประจำวัน';
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
                     'value' => function ($data) {
-                        return number_format($data->line_total);
+                        return $data->line_total;
                     },
                     'format' => ['decimal', 0],
                     'pageSummary' => true,
