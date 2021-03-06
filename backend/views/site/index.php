@@ -318,7 +318,7 @@ if ($f_date != null && $t_date != null) {
                     <span class="font-weight-bold">
                       <i class="ion ion-android-arrow-up text-warning"></i> <?= number_format($order_normal_cnt) ?>
                     </span>
-                                    <span class="text-muted">ขายหน่วยรถ</span>
+                                    <span class="text-muted">ใบสั่งขาย</span>
                                 </p>
                             </div>
                             <!-- /.d-flex -->
