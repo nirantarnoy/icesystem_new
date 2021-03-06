@@ -13,31 +13,7 @@ if ($f_date != null && $t_date != null) {
 <br/>
 <div class="site-index">
     <div class="body-content">
-        <form id="form-dashboard" action="<?= Url::to(['site/index'], true) ?>" method="post">
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="label">เลือกดูตามช่วงวันที่</div>
-                    <?php
-                    echo \kartik\daterange\DateRangePicker::widget([
-                        'name' => 'dashboard_date',
-                        'value' => $dash_date,
-                        'pluginOptions' => [
-                            'format' => 'DD/MM/YYYY',
-                            'locale' => [
-                                'format' => 'DD/MM/YYYY'
-                            ],
-                        ],
-                        'presetDropdown' => true,
-                        'options' => [
-                            'class' => 'form-control',
-                            'onchange' => '$("#form-dashboard").submit();'
-                        ]
-                    ]);
-                    ?>
-                </div>
-            </div>
-        </form>
-        <br>
+
         <div class="row">
             <div class="col-lg-3 col-6">
                 <!-- small box -->
@@ -104,6 +80,31 @@ if ($f_date != null && $t_date != null) {
         </div>
 
     </div>
+    <form id="form-dashboard" action="<?= Url::to(['site/index'], true) ?>" method="post">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="label">เลือกดูตามช่วงวันที่</div>
+                <?php
+                echo \kartik\daterange\DateRangePicker::widget([
+                    'name' => 'dashboard_date',
+                    'value' => $dash_date,
+                    'pluginOptions' => [
+                        'format' => 'DD/MM/YYYY',
+                        'locale' => [
+                            'format' => 'DD/MM/YYYY'
+                        ],
+                    ],
+                    'presetDropdown' => true,
+                    'options' => [
+                        'class' => 'form-control',
+                        'onchange' => '$("#form-dashboard").submit();'
+                    ]
+                ]);
+                ?>
+            </div>
+        </div>
+    </form>
+    <br>
     <div class="content">
         <div class="container-fluid">
             <div class="row">
