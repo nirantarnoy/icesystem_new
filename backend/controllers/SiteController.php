@@ -89,7 +89,7 @@ class SiteController extends Controller
             }
         }
 
-        echo $f_date.' and '.$t_date;return;
+//        echo $f_date.' and '.$t_date;return;
 
         $prod_cnt = \backend\models\Product::find()->count();
         $route_cnt = \backend\models\Deliveryroute::find()->count();
@@ -103,8 +103,7 @@ class SiteController extends Controller
         if ($f_date != null && $t_date != null) {
             $sql .= " where date(order_date) >='" . date('Y-m-d', strtotime($f_date)) . "' and date(order_date) <='" . date('Y-m-d', strtotime($t_date))."'";
         }
-//        echo $sql;
-//        return;
+
         $query = \Yii::$app->db->createCommand($sql)->queryAll();
         $category = ['มค.', 'กพ.', 'มีค.', 'เมษ.', 'พค.', 'มิย.', 'กค', 'สค', 'กย', 'ตค', 'พย', 'ธค'];
         $data_by_type = [];
@@ -124,6 +123,8 @@ class SiteController extends Controller
         if ($f_date != null && $t_date != null) {
             $sql2 .= " where date(order_date) >='" . date('Y-m-d', strtotime($f_date)) . "' and date(order_date) <='" . date('Y-m-d', strtotime($t_date))."'";
         }
+        echo $sql2;
+        return;
         $query2 = \Yii::$app->db->createCommand($sql2)->queryAll();
         $data_by_prod_type = [];
         $data_prod_data = [];
