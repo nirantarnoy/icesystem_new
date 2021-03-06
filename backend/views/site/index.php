@@ -165,6 +165,12 @@ if ($f_date != null && $t_date != null) {
                             <div class="position-relative mb-12">
                                 <?php
                                 echo Highcharts::widget([
+                                    'setupOptions' => [
+                                        'lang' => [
+                                            'numericSymbols' => null,
+                                            'thousandsSep' => ','
+                                        ]
+                                    ],
                                     'options' => [
                                         'title' => ['text' => ''],
                                         'subtitle' => ['text' => ''],
@@ -263,6 +269,12 @@ if ($f_date != null && $t_date != null) {
                                 <?php
                                 //  print_r($data_by_prod_type);
                                 echo Highcharts::widget([
+                                    'setupOptions' => [
+                                        'lang' => [
+                                            'numericSymbols' => null,
+                                            'thousandsSep' => ','
+                                        ]
+                                    ],
                                     'options' => [
                                         'chart' => [
                                             'type' => 'pie',
