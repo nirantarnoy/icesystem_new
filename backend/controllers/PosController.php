@@ -36,7 +36,7 @@ class PosController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index', 'print', 'printindex', 'getcustomerprice', 'getoriginprice', 'closesale', 'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate'],
+                        'actions' => ['logout', 'index', 'print', 'printindex','dailysum', 'getcustomerprice', 'getoriginprice', 'closesale', 'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -371,5 +371,32 @@ class PosController extends Controller
         }
         return false;
 
+    }
+
+    public function actionDailysum(){
+        $searchModel = new \backend\models\SaleposdataSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->select(['code','name','SUM(qty) as qty','SUM(line_total) as line_total']);
+        $dataProvider->query->andFilterWhere(['>','qty',0]);
+        $dataProvider->query->groupBy(['code','name']);
+        $dataProvider->setSort([
+            'defaultOrder'=>['code'=>SORT_ASC]
+        ]);
+
+        $searchModel2 = new \backend\models\SalepospaySearch();
+        $dataProvider2 = $searchModel2->search(Yii::$app->request->queryParams);
+        $dataProvider2->query->select(['code','SUM(payment_amount) as payment_amount']);
+        $dataProvider2->query->andFilterWhere(['>','payment_amount',0]);
+        $dataProvider2->query->groupBy(['code']);
+        $dataProvider2->setSort([
+            'defaultOrder'=>['code'=>SORT_ASC]
+        ]);
+
+        return $this->render('_dailysum', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'searchModel2' => $searchModel2,
+            'dataProvider2' => $dataProvider2,
+        ]);
     }
 }

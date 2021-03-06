@@ -199,7 +199,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                                style="display: noneผ">
                                 ประวัติการขาย
                             </a>
-                            <a href="#" class="btn btn-outline-info btn-history-cart"
+                            <a href="index.php?r=pos/dailysum" class="btn btn-outline-info btn-history-cart"
                                style="display: noneผ">
                                 สรุปยอดขายประจำวัน
                             </a>
