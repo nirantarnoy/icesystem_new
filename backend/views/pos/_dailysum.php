@@ -17,6 +17,9 @@ $this->title = 'สรุปยอดขายประจำวัน';
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             // 'filterModel' => $searchModel,
+            'showPageSummary' => true,
+            'striped' => true,
+            'hover' => true,
             'emptyCell' => '-',
             'layout' => "{items}\n{summary}\n<div class='text-center'>{pager}</div>",
             'summary' => "แสดง {begin} - {end} ของทั้งหมด {totalCount} รายการ",
@@ -33,18 +36,30 @@ $this->title = 'สรุปยอดขายประจำวัน';
                     'headerOptions' => ['style' => 'text-align: center'],
                     'contentOptions' => ['style' => 'text-align: center'],
                 ],
-                'code',
-                'name',
+                [
+                    'attribute' => 'code',
+                    'label' => 'รหัสสินค้า'
+                ],
+                [
+                    'attribute' => 'name',
+                    'label' => 'ชื่อสินค้า'
+                ],
                 [
                     'attribute' => 'qty',
+                    'label' => 'รวมจำนวน',
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
                     'value' => function ($data) {
                         return $data->qty;
-                    }
+                    },
+                    'format' => ['decimal', 0],
+                    'pageSummary' => true,
+                    'pageSummaryFunc' => GridView::F_SUM,
+                    'pageSummaryOptions' => ['class' => 'text-right','style'=>'background-color: #6699FF'],
                 ],
                 [
                     'attribute' => 'line_total',
+                    'label' => 'ยอดขายรวม',
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
                     'value' => function ($data) {
@@ -52,7 +67,8 @@ $this->title = 'สรุปยอดขายประจำวัน';
                     },
                     'format' => ['decimal', 0],
                     'pageSummary' => true,
-                    'pageSummaryFunc' => GridView::F_SUM
+                    'pageSummaryFunc' => GridView::F_SUM,
+                    'pageSummaryOptions' => ['class' => 'text-right','style'=>'background-color: #6699FF'],
                 ],
             ],
             'pager' => ['class' => LinkPager::className()],
@@ -71,6 +87,7 @@ $this->title = 'สรุปยอดขายประจำวัน';
         <?= GridView::widget([
             'dataProvider' => $dataProvider2,
             // 'filterModel' => $searchModel,
+            'showPageSummary' => true,
             'emptyCell' => '-',
             'layout' => "{items}\n{summary}\n<div class='text-center'>{pager}</div>",
             'summary' => "แสดง {begin} - {end} ของทั้งหมด {totalCount} รายการ",
@@ -85,17 +102,32 @@ $this->title = 'สรุปยอดขายประจำวัน';
                 [
                     'class' => 'yii\grid\SerialColumn',
                     'headerOptions' => ['style' => 'text-align: center'],
-                    'contentOptions' => ['style' => 'text-align: center'],
+                    'contentOptions' => ['style' => 'text-align: center;'],
+                    'footerOptions' => ['style'=>'background: white'],
                 ],
-                'code',
-                'name',
+                [
+                    'attribute' => 'code',
+                    'label' => 'รหัส',
+                    'pageSummaryOptions' => ['class' => 'text-right','style'=>'background-color: '],
+                ],
+                [
+                    'attribute' => 'name',
+                    'label' => 'ประเภทชำระเงิน',
+                    'pageSummary' => false,
+                    'pageSummaryOptions' => ['class' => 'text-right','style'=>'background-color: '],
+                ],
                 [
                     'attribute' => 'payment_amount',
+                    'label' => 'ยอดขายรวม',
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
                     'value' => function ($data) {
-                        return number_format($data->payment_amount);
-                    }
+                        return $data->payment_amount;
+                    },
+                    'format' => ['decimal', 0],
+                    'pageSummary' => true,
+                    'pageSummaryFunc' => GridView::F_SUM,
+                    'pageSummaryOptions' => ['class' => 'text-right','style'=>'background-color: #6699FF'],
                 ]
             ],
             'pager' => ['class' => LinkPager::className()],
@@ -104,6 +136,7 @@ $this->title = 'สรุปยอดขายประจำวัน';
     <div class="col-lg-2"></div>
     <div class="col-lg-6">
         <div class="btn btn-success"><i class="fa fa-check"></i> ตรวจสอบยืนยันรายการ</div>
-        <p><small>หมายเหตุ: </small><small class="text-danger">กรุณาตรวจสอบข้อมูลให้ครบถ้วนก่อนการยืนยันยอดการทำรายการก่อนส่งยอด</small></p>
+        <p><small>หมายเหตุ: </small><small class="text-danger">กรุณาตรวจสอบข้อมูลให้ครบถ้วนก่อนการยืนยันยอดการทำรายการก่อนส่งยอด</small>
+        </p>
     </div>
 </div>
