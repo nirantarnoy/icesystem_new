@@ -36,7 +36,7 @@ class PosController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index', 'print', 'printindex','dailysum', 'getcustomerprice', 'getoriginprice', 'closesale', 'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate'],
+                        'actions' => ['logout', 'index', 'print', 'printindex', 'dailysum', 'getcustomerprice', 'getoriginprice', 'closesale', 'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -146,7 +146,7 @@ class PosController extends Controller
         if ($customer_id) {
             $model_order = new \backend\models\Orders();
             $model_order->order_no = $model_order->getLastNo($sale_date);
-            $model_order->order_date = date('Y-m-d H:i:s', strtotime($sale_date.' '.$sale_time));
+            $model_order->order_date = date('Y-m-d H:i:s', strtotime($sale_date . ' ' . $sale_time));
             $model_order->customer_id = $customer_id;
             $model_order->sale_channel_id = 2; // pos
             $model_order->payment_status = 0;
@@ -214,7 +214,7 @@ class PosController extends Controller
                     $model = \backend\models\Orders::find()->where(['id' => $model_order->id])->one();
                     $model_line = \backend\models\Orderline::find()->where(['order_id' => $model_order->id])->all();
                     $change_amt = \backend\models\Paymenttransline::find()->where(['order_ref_id' => $model_order->id])->one();
-                    $this->render('_printtoindex', ['model' => $model, 'model_line' => $model_line,'change_amount'=>$change_amt->change_amount]);
+                    $this->render('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $change_amt->change_amount]);
 
                     $session = \Yii::$app->session;
                     $session->setFlash('msg-index', 'slip_index.pdf');
@@ -363,7 +363,7 @@ class PosController extends Controller
                 'model' => $model,
                 'model_line' => $model_line,
                 'change_amount' => $change_amt->change_amount
-              ]);
+            ]);
 //            $session = \Yii::$app->session;
 //            $session->setFlash('msg', 'slip_index.pdf');
             //$this->redirect(['pos/index']);
@@ -373,9 +373,10 @@ class PosController extends Controller
 
     }
 
-    public function actionDailysum(){
-       // $x = '2021-03-03';
-       // $t_date = date('Y-m-d',strtotime($x));
+    public function actionDailysum()
+    {
+        // $x = '2021-03-03';
+        // $t_date = date('Y-m-d',strtotime($x));
 
         $pos_date = \Yii::$app->request->post('pos_date');
 
@@ -388,23 +389,23 @@ class PosController extends Controller
 
         $searchModel = new \backend\models\SaleposdataSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->select(['code','name','SUM(qty) as qty','SUM(line_total) as line_total']);
-        $dataProvider->query->andFilterWhere(['>','qty',0]);
-        $dataProvider->query->andFilterWhere(['=','date(order_date)',$t_date]);
+        $dataProvider->query->select(['code', 'name', 'SUM(qty) as qty', 'SUM(line_total) as line_total']);
+        $dataProvider->query->andFilterWhere(['>', 'qty', 0]);
+        $dataProvider->query->andFilterWhere(['=', 'date(order_date)', $t_date]);
 
-        $dataProvider->query->groupBy(['code','name']);
+        $dataProvider->query->groupBy(['code', 'name']);
         $dataProvider->setSort([
-            'defaultOrder'=>['code'=>SORT_ASC]
+            'defaultOrder' => ['code' => SORT_ASC]
         ]);
 
         $searchModel2 = new \backend\models\SalepospaySearch();
         $dataProvider2 = $searchModel2->search(Yii::$app->request->queryParams);
-        $dataProvider2->query->select(['code','name','SUM(payment_amount) as payment_amount']);
-        $dataProvider2->query->andFilterWhere(['>','payment_amount',0]);
-        $dataProvider2->query->andFilterWhere(['=','date(payment_date)',$t_date]);
-        $dataProvider2->query->groupBy(['code','name']);
+        $dataProvider2->query->select(['code', 'name', 'SUM(payment_amount) as payment_amount']);
+        $dataProvider2->query->andFilterWhere(['>', 'payment_amount', 0]);
+        $dataProvider2->query->andFilterWhere(['date(payment_date)' => date('Y-m-d')]);
+        $dataProvider2->query->groupBy(['code', 'name']);
         $dataProvider2->setSort([
-            'defaultOrder'=>['code'=>SORT_ASC]
+            'defaultOrder' => ['code' => SORT_ASC]
         ]);
 
         return $this->render('_dailysum', [
