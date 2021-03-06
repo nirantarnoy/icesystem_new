@@ -123,8 +123,8 @@ class SiteController extends Controller
         if ($f_date != null && $t_date != null) {
             $sql2 .= " where date(order_date) >='" . date('Y-m-d', strtotime($f_date)) . "' and date(order_date) <='" . date('Y-m-d', strtotime($t_date))."'";
         }
-        echo $sql2;
-        return;
+//        echo $sql2;
+//        return;
         $query2 = \Yii::$app->db->createCommand($sql2)->queryAll();
         $data_by_prod_type = [];
         $data_prod_data = [];
@@ -139,10 +139,7 @@ class SiteController extends Controller
 
         array_push($data_by_prod_type, [
                 'name' => 'ยอดขาย',
-                'data' =>
-                    $data_prod_data
-
-
+                'data' => $data_prod_data
             ]
         );
 //        ['name' => 'Test',
