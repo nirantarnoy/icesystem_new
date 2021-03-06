@@ -27,7 +27,7 @@ if ($f_date != null && $t_date != null) {
                                 'format' => 'DD/MM/YYYY'
                             ],
                         ],
-                        'presetDropdown'=>true,
+                        'presetDropdown' => true,
                         'options' => [
                             'class' => 'form-control',
                             'onchange' => '$("#form-dashboard").submit();'
@@ -168,6 +168,9 @@ if ($f_date != null && $t_date != null) {
                                     'options' => [
                                         'title' => ['text' => ''],
                                         'subtitle' => ['text' => ''],
+                                        'tooltip' => [
+                                            'pointFormat' => "{point.y:,.0f} บาท"
+                                        ],
                                         'xAxis' => [
                                             'categories' => $category
                                         ],
@@ -263,6 +266,9 @@ if ($f_date != null && $t_date != null) {
                                     'options' => [
                                         'chart' => [
                                             'type' => 'pie',
+                                        ],
+                                        'tooltip' => [
+                                            'pointFormat' => "{point.y:,.0f} บาท"
                                         ],
                                         'allowPointSelect' => true,
                                         'title' => ['text' => ''],
