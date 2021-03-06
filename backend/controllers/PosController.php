@@ -377,13 +377,20 @@ class PosController extends Controller
        // $x = '2021-03-03';
        // $t_date = date('Y-m-d',strtotime($x));
 
+        $pos_date = \Yii::$app->request->post('pos_date');
+
         $t_date = date('Y-m-d');
+
+        $x_date = explode('/', $pos_date);
+        if (count($x_date) > 1) {
+            $t_date = $x_date[2] . '-' . $x_date[1] . '-' . $x_date[0];
+        }
 
         $searchModel = new \backend\models\SaleposdataSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->select(['code','name','SUM(qty) as qty','SUM(line_total) as line_total']);
         $dataProvider->query->andFilterWhere(['>','qty',0]);
-        $dataProvider->query->andFilterWhere(['>=','date(order_date)',$t_date]);
+        $dataProvider->query->andFilterWhere(['=','date(order_date)',$t_date]);
 
         $dataProvider->query->groupBy(['code','name']);
         $dataProvider->setSort([
@@ -394,7 +401,7 @@ class PosController extends Controller
         $dataProvider2 = $searchModel2->search(Yii::$app->request->queryParams);
         $dataProvider2->query->select(['code','name','SUM(payment_amount) as payment_amount']);
         $dataProvider2->query->andFilterWhere(['>','payment_amount',0]);
-        $dataProvider2->query->andFilterWhere(['>=','date(payment_date)',$t_date]);
+        $dataProvider2->query->andFilterWhere(['=','date(payment_date)',$t_date]);
         $dataProvider2->query->groupBy(['code','name']);
         $dataProvider2->setSort([
             'defaultOrder'=>['code'=>SORT_ASC]

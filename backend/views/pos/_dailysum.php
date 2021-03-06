@@ -7,7 +7,7 @@ use yii\widgets\LinkPager;
 $this->title = 'สรุปยอดขายประจำวัน';
 
 ?>
-<form action="">
+<form action="<?=\yii\helpers\Url::to(['pos/dailysum'],true)?>" method="post">
     <div class="row">
 
         <div class="col-lg-3">
@@ -18,7 +18,7 @@ $this->title = 'สรุปยอดขายประจำวัน';
                     'name' => 'pos_date',
                     'value' => date('d/m/Y'),
                     'pluginOptions' => [
-
+                        'format' => 'DD/MM/YYYY',
                     ]
                 ]);
                 ?>
@@ -27,7 +27,7 @@ $this->title = 'สรุปยอดขายประจำวัน';
         </div>
         <div class="col-lg-2">
             <div class="label" style="color: white">ค้นหา</div>
-            <div class="btn btn-primary">ค้นหา</div>
+            <input type="submit" class="btn btn-primary" value="ค้นหา"></input>
         </div>
 
     </div>
