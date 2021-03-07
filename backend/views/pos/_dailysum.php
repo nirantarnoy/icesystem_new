@@ -6,11 +6,11 @@ use yii\widgets\LinkPager;
 
 $this->title = 'สรุปยอดขายประจำวัน';
 $pos_date = date('d/m/Y');
-if($show_pos_date != null){
-    $pos_date = date('d/m/Y',strtotime($show_pos_date));
+if ($show_pos_date != null) {
+    $pos_date = date('d/m/Y', strtotime($show_pos_date));
 }
 ?>
-<form action="<?=\yii\helpers\Url::to(['pos/dailysum'],true)?>" method="post">
+<form action="<?= \yii\helpers\Url::to(['pos/dailysum'], true) ?>" method="post">
     <div class="row">
 
         <div class="col-lg-3">
@@ -75,6 +75,12 @@ if($show_pos_date != null){
                     'label' => 'ชื่อสินค้า'
                 ],
                 [
+                    'attribute' => 'price',
+                    'value' => function ($data) {
+                        return number_format($data->price);
+                    }
+                ],
+                [
                     'attribute' => 'qty',
                     'label' => 'รวมจำนวน',
                     'headerOptions' => ['style' => 'text-align: right'],
@@ -87,6 +93,7 @@ if($show_pos_date != null){
                     'pageSummaryFunc' => GridView::F_SUM,
                     'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
                 ],
+
                 [
                     'attribute' => 'line_total',
                     'label' => 'ยอดขายรวม',
