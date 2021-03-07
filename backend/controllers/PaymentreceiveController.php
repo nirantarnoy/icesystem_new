@@ -133,13 +133,13 @@ class PaymentreceiveController extends Controller
         $html = '';
         $total_amount = 0;
         if ($cus_id) {
-            $html = $cus_id;
             $model = \common\models\QuerySalePaySummary::find()->where(['customer_id' => $cus_id])->all();
-//            if ($model) {
+            if ($model) {
+                $html = $cus_id;
 //                $i = 0;
 //                foreach ($model as $value) {
 //                    $i += 1;
-//                    $total_amount = $total_amount + ($value->line_total);
+//                    $total_amount = $total_amount + ($value->line_total==null?0:$value->line_total);
 //                    $html .= '<tr>';
 //                    $html .= '<td style="text-align: center">' . $i . '</td>';
 //                    $html .= '<td>' . \backend\models\Orders::getNumber($value->order_id) . '</td>';
@@ -152,7 +152,7 @@ class PaymentreceiveController extends Controller
 //
 //                }
 //                $html.='<tr><td colspan="4" style="text-align: right">รวม</td><td style="text-align: right;font-weight: bold">'.number_format($total_amount,2).'</td><td></td></tr>';
-//            }
+            }
         }
 
         echo $html;
