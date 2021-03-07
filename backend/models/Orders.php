@@ -1,7 +1,10 @@
 <?php
+
 namespace backend\models;
+
 use Yii;
 use yii\db\ActiveRecord;
+
 date_default_timezone_set('Asia/Bangkok');
 
 class Orders extends \common\models\Orders
@@ -9,46 +12,48 @@ class Orders extends \common\models\Orders
     public function behaviors()
     {
         return [
-            'timestampcdate'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_INSERT=>'created_at',
+            'timestampcdate' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'created_at',
                 ],
-                'value'=> time(),
+                'value' => time(),
             ],
-            'timestampudate'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_INSERT=>'updated_at',
+            'timestampudate' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'updated_at',
                 ],
-                'value'=> time(),
+                'value' => time(),
             ],
-            'timestampcby'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_INSERT=>'created_by',
+            'timestampcby' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'created_by',
                 ],
-                'value'=> Yii::$app->user->id,
+                'value' => Yii::$app->user->id,
             ],
-            'timestamuby'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_UPDATE=>'updated_by',
+            'timestamuby' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_by',
                 ],
-                'value'=> Yii::$app->user->id,
+                'value' => Yii::$app->user->id,
             ],
-            'timestampupdate'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_UPDATE=>'updated_at',
+            'timestampupdate' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
                 ],
-                'value'=> time(),
+                'value' => time(),
             ],
         ];
     }
-    public static function getLastNo($date){
-     //   $model = Orders::find()->MAX('order_no');
-        $model = Orders::find()->where(['date(order_date)'=>date('Y-m-d',strtotime($date))])->MAX('order_no');
+
+    public static function getLastNo($date)
+    {
+        //   $model = Orders::find()->MAX('order_no');
+        $model = Orders::find()->where(['date(order_date)' => date('Y-m-d', strtotime($date))])->MAX('order_no');
 
 //        $model_seq = \backend\models\Sequence::find()->where(['module_id'=>4])->one();
 //        //$pre = \backend\models\Sequence::find()->where(['module_id'=>15])->one();
@@ -105,29 +110,30 @@ class Orders extends \common\models\Orders
 
 
         $pre = "SO";
-        if($model != null){
+        if ($model != null) {
 //            $prefix = $pre.substr(date("Y"),2,2);
 //            $cnum = substr((string)$model,4,strlen($model));
 //            $len = strlen($cnum);
 //            $clen = strlen($cnum + 1);
 //            $loop = $len - $clen;
-            $prefix =$pre.'-'.substr(date("Y"),2,2).date('m',strtotime($date)).date('d',strtotime($date)).'-';
+            $prefix = $pre . '-' . substr(date("Y"), 2, 2) . date('m', strtotime($date)) . date('d', strtotime($date)) . '-';
             $cnum = substr((string)$model, 10, strlen($model));
             $len = strlen($cnum);
             $clen = strlen($cnum + 1);
             $loop = $len - $clen;
-            for($i=1;$i<=$loop;$i++){
-                $prefix.="0";
+            for ($i = 1; $i <= $loop; $i++) {
+                $prefix .= "0";
             }
-            $prefix.=$cnum + 1;
+            $prefix .= $cnum + 1;
             return $prefix;
-        }else{
-            $prefix =$pre.'-'.substr(date("Y"),2,2).date('m',strtotime($date)).date('d',strtotime($date)).'-';
-            return $prefix.'0001';
+        } else {
+            $prefix = $pre . '-' . substr(date("Y"), 2, 2) . date('m', strtotime($date)) . date('d', strtotime($date)) . '-';
+            return $prefix . '0001';
         }
     }
 
-    public function findOrderemp($id){
+    public function findOrderemp($id)
+    {
         $html = '';
         if ($id) {
 //            $x_date = explode('/', $trans_date);
@@ -136,8 +142,8 @@ class Orders extends \common\models\Orders
 //                $t_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
 //            }
 
-            $model_o = \backend\models\Orders::find()->where(['id'=>$id])->one();
-            if($model_o){
+            $model_o = \backend\models\Orders::find()->where(['id' => $id])->one();
+            if ($model_o) {
                 $t_date = date('Y-m-d', strtotime($model_o->order_date));
 
                 $model = \backend\models\Cardaily::find()->where(['car_id' => $model_o->car_ref_id, 'date(trans_date)' => $t_date])->all();
@@ -157,15 +163,16 @@ class Orders extends \common\models\Orders
         return $html;
     }
 
-    public function findordercash($order_id){
+    public function findordercash($order_id)
+    {
         $total = 0;
-        $model = \backend\models\Orderline::find()->where(['order_id'=>$order_id])->all();
-        if($model){
-            foreach ($model as $value){
+        $model = \backend\models\Orderline::find()->where(['order_id' => $order_id])->all();
+        if ($model) {
+            foreach ($model as $value) {
                 $cus_pay_method = \backend\models\Customer::findPayMethod($value->customer_id);
-                $paymethod_id = \backend\models\Paymentmethod::find()->where(['id'=>$cus_pay_method])->one();
-                if($paymethod_id){
-                    if($paymethod_id->pay_type == 1){
+                $paymethod_id = \backend\models\Paymentmethod::find()->where(['id' => $cus_pay_method])->one();
+                if ($paymethod_id) {
+                    if ($paymethod_id->pay_type == 1) {
                         $total = $total + ($value->qty * $value->price);
                     }
                 }
@@ -178,19 +185,21 @@ class Orders extends \common\models\Orders
         }
         return $total;
     }
-    public function findordercredit($order_id){
+
+    public function findordercredit($order_id)
+    {
         $total = 0;
-        $model = \backend\models\Orderline::find()->where(['order_id'=>$order_id])->all();
-        if($model){
-            foreach ($model as $value){
+        $model = \backend\models\Orderline::find()->where(['order_id' => $order_id])->all();
+        if ($model) {
+            foreach ($model as $value) {
                 $cus_pay_method = \backend\models\Customer::findPayMethod($value->customer_id);
 //                $paymethod_name = \backend\models\Paymentmethod::findName($cus_pay_method);
 //                if($paymethod_name == 'เงินเชื่อ' || $paymethod_name == 'เครดิต'){
 //                    $total = $total + ($value->qty * $value->price);
 //                }
-                $paymethod_id = \backend\models\Paymentmethod::find()->where(['id'=>$cus_pay_method])->one();
-                if($paymethod_id){
-                    if($paymethod_id->pay_type == 2){
+                $paymethod_id = \backend\models\Paymentmethod::find()->where(['id' => $cus_pay_method])->one();
+                if ($paymethod_id) {
+                    if ($paymethod_id->pay_type == 2) {
                         $total = $total + ($value->qty * $value->price);
                     }
                 }
@@ -201,9 +210,10 @@ class Orders extends \common\models\Orders
         return $total;
     }
 
-    public function getNumber($id){
-        $model = Orders::find()->where(['id'=>$id])->one();
-        return count($model)>0?$model->order_no:'';
+    public function getNumber($id)
+    {
+        $model = Orders::find()->where(['id' => $id])->one();
+        return $model != null ? $model->order_no : '';
     }
 //    public function findName($id){
 //        $model = Unit::find()->where(['id'=>$id])->one();
