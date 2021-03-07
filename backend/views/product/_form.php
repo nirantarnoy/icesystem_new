@@ -107,6 +107,9 @@ $stock_type_data = [['id'=>1,'name'=>'ตัดสต๊อก'],['id'=>2,'name'
                 <?php endfor; ?>
             </select>
         </div>
+        <div class="col-lg-4">
+            <?php echo $form->field($model, 'is_pos_item')->widget(\toxor88\switchery\Switchery::className(),['options'=>['label'=>'','class'=>'form-control']])->label() ?>
+        </div>
     </div>
     <br>
     <div class="row">
