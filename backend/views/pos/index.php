@@ -93,13 +93,13 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                                         <div style="height: 10px;"></div>
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <input type="hidden" class="list-item-product-id list-item-id-<?= $i ?>"
+                                                <input type="hidden" class="list-item-product-id fix-list-item-id-<?= $i ?>"
                                                        value="<?= $value->id ?>">
-                                                <input type="hidden" class="list-item-code-<?= $i ?>"
+                                                <input type="hidden" class="fix-list-item-code-<?= $i ?>"
                                                        value="<?= $value->code ?>">
-                                                <input type="hidden" class="list-item-name-<?= $i ?>"
+                                                <input type="hidden" class="fix-list-item-name-<?= $i ?>"
                                                        value="<?= $value->name ?>">
-                                                <input type="hidden" class="list-item-price list-item-price-<?= $i ?>"
+                                                <input type="hidden" class="list-item-price fix-list-item-price-<?= $i ?>"
                                                        value="<?= $value->sale_price ?>">
                                                 <div class="btn-group" style="width: 100%">
                                                     <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"
@@ -757,41 +757,7 @@ $js = <<<JS
       $("#btn-general-customer").click(function(){
           $("#sale-by-original").show();
           $("#sale-by-customer").hide();
-//          price_group_name = '';
-//          $.ajax({
-//              type: "post",
-//              dataType: "json",
-//              url: "$url_to_get_origin_price",
-//              data: {},
-//              success: function(data){
-//                  if(data.length > 0){
-//                      var i = -1;
-//                      $(".product-items").each(function(){
-//                          i++;
-//                          var line_product_id = $(this).find(".list-item-product-id").val();
-//                          if(line_product_id == data[i]['product_id']){
-//                              $(".card").css("background-color","white"); 
-//                              $(this).find(".list-item-price").val(data[i]['sale_price']);
-//                              $(this).find(".item-price").html(data[i]['sale_price']);
-//                          }
-//                      });
-//                          
-//                  }else{
-//                      alert('no price');
-//                  }
-//               },
-//               error: function(err) {
-//                  alert('eror');
-//               }
-//             });
-//        
-//          if(price_group_name !=''){
-//              $(".text-price-type").show();
-//              $(".badge-text-price-type").html(price_group_name);
-//          }else{
-//              $(".text-price-type").hide();
-//              $(".badge-text-price-type").html('');
-//          }
+
           
         $(this).removeClass('btn-outline-secondary');
         $(this).addClass('btn-success');
@@ -1130,12 +1096,12 @@ function addcart(e){
 function addcart2(e){
     var ids = e.attr('data-var');
     
-    var prod_id = $(".list-item-id-"+ids).val();
-    var prod_code = $(".list-item-code-"+ids).val();
-    var prod_name = $(".list-item-name-"+ids).val();
-    // alert(prod_id);
+    var prod_id = $(".fix-list-item-id-"+ids).val();
+    var prod_code = $(".fix-list-item-code-"+ids).val();
+    var prod_name = $(".fix-list-item-name-"+ids).val();
+     //alert(prod_id);
     var qty = 1;
-    var price = $(".list-item-price-"+ids).val();
+    var price =$(".fix-list-item-price-"+ids).val();
     var tr = $(".table-cart tbody tr:last");
      
     var check_old = check_dup(prod_id);
