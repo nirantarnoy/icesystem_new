@@ -399,7 +399,7 @@ class PosController extends Controller
 
         $dataProvider->query->groupBy(['code', 'name','price']);
         $dataProvider->setSort([
-            'defaultOrder' => ['code' => SORT_ASC]
+            'defaultOrder' => ['item_pos_seq' => SORT_ASC]
         ]);
 
         $searchModel2 = new \backend\models\SalepospaySearch();
