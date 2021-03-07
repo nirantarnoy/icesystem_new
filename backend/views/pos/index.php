@@ -93,13 +93,13 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                                         <div style="height: 10px;"></div>
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <input type="hidden" class="list-item-product-id fix-list-item-id-<?= $i ?>"
+                                                <input type="hidden" class="list-item-product-id list-item-id-<?= $i ?>"
                                                        value="<?= $value->id ?>">
-                                                <input type="hidden" class="fix-list-item-code-<?= $i ?>"
+                                                <input type="hidden" class="list-item-code-<?= $i ?>"
                                                        value="<?= $value->code ?>">
-                                                <input type="hidden" class="fix-list-item-name-<?= $i ?>"
+                                                <input type="hidden" class="list-item-name-<?= $i ?>"
                                                        value="<?= $value->name ?>">
-                                                <input type="hidden" class="list-item-price fix-list-item-price-<?= $i ?>"
+                                                <input type="hidden" class="list-item-price list-item-price-<?= $i ?>"
                                                        value="<?= $value->sale_price ?>">
                                                 <div class="btn-group" style="width: 100%">
                                                     <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"
@@ -145,13 +145,13 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                                         <div style="height: 10px;"></div>
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <input type="hidden" class="list-item-product-id list-item-id-<?= $i ?>"
+                                                <input type="hidden" class="list-item-product-id fix-list-item-id-<?= $i ?>"
                                                        value="<?= $value->id ?>">
-                                                <input type="hidden" class="list-item-code-<?= $i ?>"
+                                                <input type="hidden" class="fix-list-item-code-<?= $i ?>"
                                                        value="<?= $value->code ?>">
-                                                <input type="hidden" class="list-item-name-<?= $i ?>"
+                                                <input type="hidden" class="fix-list-item-name-<?= $i ?>"
                                                        value="<?= $value->name ?>">
-                                                <input type="hidden" class="list-item-price list-item-price-<?= $i ?>"
+                                                <input type="hidden" class="list-item-price fix-list-item-price-<?= $i ?>"
                                                        value="<?= $value->sale_price ?>">
                                                 <div class="btn-group" style="width: 100%">
                                                     <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"

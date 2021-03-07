@@ -89,7 +89,7 @@ class PosController extends Controller
     public function actionGetoriginprice()
     {
         $data = [];
-        $model_basic_price = \backend\models\Product::find()->where(['is_pos_item'=>1])->all();
+        $model_basic_price = \backend\models\Product::find()->where(['is_pos_item' => 1])->all();
         if ($model_basic_price) {
             foreach ($model_basic_price as $value) {
                 array_push($data, ['product_id' => $value->id, 'sale_price' => $value->sale_price]);
@@ -136,7 +136,7 @@ class PosController extends Controller
 
         $pos_date = \Yii::$app->request->post('sale_pay_date');
 
-         //echo $customer_id;return;
+        //echo $customer_id;return;
         $sale_date = date('Y-m-d');
         $sale_time = date('H:i:s');
         $x_date = explode('/', $pos_date);
@@ -214,10 +214,10 @@ class PosController extends Controller
                     $model_line = \backend\models\Orderline::find()->where(['order_id' => $model_order->id])->all();
                     $change_amt = \backend\models\Paymenttransline::find()->where(['order_ref_id' => $model_order->id])->one();
                     $ch_amt = 0;
-                    if($change_amt != null){
-                        $ch_amt =  $change_amt->change_amount;
+                    if ($change_amt != null) {
+                        $ch_amt = $change_amt->change_amount;
                     }
-                    $this->render('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' =>$ch_amt]);
+                    $this->render('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt]);
 
                     $session = \Yii::$app->session;
                     $session->setFlash('msg-index', 'slip_index.pdf');
@@ -252,6 +252,7 @@ class PosController extends Controller
 
         $searchModel = new OrdersposSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andFilterWhere(['sale_channel_id' => 2]);
         $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
         //  $dataProvider->pagination->pageSize = $pageSize;
 
@@ -393,11 +394,11 @@ class PosController extends Controller
 
         $searchModel = new \backend\models\SaleposdataSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->select(['code', 'name','price', 'SUM(qty) as qty', 'SUM(line_total) as line_total']);
+        $dataProvider->query->select(['code', 'name', 'price', 'SUM(qty) as qty', 'SUM(line_total) as line_total']);
         $dataProvider->query->andFilterWhere(['>', 'qty', 0]);
         $dataProvider->query->andFilterWhere(['=', 'date(order_date)', $t_date]);
 
-        $dataProvider->query->groupBy(['code', 'name','price']);
+        $dataProvider->query->groupBy(['code', 'name', 'price']);
         $dataProvider->setSort([
             'defaultOrder' => ['item_pos_seq' => SORT_ASC]
         ]);
