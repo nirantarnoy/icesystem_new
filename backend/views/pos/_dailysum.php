@@ -50,6 +50,8 @@ if ($show_pos_date != null) {
             'showPageSummary' => true,
             'striped' => true,
             'hover' => true,
+            'pjax' => true,
+            'panel' => ['type' => 'info', 'heading' => 'รายงานแสดงยอดขายประจำวัน'],
             'emptyCell' => '-',
             'layout' => "{items}\n{summary}\n<div class='text-center'>{pager}</div>",
             'summary' => "แสดง {begin} - {end} ของทั้งหมด {totalCount} รายการ",
@@ -68,17 +70,49 @@ if ($show_pos_date != null) {
                 ],
                 [
                     'attribute' => 'code',
-                    'label' => 'รหัสสินค้า'
+                    'label' => 'รหัสสินค้า',
+                    'group' => true,
+                    'groupHeader' => function ($model, $key, $index, $widget) { // Closure method
+                        return [
+                            'mergeColumns' => [[1, 2]], // columns to merge in summary
+                            'content' => [             // content to show in each summary cell
+                                1 => 'ยอดสินค้า (' . $model->code . ')',
+                                4 => GridView::F_SUM,
+                                5 => GridView::F_SUM,
+//                        7 => GridView::F_SUM,
+                            ],
+                            'contentFormats' => [      // content reformatting for each summary cell
+                                //4 => ['format' => 'number', 'decimals' => 0],
+                                4 => ['format' => 'number', 'decimals' => 0],
+                                5 => ['format' => 'number', 'decimals' => 0],
+//                        7 => ['format' => 'number', 'decimals' => 0],
+                            ],
+                            'contentOptions' => [      // content html attributes for each summary cell
+                                1 => ['style' => 'font-variant:small-caps'],
+                                //4 => ['style' => 'text-align:right'],
+                                4 => ['style' => 'text-align:right'],
+                                5 => ['style' => 'text-align:right'],
+//                        7 => ['style' => 'text-align:right'],
+                            ],
+                            // html attributes for group summary row
+                            'options' => ['class' => 'info table-info', 'style' => 'font-weight:bold;']
+                        ];
+                    },
+//                    'pageSummaryOptions' => ['class' => 'text-right'],
+//                    'pageSummary' => true,
+//                    'pageSummaryFunc' => GridView::F_SUM
                 ],
                 [
                     'attribute' => 'name',
-                    'label' => 'ชื่อสินค้า'
+                    'label' => 'ชื่อสินค้า',
+                    'pageSummary' => false,
                 ],
                 [
                     'attribute' => 'price',
                     'value' => function ($data) {
                         return number_format($data->price);
-                    }
+                    },
+                    'pageSummary' => false,
                 ],
                 [
                     'attribute' => 'qty',
