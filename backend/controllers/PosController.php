@@ -136,7 +136,7 @@ class PosController extends Controller
 
         $pos_date = \Yii::$app->request->post('sale_pay_date');
 
-        // echo $pos_date;return;
+         //echo $customer_id;return;
         $sale_date = date('Y-m-d');
         $sale_time = date('H:i:s');
         $x_date = explode('/', $pos_date);
@@ -203,7 +203,6 @@ class PosController extends Controller
                             if ($model_line->save(false)) {
                                 //$res += 1;
                             }
-
                         }
                     }
                     $this->updateorderpayment($model_order->id, $pay_total_amount, $pay_amount);
@@ -214,7 +213,11 @@ class PosController extends Controller
                     $model = \backend\models\Orders::find()->where(['id' => $model_order->id])->one();
                     $model_line = \backend\models\Orderline::find()->where(['order_id' => $model_order->id])->all();
                     $change_amt = \backend\models\Paymenttransline::find()->where(['order_ref_id' => $model_order->id])->one();
-                    $this->render('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $change_amt->change_amount]);
+                    $ch_amt = 0;
+                    if($change_amt != null){
+                        $ch_amt =  $change_amt->change_amount;
+                    }
+                    $this->render('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' =>$ch_amt]);
 
                     $session = \Yii::$app->session;
                     $session->setFlash('msg-index', 'slip_index.pdf');
@@ -403,7 +406,7 @@ class PosController extends Controller
         $dataProvider2->query->select(['code', 'name', 'SUM(payment_amount) as payment_amount']);
         $dataProvider2->query->andFilterWhere(['>', 'payment_amount', 0]);
         $dataProvider2->query->andFilterWhere(['date(order_date)' => $t_date]);
-        $dataProvider2->query->groupBy(['code', 'name','sale_channel_id']);
+        $dataProvider2->query->groupBy(['code', 'name', 'sale_channel_id']);
         $dataProvider2->setSort([
             'defaultOrder' => ['code' => SORT_ASC]
         ]);

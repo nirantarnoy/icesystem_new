@@ -191,38 +191,38 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                     </table>
                 </div>
             </div>
-<!--            <div class="footer-cart" style="height: 250px;position: fixed;bottom: 0px;">-->
-                <div class="row">
-                    <div class="col-lg-6" style="text-align: left">
-                        <div class="btn-group">
-                            <a href="index.php?r=pos/salehistory" class="btn btn-outline-info btn-history-cart"
-                               style="display: noneผ">
-                                ประวัติการขาย
-                            </a>
-                            <a href="index.php?r=pos/dailysum" class="btn btn-outline-info btn-history-cart"
-                               style="display: noneผ">
-                                สรุปยอดขายประจำวัน
-                            </a>
-                        </div>
+            <!--            <div class="footer-cart" style="height: 250px;position: fixed;bottom: 0px;">-->
+            <div class="row">
+                <div class="col-lg-6" style="text-align: left">
+                    <div class="btn-group">
+                        <a href="index.php?r=pos/salehistory" class="btn btn-outline-info btn-history-cart"
+                           style="display: noneผ">
+                            ประวัติการขาย
+                        </a>
+                        <a href="index.php?r=pos/dailysum" class="btn btn-outline-info btn-history-cart"
+                           style="display: noneผ">
+                            สรุปยอดขายประจำวัน
+                        </a>
+                    </div>
 
-                    </div>
-                    <div class="col-lg-6" style="text-align: right">
-                        <div class="btn btn-outline-secondary btn-cancel-cart" style="display: none">
-                            ยกเลิกการขาย
-                        </div>
+                </div>
+                <div class="col-lg-6" style="text-align: right">
+                    <div class="btn btn-outline-secondary btn-cancel-cart" style="display: none">
+                        ยกเลิกการขาย
                     </div>
                 </div>
-                <hr>
-                <div class="row div-payment" style="display: none">
-                    <div class="col-lg-12" style="text-align: center">
-                        <div class="btn btn-group">
-                            <div class="btn btn-success btn-lg btn-pay-cash">ชำระเงินสด</div>
-                            <div class="btn btn-primary btn-lg btn-pay-credit">ชำระเงินเชื่อ</div>
-                            <!--                        <div class="btn btn-outline-warning btn-lg btn-pay-credit-card">ชำระบัตรเครดิต</div>-->
-                        </div>
+            </div>
+            <hr>
+            <div class="row div-payment" style="display: none">
+                <div class="col-lg-12" style="text-align: center">
+                    <div class="btn btn-group">
+                        <div class="btn btn-success btn-lg btn-pay-cash">ชำระเงินสด</div>
+                        <div class="btn btn-primary btn-lg btn-pay-credit">ชำระเงินเชื่อ</div>
+                        <!--                        <div class="btn btn-outline-warning btn-lg btn-pay-credit-card">ชำระบัตรเครดิต</div>-->
                     </div>
                 </div>
-<!--            </div>-->
+            </div>
+            <!--            </div>-->
 
     </div>
 </div>
@@ -487,6 +487,86 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
     </div>
 </div>
 
+
+<div id="paycreditModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #f9a123">
+                <div class="row" style="text-align: center;width: 100%;color: white">
+                    <div class="col-lg-12">
+                        <span><h3 class="popup-payment" style="color: white"><i class="fa fa-shopping-cart"></i> บันทึกขายเงินเชื่อ</h3></span>
+                        <input type="hidden" class="popup-product-id" value="">
+                        <input type="hidden" class="popup-product-code" value="">
+                    </div>
+                </div>
+
+            </div>
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-3" style="text-align: right">
+                        <h4>วันที่ขาย</h4>
+                    </div>
+                    <div class="col-lg-8">
+                        <?php
+                        // $order_date = date('d/m/Y',strtotime($model->order_date));
+                        echo \kartik\date\DatePicker::widget([
+                            'name' => 'pos_date',
+                            'value' => date('d/m/Y'),
+                            'options' => [
+                                'class' => 'pos-date',
+                                'onchange' => '$(".sale-pay-date").val($(this).val());'
+                                // 'readonly' => true,
+                            ],
+                            'pluginOptions' => [
+                                'format' => 'dd/mm/yyyy',
+                                'todayHighlight' => true
+                            ],
+                        ]);
+                        ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-4"></div>
+                            <div class="col-lg-4" style="text-align: center">
+                                <h4>ยอดขาย</h4>
+                            </div>
+                            <div class="col-lg-4"></div>
+                        </div>
+                        <div style="height: 10px;"></div>
+                        <div class="row">
+                            <div class="col-lg-3"></div>
+                            <div class="col-lg-6">
+                                <input type="number" class="form-control pay-total-amount" value="" min="1"
+                                       style="font-size: 50px;height: 60px;text-align: center" disabled>
+                            </div>
+                            <div class="col-lg-3"></div>
+                        </div>
+                        <input type="hidden" class="form-control pay-amount"
+                               style="font-size: 50px;height: 60px;text-align: center" value="0">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline-success btn-pay-credit-submit" data-dismiss="modalx">
+                    <i class="fa fa-check"></i> จบการขาย
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                            class="fa fa-ban text-danger"></i> ยกเลิก
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <div id="historyModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
         <!-- Modal content-->
@@ -547,6 +627,7 @@ $js = <<<JS
      dropdownAutoWidth : true
      });
      if($("#btn-general-customer").hasClass("active")){
+         $(".sale-customer-id").val(3646);
          $(".div-customer-search").hide();
      }else{
          $(".text-price-type").show();
@@ -571,6 +652,28 @@ $js = <<<JS
                         $(".btn-pay-submit").prop('disabled','');
                     }
                  $("#payModal").modal("show");
+             }
+     });
+     
+     $(".btn-pay-credit").click(function(){
+         $(".sale-pay-type").val(2);
+         var sale_total_amt = $(".total-value-top").val()
+             if(sale_total_amt > 0){
+                 $(".pay-total-amount").val(sale_total_amt);
+                 $(".sale-total-amount").val(sale_total_amt);
+                 
+                  $(".pay-amount").val(0);
+                  $(".pay-change").val(0);
+                  var c_pay = $(".pay-amount").val();
+                  var sale_total = $(".pay-total-amount").val();
+                    if(c_pay < sale_total){
+                       // $(".pay-alert").fadeIn();
+                        $(".btn-pay-submit").prop('disabled','disabled');
+                    }else{
+                       // $(".pay-alert").hide();
+                        $(".btn-pay-submit").prop('disabled','');
+                    }
+                 $("#paycreditModal").modal("show");
              }
      });
      
@@ -669,6 +772,10 @@ $js = <<<JS
      });
      
      $(".btn-pay-submit").click(function(){
+         $("form#form-close-sale").submit();
+     });
+     
+     $(".btn-pay-credit-submit").click(function(){
          $("form#form-close-sale").submit();
      });
  });

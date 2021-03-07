@@ -8,6 +8,7 @@ use Yii;
 class Orders extends \yii\db\ActiveRecord
 {
     public $order_total_amt_text;
+
     public static function tableName()
     {
         return 'orders';
@@ -19,14 +20,14 @@ class Orders extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_no'],'unique'],
-            [['order_no','order_date','order_channel_id','car_ref_id'],'required'],
-            [['customer_id', 'customer_type', 'emp_sale_id','payment_status', 'car_ref_id', 'order_channel_id', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by','issue_id'], 'integer'],
-            [['order_date','status','order_total_amt_text'], 'safe'],
+            [['order_no'], 'unique'],
+            [['order_no', 'order_date', 'order_channel_id', 'car_ref_id'], 'required'],
+            [['customer_id', 'customer_type', 'emp_sale_id', 'payment_status', 'car_ref_id', 'order_channel_id', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by', 'issue_id'], 'integer'],
+            [['order_date', 'status', 'order_total_amt_text'], 'safe'],
             [['vat_amt', 'vat_per', 'order_total_amt'], 'number'],
             [['order_no', 'customer_name'], 'string', 'max' => 255],
-            [['payment_method_id','payment_term_id',],'safe'],
-            [['sale_channel_id'],'integer'],
+            [['payment_method_id', 'payment_term_id', 'is_approve_status'], 'safe'],
+            [['sale_channel_id'], 'integer'],
             [['branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['branch_id' => 'id']],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'id']],
         ];
