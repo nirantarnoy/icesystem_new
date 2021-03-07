@@ -4,7 +4,6 @@ use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\web\Session;
 
-
 $filename = "empty";
 
 if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
@@ -67,56 +66,111 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
         </div>
         <br/>
         <div class="row">
-            <div class="col-lg-12" style="height: 800px;overflow-x: hidden">
-                <div class="row">
-                    <?php $i = 0; ?>
-                    <?php $list = ['PB', 'PS', 'PC', 'T1', 'T2']; ?>
-                    <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
-                    <?php $product_data = \backend\models\Product::find()->all(); ?>
-                    <?php foreach ($product_data as $value): ?>
-                        <?php $i += 1; ?>
-                        <div class="col-lg-3 product-items">
-                            <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
-                            <div class="card" style="heightc: 200px;">
-                                <!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
-                                <!--                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="">-->
-                                <div class="card-body">
-                                    <p class="card-text"
-                                       style="font-size: 20px;text-align: center;font-weight: bold"><?= $value->code ?></p>
-                                </div>
-                                <div class="card-footer" style="width: 100%">
-                                    <div class="row" style="width: 120%;text-align: center">
-                                        <div class="col-lg-12">
-                                            <div class="item-price"
-                                                 style="color: red;font-weight: bold;"><?= $value->sale_price ?></div>
-                                        </div>
+            <div id="sale-by-customer" style="display: none">
+                <div class="col-lg-12" style="height: 800px;overflow-x: hidden">
+                    <div class="row">
+                        <?php $i = 0; ?>
+                        <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
+                        <?php $product_data = \backend\models\Product::find()->all(); ?>
+                        <?php foreach ($product_data as $value): ?>
+                            <?php $i += 1; ?>
+                            <div class="col-lg-3 product-items">
+                                <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
+                                <div class="card" style="heightc: 200px;">
+                                    <!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
+                                    <!--                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="">-->
+                                    <div class="card-body">
+                                        <p class="card-text"
+                                           style="font-size: 20px;text-align: center;font-weight: bold"><?= $value->code ?></p>
                                     </div>
-                                    <div style="height: 10px;"></div>
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <input type="hidden" class="list-item-product-id list-item-id-<?= $i ?>"
-                                                   value="<?= $value->id ?>">
-                                            <input type="hidden" class="list-item-code-<?= $i ?>"
-                                                   value="<?= $value->code ?>">
-                                            <input type="hidden" class="list-item-name-<?= $i ?>"
-                                                   value="<?= $value->name ?>">
-                                            <input type="hidden" class="list-item-price list-item-price-<?= $i ?>"
-                                                   value="<?= $value->sale_price ?>">
-                                            <div class="btn-group" style="width: 100%">
-                                                <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"
-                                                     onclick="reducecart2($(this))"><i class="fa fa-minus"></i></div>
-                                                <div class="btn btn-outline-primary btn-sm" data-var="<?= $i ?>"
-                                                     onclick="addcart2($(this))">
-                                                    <i class="fa fa-plus"></i></div>
+                                    <div class="card-footer" style="width: 100%">
+                                        <div class="row" style="width: 120%;text-align: center">
+                                            <div class="col-lg-12">
+                                                <div class="item-price"
+                                                     style="color: red;font-weight: bold;"><?= $value->sale_price ?></div>
+                                            </div>
+                                        </div>
+                                        <div style="height: 10px;"></div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <input type="hidden" class="list-item-product-id list-item-id-<?= $i ?>"
+                                                       value="<?= $value->id ?>">
+                                                <input type="hidden" class="list-item-code-<?= $i ?>"
+                                                       value="<?= $value->code ?>">
+                                                <input type="hidden" class="list-item-name-<?= $i ?>"
+                                                       value="<?= $value->name ?>">
+                                                <input type="hidden" class="list-item-price list-item-price-<?= $i ?>"
+                                                       value="<?= $value->sale_price ?>">
+                                                <div class="btn-group" style="width: 100%">
+                                                    <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"
+                                                         onclick="reducecart2($(this))"><i class="fa fa-minus"></i>
+                                                    </div>
+                                                    <div class="btn btn-outline-primary btn-sm" data-var="<?= $i ?>"
+                                                         onclick="addcart2($(this))">
+                                                        <i class="fa fa-plus"></i></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
+            <div id="sale-by-original">
+                <div class="col-lg-12" style="height: 800px;overflow-x: hidden">
+                    <div class="row">
+                        <?php $i = 0; ?>
+                        <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
+                        <?php $product_data = \backend\models\Product::find()->where(['is_pos_item'=>1])->all(); ?>
+                        <?php foreach ($product_data as $value): ?>
+                            <?php $i += 1; ?>
+                            <div class="col-lg-3 product-items">
+                                <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
+                                <div class="card" style="heightc: 200px;">
+                                    <!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
+                                    <!--                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="">-->
+                                    <div class="card-body">
+                                        <p class="card-text"
+                                           style="font-size: 20px;text-align: center;font-weight: bold"><?= $value->code ?></p>
+                                    </div>
+                                    <div class="card-footer" style="width: 100%">
+                                        <div class="row" style="width: 120%;text-align: center">
+                                            <div class="col-lg-12">
+                                                <div class="item-price"
+                                                     style="color: red;font-weight: bold;"><?= $value->sale_price ?></div>
+                                            </div>
+                                        </div>
+                                        <div style="height: 10px;"></div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <input type="hidden" class="list-item-product-id list-item-id-<?= $i ?>"
+                                                       value="<?= $value->id ?>">
+                                                <input type="hidden" class="list-item-code-<?= $i ?>"
+                                                       value="<?= $value->code ?>">
+                                                <input type="hidden" class="list-item-name-<?= $i ?>"
+                                                       value="<?= $value->name ?>">
+                                                <input type="hidden" class="list-item-price list-item-price-<?= $i ?>"
+                                                       value="<?= $value->sale_price ?>">
+                                                <div class="btn-group" style="width: 100%">
+                                                    <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"
+                                                         onclick="reducecart2($(this))"><i class="fa fa-minus"></i>
+                                                    </div>
+                                                    <div class="btn btn-outline-primary btn-sm" data-var="<?= $i ?>"
+                                                         onclick="addcart2($(this))">
+                                                        <i class="fa fa-plus"></i></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
     <div class="col-lg-6">

@@ -89,7 +89,7 @@ class PosController extends Controller
     public function actionGetoriginprice()
     {
         $data = [];
-        $model_basic_price = \backend\models\Product::find()->all();
+        $model_basic_price = \backend\models\Product::find()->where(['is_pos_item'=>1])->all();
         if ($model_basic_price) {
             foreach ($model_basic_price as $value) {
                 array_push($data, ['product_id' => $value->id, 'sale_price' => $value->sale_price]);
