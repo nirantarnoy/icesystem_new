@@ -201,10 +201,10 @@ class Orders extends \common\models\Orders
         return $total;
     }
 
-//    public function findUnitname($id){
-//        $model = Unit::find()->where(['id'=>$id])->one();
-//        return count($model)>0?$model->name:'';
-//    }
+    public function getNumber($id){
+        $model = Orders::find()->where(['id'=>$id])->one();
+        return count($model)>0?$model->order_no:'';
+    }
 //    public function findName($id){
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';

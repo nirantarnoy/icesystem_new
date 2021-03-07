@@ -123,7 +123,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                     <div class="row">
                         <?php $i = 0; ?>
                         <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
-                        <?php $product_data = \backend\models\Product::find()->where(['is_pos_item'=>1])->orderBy(['item_pos_seq'=>SORT_ASC])->all(); ?>
+                        <?php $product_data = \backend\models\Product::find()->where(['is_pos_item' => 1])->orderBy(['item_pos_seq' => SORT_ASC])->all(); ?>
                         <?php foreach ($product_data as $value): ?>
                             <?php $i += 1; ?>
                             <div class="col-lg-3 product-items">
@@ -742,6 +742,8 @@ $js = <<<JS
      });
      
      $("#btn-fix-customer").click(function(){
+           $("#sale-by-original").hide();
+          $("#sale-by-customer").show();
         $(this).removeClass('btn-outline-secondary');
         $(this).addClass('btn-success');
         
@@ -753,6 +755,8 @@ $js = <<<JS
      });
      
       $("#btn-general-customer").click(function(){
+          $("#sale-by-original").show();
+          $("#sale-by-customer").hide();
           price_group_name = '';
           $.ajax({
               type: "post",

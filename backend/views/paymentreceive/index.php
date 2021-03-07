@@ -1,16 +1,15 @@
 <?php
 
 use yii\helpers\Html;
-use kartik\grid\GridView;
+use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
-use yii\bootstrap4\LinkPager;
+use yii\widgets\LinkPager;
 
-$this->title = Yii::t('app', 'ใบสั่งขาย');
+$this->title = 'ชำระหนี้';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="orders-index">
-
+<div class="paymentterm-index">
     <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">
@@ -19,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </p>
         </div>
         <div class="col-lg-2" style="text-align: right">
-            <form id="form-perpage" class="form-inline" action="<?= Url::to(['orders/index'], true) ?>"
+            <form id="form-perpage" class="form-inline" action="<?= Url::to(['producttype/index'], true) ?>"
                   method="post">
                 <div class="form-group">
                     <label>แสดง </label>
@@ -54,90 +53,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center'],
             ],
-            'order_no',
-            [
-                'attribute' => 'order_date',
-                'value' => function ($data) {
-                    return date('d/m/Y', strtotime($data->order_date));
-                }
-            ],
-//            [
-//                'attribute' => 'customer_id',
-//                'value' => function ($data) {
-//                    return \backend\models\Customer::findName($data->customer_id);
-//                }
-//            ],
-//            'customer_type',
-//            'customer_name',
-            [
-                'attribute' => 'order_channel_id',
-                'value' => function ($data) {
-                    return \backend\models\Deliveryroute::findName($data->order_channel_id);
-                }
-            ],
-            [
-                'attribute' => 'car_ref_id',
-                'value' => function ($data) {
-                    return \backend\models\Car::findName($data->car_ref_id);
-                }
-            ],
-            [
-                'label' => 'ยอดรับชำระ',
-                'headerOptions' => ['style' => 'text-align: right'],
-                'contentOptions' => ['style' => 'text-align: right'],
-                'value' => function ($data) {
-                    return 0;
-                }
-            ],
-            [
-                'label' => 'เครดิต/เชื่อ',
-                'headerOptions' => ['style' => 'text-align: right'],
-                'contentOptions' => ['style' => 'text-align: right'],
-                'value' => function ($data) {
-                    return number_format(\backend\models\Orders::findordercredit($data->id));
-                }
-            ],
-            [
-                'label' => 'สด',
-                'headerOptions' => ['style' => 'text-align: right'],
-                'contentOptions' => ['style' => 'text-align: right'],
-                'value' => function ($data) {
-                    return number_format(\backend\models\Orders::findordercash($data->id));
-                }
-            ],
-            [
-                'attribute' => 'order_total_amt',
-                'headerOptions' => ['style' => 'text-align: right'],
-                'contentOptions' => ['style' => 'text-align: right'],
-                'value' => function ($data) {
-                    return number_format($data->order_total_amt);
-                }
-            ],
-            //'vat_per',
-            //'order_total_amt',
-            //'emp_sale_id',
-            //'car_ref_id',
-            //'order_channel_id',
-            [
-                'attribute' => 'status',
-                'format' => 'raw',
-                'headerOptions' => ['style' => 'text-align: center'],
-                'contentOptions' => ['style' => 'text-align: center'],
-                'value' => function ($data) {
-                    if ($data->status == 1) {
-                        return '<div class="badge badge-success">Open</div>';
-                    } else {
-                        return '<div class="badge badge-secondary">Closed</div>';
-                    }
-                }
-            ],
-            //'company_id',
-            //'branch_id',
-            //'created_at',
+            'trans_date',
+            'journal_no',
+            'customer_id',
+            'created_at',
+            //'crated_by',
             //'updated_at',
-            //'created_by',
             //'updated_by',
-
+            //'status',
             [
 
                 'header' => 'ตัวเลือก',

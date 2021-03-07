@@ -43,7 +43,7 @@ $mpdf->AddPageByArray([
         body {
             font-family: sarabun;
             /*font-family: garuda;*/
-            font-size: 14px;
+            font-size: 18px;
         }
 
         table.table-header {
@@ -111,12 +111,12 @@ $mpdf->AddPageByArray([
 </table>
 <table class="table-header" width="100%">
     <tr>
-        <td style="font-size: 18px;text-align: center;vertical-align: bottom">
+        <td style="font-size: 20px;text-align: center;vertical-align: bottom">
             <h5>น้ำแข็ง</h5>
         </td>
     </tr>
     <tr>
-        <td style="font-size: 18px;text-align: center;vertical-align: top">
+        <td style="font-size: 20px;text-align: center;vertical-align: top">
             <h5>ใบสั่งจ่าย</h5>
         </td>
     </tr>
@@ -124,18 +124,18 @@ $mpdf->AddPageByArray([
 </table>
 <table class="table-header" width="100%">
     <tr>
-        <td style="font-size: 16px;text-align: left">
+        <td style="font-size: 18px;text-align: left">
             เลขที่ <span><?= $model->order_no; ?></span>
         </td>
-        <td style="font-size: 16px;text-align: left">
+        <td style="font-size: 18px;text-align: left">
             วันที่ <span><?= date('d/m/Y', strtotime($model->order_date)); ?></span>
         </td>
     </tr>
     <tr>
-        <td style="font-size: 16px;text-align: left">
+        <td style="font-size: 18px;text-align: left">
             ลูกค้า <span><?= \backend\models\Customer::findName($model->customer_id); ?></span>
         </td>
-        <td style="font-size: 16px;text-align: left">
+        <td style="font-size: 18px;text-align: left">
             เวลา <span><?= date('H:i:s', strtotime($model->order_date)); ?></span>
         </td>
     </tr>
@@ -169,28 +169,28 @@ $mpdf->AddPageByArray([
     <?php endforeach; ?>
     <tfoot>
     <tr>
-        <td style="font-size: 16px;border-top: 1px dotted gray">จำนวนรายการ</td>
-        <td style="font-size: 16px;border-top: 1px dotted gray;text-align: center"><?= number_format($total_qty) ?></td>
-        <td style="font-size: 16px;border-top: 1px dotted gray;text-align: center"></td>
-        <td style="font-size: 16px;border-top: 1px dotted gray;text-align: right"><?= number_format($total_amt) ?></td>
+        <td style="font-size: 18px;border-top: 1px dotted gray">จำนวนรายการ</td>
+        <td style="font-size: 18px;border-top: 1px dotted gray;text-align: center"><?= number_format($total_qty) ?></td>
+        <td style="font-size: 18px;border-top: 1px dotted gray;text-align: center"></td>
+        <td style="font-size: 18px;border-top: 1px dotted gray;text-align: right"><?= number_format($total_amt, 2) ?></td>
     </tr>
     <tr>
-        <td style="font-size: 16px;">ส่วนลด</td>
+        <td style="font-size: 18px;">ส่วนลด</td>
         <td></td>
         <td></td>
-        <td style="font-size: 16px;text-align: right"><?= number_format($discount) ?></td>
+        <td style="font-size: 18px;text-align: right"><?= number_format($discount) ?></td>
     </tr>
     <tr>
-        <td style="font-size: 16px;">จำนวนสุทธิ</td>
+        <td style="font-size: 18px;">จำนวนสุทธิ</td>
         <td></td>
         <td></td>
-        <td style="font-size: 16px;text-align: right"> <?= number_format($total_amt - $discount) ?></td>
+        <td style="font-size: 18px;text-align: right"> <?= number_format($total_amt - $discount) ?></td>
     </tr>
     <tr>
-        <td style="font-size: 16px;">ทอนเงิน</td>
+        <td style="font-size: 18px;">ทอนเงิน</td>
         <td></td>
         <td></td>
-        <td style="font-size: 16px;text-align: right"> <?= number_format($change) ?></td>
+        <td style="font-size: 18px;text-align: right"> <?= number_format($change) ?></td>
     </tr>
     </tfoot>
 </table>
@@ -199,9 +199,11 @@ $mpdf->AddPageByArray([
 </table>
 <table class="table-header">
     <tr>
-        <td style="font-size: 16px;">แคชเชียร์ .......................................................</td>
+        <td style="font-size: 18px;">แคชเชียร์ .......................................................</td>
     </tr>
 </table>
+<br/>
+<br/>
 <!--<script src="../web/plugins/jquery/jquery.min.js"></script>-->
 <!--<script>-->
 <!--    $(function(){-->
