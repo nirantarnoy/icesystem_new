@@ -64,35 +64,35 @@ if ($show_pos_date != null) {
             //'tableOptions' => ['class' => 'table table-hover'],
             'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b></div>',
             'columns' => [
-                [
-                    'class' => 'yii\grid\SerialColumn',
-                    'headerOptions' => ['style' => 'text-align: center'],
-                    'contentOptions' => ['style' => 'text-align: center'],
-                ],
+//                [
+//                    'class' => 'yii\grid\SerialColumn',
+//                    'headerOptions' => ['style' => 'text-align: center'],
+//                    'contentOptions' => ['style' => 'text-align: center'],
+//                ],
                 [
                     'attribute' => 'code',
                     'label' => 'รหัสสินค้า',
                     'group' => true,
                     'groupHeader' => function ($model, $key, $index, $widget) { // Closure method
                         return [
-                            //'mergeColumns' => [[1, 1]], // columns to merge in summary
+                            'mergeColumns' => [[0, 1]], // columns to merge in summary
                             'content' => [             // content to show in each summary cell
                                 1 => 'ยอดสินค้า (' . $model->code . ')',
+                                3 => GridView::F_SUM,
                                 4 => GridView::F_SUM,
-                                5 => GridView::F_SUM,
 //                        7 => GridView::F_SUM,
                             ],
                             'contentFormats' => [      // content reformatting for each summary cell
                                 //4 => ['format' => 'number', 'decimals' => 0],
+                                3 => ['format' => 'number', 'decimals' => 0],
                                 4 => ['format' => 'number', 'decimals' => 0],
-                                5 => ['format' => 'number', 'decimals' => 0],
 //                        7 => ['format' => 'number', 'decimals' => 0],
                             ],
                             'contentOptions' => [      // content html attributes for each summary cell
                                 1 => ['style' => 'font-variant:small-caps'],
                                 //4 => ['style' => 'text-align:right'],
+                                3 => ['style' => 'text-align:right'],
                                 4 => ['style' => 'text-align:right'],
-                                5 => ['style' => 'text-align:right'],
 //                        7 => ['style' => 'text-align:right'],
                             ],
                             // html attributes for group summary row

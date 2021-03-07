@@ -10,8 +10,8 @@ $prod_type_data = \backend\models\Producttype::find()->all();
 $prod_status = \backend\helpers\ProductStatus::asArrayObject();
 //print_r($prod_status);
 
-$sale_status_data = [['id'=>1,'name'=>'ขาย'],['id'=>2,'name'=>'ไม่ขาย']];
-$stock_type_data = [['id'=>1,'name'=>'ตัดสต๊อก'],['id'=>2,'name'=>'ไม่ตัดสต๊อก']];
+$sale_status_data = [['id' => 1, 'name' => 'ขาย'], ['id' => 2, 'name' => 'ไม่ขาย']];
+$stock_type_data = [['id' => 1, 'name' => 'ตัดสต๊อก'], ['id' => 2, 'name' => 'ไม่ตัดสต๊อก']];
 ?>
 
 <div class="product-form">
@@ -82,10 +82,10 @@ $stock_type_data = [['id'=>1,'name'=>'ตัดสต๊อก'],['id'=>2,'name'
             <label for=""><?= $model->getAttributeLabel('sale_status') ?></label>
             <select name="sale_status" class="form-control sale-status" id=""
                     onchange="">
-                <?php for ($i=0;$i<=count($sale_status_data)-1;$i++): ?>
+                <?php for ($i = 0; $i <= count($sale_status_data) - 1; $i++): ?>
                     <?php
                     $selected = '';
-                    if ($sale_status_data[$i]['id'] == $model->sale_status){
+                    if ($sale_status_data[$i]['id'] == $model->sale_status) {
                         $selected = 'selected';
                     }
                     ?>
@@ -97,7 +97,7 @@ $stock_type_data = [['id'=>1,'name'=>'ตัดสต๊อก'],['id'=>2,'name'
             <label for=""><?= $model->getAttributeLabel('stock_type') ?></label>
             <select name="stock_type" class="form-control stock_type" id=""
                     onchange="">
-                <?php for ($i=0;$i<=count($stock_type_data)-1;$i++): ?>
+                <?php for ($i = 0; $i <= count($stock_type_data) - 1; $i++): ?>
                     <?php
                     $selected = '';
                     if ($stock_type_data[$i]['id'] == $model->stock_type)
@@ -108,7 +108,7 @@ $stock_type_data = [['id'=>1,'name'=>'ตัดสต๊อก'],['id'=>2,'name'
             </select>
         </div>
         <div class="col-lg-4">
-            <?php echo $form->field($model, 'is_pos_item')->widget(\toxor88\switchery\Switchery::className(),['options'=>['label'=>'','class'=>'form-control']])->label() ?>
+            <?php echo $form->field($model, 'is_pos_item')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label() ?>
         </div>
     </div>
     <br>
@@ -134,6 +134,13 @@ $stock_type_data = [['id'=>1,'name'=>'ตัดสต๊อก'],['id'=>2,'name'
                 <?php endfor; ?>
             </select>
         </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <?= $form->field($model, 'item_pos_seq')->textInput() ?>
+        </div>
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4"></div>
     </div>
     <hr style="border-top: 1px dashed black">
     <div class="row">
@@ -174,7 +181,7 @@ $stock_type_data = [['id'=>1,'name'=>'ตัดสต๊อก'],['id'=>2,'name'
 
 </div>
 
-<form id="form-delete-photo" action="<?=\yii\helpers\Url::to(['product/deletephoto'], true)?>" method="post">
+<form id="form-delete-photo" action="<?= \yii\helpers\Url::to(['product/deletephoto'], true) ?>" method="post">
     <input type="hidden" class="delete-photo-id" name="delete_id" value="">
 </form>
 
