@@ -121,7 +121,7 @@ class OrdersposSearch extends Orders
                 }
             }
 
-            $query->andFilterWhere(['AND', ['>=', 'order_date', date('Y-m-d', strtotime($f_date))], ['<=', 'order_date', date('Y-m-d', strtotime($t_date))]]);
+            $query->andFilterWhere(['AND', ['>=', 'date(order_date)', date('Y-m-d', strtotime($f_date))], ['<=', 'date(order_date)', date('Y-m-d', strtotime($t_date))]]);
 
         }
 
