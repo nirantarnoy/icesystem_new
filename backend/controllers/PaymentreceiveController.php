@@ -154,6 +154,6 @@ class PaymentreceiveController extends Controller
             }
         }
 
-        echo $html;
+        return $html;
     }
 }
