@@ -249,6 +249,7 @@ class PosController extends Controller
             //  unlink('../web/uploads/slip/slip.pdf');
         }
 
+
         $searchModel = new OrdersposSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);

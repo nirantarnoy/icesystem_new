@@ -52,6 +52,7 @@ if ($show_pos_date != null) {
             'hover' => true,
             'pjax' => true,
             'panel' => ['type' => 'info', 'heading' => 'รายงานแสดงยอดขายประจำวัน'],
+            'toggleDataContainer' => ['class' => 'btn-group mr-2'],
             'emptyCell' => '-',
             'layout' => "{items}\n{summary}\n<div class='text-center'>{pager}</div>",
             'summary' => "แสดง {begin} - {end} ของทั้งหมด {totalCount} รายการ",
@@ -74,7 +75,7 @@ if ($show_pos_date != null) {
                     'group' => true,
                     'groupHeader' => function ($model, $key, $index, $widget) { // Closure method
                         return [
-                            'mergeColumns' => [[1, 2]], // columns to merge in summary
+                            //'mergeColumns' => [[1, 1]], // columns to merge in summary
                             'content' => [             // content to show in each summary cell
                                 1 => 'ยอดสินค้า (' . $model->code . ')',
                                 4 => GridView::F_SUM,
@@ -140,6 +141,7 @@ if ($show_pos_date != null) {
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_SUM,
                     'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
+                    'subGroupOf' => 1
                 ],
             ],
             'pager' => ['class' => LinkPager::className()],

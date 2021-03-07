@@ -7,11 +7,11 @@ $this->title = 'ประวัติการขาย POS';
 
 $filename = "empty";
 
-if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->session->getFlash('after-print'))){
+if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->session->getFlash('after-print'))) {
     $f_name = \Yii::$app->session->getFlash('msg-index');
     echo $f_name;
-    if (file_exists('../web/uploads/slip/'.$f_name)) {
-        $filename = "../web/uploads/slip/".$f_name;
+    if (file_exists('../web/uploads/slip/' . $f_name)) {
+        $filename = "../web/uploads/slip/" . $f_name;
     }
 }
 //unlink('../web/uploads/slip/slip.pdf');
@@ -24,6 +24,8 @@ if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->sess
     </div>
 </div>
 <div style="height: 5px;"></div>
+<?php echo $this->render('_search', ['model' => $searchModel]); ?>
+
 <div class="row">
     <div class="col-lg-12">
         <?= GridView::widget([
@@ -112,7 +114,13 @@ if(!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->sess
                 //'branch_id',
                 //'created_at',
                 //'updated_at',
-                //'created_by',
+                [
+                    'attribute' => 'created_by',
+                    'label' => 'พนักงาน',
+                    'value' => function ($data) {
+                        return \backend\models\User::findName($data->created_by);
+                    }
+                ],
                 //'updated_by',
 
                 [
