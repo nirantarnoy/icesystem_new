@@ -757,41 +757,41 @@ $js = <<<JS
       $("#btn-general-customer").click(function(){
           $("#sale-by-original").show();
           $("#sale-by-customer").hide();
-          price_group_name = '';
-          $.ajax({
-              type: "post",
-              dataType: "json",
-              url: "$url_to_get_origin_price",
-              data: {},
-              success: function(data){
-                  if(data.length > 0){
-                      var i = -1;
-                      $(".product-items").each(function(){
-                          i++;
-                          var line_product_id = $(this).find(".list-item-product-id").val();
-                          if(line_product_id == data[i]['product_id']){
-                              $(".card").css("background-color","white"); 
-                              $(this).find(".list-item-price").val(data[i]['sale_price']);
-                              $(this).find(".item-price").html(data[i]['sale_price']);
-                          }
-                      });
-                          
-                  }else{
-                      alert('no price');
-                  }
-               },
-               error: function(err) {
-                  alert('eror');
-               }
-             });
-        
-          if(price_group_name !=''){
-              $(".text-price-type").show();
-              $(".badge-text-price-type").html(price_group_name);
-          }else{
-              $(".text-price-type").hide();
-              $(".badge-text-price-type").html('');
-          }
+//          price_group_name = '';
+//          $.ajax({
+//              type: "post",
+//              dataType: "json",
+//              url: "$url_to_get_origin_price",
+//              data: {},
+//              success: function(data){
+//                  if(data.length > 0){
+//                      var i = -1;
+//                      $(".product-items").each(function(){
+//                          i++;
+//                          var line_product_id = $(this).find(".list-item-product-id").val();
+//                          if(line_product_id == data[i]['product_id']){
+//                              $(".card").css("background-color","white"); 
+//                              $(this).find(".list-item-price").val(data[i]['sale_price']);
+//                              $(this).find(".item-price").html(data[i]['sale_price']);
+//                          }
+//                      });
+//                          
+//                  }else{
+//                      alert('no price');
+//                  }
+//               },
+//               error: function(err) {
+//                  alert('eror');
+//               }
+//             });
+//        
+//          if(price_group_name !=''){
+//              $(".text-price-type").show();
+//              $(".badge-text-price-type").html(price_group_name);
+//          }else{
+//              $(".text-price-type").hide();
+//              $(".badge-text-price-type").html('');
+//          }
           
         $(this).removeClass('btn-outline-secondary');
         $(this).addClass('btn-success');
