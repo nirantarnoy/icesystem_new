@@ -46,7 +46,27 @@ class Paymentreceive extends \common\models\PaymentReceive
             ],
         ];
     }
-
+    public static function getLastNo($date)
+    {
+        //   $model = Orders::find()->MAX('order_no');
+        $model = Paymentreceive::find()->where(['date(trans_date)' => date('Y-m-d', strtotime($date))])->MAX('journal_no');
+        $pre = "AR";
+        if ($model != null) {
+            $prefix = $pre . '-' . substr(date("Y"), 2, 2) . date('m', strtotime($date)) . date('d', strtotime($date)) . '-';
+            $cnum = substr((string)$model, 10, strlen($model));
+            $len = strlen($cnum);
+            $clen = strlen($cnum + 1);
+            $loop = $len - $clen;
+            for ($i = 1; $i <= $loop; $i++) {
+                $prefix .= "0";
+            }
+            $prefix .= $cnum + 1;
+            return $prefix;
+        } else {
+            $prefix = $pre . '-' . substr(date("Y"), 2, 2) . date('m', strtotime($date)) . date('d', strtotime($date)) . '-';
+            return $prefix . '0001';
+        }
+    }
 //    public function findUnitname($id){
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';

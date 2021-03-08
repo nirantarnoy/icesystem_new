@@ -68,8 +68,21 @@ class PaymentreceiveController extends Controller
     {
         $model = new Paymentreceive();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $xdate = explode('/',$model->trans_date);
+            $t_date = date('Y-m-d H:i:s');
+            if(count($xdate)>1){
+                $t_date = $xdate[2].'-'.$xdate[1].'-'.$xdate[0].' '.date('H:i:s');
+            }
+
+            $model->trans_date = date('Y-m-d H:i:s', strtotime($t_date));
+            $model->journal_no = $model->getLastNo();
+            if ($model->save()) {
+                $session = Yii::$app->session;
+                $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
+                return $this->redirect(['index']);
+            }
+
         }
 
         return $this->render('create', [
@@ -139,19 +152,19 @@ class PaymentreceiveController extends Controller
                 $i = 0;
                 foreach ($model as $value) {
                     $i += 1;
-                    $total_amount = $total_amount + ($value->line_total==null?0:$value->line_total);
+                    $total_amount = $total_amount + ($value->line_total == null ? 0 : $value->line_total);
                     $html .= '<tr>';
                     $html .= '<td style="text-align: center">' . $i . '</td>';
-                    $html .= '<td>' . \backend\models\Orders::getNumber($value->order_id) . '</td>';
-                    $html .= '<td>' . date('d/m/Y', strtotime($value->order_date)) . '</td>';
-                    $html .= '<td><select name="" id=""  class="form-control"><option value="">--เลือกช่องทางชำระ--</option><option value="">เงินสด</option><option value="">โอนธนาคาร</option></select></td>';
+                    $html .= '<td style="text-align: center">' . \backend\models\Orders::getNumber($value->order_id) . '</td>';
+                    $html .= '<td style="text-align: center">' . date('d/m/Y', strtotime($value->order_date)) . '</td>';
+                    $html .= '<td><select name="" id=""  class="form-control"><option value="">เงินสด</option><option value="">โอนธนาคาร</option></select></td>';
 //                    $html .= '<td style="text-align: center"><input type="file" class="form-control"></td>';
-                    $html .= '<td><input type="text" class="form-control line-remain" style="text-align: right" name="line_remain[]" value="' . number_format($value->line_total,2) . '" readonly></td>';
+                    $html .= '<td><input type="text" class="form-control line-remain" style="text-align: right" name="line_remain[]" value="' . number_format($value->line_total, 2) . '" readonly></td>';
                     $html .= '<td><input type="number" class="form-control line-pay" name="line_pay[]" value=""></td>';
                     $html .= '</tr>';
 
                 }
-                $html.='<tr><td colspan="4" style="text-align: right">รวม</td><td style="text-align: right;font-weight: bold">'.number_format($total_amount,2).'</td><td></td></tr>';
+                $html .= '<tr><td colspan="4" style="text-align: right">รวม</td><td style="text-align: right;font-weight: bold">' . number_format($total_amount, 2) . '</td><td></td></tr>';
             }
         }
 

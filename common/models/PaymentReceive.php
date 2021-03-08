@@ -46,9 +46,9 @@ class PaymentReceive extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'trans_date' => 'Trans Date',
-            'journal_no' => 'Journal No',
-            'customer_id' => 'Customer ID',
+            'trans_date' => 'วันที่รับชำระ',
+            'journal_no' => 'เลขที่',
+            'customer_id' => 'ลูกค้า',
             'created_at' => 'Created At',
             'crated_by' => 'Crated By',
             'updated_at' => 'Updated At',

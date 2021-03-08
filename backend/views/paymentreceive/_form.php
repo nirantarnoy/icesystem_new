@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+
 $t_date = date('d/m/Y');
 ?>
 
@@ -13,8 +14,12 @@ $t_date = date('d/m/Y');
             <?= $form->field($model, 'journal_no')->textInput(['maxlength' => true, 'readonly' => 'readonly']) ?>
         </div>
         <div class="col-lg-4">
+            <?php $model->trans_date = $model->isNewRecord ? $t_date : date('d/m/Y', strtotime($t_date)); ?>
             <?= $form->field($model, 'trans_date')->widget(\kartik\date\DatePicker::className(), [
-                'data' => $t_date,
+                'pluginOptions' => [
+                    'format' => 'dd/mm/yyyy',
+                    'todayHighlight' => true
+                ]
             ]) ?>
         </div>
         <div class="col-lg-4">
@@ -42,19 +47,19 @@ $t_date = date('d/m/Y');
                     <th style="text-align: center">เลขที่</th>
                     <th style="text-align: center">วันที่</th>
                     <th style="text-align: center">ช่องทางชำระ</th>
-<!--                    <th style="text-align: center">แนบเอกสาร</th>-->
+                    <!--                    <th style="text-align: center">แนบเอกสาร</th>-->
                     <th style="text-align: center">ค้างชำระ</th>
                     <th style="text-align: center">ยอดชำระ</th>
                 </tr>
                 </thead>
                 <tbody>
-<!--                <tr>-->
-<!--                    <td></td>-->
-<!--                    <td></td>-->
-<!--                    <td></td>-->
-<!--                    <td></td>-->
-<!--                    <td></td>-->
-<!--                </tr>-->
+                <!--                <tr>-->
+                <!--                    <td></td>-->
+                <!--                    <td></td>-->
+                <!--                    <td></td>-->
+                <!--                    <td></td>-->
+                <!--                    <td></td>-->
+                <!--                </tr>-->
                 </tbody>
             </table>
         </div>

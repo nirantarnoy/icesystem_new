@@ -103,10 +103,10 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                                                        value="<?= $value->sale_price ?>">
                                                 <div class="btn-group" style="width: 100%">
                                                     <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"
-                                                         onclick="reducecart2($(this))"><i class="fa fa-minus"></i>
+                                                         onclick="reducecartdivcustomer($(this))"><i class="fa fa-minus"></i>
                                                     </div>
                                                     <div class="btn btn-outline-primary btn-sm" data-var="<?= $i ?>"
-                                                         onclick="addcart2($(this))">
+                                                         onclick="addcartdivcustomer($(this))">
                                                         <i class="fa fa-plus"></i></div>
                                                 </div>
                                             </div>
@@ -1148,7 +1148,88 @@ function addcart2(e){
 }
 function reducecart2(e){
     var ids = e.attr('data-var');
+    var prod_id = $(".list-item-id-"+ids).val();
+    var prod_code = $(".list-item-code-"+ids).val();
+    var prod_name = $(".list-item-name-"+ids).val();
+    // alert(prod_id);
+    var qty = -1;
+    var price = $(".list-item-price-"+ids).val();
+    var tr = $(".table-cart tbody tr:last");
+     
+    var check_old = check_dup(prod_id);
+    if(check_old == 1){
+        $(".table-cart tbody tr").each(function(){
+        var id = $(this).closest('tr').find('.cart-product-id').val();
+        if(id == prod_id){
+            var old_qty = $(this).closest('tr').find('.cart-qty').val();
+            var new_qty = parseFloat(old_qty) + parseFloat(qty);
+            if(new_qty < 0){return false;}
+            $(this).closest('tr').find('.cart-qty').val(new_qty);
+            line_cal($(this));
+            
+        }
+     });
+    }
+    cal_linenum();
+    calall();
+   // $("#posModal").modal('hide');
+}
+
+function addcartdivcustomer(e){
+    var ids = e.attr('data-var');
     
+    var prod_id = $(".list-item-id-"+ids).val();
+    var prod_code = $(".list-item-code-"+ids).val();
+    var prod_name = $(".list-item-name-"+ids).val();
+     //alert(prod_id);
+    var qty = 1;
+    var price =$(".list-item-price-"+ids).val();
+    var tr = $(".table-cart tbody tr:last");
+     
+    var check_old = check_dup(prod_id);
+    if(check_old == 1){
+        $(".table-cart tbody tr").each(function(){
+        var id = $(this).closest('tr').find('.cart-product-id').val();
+        if(id == prod_id){
+            var old_qty = $(this).closest('tr').find('.cart-qty').val();
+            var new_qty = parseFloat(old_qty) + parseFloat(qty);
+            $(this).closest('tr').find('.cart-qty').val(new_qty);
+            line_cal($(this));
+        }
+     });
+    }else{
+        if(tr.closest('tr').find('.cart-product-id').val() == ''){
+            // alert('has');
+            tr.closest('tr').find('.cart-product-id').val(prod_id);
+            tr.closest('tr').find('.cart-qty').val(qty);
+            tr.closest('tr').find('.cart-price').val(price);
+            tr.closest('tr').find('td:eq(1)').html(prod_code);
+            tr.closest('tr').find('td:eq(2)').html(prod_name);
+            tr.closest('tr').find('td:eq(4)').html(price);
+
+            tr.closest('tr').find('.cart-qty').prop("disabled","");
+            tr.closest('tr').find('.removecart-item').show();
+            $(".div-payment").show();
+            line_cal(tr);
+        }else{
+            var clone = tr.clone();
+            clone.find(".cart-product-id").val(prod_id);
+            clone.find('.cart-qty').val(qty);
+            clone.find('.cart-price').val(price);
+            clone.find('td:eq(1)').html(prod_code);
+            clone.find('td:eq(2)').html(prod_name);
+            clone.find('td:eq(4)').html(price);
+            tr.after(clone);
+            line_cal(clone);
+        }
+    }
+    cal_linenum();
+    calall();
+    $(".btn-cancel-cart").show();
+   // $("#posModal").modal('hide');
+}
+function reducecartdivcustomer(e){
+    var ids = e.attr('data-var');
     var prod_id = $(".list-item-id-"+ids).val();
     var prod_code = $(".list-item-code-"+ids).val();
     var prod_name = $(".list-item-name-"+ids).val();
