@@ -206,6 +206,33 @@ class PosController extends Controller
                         }
                     }
                     $this->updateorderpayment($model_order->id, $pay_total_amount, $pay_amount);
+                }else{
+                    $model = new \backend\models\Paymenttrans();
+                    $model->trans_no = $model->getLastNo();
+                    $model->trans_date = date('Y-m-d H:i:s');
+                    $model->order_id = $model_order->id;
+                    $model->status = 0;
+                    if ($model->save()) {
+                        if ($customer_id > 0) {
+                            //$pay_method_name = \backend\models\Paymentmethod::findName($pay_method[$i]);
+                            $model_line = new \backend\models\Paymenttransline();
+                            $model_line->trans_id = $model->id;
+                            $model_line->customer_id = $customer_id;
+                            $model_line->payment_method_id = $payment_type;
+                            //   $model_line->payment_term_id = $pay_term[$i] == null ? 0 : $pay_term[$i];
+                            $model_line->payment_date = date('Y-m-d H:i:s');
+                            $model_line->payment_amount = $pay_amount;
+                            $model_line->total_amount = $pay_total_amount;
+                            $model_line->change_amount = $pay_change;
+                            $model_line->order_ref_id = $model_order->id;
+                            $model_line->status = 1;
+                            $model_line->doc = '';
+                            if ($model_line->save(false)) {
+                                //$res += 1;
+                            }
+                        }
+                    }
+                   // $this->updateorderpayment($model_order->id, $pay_total_amount, $pay_amount);
                 }
 
                 //  if($this->printindex(31)){
