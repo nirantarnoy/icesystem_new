@@ -244,11 +244,11 @@ class PosController extends Controller
                     if ($change_amt != null) {
                         $ch_amt = $change_amt->change_amount;
                     }
-                    $this->render('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt]);
-
-                    $session = \Yii::$app->session;
-                    $session->setFlash('msg-index', 'slip_index.pdf');
-                    $session->setFlash('after-save', true);
+//                    $this->render('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt]);
+//
+//                    $session = \Yii::$app->session;
+//                    $session->setFlash('msg-index', 'slip_index.pdf');
+//                    $session->setFlash('after-save', true);
                 }
             }
         }
@@ -373,14 +373,14 @@ class PosController extends Controller
     public function actionPrint($id)
     {
         if ($id) {
-            $model = \backend\models\Orders::find()->where(['id' => $id])->one();
-            $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
-            $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
-            //   $content =  $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
-            $session = \Yii::$app->session;
-            $session->setFlash('msg-index', 'slip.pdf');
-            $session->setFlash('after-print', true);
-            $this->redirect(['pos/salehistory']);
+//            $model = \backend\models\Orders::find()->where(['id' => $id])->one();
+//            $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
+//            $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
+//            //   $content =  $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
+//            $session = \Yii::$app->session;
+//            $session->setFlash('msg-index', 'slip.pdf');
+//            $session->setFlash('after-print', true);
+//            $this->redirect(['pos/salehistory']);
         }
 
     }
