@@ -90,7 +90,7 @@ class OrdersSearch extends Orders
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
             $this->order_date = date('Y-m-d', strtotime($sale_date));
-            $query->andFilterWhere(['order_date' => date('Y-m-d', strtotime($sale_date))]);
+            $query->andFilterWhere(['date(order_date)' => date('Y-m-d', strtotime($sale_date))]);
         }
 
         if ($this->globalSearch != '') {
