@@ -94,7 +94,7 @@ class OrdersSearch extends Orders
         }
 
         if ($this->globalSearch != '') {
-            $query->orFilterWhere(['like', 'order_no', $this->globalSearch])
+            $query->andFilterWhere(['like', 'order_no', $this->globalSearch])
                 ->orFilterWhere(['like', 'customer_name', $this->globalSearch])
                 ->orFilterWhere(['like', 'car.name', $this->globalSearch])
                 ->orFilterWhere(['like', 'delivery_route.code', $this->globalSearch]);
