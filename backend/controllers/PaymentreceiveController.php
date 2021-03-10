@@ -8,7 +8,7 @@ use backend\models\PaymentreceiveSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\web\UploadedFile;
 
 class PaymentreceiveController extends Controller
 {
@@ -69,15 +69,50 @@ class PaymentreceiveController extends Controller
         $model = new Paymentreceive();
 
         if ($model->load(Yii::$app->request->post())) {
-            $xdate = explode('/',$model->trans_date);
+
+            $line_order = \Yii::$app->request->post('line_order_id');
+            $line_pay_type = \Yii::$app->request->post('line_pay_type');
+            $line_pay = \Yii::$app->request->post('line_pay');
+            $line_number = \Yii::$app->request->post('line_number');
+
+            $uploaded_file = UploadedFile::getInstancesByName('line_doc');
+
+            $xdate = explode('/', $model->trans_date);
             $t_date = date('Y-m-d H:i:s');
-            if(count($xdate)>1){
-                $t_date = $xdate[2].'-'.$xdate[1].'-'.$xdate[0].' '.date('H:i:s');
+            if (count($xdate) > 1) {
+                $t_date = $xdate[2] . '-' . $xdate[1] . '-' . $xdate[0] . ' ' . date('H:i:s');
             }
 
             $model->trans_date = date('Y-m-d H:i:s', strtotime($t_date));
-            $model->journal_no = $model->getLastNo();
+            $model->journal_no = $model->getLastNo(date('Y-m-d'));
+            $model->status = 1;
             if ($model->save()) {
+                if ($line_order != null) {
+                    if (count($line_order) > 0) {
+                        for ($i = 0; $i <= count($line_order) - 1; $i++) {
+                            $model_line = new \common\models\PaymentReceiveLine();
+                            $model_line->order_id = $line_order[$i];
+                            $model_line->payment_receive_id = $model->id;
+                            $model_line->payment_amount = $line_pay[$i];
+                            $model_line->status = 1;
+
+                            if($i==$line_number[$i]){
+                                if (!empty($uploaded_file)) {
+                                    foreach ($uploaded_file as $files) {
+                                        $file_name = time() . '.' . $files->getExtension();
+                                        $files->saveAs(Yii::getAlias('@backend') . '/web/uploads/files/receive/' . $file_name);
+                                        $model_line->doc = $file_name;
+                                    }
+                                }
+
+                            }
+
+                            if($model_line->save()){
+                                $this->updatePaymenttransline($model->customer_id,$line_order[$i],$line_pay[$i]);
+                            }
+                        }
+                    }
+                }
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
                 return $this->redirect(['index']);
@@ -90,6 +125,16 @@ class PaymentreceiveController extends Controller
         ]);
     }
 
+    public function updatePaymenttransline($customer_id, $order_id, $pay_amt){
+        if($customer_id != null && $order_id != null && $pay_amt > 0){
+            $model = \backend\models\Paymenttransline::find()->where(['customer_id'=>$customer_id,'order_ref_id'=>$order_id])->andFilterWhere(['payment_method_id'=>2])->one();
+            if($model){
+                $model->payment_amount = ($model->payment_amount + (float)$pay_amt);
+                $model->save();
+            }
+        }
+    }
+
     /**
      * Updates an existing Paymentreceive model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -100,13 +145,66 @@ class PaymentreceiveController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model_line = \common\models\PaymentReceiveLine::find()->where(['payment_receive_id'=>$id])->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $line_order = \Yii::$app->request->post('line_order_id');
+            $line_pay_type = \Yii::$app->request->post('line_pay_type');
+            $line_pay = \Yii::$app->request->post('line_pay');
+            $line_id = \Yii::$app->request->post('line_id');
+            $line_number = \Yii::$app->request->post('line_number');
+
+            $uploaded_file = UploadedFile::getInstancesByName('line_doc');
+
+            $xdate = explode('/', $model->trans_date);
+            $t_date = date('Y-m-d H:i:s');
+            if (count($xdate) > 1) {
+                $t_date = $xdate[2] . '-' . $xdate[1] . '-' . $xdate[0] . ' ' . date('H:i:s');
+            }
+
+            $model->trans_date = date('Y-m-d H:i:s', strtotime($t_date));
+            if ($model->save()) {
+                if ($line_order != null) {
+                    if (count($line_order) > 0) {
+                        for ($i = 0; $i <= count($line_order) - 1; $i++) {
+
+                            if($line_id != null){
+                                $model_chk = \common\models\PaymentReceiveLine::find()->where(['id'=>$line_id[$i]])->one();
+                                if($model_chk){
+                                    $model_chk->payment_amount = $line_pay[$i];
+                                }
+                            }else{
+                                $model_line = new \common\models\PaymentReceiveLine();
+                                $model_line->order_id = $line_order[$i];
+                                $model_line->payment_receive_id = $model->id;
+                                $model_line->payment_amount = $line_pay[$i];
+                                $model_line->status = 1;
+                                if($i==$line_number[$i]){
+                                    if (!empty($uploaded_file)) {
+                                        foreach ($uploaded_file as $files) {
+                                            $file_name = time() . '.' . $files->getExtension();
+                                            $files->saveAs(Yii::getAlias('@backend') . '/web/uploads/files/receive/' . $file_name);
+                                            $model_line->doc = $file_name;
+                                        }
+                                    }
+
+                                }
+
+                                $model_line->save();
+                            }
+                        }
+                    }
+                }
+                $session = Yii::$app->session;
+                $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('update', [
             'model' => $model,
+            'model_line'=> $model_line
         ]);
     }
 
@@ -146,20 +244,28 @@ class PaymentreceiveController extends Controller
         $html = '';
         $total_amount = 0;
         if ($cus_id) {
-            $model = \common\models\QuerySalePaySummary::find()->where(['customer_id' => $cus_id])->all();
+            $model = \common\models\QuerySalePaySummary::find()->where(['customer_id' => $cus_id])->andFilterWhere(['>','remain_amount',0])->all();
             if ($model) {
 //                $html = $cus_id;
                 $i = 0;
                 foreach ($model as $value) {
                     $i += 1;
-                    $total_amount = $total_amount + ($value->line_total == null ? 0 : $value->line_total);
+                    $total_amount = $total_amount + ($value->remain_amount == null ? 0 : $value->remain_amount);
                     $html .= '<tr>';
                     $html .= '<td style="text-align: center">' . $i . '</td>';
                     $html .= '<td style="text-align: center">' . \backend\models\Orders::getNumber($value->order_id) . '</td>';
                     $html .= '<td style="text-align: center">' . date('d/m/Y', strtotime($value->order_date)) . '</td>';
-                    $html .= '<td><select name="" id=""  class="form-control"><option value="">เงินสด</option><option value="">โอนธนาคาร</option></select></td>';
+                    $html .= '<td>
+                            <select name="line_pay_type[]" id=""  class="form-control" onchange="checkpaytype($(this))">
+                                <option value="0">เงินสด</option>
+                                <option value="1">โอนธนาคาร</option>
+                            </select>
+                            <input type="file" class="line-doc" name="line_doc[]" style="display: none">
+                            <input type="hidden" class="line-order-id" name="line_order_id[]" value="' . $value->order_id . '">
+                            <input type="hidden" class="line-number" name="line_number[]" value="'.($i-1).'">
+                    </td>';
 //                    $html .= '<td style="text-align: center"><input type="file" class="form-control"></td>';
-                    $html .= '<td><input type="text" class="form-control line-remain" style="text-align: right" name="line_remain[]" value="' . number_format($value->line_total, 2) . '" readonly></td>';
+                    $html .= '<td><input type="text" class="form-control line-remain" style="text-align: right" name="line_remain[]" value="' . number_format($value->remain_amount, 2) . '" readonly></td>';
                     $html .= '<td><input type="number" class="form-control line-pay" name="line_pay[]" value=""></td>';
                     $html .= '</tr>';
 

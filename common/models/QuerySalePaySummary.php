@@ -31,7 +31,7 @@ class QuerySalePaySummary extends \yii\db\ActiveRecord
         return [
             [['customer_id', 'order_id'], 'integer'],
             [['line_total', 'payment_amount'], 'number'],
-            [['order_date'], 'safe'],
+            [['order_date','remain_amount'], 'safe'],
         ];
     }
 

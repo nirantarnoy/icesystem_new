@@ -8,7 +8,8 @@ $t_date = date('d/m/Y');
 
 <div class="paymentreceive-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['id'=>'form-receive','enctype' => 'multipart/form-data']]); ?>
+    <input type="hidden" name="removelist" class="remove-list" value="">
     <div class="row">
         <div class="col-lg-4">
             <?= $form->field($model, 'journal_no')->textInput(['maxlength' => true, 'readonly' => 'readonly']) ?>
@@ -60,12 +61,38 @@ $t_date = date('d/m/Y');
                 <!--                    <td></td>-->
                 <!--                    <td></td>-->
                 <!--                </tr>-->
+                  <?php if($model_line != null):?>
+                  <?php $i=0;?>
+                     <?php foreach ($model_line as $value):?>
+                          <?php
+                             $i+=1;
+                             $order_date = \backend\models\Orders::getOrderdate($value->order_id);
+                          ?>
+                         <tr data-id="<?=$value->id?>">
+                              <td style="text-align: center"><?= $i?></td>
+                              <td style="text-align: center"><?= \backend\models\Orders::getNumber($value->order_id)?></td>
+                              <td style="text-align: center"><?= date('d/m/Y', strtotime($order_date)) ?></td>
+                              <td>
+                                  <select name="line_pay_type[]" id=""  class="form-control" onchange="checkpaytype($(this))">
+                                      <option value="0">เงินสด</option>
+                                      <option value="1">โอนธนาคาร</option>
+                                  </select>
+                                  <input type="file" class="line-doc" name="line_doc[]" style="display: none">
+                                  <input type="hidden" class="line-order-id" name="line_order_id[]" value="<?=$value->order_id ?>">
+                                  <input type="hidden" class="line-number" name="line_number[]" value="<?=($i-1)?>">
+                                  <input type="hidden" class="line-id" name="line_id[]" value="<?=$value->id?>">
+                              </td>
+                              <td><input type="text" class="form-control line-remain" style="text-align: right" name="line_remain[]" value="<?= number_format($value->remain_amount, 2) ?>" readonly></td>
+                              <td><input type="number" class="form-control line-pay" name="line_pay[]" value=""></td>
+                           </tr>
+                     <?php endforeach;?>
+                 <?php endif;?>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group show-save" style="display: none">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
@@ -77,6 +104,8 @@ $t_date = date('d/m/Y');
 <?php
 $url_to_get_receive = \yii\helpers\Url::to(['paymentreceive/getitem'], true);
 $js = <<<JS
+var removelist = [];
+var selecteditem = [];
 $(function(){
     
 });
@@ -91,11 +120,55 @@ function getpaymentrec(e){
               'data': {'customer_id': ids},
               'success': function(data) {
                   //  alert(data);
+                   if(data != ''){
+                       $(".show-save").show();
+                   }else{
+                       $(".show-save").hide();
+                   }
                    $(".table-list tbody").html(data);
                  }
               });
     }
 }
+function checkpaytype(e){
+    var type_ = e.val();
+    if(type_ == 1){
+         e.closest('tr').find('.line-doc').trigger('click');
+    }
+   
+    
+}
+
+function cal_linenum() {
+        var xline = 0;
+        $("#table-list tbody tr").each(function () {
+            xline += 1;
+            $(this).closest("tr").find("td:eq(0)").text(xline);
+        });
+    }
+    function removeline(e) {
+        if (confirm("ต้องการลบรายการนี้ใช่หรือไม่?")) {
+            if (e.parent().parent().attr("data-var") != '') {
+                removelist.push(e.parent().parent().attr("data-var"));
+                $(".remove-list").val(removelist);
+            }
+            // alert(removelist);
+
+            if ($("#table-list tbody tr").length == 1) {
+                $("#table-list tbody tr").each(function () {
+                    $(this).find(":text").val("");
+                   // $(this).find(".line-prod-photo").attr('src', '');
+                    $(this).find(".line-price").val(0);
+                    cal_num();
+                });
+            } else {
+                e.parent().parent().remove();
+            }
+            cal_linenum();
+           // cal_all();
+        }
+    }
+
 JS;
 
 $this->registerJs($js, static::POS_END);

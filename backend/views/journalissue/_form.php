@@ -387,28 +387,28 @@ function showfind(e){
       });
       return _has;
     }
-  function removeline(e) {
-        if (confirm("ต้องการลบรายการนี้ใช่หรือไม่?")) {
-            if (e.parent().parent().attr("data-var") != '') {
-                removelist.push(e.parent().parent().attr("data-var"));
-                $(".remove-list").val(removelist);
-            }
-            // alert(removelist);
-
-            if ($("#table-list tbody tr").length == 1) {
-                $("#table-list tbody tr").each(function () {
-                    $(this).find(":text").val("");
-                   // $(this).find(".line-prod-photo").attr('src', '');
-                    $(this).find(".line-price").val(0);
-                    cal_num();
-                });
-            } else {
-                e.parent().parent().remove();
-            }
-            cal_linenum();
-            cal_all();
-        }
-    }
+//  function removeline(e) {
+//        if (confirm("ต้องการลบรายการนี้ใช่หรือไม่?")) {
+//            if (e.parent().parent().attr("data-var") != '') {
+//                removelist.push(e.parent().parent().attr("data-var"));
+//                $(".remove-list").val(removelist);
+//            }
+//            // alert(removelist);
+//
+//            if ($("#table-list tbody tr").length == 1) {
+//                $("#table-list tbody tr").each(function () {
+//                    $(this).find(":text").val("");
+//                   // $(this).find(".line-prod-photo").attr('src', '');
+//                    $(this).find(".line-price").val(0);
+//                    cal_num();
+//                });
+//            } else {
+//                e.parent().parent().remove();
+//            }
+//            cal_linenum();
+//            cal_all();
+//        }
+//    }
 
     function cal_linenum() {
         var xline = 0;

@@ -215,10 +215,12 @@ class Orders extends \common\models\Orders
         $model = Orders::find()->where(['id' => $id])->one();
         return $model != null ? $model->order_no : '';
     }
-//    public function findName($id){
-//        $model = Unit::find()->where(['id'=>$id])->one();
-//        return count($model)>0?$model->name:'';
-//    }
+
+    public function getOrderdate($id)
+    {
+        $model = Orders::find()->where(['id' => $id])->one();
+        return $model != null ? $model->order_date : null;
+    }
 //    public function findUnitid($code){
 //        $model = Unit::find()->where(['name'=>$code])->one();
 //        return count($model)>0?$model->id:0;
