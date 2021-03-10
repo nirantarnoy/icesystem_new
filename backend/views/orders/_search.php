@@ -19,10 +19,10 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-lg-6">
             <div class="input-group">
                 <!--         <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>-->
-                <?= $form->field($model, 'globalSearch')->textInput(['placeholder' => 'เลขที่ขาย,สายส่ง,รถ', 'class' => 'form-control', 'aria-describedby' => 'basic-addon1'])->label(false) ?>
+                <?= $form->field($model, 'globalSearch')->textInput(['placeholder' => 'เลขที่ขาย,รถ', 'class' => 'form-control', 'aria-describedby' => 'basic-addon1'])->label(false) ?>
                 <?= $form->field($model, 'order_channel_id')->widget(\kartik\select2\Select2::className(), [
                     'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(), 'id', function ($data) {
                         return $data->code . ' ' . $data->name;
