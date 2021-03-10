@@ -6,15 +6,12 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Paymentreceive */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Paymentreceives', 'url' => ['index']];
+$this->title = $model->journal_no;
+$this->params['breadcrumbs'][] = ['label' => 'ชำระหนี้', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="paymentreceive-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
@@ -29,15 +26,27 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+            //    'id',
             'trans_date',
             'journal_no',
             'customer_id',
-            'created_at',
-            'crated_by',
-            'updated_at',
-            'updated_by',
-            'status',
+            [
+                'attribute' => 'customer_id',
+                'value' => function ($data) {
+                    return \backend\models\Customer::findName($data->customer_id);
+                }
+            ],
+            [
+                'label' => 'ยอดชำระ',
+                'value' => function ($data) {
+                    return \backend\models\Paymentreceive::findPayamt($data->id);
+                }
+            ]
+//            'created_at',
+//            'crated_by',
+//            'updated_at',
+//            'updated_by',
+//            'status',
         ],
     ]) ?>
 

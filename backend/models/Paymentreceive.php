@@ -1,7 +1,10 @@
 <?php
+
 namespace backend\models;
+
 use Yii;
 use yii\db\ActiveRecord;
+
 date_default_timezone_set('Asia/Bangkok');
 
 class Paymentreceive extends \common\models\PaymentReceive
@@ -9,19 +12,19 @@ class Paymentreceive extends \common\models\PaymentReceive
     public function behaviors()
     {
         return [
-            'timestampcdate'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_INSERT=>'created_at',
+            'timestampcdate' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'created_at',
                 ],
-                'value'=> time(),
+                'value' => time(),
             ],
-            'timestampudate'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_INSERT=>'updated_at',
+            'timestampudate' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'updated_at',
                 ],
-                'value'=> time(),
+                'value' => time(),
             ],
 //            'timestampcby'=>[
 //                'class'=> \yii\behaviors\AttributeBehavior::className(),
@@ -37,15 +40,16 @@ class Paymentreceive extends \common\models\PaymentReceive
 //                ],
 //                'value'=> Yii::$app->user->identity->id,
 //            ],
-            'timestampupdate'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_UPDATE=>'updated_at',
+            'timestampupdate' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
                 ],
-                'value'=> time(),
+                'value' => time(),
             ],
         ];
     }
+
     public static function getLastNo($date)
     {
         //   $model = Orders::find()->MAX('order_no');
@@ -67,10 +71,12 @@ class Paymentreceive extends \common\models\PaymentReceive
             return $prefix . '0001';
         }
     }
-//    public function findUnitname($id){
-//        $model = Unit::find()->where(['id'=>$id])->one();
-//        return count($model)>0?$model->name:'';
-//    }
+
+    public function findPayamt($id)
+    {
+        $model = \common\models\PaymentReceiveLine::find()->where(['payment_receive_id' => $id])->sum('payment_amount');
+        return $model != null ? $model : 0;
+    }
 //    public function findName($id){
 //        $model = Position::find()->where(['id'=>$id])->one();
 //        return $model!= null?$model->name:'';

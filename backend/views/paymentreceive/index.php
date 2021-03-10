@@ -55,8 +55,20 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'trans_date',
             'journal_no',
-            'customer_id',
-            'created_at',
+            [
+                'attribute' => 'customer_id',
+                'value' => function ($data) {
+                    return \backend\models\Customer::findName($data->customer_id);
+                }
+            ],
+            [
+                'label' => 'ยอดชำระ',
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
+                'value' => function ($data) {
+                    return \backend\models\Paymentreceive::findPayamt($data->id);
+                }
+            ],
             //'crated_by',
             //'updated_at',
             //'updated_by',
