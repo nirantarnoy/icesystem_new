@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
-                    return 0;
+                    return number_format(\backend\models\Paymentreceive::findPayorderamt($data->id));
                 }
             ],
             [
