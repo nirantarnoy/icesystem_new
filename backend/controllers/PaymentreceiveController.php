@@ -94,6 +94,7 @@ class PaymentreceiveController extends Controller
                             $model_line->order_id = $line_order[$i];
                             $model_line->payment_receive_id = $model->id;
                             $model_line->payment_amount = $line_pay[$i];
+                            $model_line->payment_channel_id = $line_pay_type[$i];
                             $model_line->status = 1;
 
                             if($i==$line_number[$i]){
@@ -108,7 +109,7 @@ class PaymentreceiveController extends Controller
                             }
 
                             if($model_line->save()){
-                                $this->updatePaymenttransline($model->customer_id,$line_order[$i],$line_pay[$i]);
+                                $this->updatePaymenttransline($model->customer_id,$line_order[$i],$line_pay[$i],1);
                             }
                         }
                     }
@@ -125,11 +126,16 @@ class PaymentreceiveController extends Controller
         ]);
     }
 
-    public function updatePaymenttransline($customer_id, $order_id, $pay_amt){
+    public function updatePaymenttransline($customer_id, $order_id, $pay_amt, $pay_type){
         if($customer_id != null && $order_id != null && $pay_amt > 0){
             $model = \backend\models\Paymenttransline::find()->where(['customer_id'=>$customer_id,'order_ref_id'=>$order_id])->andFilterWhere(['payment_method_id'=>2])->one();
             if($model){
-                $model->payment_amount = ($model->payment_amount + (float)$pay_amt);
+                if($pay_type == 0){
+                    $model->payment_amount = ($model->payment_amount - (float)$pay_amt);
+                }else{
+                    $model->payment_amount = ($model->payment_amount + (float)$pay_amt);
+                }
+
                 $model->save();
             }
         }
@@ -172,6 +178,7 @@ class PaymentreceiveController extends Controller
                             if($line_id != null){
                                 $model_chk = \common\models\PaymentReceiveLine::find()->where(['id'=>$line_id[$i]])->one();
                                 if($model_chk){
+                                    $model_chk->payment_channel_id = $line_pay_type[$i];
                                     $model_chk->payment_amount = $line_pay[$i];
                                 }
                             }else{
@@ -217,7 +224,22 @@ class PaymentreceiveController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if($id){
+            $model = \backend\models\Paymentreceive::find()->where(['id'=>$id])->one();
+            if($model){
+                $model_line = \common\models\PaymentReceiveLine::find()->where(['payment_receive_id'=>$id])->one();
+                if($model_line){
+                    $this->updatePaymenttransline($model->customer_id,$model_line->order_id,$model_line->payment_amount,0);
+                    if(\common\models\PaymentReceiveLine::deleteAll(['payment_receive_id'=>$id])){
+                        $this->findModel($id)->delete();
+                    }
+                }
+            }
+
+//            if(\common\models\PaymentReceiveLine::deleteAll(['payment_receive_id'=>$id])){
+//                $this->findModel($id)->delete();
+//            }
+        }
 
         return $this->redirect(['index']);
     }
@@ -266,7 +288,7 @@ class PaymentreceiveController extends Controller
                     </td>';
 //                    $html .= '<td style="text-align: center"><input type="file" class="form-control"></td>';
                     $html .= '<td><input type="text" class="form-control line-remain" style="text-align: right" name="line_remain[]" value="' . number_format($value->remain_amount, 2) . '" readonly></td>';
-                    $html .= '<td><input type="number" class="form-control line-pay" name="line_pay[]" value=""></td>';
+                    $html .= '<td><input type="number" class="form-control line-pay" name="line_pay[]" value="" onchange="linepaychange($(this))"></td>';
                     $html .= '</tr>';
 
                 }

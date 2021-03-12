@@ -53,8 +53,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center'],
             ],
-            'trans_date',
             'journal_no',
+            'trans_date',
             [
                 'attribute' => 'customer_id',
                 'value' => function ($data) {
