@@ -134,6 +134,8 @@ class PosController extends Controller
         $line_qty = \Yii::$app->request->post('cart_qty');
         $line_price = \Yii::$app->request->post('cart_price');
 
+        $print_type_doc = \Yii::$app->request->post('print_type_doc');
+
         $pos_date = \Yii::$app->request->post('sale_pay_date');
 
         //echo $customer_id;return;
@@ -244,11 +246,18 @@ class PosController extends Controller
                     if ($change_amt != null) {
                         $ch_amt = $change_amt->change_amount;
                     }
-//                    $this->render('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt]);
+                    $this->render('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt,$print_type_doc]);
+                    if($print_type_doc == 2){
+                       $this->render('_printtoindex2', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt,$print_type_doc]);
+                    }
 //
-//                    $session = \Yii::$app->session;
-//                    $session->setFlash('msg-index', 'slip_index.pdf');
-//                    $session->setFlash('after-save', true);
+                    $session = \Yii::$app->session;
+                    $session->setFlash('msg-index', 'slip_index.pdf');
+                    $session->setFlash('msg-index-do', 'slip_index_do.pdf');
+                    $session->setFlash('after-save', true);
+                    if($print_type_doc == 2){
+                        $session->setFlash('msg-is-do', $print_type_doc);
+                    }
                 }
             }
         }

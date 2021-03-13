@@ -244,6 +244,7 @@ $(function (){
       });
 });
 function showfind(e){
+    //alert();
       $.ajax({
               'type':'post',
               'dataType': 'html',
@@ -251,7 +252,7 @@ function showfind(e){
               'url': "$url_to_find_item",
               'data': {},
               'success': function(data) {
-                  //  alert(data);
+                  // alert(data);
                    $(".table-find-list tbody").html(data);
                    $("#findModal").modal("show");
                  }

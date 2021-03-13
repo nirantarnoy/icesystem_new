@@ -15,7 +15,6 @@ use yii\filters\VerbFilter;
  */
 class PricegroupController extends Controller
 {
-    public $enableCsrfValidation
     /**
      * {@inheritdoc}
      */
