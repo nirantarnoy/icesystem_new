@@ -147,7 +147,7 @@ function calpayment(){
     $(".table-list tbody tr").each(function(){
          var x = $(this).closest('tr').find('.line-pay').val();
          var rem_amt = $(this).closest('tr').find('.line-remain-qty').val();
-         alert(x);
+       //  alert(x);
          x = parseFloat(x);
          pay_total = parseFloat(pay_total) + parseFloat(x);
          remain_amount = parseFloat(rem_amt) + parseFloat(rem_amt);
