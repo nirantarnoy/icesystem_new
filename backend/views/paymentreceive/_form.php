@@ -8,7 +8,7 @@ $t_date = date('d/m/Y');
 
 <div class="paymentreceive-form">
 
-    <?php $form = ActiveForm::begin(['options' => ['id'=>'form-receive','enctype' => 'multipart/form-data']]); ?>
+    <?php $form = ActiveForm::begin(['options' => ['id' => 'form-receive', 'enctype' => 'multipart/form-data']]); ?>
     <input type="hidden" name="removelist" class="remove-list" value="">
     <div class="row">
         <div class="col-lg-4">
@@ -61,37 +61,42 @@ $t_date = date('d/m/Y');
                 <!--                    <td></td>-->
                 <!--                    <td></td>-->
                 <!--                </tr>-->
-                  <?php if($model_line != null):?>
-                  <?php $i=0;?>
-                     <?php foreach ($model_line as $value):?>
-                          <?php
-                             $i+=1;
-                             $order_date = \backend\models\Orders::getOrderdate($value->order_id);
-                          ?>
-                         <tr data-id="<?=$value->id?>">
-                              <td style="text-align: center"><?= $i?></td>
-                              <td style="text-align: center"><?= \backend\models\Orders::getNumber($value->order_id)?></td>
-                              <td style="text-align: center"><?= date('d/m/Y', strtotime($order_date)) ?></td>
-                              <td>
-                                  <select name="line_pay_type[]" id=""  class="form-control" onchange="checkpaytype($(this))">
-                                      <option value="0">เงินสด</option>
-                                      <option value="1">โอนธนาคาร</option>
-                                  </select>
-                                  <input type="file" class="line-doc" name="line_doc[]" style="display: none">
-                                  <input type="hidden" class="line-order-id" name="line_order_id[]" value="<?=$value->order_id ?>">
-                                  <input type="hidden" class="line-number" name="line_number[]" value="<?=($i-1)?>">
-                                  <input type="hidden" class="line-id" name="line_id[]" value="<?=$value->id?>">
-                              </td>
-                              <td>
-                                  <input type="text" class="form-control line-remain" style="text-align: right" name="line_remain[]" value="<?= number_format($value->remain_amount, 2) ?>" readonly>
-                                  <input type="hidden" class="line-remain-qty" value="<?=$value->remain_amount?>">
-                              </td>
-                              <td>
-                                  <input type="number" class="form-control line-pay" name="line_pay[]" value="" onchange="linepaychange($(this))">
-                              </td>
-                           </tr>
-                     <?php endforeach;?>
-                 <?php endif;?>
+                <?php if ($model_line != null): ?>
+                    <?php $i = 0; ?>
+                    <?php foreach ($model_line as $value): ?>
+                        <?php
+                        $i += 1;
+                        $order_date = \backend\models\Orders::getOrderdate($value->order_id);
+                        ?>
+                        <tr data-id="<?= $value->id ?>">
+                            <td style="text-align: center"><?= $i ?></td>
+                            <td style="text-align: center"><?= \backend\models\Orders::getNumber($value->order_id) ?></td>
+                            <td style="text-align: center"><?= date('d/m/Y', strtotime($order_date)) ?></td>
+                            <td>
+                                <select name="line_pay_type[]" id="" class="form-control"
+                                        onchange="checkpaytype($(this))">
+                                    <option value="0">เงินสด</option>
+                                    <option value="1">โอนธนาคาร</option>
+                                </select>
+                                <input type="file" class="line-doc" name="line_doc[]" style="display: none">
+                                <input type="hidden" class="line-order-id" name="line_order_id[]"
+                                       value="<?= $value->order_id ?>">
+                                <input type="hidden" class="line-number" name="line_number[]" value="<?= ($i - 1) ?>">
+                                <input type="hidden" class="line-id" name="line_id[]" value="<?= $value->id ?>">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control line-remain" style="text-align: right"
+                                       name="line_remain[]" value="<?= number_format($value->remain_amount, 2) ?>"
+                                       readonly>
+                                <input type="hidden" class="line-remain-qty" value="<?= $value->remain_amount ?>">
+                            </td>
+                            <td>
+                                <input type="number" class="form-control line-pay" name="line_pay[]" value=""
+                                       onchange="linepaychange($(this))">
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
                 </tbody>
             </table>
         </div>
@@ -133,10 +138,10 @@ function calpayment(){
     var pay_total = 0;
     $(".table-list tbody tr").each(function(){
          var x = $(this).closest('tr').find('.line-pay').val();
-         x = x == null? 0 : parseFloat(x);
+         x = parseFloat(x);
          pay_total = parseFloat(pay_total) + parseFloat(x);
          
-         $(".line-pay-total").html(pay_total);
+         $(this).closest('tr').find(".line-pay-total").html(pay_total);
     });
    
 }
