@@ -130,13 +130,13 @@ class PaymentreceiveController extends Controller
         if($customer_id != null && $order_id != null && $pay_amt > 0){
             $model = \backend\models\Paymenttransline::find()->where(['customer_id'=>$customer_id,'order_ref_id'=>$order_id])->andFilterWhere(['payment_method_id'=>2])->one();
             if($model){
-                if($pay_type == 0){
-                    $model->payment_amount = ($model->payment_amount - (float)$pay_amt);
-                }else{
+//                if($pay_type == 0){
+//                    $model->payment_amount = ($model->payment_amount - (float)$pay_amt);
+//                }else{
                     $model->payment_amount = ($model->payment_amount + (float)$pay_amt);
-                }
+//                }
 
-                $model->save();
+                $model->save(false);
             }
         }
     }

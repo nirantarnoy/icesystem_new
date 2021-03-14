@@ -126,6 +126,13 @@ function linepaychange(e){
     }
 }
 
+function calpayment(){
+    var pay_total = 0;
+    $(".table-list tbody tr").each(function(){
+        // var 
+    });
+}
+
 function getpaymentrec(e){
     var ids = e.val();
     if(ids){
