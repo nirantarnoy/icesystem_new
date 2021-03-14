@@ -138,6 +138,7 @@ function calpayment(){
     var pay_total = 0;
     $(".table-list tbody tr").each(function(){
          var x = $(this).closest('tr').find('.line-pay').val();
+         alert(x);
          x = parseFloat(x);
          pay_total = parseFloat(pay_total) + parseFloat(x);
          
