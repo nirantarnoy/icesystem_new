@@ -287,7 +287,10 @@ class PaymentreceiveController extends Controller
                             <input type="hidden" class="line-number" name="line_number[]" value="'.($i-1).'">
                     </td>';
 //                    $html .= '<td style="text-align: center"><input type="file" class="form-control"></td>';
-                    $html .= '<td><input type="text" class="form-control line-remain" style="text-align: right" name="line_remain[]" value="' . number_format($value->remain_amount, 2) . '" readonly></td>';
+                    $html .= '<td>
+                            <input type="text" class="form-control line-remain" style="text-align: right" name="line_remain[]" value="' . number_format($value->remain_amount, 2) . '" readonly>
+                            <input type="hidden" class="line-remain-qty" value="'.$value->remain_amount.'">
+                            </td>';
                     $html .= '<td><input type="number" class="form-control line-pay" name="line_pay[]" value="" onchange="linepaychange($(this))"></td>';
                     $html .= '</tr>';
 

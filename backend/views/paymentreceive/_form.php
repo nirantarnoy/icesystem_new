@@ -82,7 +82,10 @@ $t_date = date('d/m/Y');
                                   <input type="hidden" class="line-number" name="line_number[]" value="<?=($i-1)?>">
                                   <input type="hidden" class="line-id" name="line_id[]" value="<?=$value->id?>">
                               </td>
-                              <td><input type="text" class="form-control line-remain" style="text-align: right" name="line_remain[]" value="<?= number_format($value->remain_amount, 2) ?>" readonly></td>
+                              <td>
+                                  <input type="text" class="form-control line-remain" style="text-align: right" name="line_remain[]" value="<?= number_format($value->remain_amount, 2) ?>" readonly>
+                                  <input type="hidden" class="line-remain-qty" value="<?=$value->remain_amount?>">
+                              </td>
                               <td><input type="number" class="form-control line-pay" name="line_pay[]" value="" onchange="linepaychange($(this))"></td>
                            </tr>
                      <?php endforeach;?>
@@ -112,7 +115,7 @@ $(function(){
 
 function linepaychange(e){
    // alert();
-    var remain_amount = e.closest('tr').find('.line-remain').val();
+    var remain_amount = e.closest('tr').find('.line-remain-qty').val();
     var pay = e.val();
     
     if(pay > remain_amount){
