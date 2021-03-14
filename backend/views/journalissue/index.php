@@ -5,9 +5,13 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
+use chillerlan\QRCode\QRCode;
+use yii\web\Response;
 
 $this->title = 'เบิกสินค้า';
 $this->params['breadcrumbs'][] = $this->title;
+
+
 ?>
 <div class="location-index">
     <?php Pjax::begin(); ?>

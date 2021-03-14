@@ -1,6 +1,9 @@
 <?php
 date_default_timezone_set('Asia/Bangkok');
 
+use chillerlan\QRCode\QRCode;
+use yii\web\Response;
+
 //require_once __DIR__ . '/vendor/autoload.php';
 //require_once 'vendor/autoload.php';
 // เพิ่ม Font ให้กับ mPDF
@@ -9,7 +12,7 @@ $fontData = $defaultFontConfig['fontdata'];
 $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp',
 //$mpdf = new \Mpdf\Mpdf([
     //'tempDir' => '/tmp',
-    'mode' => 'utf-8', 'format' => [80, 120],
+    'mode' => 'utf-8', 'format' => [80, 160],
     'fontdata' => $fontData + [
             'sarabun' => [ // ส่วนที่ต้องเป็น lower case ครับ
                 'R' => 'THSarabunNew.ttf',
@@ -158,13 +161,13 @@ $mpdf->AddPageByArray([
         <?php
         $total_qty = $total_qty + $value->qty;
         $total_amt = $total_amt + ($value->qty * $value->price);
-        $change = $change_amount == null?0:$change_amount;//$value->change_amount;
+        $change = $change_amount == null ? 0 : $change_amount;//$value->change_amount;
         ?>
         <tr>
             <td><?= \backend\models\Product::findName($value->product_id); ?></td>
             <td style="text-align: center"><?= $value->qty ?></td>
             <td style="text-align: center"><?= number_format($value->price) ?></td>
-            <td style="text-align: right"><?= number_format($value->qty * $value->price,2); ?></td>
+            <td style="text-align: right"><?= number_format($value->qty * $value->price, 2); ?></td>
         </tr>
 
     <?php endforeach; ?>
@@ -173,7 +176,7 @@ $mpdf->AddPageByArray([
         <td style="font-size: 18px;border-top: 1px dotted gray">จำนวนรายการ</td>
         <td style="font-size: 18px;border-top: 1px dotted gray;text-align: center"><?= number_format($total_qty) ?></td>
         <td style="font-size: 18px;border-top: 1px dotted gray;text-align: center"></td>
-        <td style="font-size: 18px;border-top: 1px dotted gray;text-align: right"><?= number_format($total_amt,2) ?></td>
+        <td style="font-size: 18px;border-top: 1px dotted gray;text-align: right"><?= number_format($total_amt, 2) ?></td>
     </tr>
     <tr>
         <td style="font-size: 18px;">ส่วนลด</td>
@@ -202,8 +205,18 @@ $mpdf->AddPageByArray([
     <tr>
         <td style="font-size: 18px;">แคชเชียร์ .......................................................</td>
     </tr>
+    <tr>
+    </tr>
 </table>
 <br/>
+<div style="height: 50px;width: 50px;">
+    <?php
+    \Yii::$app->response->format = Response::FORMAT_HTML;
+    $data = 'IS-210303-0001';
+    $qr = new QRCode();
+    echo '<img src="' . $qr->render($data) . '" />';
+    ?>
+</div>
 <br/>
 <!--<script src="../web/plugins/jquery/jquery.min.js"></script>-->
 <!--<script>-->
@@ -222,6 +235,10 @@ $mpdf->AddPageByArray([
 //include("pdf_footer.php");
 ?>
 <?php
+
+if(file_exists('../web/uploads/slip/slip_index.pdf')){
+    unlink('../web/uploads/slip/slip_index.pdf');
+}
 
 $html = ob_get_contents(); // ทำการเก็บค่า HTML จากคำสั่ง ob_start()
 $mpdf->WriteHTML($html); // ทำการสร้าง PDF ไฟล์

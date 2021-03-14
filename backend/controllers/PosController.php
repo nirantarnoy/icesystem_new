@@ -248,6 +248,9 @@ class PosController extends Controller
                     }
                     $this->render('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt,$print_type_doc]);
                     if($print_type_doc == 2){
+                        if(file_exists('../web/uploads/slip/slip_index_do.pdf')){
+                            unlink('../web/uploads/slip/slip_index_do.pdf');
+                        }
                        $this->render('_printtoindex2', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt,$print_type_doc]);
                     }
 //

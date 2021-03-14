@@ -110,7 +110,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
-                    return number_format($data->order_total_amt);
+                   // return number_format($data->order_total_amt);
+                    return number_format(\backend\models\Paymentreceive::findPayorderamt($data->id) + \backend\models\Orders::findordercash($data->id));
                 }
             ],
             //'vat_per',
