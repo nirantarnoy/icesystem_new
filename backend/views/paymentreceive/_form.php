@@ -120,12 +120,13 @@ function linepaychange(e){
     var remain_amount = e.closest('tr').find('.line-remain-qty').val();
     var pay = e.val();
     
-    if(pay > remain_amount){
+    if((int)pay > (int)remain_amount){
         alert('ชำระเงินมากกว่ายอดค้างชำระ');
         e.val(remain_amount);
         e.focus();
         return false;
     }
+    calpayment();
 }
 
 function calpayment(){
