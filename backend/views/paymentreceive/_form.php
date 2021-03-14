@@ -135,6 +135,8 @@ function calpayment(){
          var x = $(this).closest('tr').find('.line-pay').val();
          x = x == null? 0 : parseFloat(x);
          pay_total = parseFloat(pay_total) + parseFloat(x);
+         
+         $(".line-pay-total").html(pay_total);
     });
    
 }
