@@ -86,7 +86,9 @@ $t_date = date('d/m/Y');
                                   <input type="text" class="form-control line-remain" style="text-align: right" name="line_remain[]" value="<?= number_format($value->remain_amount, 2) ?>" readonly>
                                   <input type="hidden" class="line-remain-qty" value="<?=$value->remain_amount?>">
                               </td>
-                              <td><input type="number" class="form-control line-pay" name="line_pay[]" value="" onchange="linepaychange($(this))"></td>
+                              <td>
+                                  <input type="number" class="form-control line-pay" name="line_pay[]" value="" onchange="linepaychange($(this))">
+                              </td>
                            </tr>
                      <?php endforeach;?>
                  <?php endif;?>
@@ -129,8 +131,11 @@ function linepaychange(e){
 function calpayment(){
     var pay_total = 0;
     $(".table-list tbody tr").each(function(){
-        // var 
+         var x = $(this).closest('tr').find('.line-pay').val();
+         x = x == null? 0 : parseFloat(x);
+         pay_total = parseFloat(pay_total) + parseFloat(x);
     });
+    
 }
 
 function getpaymentrec(e){
