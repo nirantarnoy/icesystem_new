@@ -98,6 +98,13 @@ $t_date = date('d/m/Y');
                     <?php endforeach; ?>
                 <?php endif; ?>
                 </tbody>
+                <tfoot>
+                     <tr>
+                         <td colspan="4" style="text-align: right">รวม</td>
+                         <td style="text-align: right;font-weight: bold"><span class="line-pay-remain">0</span></td>
+                         <td style="text-align: right;font-weight: bold"><span class="line-pay-total">0</span></td>
+                     </tr>
+                </tfoot>
             </table>
         </div>
     </div>
@@ -136,15 +143,17 @@ function linepaychange(e){
 
 function calpayment(){
     var pay_total = 0;
+    var remain_amount = 0;
     $(".table-list tbody tr").each(function(){
          var x = $(this).closest('tr').find('.line-pay').val();
+         var rem_amt = $(this).closest('tr').find('.line-remain-qty').val();
          alert(x);
          x = parseFloat(x);
          pay_total = parseFloat(pay_total) + parseFloat(x);
-         
-         $(this).closest('tr').find(".line-pay-total").html(pay_total);
+         remain_amount = parseFloat(rem_amt) + parseFloat(rem_amt);
     });
-   
+    $(".table-list tfoot tr").find(".line-pay-remain").val(remain_amount);
+    $(".table-list tfoot tr").find(".line-pay-total").val(pay_total);
 }
 
 function getpaymentrec(e){
