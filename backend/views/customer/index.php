@@ -55,6 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'text-align: center'],
             ],
             'code',
+            'sort_name',
             'name',
             'description',
             [
