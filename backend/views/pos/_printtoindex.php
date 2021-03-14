@@ -54,6 +54,18 @@ $mpdf->AddPageByArray([
             border-spacing: 1px;
         }
 
+        table.table-qrcode {
+            border: 0px;
+            border-spacing: 1px;
+        }
+
+        table.table-qrcode td, th {
+            border: 0px solid #dddddd;
+            text-align: left;
+            padding-top: 2px;
+            padding-bottom: 2px;
+        }
+
         table.table-footer {
             border: 0px;
             border-spacing: 0px;
@@ -109,22 +121,37 @@ $mpdf->AddPageByArray([
     <!--    <script type="text/javascript" src="js/ThaiBath-master/thaibath.js"></script>-->
 </head>
 <body>
-<table class="table-header" style="width: 100%;font-size: 18px;" border="0">
 
-</table>
-<table class="table-header" width="100%">
+<table class="table-qrcode" style="width: 100%">
     <tr>
-        <td style="font-size: 20px;text-align: center;vertical-align: bottom">
-            <h5>น้ำแข็ง</h5>
+        <td style="width: 2%">
+            <div style="height: 20px;width: 20px;">
+                <?php
+                \Yii::$app->response->format = Response::FORMAT_HTML;
+                $data = $model->order_no;
+                $qr = new QRCode();
+                echo '<img src="' . $qr->render($data) . '" />';
+                ?>
+            </div>
+        </td>
+        <td style="width: 98%">
+            <table class="table-header" width="100%">
+                <tr>
+                    <td style="font-size: 20px;text-align: center;vertical-align: bottom">
+                        <h2>น้ำแข็ง</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: 20px;text-align: center;vertical-align: top">
+                        <h2>ใบสั่งจ่าย</h2>
+                    </td>
+                </tr>
+
+            </table>
         </td>
     </tr>
-    <tr>
-        <td style="font-size: 20px;text-align: center;vertical-align: top">
-            <h5>ใบสั่งจ่าย</h5>
-        </td>
-    </tr>
-
 </table>
+
 <table class="table-header" width="100%">
     <tr>
         <td style="font-size: 18px;text-align: left">
@@ -203,20 +230,13 @@ $mpdf->AddPageByArray([
 </table>
 <table class="table-header">
     <tr>
-        <td style="font-size: 18px;">แคชเชียร์ .......................................................</td>
+        <td style="font-size: 18px;">แคชเชียร์ ........ <span style="position: absolute;"><?=\backend\models\User::findName(\Yii::$app->user->id)?></span> .........</td>
     </tr>
     <tr>
     </tr>
 </table>
 <br/>
-<div style="height: 50px;width: 50px;">
-    <?php
-    \Yii::$app->response->format = Response::FORMAT_HTML;
-    $data = 'IS-210303-0001';
-    $qr = new QRCode();
-    echo '<img src="' . $qr->render($data) . '" />';
-    ?>
-</div>
+
 <br/>
 <!--<script src="../web/plugins/jquery/jquery.min.js"></script>-->
 <!--<script>-->

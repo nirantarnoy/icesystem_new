@@ -15,7 +15,7 @@ $t_date = date('d/m/Y');
             <?= $form->field($model, 'journal_no')->textInput(['maxlength' => true, 'readonly' => 'readonly']) ?>
         </div>
         <div class="col-lg-4">
-            <?php $model->trans_date = $model->isNewRecord ? $t_date : date('d/m/Y', strtotime($t_date)); ?>
+            <?php $model->trans_date = $model->isNewRecord ? $t_date : date('d/m/Y', strtotime($model->trans_date)); ?>
             <?= $form->field($model, 'trans_date')->widget(\kartik\date\DatePicker::className(), [
                 'pluginOptions' => [
                     'format' => 'dd/mm/yyyy',
