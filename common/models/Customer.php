@@ -47,7 +47,7 @@ class Customer extends \yii\db\ActiveRecord
             [['code','name'],'unique'],
             [['customer_group_id', 'delivery_route_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['active_date'], 'safe'],
-            [['code', 'name', 'description', 'location_info', 'logo', 'shop_photo','address','address2','phone','branch_no'], 'string', 'max' => 255],
+            [['code', 'name', 'description', 'location_info', 'logo', 'shop_photo','address','address2','phone','branch_no','sort_name'], 'string', 'max' => 255],
             [['branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['branch_id' => 'id']],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'id']],
             [['customer_type_id','payment_method_id','payment_term_id',],'integer']
@@ -70,6 +70,7 @@ class Customer extends \yii\db\ActiveRecord
             'delivery_route_id' => Yii::t('app', 'สายส่ง'),
             'active_date' => Yii::t('app', 'วันที่เริ่มใช้งาน'),
             'logo' => Yii::t('app', 'Logo'),
+            'sort_name' => 'รหัสสาย',
             'shop_photo' => Yii::t('app', 'Shop Photo'),
             'status' => Yii::t('app', 'สถานะ'),
             'payment_method_id' => Yii::t('app', 'วิธีชำระเงิน'),

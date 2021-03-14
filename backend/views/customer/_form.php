@@ -10,13 +10,16 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-3">
             <?= $form->field($model, 'code')->textInput(['maxlength' => true,'readonly'=>'readonly','value'=>$model->isNewRecord?'Draft':$model->code]) ?>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-3">
+            <?= $form->field($model, 'sort_name')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-lg-3">
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-3">
             <?= $form->field($model, 'customer_group_id')->Widget(\kartik\select2\Select2::className(), [
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customergroup::find()->all(), 'id', function ($data) {
                     return $data->code . ' ' . $data->name;
