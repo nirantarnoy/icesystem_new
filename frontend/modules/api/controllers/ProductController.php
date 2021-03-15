@@ -7,8 +7,7 @@ use yii\web\Controller;
 
 class ProductController extends Controller
 {
-
-    public function actionProductlist()
+    public function actionList()
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 //        $req_data = \Yii::$app->request->getBodyParams();
@@ -22,7 +21,7 @@ class ProductController extends Controller
             foreach ($model as $value) {
                 array_push($data, [
                     'id' => $value->id,
-                    'image' => $value->photo,
+                    'image' => 'http://192.168.60.118/icesystem/backend/web/uploads/images/products/'.$value->photo,
                     'code' => $value->code,
                     'name' => $value->name,
                     'sale_price' => $value->sale_price,
