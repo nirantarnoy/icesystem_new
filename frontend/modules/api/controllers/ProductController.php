@@ -15,7 +15,7 @@ class ProductController extends Controller
 
         $data = [];
         $status = false;
-        $model = \common\models\Product::find()->all();
+        $model = \common\models\Product::find()->where(['<>','id', 23])->all();
         if ($model) {
             $status = true;
             foreach ($model as $value) {
