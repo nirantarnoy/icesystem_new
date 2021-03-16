@@ -23,7 +23,7 @@ class ProductController extends Controller
                     'id' => $value->id,
                   //  'image' => 'http://192.168.1.104/icesystem/backend/web/uploads/images/products/'.$value->photo,
                  //   'image' => 'http://119.59.100.74/icesystem/backend/web/uploads/images/products/'.$value->photo,
-                    'image' => \Yii::$app->getUrlManager()->baseUrl().'/uploads/images/products/'.$value->photo,
+                    'image' => \Yii::$app->getUrlManager()->baseUrl.'/uploads/images/products/'.$value->photo,
                     'code' => $value->code,
                     'name' => $value->name,
                     'sale_price' => $value->sale_price,
