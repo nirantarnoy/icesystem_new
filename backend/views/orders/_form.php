@@ -545,18 +545,18 @@ $js = <<<JS
               }
          });
          
-         $.ajax({
-              'type':'post',
-              'dataType': 'html',
-              'async': false,
-              'url': "$url_to_get_issue_item",
-              'data': {'id': e.val()},
-              'success': function(data) {
-                 // alert();
-                 $("#issue-id").html(data);
-                 $("#issue-id").prop("disabled","");
-              }
-         });
+//         $.ajax({
+//              'type':'post',
+//              'dataType': 'html',
+//              'async': false,
+//              'url': "$url_to_get_issue_item",
+//              'data': {'id': e.val()},
+//              'success': function(data) {
+//                 // alert();
+//                 $("#issue-id").html(data);
+//                 $("#issue-id").prop("disabled","");
+//              }
+//         });
 
  }
  
