@@ -19,6 +19,7 @@ use kartik\time\TimePicker;
 class OrdersController extends Controller
 {
     public $enableCsrfValidation = false;
+    public $defaultPageSize = 50;
 
     public function behaviors()
     {
@@ -34,6 +35,7 @@ class OrdersController extends Controller
 
     public function actionIndex()
     {
+
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new OrdersSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
