@@ -37,8 +37,8 @@ class OrdersController extends Controller
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new OrdersSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->setSort(['defaultOrder' => ['order_date' => SORT_DESC, 'order_no' => SORT_DESC]]);
         $dataProvider->query->limit(300);
+        $dataProvider->setSort(['defaultOrder' => ['order_date' => SORT_DESC, 'order_no' => SORT_DESC]]);
         $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render('index', [
