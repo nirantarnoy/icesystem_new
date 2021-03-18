@@ -59,11 +59,12 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-lg-3">
+            <?=$model->issue_id?>
             <?= $form->field($model, 'issue_id')->Widget(\kartik\select2\Select2::className(), [
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Journalissue::find()->where(['status'=>1])->all(), 'id', 'journal_no'),
                 'options' => [
                     'id' => 'issue-id',
-                   // 'disabled' => 'disabled',
+                    'disabled' => 'disabled',
                     'placeholder' => '--เลือกใบเบิก--'
                 ]
             ]) ?>
@@ -545,18 +546,18 @@ $js = <<<JS
               }
          });
          
-//         $.ajax({
-//              'type':'post',
-//              'dataType': 'html',
-//              'async': false,
-//              'url': "$url_to_get_issue_item",
-//              'data': {'id': e.val()},
-//              'success': function(data) {
-//                 // alert();
-//                 $("#issue-id").html(data);
-//                 $("#issue-id").prop("disabled","");
-//              }
-//         });
+         $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_get_issue_item",
+              'data': {'id': e.val()},
+              'success': function(data) {
+                 // alert();
+                 $("#issue-id").html(data);
+                 $("#issue-id").prop("disabled","");
+              }
+         });
 
  }
  
