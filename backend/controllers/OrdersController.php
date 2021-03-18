@@ -19,7 +19,6 @@ use kartik\time\TimePicker;
 class OrdersController extends Controller
 {
     public $enableCsrfValidation = false;
-    public $defaultPageSize = 50;
 
     public function behaviors()
     {
@@ -41,6 +40,7 @@ class OrdersController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->limit(300);
         $dataProvider->setSort(['defaultOrder' => ['order_date' => SORT_DESC, 'order_no' => SORT_DESC]]);
+        $dataProvider->pagination->defaultPageSize = 50;
         $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render('index', [
