@@ -59,9 +59,9 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-lg-3">
-            <?=$model->issue_id?>
+            <?php $filter_status = $model->isNewRecord ? 1 : 2; ?>
             <?= $form->field($model, 'issue_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Journalissue::find()->where(['status'=>1])->all(), 'id', 'journal_no'),
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Journalissue::find()->where(['status'=>$filter_status])->all(), 'id', 'journal_no'),
                 'options' => [
                     'id' => 'issue-id',
                     'disabled' => 'disabled',
