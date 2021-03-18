@@ -15,9 +15,7 @@ use yii\filters\VerbFilter;
  */
 class CardailyController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
+    public $enableCsrfValidation = false;
     public function behaviors()
     {
         return [

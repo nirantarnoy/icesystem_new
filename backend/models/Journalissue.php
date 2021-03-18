@@ -51,9 +51,9 @@ class Journalissue extends \common\models\JournalIssue
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';
 //    }
-    public function findName($id){
-        $model = \common\models\SaleGroup::find()->where(['id'=>$id])->one();
-        return $model!=null?$model->name:'';
+    public function findNum($id){
+        $model = \common\models\JournalIssue::find()->where(['id'=>$id])->one();
+        return $model!=null?$model->journal_no:'';
     }
 //    public function findUnitid($code){
 //        $model = Unit::find()->where(['name'=>$code])->one();
