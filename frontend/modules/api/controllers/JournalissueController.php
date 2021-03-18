@@ -29,6 +29,7 @@ class JournalissueController extends Controller
         $data = [];
         $status = false;
         if($route_id){
+           // $model = \common\models\JournalIssue::find()->one();
             $model = \common\models\JournalIssue::find()->where(['delivery_route_id'=>$route_id,'status'=>1])->one();
             if ($model) {
                 $model_line = \common\models\JournalIssueLine::find()->where(['issue_id'=>$model->id])->all();
@@ -37,8 +38,8 @@ class JournalissueController extends Controller
                     foreach ($model_line as $value) {
                         array_push($data, [
                             'id' => $value->id,
-                            'issue_id' => $value->journal_issue_id,
-                            'issue_no' => \backend\models\Journalissue::findNum($value->journal_issue_id),
+                            'issue_id' => $value->issue_id,
+                            'issue_no' => \backend\models\Journalissue::findNum($value->issue_id),
                             'product_id' => $value->product_id,
                             'product_name' => \backend\models\Product::findName($value->product_id),
                             'issue_qty' => $value->qty,

@@ -63,7 +63,7 @@ use yii\widgets\ActiveForm;
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Journalissue::find()->where(['status'=>1])->all(), 'id', 'journal_no'),
                 'options' => [
                     'id' => 'issue-id',
-                    'disabled' => 'disabled',
+                   // 'disabled' => 'disabled',
                     'placeholder' => '--เลือกใบเบิก--'
                 ]
             ]) ?>
