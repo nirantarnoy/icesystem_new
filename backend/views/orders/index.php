@@ -24,9 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="form-group">
                     <label>แสดง </label>
                     <select class="form-control" name="perpage" id="perpage">
-                        <option value="20" <?= $perpage == '50' ? 'selected' : '' ?>>50</option>
-                        <option value="50" <?= $perpage == '100' ? 'selected' : '' ?> >100</option>
-                        <option value="100" <?= $perpage == '150' ? 'selected' : '' ?>>150</option>
+                        <option value="50" <?= $perpage == '50' ? 'selected' : '' ?>>50</option>
+                        <option value="100" <?= $perpage == '100' ? 'selected' : '' ?> >100</option>
+                        <option value="150" <?= $perpage == '150' ? 'selected' : '' ?>>150</option>
                     </select>
                     <label> รายการ</label>
                 </div>
