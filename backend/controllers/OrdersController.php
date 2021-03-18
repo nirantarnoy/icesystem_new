@@ -38,6 +38,7 @@ class OrdersController extends Controller
         $searchModel = new OrdersSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->setSort(['defaultOrder' => ['order_date' => SORT_DESC, 'order_no' => SORT_DESC]]);
+        $dataProvider->query->limit(300);
         $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render('index', [

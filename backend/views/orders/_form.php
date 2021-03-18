@@ -302,7 +302,7 @@ use yii\widgets\ActiveForm;
                             <?php
                             echo \kartik\select2\Select2::widget([
                                 'name' => 'order_target',
-                                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Orders::find()->where(['status' => 1])->all(), 'id', function ($data) {
+                                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Orders::find()->where(['status' => 1, 'sale_channel_id'=>1])->all(), 'id', function ($data) {
                                     return $data->order_no . ' (' . \backend\models\Deliveryroute::findName($data->order_channel_id) . ')';
                                 })
                             ])
