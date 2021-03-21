@@ -55,6 +55,14 @@ class Car extends \common\models\Car
         $model = Car::find()->where(['id'=>$id])->one();
         return $model!=null?$model->name:'';
     }
+    public function findRouteId($id){
+        $model = \common\models\QueryCarRoute::find()->where(['id'=>$id])->one();
+        return $model!=null?$model->delivery_route_id:0;
+    }
+    public function findRouteName($id){
+        $model = \common\models\QueryCarRoute::find()->where(['id'=>$id])->one();
+        return $model!=null?$model->route_code:'';
+    }
 //    public function findUnitid($code){
 //        $model = Unit::find()->where(['name'=>$code])->one();
 //        return count($model)>0?$model->id:0;

@@ -36,12 +36,14 @@ class JournalissueController extends Controller
                 if($model_line){
                     $status = true;
                     foreach ($model_line as $value) {
+                        $product_image = \backend\models\Product::findPhoto($value->product_id);
                         array_push($data, [
                             'id' => $value->id,
                             'issue_id' => $value->issue_id,
                             'issue_no' => \backend\models\Journalissue::findNum($value->issue_id),
                             'product_id' => $value->product_id,
                             'product_name' => \backend\models\Product::findName($value->product_id),
+                            'image' => 'http://192.168.1.120/icesystem/backend/web/uploads/images/products/'.$product_image,
                             'issue_qty' => $value->qty,
                             'price' => 0,
                             'product_image' => '',

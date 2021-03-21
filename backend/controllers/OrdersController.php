@@ -134,7 +134,6 @@ class OrdersController extends Controller
 
                                     }
                                 }
-
                             }
                         } else {
                             echo "not have data";

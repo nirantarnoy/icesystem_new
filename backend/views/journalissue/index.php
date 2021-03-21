@@ -54,12 +54,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-           // 'id',
+            // 'id',
             'journal_no',
             [
                 'attribute' => 'trans_date',
                 'value' => function ($data) {
                     return date('d/m/Y', strtotime($data->trans_date));
+                }
+            ],
+            [
+                'attribute' => 'delivery_route_id',
+                'value' => function ($data) {
+                    return \backend\models\Deliveryroute::findName($data->delivery_route_id);
                 }
             ],
             [

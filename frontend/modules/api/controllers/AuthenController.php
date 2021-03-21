@@ -41,13 +41,18 @@ class AuthenController extends Controller
                 if ($model->validatePassword($password)) {
                     $model_info = \backend\models\Employee::find()->where(['id' => $model->employee_ref_id])->one();
                     if ($model_info) {
+                        $car_info = $this->getCar($model_info->id);
                         array_push($data, [
                                 'username' => $username,
                                 'user_id' => '' . $model->id,
                                 'emp_code' => $model_info->code,
                                 'emp_name' => $model_info->fname . ' ' . $model_info->lname,
                        //         'emp_photo' => 'http://119.59.100.74/icesystem/backend/web/uploads/images/employee/' . $model_info->photo
-                                'emp_photo' => 'http://192.168.60.118/icesystem/backend/web/uploads/images/employee/' . $model_info->photo
+                                'emp_photo' => 'http://192.168.1.120/icesystem/backend/web/uploads/images/employee/' . $model_info->photo,
+                                'emp_route_id' => $car_info ==null?0:$car_info[0]['route_id'],
+                                'emp_route_name' => $car_info ==null?0:$car_info[0]['route_name'],
+                                'emp_car_id' => $car_info ==null?0:$car_info[0]['car_id'],
+                                'emp_car_name' => $car_info ==null?0:$car_info[0]['car_name'],
                             ]
                         );
                         $status = true;
@@ -59,6 +64,23 @@ class AuthenController extends Controller
 
         return ['status' => $status, 'data' => $data];
     }
+
+    public function getCar($emp_id){
+       $data = [];
+       if($emp_id){
+           $model = \common\models\CarDaily::find()->where(['employee_id'=>$emp_id,'date(trans_date)'=>date('Y-m-d')])->one();
+           if($model){
+               array_push($data,[
+                   'car_id'=> $model->car_id,
+                   'car_name' => \backend\models\Car::findName($model->car_id),
+                   'route_id' => \backend\models\Car::findRouteId($model->car_id),
+                   'route_name' => \backend\models\Car::findRouteName($model->car_id),
+               ]);
+           }
+       }
+       return $data;
+    }
+
 //    public function actionLogin()
 //    {
 //        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
