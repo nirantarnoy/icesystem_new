@@ -1465,7 +1465,7 @@ class OrdersController extends Controller
                 $model->order_ref_id = $order_id;
                 $model->order_target_id = $order_target_id;
                 $model->status = 1;
-                if ($model->save()) {
+                if ($model->save(false)) {
                     if (count($line_prod) > 0) {
                         for ($i = 0; $i <= count($line_prod) - 1; $i++) {
                             if ($line_qty[$i] <= 0) continue;
