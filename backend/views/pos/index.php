@@ -60,7 +60,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                     <?php echo Select2::widget([
                         'name' => 'customer_id',
                         'value' => 1,
-                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['sort_name'=>null])->all(), 'id', function ($data) {
+                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['sort_name' => null])->all(), 'id', function ($data) {
                             return $data->code . ' ' . $data->name;
                         }),
                         'options' => [
@@ -115,7 +115,8 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                                                        value="<?= $value->sale_price ?>">
                                                 <div class="btn-group" style="width: 100%">
                                                     <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"
-                                                         onclick="reducecartdivcustomer($(this))"><i class="fa fa-minus"></i>
+                                                         onclick="reducecartdivcustomer($(this))"><i
+                                                                class="fa fa-minus"></i>
                                                     </div>
                                                     <div class="btn btn-outline-primary btn-sm" data-var="<?= $i ?>"
                                                          onclick="addcartdivcustomer($(this))">
@@ -157,13 +158,15 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                                         <div style="height: 10px;"></div>
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <input type="hidden" class="list-item-product-id fix-list-item-id-<?= $i ?>"
+                                                <input type="hidden"
+                                                       class="list-item-product-id fix-list-item-id-<?= $i ?>"
                                                        value="<?= $value->id ?>">
                                                 <input type="hidden" class="fix-list-item-code-<?= $i ?>"
                                                        value="<?= $value->code ?>">
                                                 <input type="hidden" class="fix-list-item-name-<?= $i ?>"
                                                        value="<?= $value->name ?>">
-                                                <input type="hidden" class="list-item-price fix-list-item-price-<?= $i ?>"
+                                                <input type="hidden"
+                                                       class="list-item-price fix-list-item-price-<?= $i ?>"
                                                        value="<?= $value->sale_price ?>">
                                                 <div class="btn-group" style="width: 100%">
                                                     <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"
@@ -194,6 +197,39 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
             <input type="hidden" class="sale-pay-change" name="sale_pay_change" value="">
             <input type="hidden" class="sale-pay-type" name="sale_pay_type" value="">
             <input type="hidden" class="print-type-doc" name="print_type_doc" value="">
+
+            <div class="row">
+                <div class="col-lg-6" style="text-align: left">
+                    <div class="btn-group">
+                        <a href="index.php?r=pos/salehistory" class="btn btn-outline-info btn-history-cart"
+                           style="display: noneผ">
+                            ประวัติการขาย
+                        </a>
+                        <a href="index.php?r=pos/dailysum" class="btn btn-outline-info btn-history-cart"
+                           style="display: noneผ">
+                            สรุปยอดขายประจำวัน
+                        </a>
+                    </div>
+
+                </div>
+                <div class="col-lg-6" style="text-align: right">
+                    <div class="btn btn-outline-secondary btn-cancel-cart" style="display: none">
+                        ยกเลิกการขาย
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row div-payment" style="display: none">
+                <div class="col-lg-12" style="text-align: center">
+                    <div class="btn btn-group">
+                        <div class="btn btn-success btn-lg btn-pay-cash">ชำระเงินสด</div>
+                        <div class="btn btn-primary btn-lg btn-pay-credit">ชำระเงินเชื่อ</div>
+                        <!--                        <div class="btn btn-outline-warning btn-lg btn-pay-credit-card">ชำระบัตรเครดิต</div>-->
+                    </div>
+                </div>
+            </div>
+
+
             <div class="row">
                 <div class="col-lg-4">
                     <h6 style="color: #258faf"><i class="fa fa-calendar"></i> <?= date('d/m/Y') ?> <span
@@ -231,7 +267,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                             <td style="text-align: right">
                                 <input type="number" style="vertical-align: middle;text-align: right"
                                        class="form-control cart-qty" name="cart_qty[]" onchange="line_cal($(this))"
-                                       value="" min="1">
+                                       value="" min="1" onclick="edit_qty($(this))">
                             </td>
                             <td style="text-align: right;vertical-align: middle"></td>
                             <td style="text-align: right;vertical-align: middle"></td>
@@ -259,36 +295,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                 </div>
             </div>
             <!--            <div class="footer-cart" style="height: 250px;position: fixed;bottom: 0px;">-->
-            <div class="row">
-                <div class="col-lg-6" style="text-align: left">
-                    <div class="btn-group">
-                        <a href="index.php?r=pos/salehistory" class="btn btn-outline-info btn-history-cart"
-                           style="display: noneผ">
-                            ประวัติการขาย
-                        </a>
-                        <a href="index.php?r=pos/dailysum" class="btn btn-outline-info btn-history-cart"
-                           style="display: noneผ">
-                            สรุปยอดขายประจำวัน
-                        </a>
-                    </div>
 
-                </div>
-                <div class="col-lg-6" style="text-align: right">
-                    <div class="btn btn-outline-secondary btn-cancel-cart" style="display: none">
-                        ยกเลิกการขาย
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <div class="row div-payment" style="display: none">
-                <div class="col-lg-12" style="text-align: center">
-                    <div class="btn btn-group">
-                        <div class="btn btn-success btn-lg btn-pay-cash">ชำระเงินสด</div>
-                        <div class="btn btn-primary btn-lg btn-pay-credit">ชำระเงินเชื่อ</div>
-                        <!--                        <div class="btn btn-outline-warning btn-lg btn-pay-credit-card">ชำระบัตรเครดิต</div>-->
-                    </div>
-                </div>
-            </div>
             <!--            </div>-->
 
     </div>
@@ -669,14 +676,133 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
 
     </div>
 </div>
+
+<div id="editQtyModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #2b669a">
+                <div class="row" style="text-align: center;width: 100%;color: white">
+                    <div class="col-lg-12">
+                        <span><h3 class="popup-product" style="color: white"></h3></span>
+                        <input type="hidden" class="line-edit-amount" value="">
+                    </div>
+                </div>
+            </div>
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <input type="number" class="form-control edit-amount" min="1"
+                               style="font-size: 50px;height: 60px;text-align: center" value="0">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="1"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">1
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="2"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">2
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="3"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">3
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="4"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">4
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="5"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">5
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="6"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">6
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="7"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">7
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="8"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">8
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="9"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">9
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="0"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">0
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="btn btn-outline-danger" data-var="-1"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))"> Clear
+                        </div>
+                    </div>
+<!--                    <div class="col-lg-3">-->
+<!--                        <div class="btn btn-outline-primary" data-var="8"-->
+<!--                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"-->
+<!--                             onclick="calpayprice($(this))">8-->
+<!--                        </div>-->
+<!--                    </div>-->
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline-success btn-add-cart" data-dismiss="modalx" onclick="sumitchangeqty($(this))">
+                    <i class="fa fa-check"></i> ตกลง
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                            class="fa fa-close text-danger"></i> ยกเลิก
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <input type="hidden" class="slip-print" value="<?= $filename ?>">
 <iframe id="iFramePdf" src="<?= $filename ?>" style="display:none;"></iframe>
 
 <?php //if($is_print_do != ""|| $is_print_do != null):?>
-  <div class="has-print-do" data-var="<?=$filename_do?>">
-      <input type="hidden" class="slip-print-do" value="<?= $filename_do ?>">
-      <iframe id="iFramePdfDo" src="<?= $filename_do ?>" style="display:none;"></iframe>
-  </div>
+<div class="has-print-do" data-var="<?= $filename_do ?>">
+    <input type="hidden" class="slip-print-do" value="<?= $filename_do ?>">
+    <iframe id="iFramePdfDo" src="<?= $filename_do ?>" style="display:none;"></iframe>
+</div>
 
 <?php //endif;?>
 
@@ -901,6 +1027,22 @@ function calpayprice(e){
         $(".pay-alert").hide();
         $(".btn-pay-submit").prop('disabled','');
     }
+}
+function calpayprice2(e){
+    var price_val = e.attr('data-var');
+    var c_pay = "";
+    if(price_val == "-1"){
+        $(".edit-amount").val(0);
+    }else{
+        if($(".edit-amount").val() == 0){
+            c_pay = price_val;
+        }else{
+            c_pay = ''+$(".edit-amount").val()+price_val;
+        }
+       
+    }
+    
+    $(".edit-amount").val(c_pay);
 }
 function getproduct_price(e){
     var ids = e.val();
@@ -1172,6 +1314,7 @@ function addcart2(e){
             line_cal(tr);
         }else{
             var clone = tr.clone();
+            
             clone.find(".cart-product-id").val(prod_id);
             clone.find('.cart-qty').val(qty);
             clone.find('.cart-price').val(price);
@@ -1299,7 +1442,7 @@ function reducecartdivcustomer(e){
 }
 
 function removecartitem(e){
-    if(confirm('ต้องการลบข้อมูลนี้ใช่หรือไม่?')){
+   // if(confirm('ต้องการลบข้อมูลนี้ใช่หรือไม่?')){
         
         if($('.table-cart tbody tr').length == 1){
             var tr = $('.table-cart tbody tr:last');
@@ -1323,7 +1466,7 @@ function removecartitem(e){
         }
         
         
-    }
+  //  }
 }
 function cal_linenum() {
         var xline = 0;
@@ -1409,6 +1552,26 @@ function myPrint2(){
         getMyFrame.contentWindow.print();
     }
     
+}
+
+function edit_qty(e){
+    var line_product_id = e.closest("tr").find(".cart-product-id").val();
+    $(".line-edit-amount").val(line_product_id);
+    $(".edit-amount").val(0);
+    $("#editQtyModal").modal("show");
+}
+
+function sumitchangeqty(e){
+     var new_amt = $(".edit-amount").val();
+     var update_product_line = $(".line-edit-amount").val();
+     $("table.table-cart tbody tr").each(function(){
+         var p_line = $(this).closest('tr').find('.cart-product-id').val();
+         if(p_line == update_product_line){
+             $(this).closest('tr').find('.cart-qty').val(new_amt).change();
+         }
+     });
+     //alert(new_amt);
+     $("#editQtyModal").modal("hide");
 }
 
 JS;
