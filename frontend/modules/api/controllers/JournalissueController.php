@@ -30,7 +30,7 @@ class JournalissueController extends Controller
         $status = false;
         if($route_id){
            // $model = \common\models\JournalIssue::find()->one();
-            $model = \common\models\JournalIssue::find()->where(['delivery_route_id'=>$route_id,'status'=>1])->one();
+            $model = \common\models\JournalIssue::find()->where(['delivery_route_id'=>$route_id,'status'=>2])->one();
             if ($model) {
                 $model_line = \common\models\JournalIssueLine::find()->where(['issue_id'=>$model->id])->all();
                 if($model_line){

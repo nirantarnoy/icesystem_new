@@ -6,9 +6,11 @@ use yii\filters\VerbFilter;
 use yii\web\Controller;
 
 date_default_timezone_set('Asia/Bangkok');
+
 class OrderController extends Controller
 {
     public $enableCsrfValidation = false;
+
     public function behaviors()
     {
         return [
@@ -20,7 +22,7 @@ class OrderController extends Controller
                     'listbycustomer' => ['POST'],
                     'deleteorder' => ['POST'],
                     'deleteorderline' => ['POST'],
-                    'customercredit'=> ['POST']
+                    'customercredit' => ['POST']
                 ],
             ],
         ];
@@ -47,9 +49,9 @@ class OrderController extends Controller
             $customer_id = $req_data['customer_id'];
             $product_id = $req_data['product_id'];
             $qty = $req_data['qty'];
-           // $price = $req_data['price']; // find by route_id
-          //  $price_group_id = $req_data['price_group_id'];
-            $user_id = $req_data['user_id']==null?0:$req_data['user_id'];
+            // $price = $req_data['price']; // find by route_id
+            //  $price_group_id = $req_data['price_group_id'];
+            $user_id = $req_data['user_id'] == null ? 0 : $req_data['user_id'];
             $issue_id = $req_data['issue_id'];
             $route_id = $req_data['route_id'];
             $car_id = $req_data['car_id'];
@@ -59,16 +61,16 @@ class OrderController extends Controller
         if ($customer_id) {
             $sale_date = date('Y/m/d');
             $t_date = null;
-            $exp_order_date  = explode(' ',$api_date);
-            if($exp_order_date != null){
-                if(count($exp_order_date) >1){
-                    $x_date = explode('-',$exp_order_date[0]);
-                    if(count($x_date) >1){
-                         $t_date = $x_date[0]."/".$x_date[1]."/".$x_date[2];
+            $exp_order_date = explode(' ', $api_date);
+            if ($exp_order_date != null) {
+                if (count($exp_order_date) > 1) {
+                    $x_date = explode('-', $exp_order_date[0]);
+                    if (count($x_date) > 1) {
+                        $t_date = $x_date[0] . "/" . $x_date[1] . "/" . $x_date[2];
                     }
                 }
             }
-            if($t_date!=null){
+            if ($t_date != null) {
                 $sale_date = $t_date;
             }
             $sale_time = date('H:i:s');
@@ -86,8 +88,8 @@ class OrderController extends Controller
             $model->status = 1;
             $model->created_by = $user_id;
             if ($model->save(false)) {
-                $price = $this->findCustomerprice($customer_id,$product_id,$route_id);
-                $price_group_id = $this->findCustomerpricgroup($customer_id,$product_id,$route_id);
+                $price = $this->findCustomerprice($customer_id, $product_id, $route_id);
+                $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
                 $model_line = new \backend\models\Orderline();
                 $model_line->order_id = $model->id;
                 $model_line->customer_id = $customer_id;
@@ -98,7 +100,7 @@ class OrderController extends Controller
                 $model_line->price_group_id = $price_group_id;
                 $model_line->status = 1;
                 if ($model_line->save()) {
-                    $order_total_all+= $model_line->line_total;
+                    $order_total_all += $model_line->line_total;
                     $status = true;
                 }
                 $model->order_total_amt = $order_total_all;
@@ -120,34 +122,41 @@ class OrderController extends Controller
 
         return ['status' => $status, 'data' => $data];
     }
-    public function hasOrder($order_date,$route_id){
+
+    public function hasOrder($order_date, $route_id)
+    {
         $res = false;
-        if($route_id){
-            $model = \common\models\Orders::find()->where(['order_date'=>$order_date,'order_channel_id'=>$route_id])->count();
+        if ($route_id) {
+            $model = \common\models\Orders::find()->where(['order_date' => $order_date, 'order_channel_id' => $route_id])->count();
             $res = $model;
         }
         return $res;
     }
-    public function findCustomerprice($customer_id,$product_id, $route_id){
+
+    public function findCustomerprice($customer_id, $product_id, $route_id)
+    {
         $price = 0;
-        if($product_id && $route_id){
-            $model = \common\models\QueryCustomerPrice::find()->where(['cus_id'=>$customer_id,'product_id'=>$product_id,'delivery_route_id'=>$route_id])->one();
-            if($model){
-                $price = $model->sale_price==null?0:$model->sale_price;
+        if ($product_id && $route_id) {
+            $model = \common\models\QueryCustomerPrice::find()->where(['cus_id' => $customer_id, 'product_id' => $product_id, 'delivery_route_id' => $route_id])->one();
+            if ($model) {
+                $price = $model->sale_price == null ? 0 : $model->sale_price;
             }
         }
         return $price;
     }
-    public function findCustomerpricgroup($customer_id,$product_id, $route_id){
+
+    public function findCustomerpricgroup($customer_id, $product_id, $route_id)
+    {
         $group_id = 0;
-        if($product_id && $route_id){
-            $model = \common\models\QueryCustomerPrice::find()->where(['cus_id'=>$customer_id,'product_id'=>$product_id,'delivery_route_id'=>$route_id])->one();
-            if($model){
-                $group_id = $model->id==null?0:$model->id;
+        if ($product_id && $route_id) {
+            $model = \common\models\QueryCustomerPrice::find()->where(['cus_id' => $customer_id, 'product_id' => $product_id, 'delivery_route_id' => $route_id])->one();
+            if ($model) {
+                $group_id = $model->id == null ? 0 : $model->id;
             }
         }
         return $group_id;
     }
+
     public function actionList()
     {
         $status = false;
@@ -157,26 +166,24 @@ class OrderController extends Controller
 
         $data = [];
         if ($car_id) {
-            $model = \common\models\Orders::find()->where(['car_ref_id'=>$car_id])->all();
+            $model = \common\models\QueryApiOrderDailySummary::find()->where(['car_ref_id' => $car_id])->all();
             // $model = \common\models\Orders::find()->where(['id'=>131])->all();
             //  $model = \common\models\Orders::find()->where(['car_ref_id' => $car_id])->all();
             if ($model) {
                 $status = true;
                 foreach ($model as $value) {
-                    $paymethod_id = \backend\models\Customer::findPayMethod($value->customer_id);
-                    $pay_type = \backend\models\Paymentmethod::findPaytype($paymethod_id);
-                    $paymethod_name = \backend\models\Paymentmethod::findName($paymethod_id);
                     array_push($data, [
                         'id' => $value->id,
                         'order_no' => $value->order_no,
                         'order_date' => $value->order_date,
                         'order_status' => $value->status,
                         'customer_id' => $value->customer_id,
-                        'customer_name' => \backend\models\Customer::findName($value->customer_id),
+                        'customer_code' => $value->code,
+                        'customer_name' => $value->name,
                         'note' => '',
-                        'payment_method' => $paymethod_name,
-                        'payment_method_id' => $pay_type,
-                        'total_amount' => $value->order_total_amt == null? 0:$value->order_total_amt,
+                        'payment_method' => $value->payment_method_name,
+                        'payment_method_id' => $value->pay_type,
+                        'total_amount' => $value->line_total == null ? 0 : $value->line_total,
                     ]);
                 }
             }
@@ -190,40 +197,29 @@ class OrderController extends Controller
         $status = false;
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
-        $car_id = $req_data['car_id'];
+        $customer_id = $req_data['customer_id'];
 
         $data = [];
-        if (!$car_id) {
-            $model = \common\models\Orders::find()->where(['>=', 'id', 120])->all();
-            // $model = \common\models\Orders::find()->where(['id'=>131])->all();
-            //  $model = \common\models\Orders::find()->where(['car_ref_id' => $car_id])->all();
+        if ($customer_id) {
+            $model = \common\models\QueryApiOrderDaily::find()->where(['customer_id' => $customer_id])->all();
             if ($model) {
                 $status = true;
                 foreach ($model as $value) {
-                    $paymethod_id = \backend\models\Customer::findPayMethod($value->customer_id);
-                    $pay_type = \backend\models\Paymentmethod::findPaytype($paymethod_id);
-                    $paymethod_name = \backend\models\Paymentmethod::findName($paymethod_id);
-
-                    $data_line = $this->getSumbycust($value->id);
-                    if ($data_line != null) {
-                        if (count($data_line) > 0) {
-                            for ($x = 0; $x <= count($data_line) - 1; $x++) {
-                                array_push($data, [
-                                    'id' => $value->id,
-                                    'order_no' => $value->order_no,
-                                    'order_date' => $value->order_date,
-                                    'order_status' => $value->status,
-                                    'customer_id' => $data_line[$x]['customer_id'],
-                                    'customer_name' => \backend\models\Customer::findName($data_line[$x]['customer_id']),
-                                    'note' => '',
-                                    'payment_method' => $paymethod_name,
-                                    'payment_method_id' => $pay_type,
-                                    'total_amount' => $data_line[$x]['line_total'],
-                                ]);
-                            }
-                        }
-                    }
-
+                    array_push($data, [
+                        'id' => $value->id,
+                        'order_no' => $value->order_no,
+                        'order_date' => $value->order_date,
+                        'order_status' => $value->status,
+                        'customer_id' => $value->customer_id,
+                        'customer_name' => $value->customer_name,
+                        'customer_code'=> $value->customer_code,
+                        'product_id' => $value->product_id,
+                        'product_code' => $value->product_code,
+                        'product_name' => $value->product_name,
+                        'qty' => $value->qty,
+                        'price' => $value->price,
+                        'price_group_id'=> ''
+                    ]);
 
                 }
             }
@@ -251,10 +247,10 @@ class OrderController extends Controller
         $status = false;
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
-        $id = $req_data['orderline_id'];
+        $id = $req_data['id'];
 
         $data = [];
-        if (!$id) {
+        if ($id) {
             if (\common\models\OrderLine::deleteAll(['id' => $id])) {
                 $status = true;
             }
