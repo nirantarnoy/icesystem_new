@@ -12,9 +12,7 @@ use yii\web\UploadedFile;
 
 class PaymentreceiveController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
+    public $enableCsrfValidation = false;
     public function behaviors()
     {
         return [
