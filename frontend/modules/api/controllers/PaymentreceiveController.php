@@ -34,7 +34,7 @@ class PaymentreceiveController extends Controller
         $status = false;
         if ($customer_id) {
             // $model = \common\models\JournalIssue::find()->one();
-            $model = \common\models\QuerySalePaySummary::find()->where(['customer_id' => $customer_id])->one();
+            $model = \common\models\QuerySalePaySummary::find()->where(['customer_id' => $customer_id])->all();
             if ($model) {
                 $status = true;
                 foreach ($model as $value) {
@@ -50,7 +50,6 @@ class PaymentreceiveController extends Controller
                         //'pay_type' => $value->pay_type,
                     ]);
                 }
-
             }
         }
 
