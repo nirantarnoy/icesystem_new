@@ -85,7 +85,7 @@ $this->params['breadcrumbs'][] = '/' . $this->title;
                     return \backend\models\Productgroup::findName($data->product_group_id);
                 }
             ],
-            'barcode',
+            'nw',
             [
                 'attribute' => 'stock_type',
                 'format' => 'raw',

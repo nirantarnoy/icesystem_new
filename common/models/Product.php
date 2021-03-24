@@ -75,7 +75,7 @@ class Product extends \yii\db\ActiveRecord
             'std_cost' => Yii::t('app', 'ต้นทุน'),
             'sale_price' => Yii::t('app', 'ราคาขาย'),
             'unit_id' => Yii::t('app', 'หน่วยนับ'),
-            'nw' => Yii::t('app', 'Nw'),
+            'nw' => Yii::t('app', 'น้ำหนัก'),
             'gw' => Yii::t('app', 'Gw'),
             'min_stock' => Yii::t('app', 'Min Stock'),
             'max_stock' => Yii::t('app', 'Max Stock'),
