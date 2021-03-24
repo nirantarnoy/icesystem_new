@@ -84,6 +84,7 @@ class PaymentreceiveController extends Controller
                     $model_line->status = 1;
                     if($model_line->save()){
                         $status = true;
+                       // $this->updatePaymenttransline($model->customer_id, $line_order[$i], $line_pay[$i], 1);
                     }
                 }
             }else{
@@ -101,6 +102,7 @@ class PaymentreceiveController extends Controller
                     $model_line->status = 1;
                     if($model_line->save()){
                         $status = true;
+                        $this->updatePaymenttransline($model->customer_id, $line_order[$i], $line_pay[$i], 1);
                     }
                 }
             }
@@ -112,6 +114,22 @@ class PaymentreceiveController extends Controller
     public function checkHasRecord($customer_id, $trans_date){
         $model = \common\models\PaymentReceive::find()->where(['date(trans_date)'=>$trans_date,'customer_id'=>$customer_id])->one();
         return $model;
+    }
+    public function updatePaymenttransline($customer_id, $order_id, $pay_amt, $pay_type)
+    {
+        if ($customer_id != null && $order_id != null && $pay_amt > 0) {
+            //     $model = \backend\models\Paymenttransline::find()->where(['customer_id'=>$customer_id,'order_ref_id'=>$order_id])->andFilterWhere(['payment_method_id'=>2])->one();
+            $model = \backend\models\Paymenttransline::find()->innerJoin('payment_method', 'payment_trans_line.payment_method_id=payment_method.id')->where(['payment_trans_line.customer_id' => $customer_id, 'payment_trans_line.order_ref_id' => $order_id])->andFilterWhere(['payment_method.pay_type' => 2])->one();
+            if ($model) {
+                if ($pay_type == 0) {
+                    $model->payment_amount = ($model->payment_amount - (float)$pay_amt);
+                } else {
+                    $model->payment_amount = ($model->payment_amount + (float)$pay_amt);
+                }
+
+                $model->save(false);
+            }
+        }
     }
     public function actionDeletepay()
     {

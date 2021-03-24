@@ -25,12 +25,27 @@ class JournalissueController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $route_id = $req_data['route_id'];
+        $issue_date = $req_data['issue_date'];
 
         $data = [];
         $status = false;
         if($route_id){
+            $trans_date = date('Y/m/d');
+            $t_date = null;
+            $exp_order_date = explode(' ', $issue_date);
+            if ($exp_order_date != null) {
+                if (count($exp_order_date) > 1) {
+                    $x_date = explode('-', $exp_order_date[0]);
+                    if (count($x_date) > 1) {
+                        $t_date = $x_date[0] . "/" . $x_date[1] . "/" . $x_date[2];
+                    }
+                }
+            }
+            if ($t_date != null) {
+                $trans_date = $t_date;
+            }
            // $model = \common\models\JournalIssue::find()->one();
-            $model = \common\models\JournalIssue::find()->where(['delivery_route_id'=>$route_id,'status'=>2])->one();
+            $model = \common\models\JournalIssue::find()->where(['delivery_route_id'=>$route_id,'status'=>1,'date(trans_date)'=>$trans_date])->one();
             if ($model) {
                 $model_line = \common\models\JournalIssueLine::find()->where(['issue_id'=>$model->id])->all();
                 if($model_line){

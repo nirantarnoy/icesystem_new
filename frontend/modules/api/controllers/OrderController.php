@@ -58,7 +58,7 @@ class OrderController extends Controller
         }
 
         $data = [];
-        if ($customer_id) {
+        if ($customer_id && $route_id && $car_id) {
             $sale_date = date('Y/m/d');
             $t_date = null;
             $exp_order_date = explode(' ', $api_date);
@@ -77,35 +77,61 @@ class OrderController extends Controller
 
             $order_total_all = 0;
 
-            $model = new \backend\models\Orders();
-            $model->order_no = $model->getLastNo($sale_date);
-            $model->order_date = date('Y-m-d H:i:s', strtotime($sale_date . ' ' . $sale_time));
-            $model->customer_id = 0;
-            $model->order_channel_id = $route_id; // สายส่ง
-            $model->sale_channel_id = 1; //ช่องทาง
-            $model->car_ref_id = $car_id;
-            $model->issue_id = $issue_id;
-            $model->status = 1;
-            $model->created_by = $user_id;
-            if ($model->save(false)) {
-                $price = $this->findCustomerprice($customer_id, $product_id, $route_id);
-                $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
-                $model_line = new \backend\models\Orderline();
-                $model_line->order_id = $model->id;
-                $model_line->customer_id = $customer_id;
-                $model_line->product_id = $product_id;
-                $model_line->qty = $qty;
-                $model_line->price = $price;
-                $model_line->line_total = ($qty * $price);
-                $model_line->price_group_id = $price_group_id;
-                $model_line->status = 1;
-                if ($model_line->save()) {
-                    $order_total_all += $model_line->line_total;
-                    $status = true;
+            $has_order = $this->hasOrder();
+            if($has_order != null){
+                $has_order_id = $has_order->id;
+                if($has_order_id){
+                    $price = $this->findCustomerprice($customer_id, $product_id, $route_id);
+                    $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
+                    $model_line = new \backend\models\Orderline();
+                    $model_line->order_id = $has_order_id;
+                    $model_line->customer_id = $customer_id;
+                    $model_line->product_id = $product_id;
+                    $model_line->qty = $qty;
+                    $model_line->price = $price;
+                    $model_line->line_total = ($qty * $price);
+                    $model_line->price_group_id = $price_group_id;
+                    $model_line->status = 1;
+                    if ($model_line->save()) {
+                        $order_total_all += $model_line->line_total;
+                        $status = true;
+                    }
+                    $model->order_total_amt = $order_total_all;
+                    $model->save(false);
                 }
-                $model->order_total_amt = $order_total_all;
-                $model->save(false);
+            }else{
+                $model = new \backend\models\Orders();
+                $model->order_no = $model->getLastNo($sale_date);
+                $model->order_date = date('Y-m-d H:i:s', strtotime($sale_date . ' ' . $sale_time));
+                $model->customer_id = 0;
+                $model->order_channel_id = $route_id; // สายส่ง
+                $model->sale_channel_id = 1; //ช่องทาง
+                $model->car_ref_id = $car_id;
+                $model->issue_id = $issue_id;
+                $model->status = 1;
+                $model->created_by = $user_id;
+                if ($model->save(false)) {
+                    $price = $this->findCustomerprice($customer_id, $product_id, $route_id);
+                    $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
+                    $model_line = new \backend\models\Orderline();
+                    $model_line->order_id = $model->id;
+                    $model_line->customer_id = $customer_id;
+                    $model_line->product_id = $product_id;
+                    $model_line->qty = $qty;
+                    $model_line->price = $price;
+                    $model_line->line_total = ($qty * $price);
+                    $model_line->price_group_id = $price_group_id;
+                    $model_line->status = 1;
+                    if ($model_line->save()) {
+                        $order_total_all += $model_line->line_total;
+                        $status = true;
+                    }
+                    $model->order_total_amt = $order_total_all;
+                    $model->save(false);
+                }
             }
+
+
 //            $model = \common\models\Customer::find()->where(['delivery_route_id'=>$route_id])->all();
 //            if ($model) {
 //                $status = true;
@@ -123,11 +149,11 @@ class OrderController extends Controller
         return ['status' => $status, 'data' => $data];
     }
 
-    public function hasOrder($order_date, $route_id)
+    public function hasOrder($order_date, $route_id , $car_id)
     {
-        $res = false;
-        if ($route_id) {
-            $model = \common\models\Orders::find()->where(['order_date' => $order_date, 'order_channel_id' => $route_id])->count();
+        $res = null;
+        if ($route_id && $car_id) {
+            $model = \common\models\Orders::find()->where(['date(order_date)' => $order_date, 'order_channel_id' => $route_id,'car_id'=>$car_id])->one();
             $res = $model;
         }
         return $res;
@@ -198,6 +224,7 @@ class OrderController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $customer_id = $req_data['customer_id'];
+        $order_id = $req_data['order_id'];
 
         $data = [];
         if ($customer_id) {
@@ -206,10 +233,11 @@ class OrderController extends Controller
                 $status = true;
                 foreach ($model as $value) {
                     array_push($data, [
-                        'id' => $value->id,
+                        'order_id' => $value->id,
                         'order_no' => $value->order_no,
                         'order_date' => $value->order_date,
                         'order_status' => $value->status,
+                        'line_id' => $value->line_id,
                         'customer_id' => $value->customer_id,
                         'customer_name' => $value->customer_name,
                         'customer_code'=> $value->customer_code,

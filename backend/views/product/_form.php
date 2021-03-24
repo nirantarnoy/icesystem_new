@@ -136,10 +136,12 @@ $stock_type_data = [['id' => 1, 'name' => 'ตัดสต๊อก'], ['id' => 
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-3">
+        <div class="col-lg-4">
             <?= $form->field($model, 'item_pos_seq')->textInput() ?>
         </div>
-        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <?= $form->field($model, 'nw')->textInput()->label('น้ำหนักสินค้า') ?>
+        </div>
         <div class="col-lg-4"></div>
     </div>
     <hr style="border-top: 1px dashed black">

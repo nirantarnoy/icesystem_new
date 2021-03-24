@@ -224,9 +224,13 @@ class PaymentreceiveController extends Controller
      */
     public function actionDelete($id)
     {
+        $customer_id = 0;
+        $order_id = 0;
+        $qty = 0;
         if ($id) {
             $model = \backend\models\Paymentreceive::find()->where(['id' => $id])->one();
             if ($model) {
+                $customer_id = $model->customer_id;
                 $model_line = \common\models\PaymentReceiveLine::find()->where(['payment_receive_id' => $id])->one();
                 if ($model_line) {
                     $this->updatePaymenttransline($model->customer_id, $model_line->order_id, $model_line->payment_amount, 0);
@@ -243,6 +247,17 @@ class PaymentreceiveController extends Controller
 
         return $this->redirect(['index']);
     }
+
+//    public function updatePaymenttransline($customer_id, $order_id, $qty){
+//         if($customer_id && $order_id && $qty){
+//             $model = \backend\models\Paymenttransline::find(['customer_id'=>$customer_id,'order_ref_id'=>$order_id])->one();
+//             if($model){
+//                 $old_q = $model->payment_amount;
+//                 $model->payment_amount = ($old_q - $qty);
+//                 $model->save(false);
+//             }
+//         }
+//    }
 
     /**
      * Finds the Paymentreceive model based on its primary key value.
