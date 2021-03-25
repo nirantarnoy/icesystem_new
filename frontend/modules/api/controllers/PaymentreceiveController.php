@@ -102,7 +102,7 @@ class PaymentreceiveController extends Controller
                     }
                // }
             }else{
-                $model = new \backend\models\PaymentReceive();
+                $model = new \backend\models\Paymentreceive();
                 $model->trans_date = date('Y-m-d', strtotime($t_date));//date('Y-m-d H:i:s');
                 $model->customer_id = $customer_id;
                 $model->journal_no = $model->getLastNo(date('Y-m-d'));
