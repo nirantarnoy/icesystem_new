@@ -215,10 +215,27 @@ class OrderController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $car_id = $req_data['car_id'];
+        $order_date = $req_data['order_date'];
 
         $data = [];
         if ($car_id) {
-            $model = \common\models\QueryApiOrderDailySummary::find()->where(['car_ref_id' => $car_id])->all();
+
+            $sale_date = date('Y-m-d');
+            $t_date = null;
+            $exp_order_date = explode(' ', $api_date);
+            if ($exp_order_date != null) {
+                if (count($exp_order_date) > 1) {
+                    $x_date = explode('-', $exp_order_date[0]);
+                    if (count($x_date) > 1) {
+                        $t_date = $x_date[0] . "/" . $x_date[1] . "/" . $x_date[2];
+                    }
+                }
+            }
+            if ($t_date != null) {
+                $sale_date = $t_date;
+            }
+
+            $model = \common\models\QueryApiOrderDailySummary::find()->where(['car_ref_id' => $car_id,'date(order_date)'=>$sale_date])->all();
             // $model = \common\models\Orders::find()->where(['id'=>131])->all();
             //  $model = \common\models\Orders::find()->where(['car_ref_id' => $car_id])->all();
             if ($model) {
