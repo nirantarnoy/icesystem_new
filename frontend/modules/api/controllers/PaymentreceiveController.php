@@ -122,7 +122,7 @@ class PaymentreceiveController extends Controller
 //            }
 //
 //        }
-        array_push($data,['date'=>$pay_date]);
+        array_push($data,['date'=>$t_date]);
 
         return ['status' => $status, 'data' => $data];
     }
