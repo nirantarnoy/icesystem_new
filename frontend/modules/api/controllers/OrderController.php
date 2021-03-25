@@ -49,7 +49,7 @@ class OrderController extends Controller
             $customer_id = $req_data['customer_id'];
             $product_id = $req_data['product_id'];
             $qty = $req_data['qty'];
-            // $price = $req_data['price']; // find by route_id
+            $price = $req_data['price']; // find by route_id
             //  $price_group_id = $req_data['price_group_id'];
             $user_id = $req_data['user_id'] == null ? 0 : $req_data['user_id'];
             $issue_id = $req_data['issue_id'];
@@ -59,50 +59,73 @@ class OrderController extends Controller
 
         $data = [];
         if ($customer_id && $route_id && $car_id) {
+            //  $sale_date = date('Y/m/d');
             $sale_date = date('Y/m/d');
-            $t_date = null;
-            $exp_order_date = explode(' ', $api_date);
-            if ($exp_order_date != null) {
-                if (count($exp_order_date) > 1) {
-                    $x_date = explode('-', $exp_order_date[0]);
-                    if (count($x_date) > 1) {
-                        $t_date = $x_date[0] . "/" . $x_date[1] . "/" . $x_date[2];
-                    }
-                }
-            }
-            if ($t_date != null) {
-                $sale_date = $t_date;
-            }
+//            $t_date = null;
+//            $exp_order_date = explode(' ', $api_date);
+//            if ($exp_order_date != null) {
+//                if (count($exp_order_date) > 1) {
+//                    $x_date = explode('-', $exp_order_date[0]);
+//                    if (count($x_date) > 1) {
+//                        $t_date = $x_date[0] . "/" . $x_date[1] . "/" . $x_date[2];
+//                    }
+//                }
+//            }
+//            if ($t_date != null) {
+//                $sale_date = $t_date;
+//            }
             $sale_time = date('H:i:s');
 
             $order_total_all = 0;
 
-            $has_order = $this->hasOrder();
-            if($has_order != null){
+            $has_order = $this->hasOrder($sale_date,$route_id,$car_id);
+            if ($has_order != null) {
                 $has_order_id = $has_order->id;
-                if($has_order_id){
-                    $price = $this->findCustomerprice($customer_id, $product_id, $route_id);
+                if ($has_order_id) {
+                    //$price = $this->findCustomerprice($customer_id, $product_id, $route_id);
+
                     $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
-                    $model_line = new \backend\models\Orderline();
-                    $model_line->order_id = $has_order_id;
-                    $model_line->customer_id = $customer_id;
-                    $model_line->product_id = $product_id;
-                    $model_line->qty = $qty;
-                    $model_line->price = $price;
-                    $model_line->line_total = ($qty * $price);
-                    $model_line->price_group_id = $price_group_id;
-                    $model_line->status = 1;
-                    if ($model_line->save()) {
-                        $order_total_all += $model_line->line_total;
-                        $status = true;
+
+                    $modelx = \common\models\OrderLine::find()->where(['product_id'=>$product_id,'order_id'=>$has_order_id,'customer_id'=>$customer_id])->one();
+                    if($modelx){
+                        $modelx->qty = ($modelx->qty + $qty);
+                        $modelx->line_total = ($modelx->qty * $price);
+                        $modelx->status = 1;
+                        if ($modelx->save(false)) {
+
+                            $status = true;
+                        }
+                    }else{
+                        $model_line = new \backend\models\Orderline();
+                        $model_line->order_id = $has_order_id;
+                        $model_line->customer_id = $customer_id;
+                        $model_line->product_id = $product_id;
+                        $model_line->qty = $qty;
+                        $model_line->price = $price;
+                        $model_line->line_total = ($qty * $price);
+                        $model_line->price_group_id = $price_group_id;
+                        $model_line->status = 1;
+                        if ($model_line->save(false)) {
+                            $order_total_all += $model_line->line_total;
+                            $status = true;
+
+                            $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id'=>$issue_id,'product_id'=>$product_id])->one();
+                            if($model_update_issue_line){
+                                $model_update_issue_line->avl_qty = $model_update_issue_line->avl_qty - $qty;
+                                $model_update_issue_line->save(false);
+                            }
+                        }
                     }
-                    $model->order_total_amt = $order_total_all;
-                    $model->save(false);
+
+
+//                    $model->order_total_amt = $order_total_all;
+//                    $model->save(false);
                 }
-            }else{
+            } else {
                 $model = new \backend\models\Orders();
                 $model->order_no = $model->getLastNo($sale_date);
-                $model->order_date = date('Y-m-d H:i:s', strtotime($sale_date . ' ' . $sale_time));
+                // $model->order_date = date('Y-m-d H:i:s', strtotime($sale_date . ' ' . $sale_time));
+                $model->order_date = date('Y-m-d H:i:s');
                 $model->customer_id = 0;
                 $model->order_channel_id = $route_id; // สายส่ง
                 $model->sale_channel_id = 1; //ช่องทาง
@@ -111,7 +134,7 @@ class OrderController extends Controller
                 $model->status = 1;
                 $model->created_by = $user_id;
                 if ($model->save(false)) {
-                    $price = $this->findCustomerprice($customer_id, $product_id, $route_id);
+                    //   $price = $this->findCustomerprice($customer_id, $product_id, $route_id);
                     $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
                     $model_line = new \backend\models\Orderline();
                     $model_line->order_id = $model->id;
@@ -122,38 +145,41 @@ class OrderController extends Controller
                     $model_line->line_total = ($qty * $price);
                     $model_line->price_group_id = $price_group_id;
                     $model_line->status = 1;
-                    if ($model_line->save()) {
+                    if ($model_line->save(false)) {
                         $order_total_all += $model_line->line_total;
                         $status = true;
+
+                        $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id'=>$issue_id,'product_id'=>$product_id])->one();
+                        if($model_update_issue_line){
+                            $model_update_issue_line->avl_qty = $model_update_issue_line->avl_qty - $qty;
+                            $model_update_issue_line->save(false);
+                        }
                     }
                     $model->order_total_amt = $order_total_all;
                     $model->save(false);
+
+                    if ($model->issue_id > 0) {
+                        $model_issue = \backend\models\Journalissue::find()->where(['id' => $model->issue_id])->one();
+                        if ($model_issue) {
+                            $model_issue->status = 2;
+                            $model_issue->order_ref_id = $model->id;
+                            $model_issue->save();
+                        }
+                    }
                 }
             }
-
-
-//            $model = \common\models\Customer::find()->where(['delivery_route_id'=>$route_id])->all();
-//            if ($model) {
-//                $status = true;
-//                foreach ($model as $value) {
-//                    array_push($data, [
-//                        'id' => $value->id,
-//                        'code' => $value->code,
-//                        'name' => $value->name,
-//                        'route_id' => $value->delivery_route_id
-//                    ]);
-//                }
-//            }
         }
+      //  array_push($data,['data'=>$req_data]);
 
         return ['status' => $status, 'data' => $data];
     }
 
-    public function hasOrder($order_date, $route_id , $car_id)
+    public function hasOrder($order_date, $route_id, $car_id)
     {
+        $order_date = date('Y-m-d');
         $res = null;
         if ($route_id && $car_id) {
-            $model = \common\models\Orders::find()->where(['date(order_date)' => $order_date, 'order_channel_id' => $route_id,'car_id'=>$car_id])->one();
+            $model = \common\models\Orders::find()->where(['date(order_date)' => $order_date, 'order_channel_id' => $route_id, 'car_ref_id' => $car_id])->one();
             $res = $model;
         }
         return $res;
@@ -228,7 +254,7 @@ class OrderController extends Controller
 
         $data = [];
         if ($customer_id) {
-            $model = \common\models\QueryApiOrderDaily::find()->where(['customer_id' => $customer_id])->all();
+            $model = \common\models\QueryApiOrderDaily::find()->where(['customer_id' => $customer_id])->andFilterWhere(['>', 'qty', 0])->all();
             if ($model) {
                 $status = true;
                 foreach ($model as $value) {
@@ -240,13 +266,13 @@ class OrderController extends Controller
                         'line_id' => $value->line_id,
                         'customer_id' => $value->customer_id,
                         'customer_name' => $value->customer_name,
-                        'customer_code'=> $value->customer_code,
+                        'customer_code' => $value->customer_code,
                         'product_id' => $value->product_id,
                         'product_code' => $value->product_code,
                         'product_name' => $value->product_name,
                         'qty' => $value->qty,
                         'price' => $value->price,
-                        'price_group_id'=> ''
+                        'price_group_id' => ''
                     ]);
 
                 }

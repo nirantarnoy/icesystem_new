@@ -35,7 +35,7 @@ class JournalIssueLine extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['issue_id', 'product_id', 'warehouse_id', 'location_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['issue_id', 'product_id', 'warehouse_id','avl_qty', 'location_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['qty'], 'number'],
             [['sale_price'], 'number'],
         ];
@@ -53,6 +53,7 @@ class JournalIssueLine extends \yii\db\ActiveRecord
             'warehouse_id' => 'Warehouse ID',
             'location_id' => 'Location ID',
             'qty' => 'Qty',
+            'avl_qty' => 'Available Qty',
             'status' => 'Status',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
