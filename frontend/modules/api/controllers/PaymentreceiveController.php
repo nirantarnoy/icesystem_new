@@ -71,6 +71,11 @@ class PaymentreceiveController extends Controller
         $pay_amount = $req_data['pay_amount'];
         $pay_date = $req_data['pay_date'];
 
+        $xdate = explode('-', trim($pay_date));
+        $t_date = date('Y-m-d');
+        if (count($xdate) > 1) {
+            $t_date = $xdate[2] . '-' . $xdate[1] . '-' . $xdate[0];
+        }
         $data = [];
         $status = false;
 //        if ($customer_id && $order_id) {
