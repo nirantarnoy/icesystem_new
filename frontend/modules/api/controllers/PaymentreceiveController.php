@@ -74,7 +74,14 @@ class PaymentreceiveController extends Controller
         $data = [];
         $status = false;
         if ($customer_id && $order_id) {
+          //  $t_date = date('Y-m-d');
+
+            $xdate = explode('-', $pay_date);
             $t_date = date('Y-m-d');
+            if (count($xdate) > 1) {
+                $t_date = $xdate[2] . '-' . $xdate[1] . '-' . $xdate[0];
+            }
+
             $check_record = $this->checkHasRecord($customer_id, $t_date);
             if($check_record != null){
                 //if(count($check_record) > 0){
@@ -91,7 +98,7 @@ class PaymentreceiveController extends Controller
                // }
             }else{
                 $model = new \backend\models\PaymentReceive();
-                $model->trans_date = date('Y-m-d H:i:s');
+                $model->trans_date = date('Y-m-d', strtotime($t_date));//date('Y-m-d H:i:s');
                 $model->customer_id = $customer_id;
                 $model->journal_no = $model->getLastNo(date('Y-m-d'));
                 $model->status = 1;
