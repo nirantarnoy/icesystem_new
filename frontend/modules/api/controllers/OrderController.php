@@ -271,7 +271,7 @@ class OrderController extends Controller
 
         $data = [];
         if ($customer_id) {
-            $model = \common\models\QueryApiOrderDaily::find()->where(['customer_id' => $customer_id])->andFilterWhere(['>', 'qty', 0])->all();
+            $model = \common\models\QueryApiOrderDaily::find()->where(['customer_id' => $customer_id])->andFilterWhere(['id'=>$order_id])->andFilterWhere(['>', 'qty', 0])->all();
             if ($model) {
                 $status = true;
                 foreach ($model as $value) {
