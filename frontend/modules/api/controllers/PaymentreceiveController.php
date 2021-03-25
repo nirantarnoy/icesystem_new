@@ -76,7 +76,7 @@ class PaymentreceiveController extends Controller
         if ($customer_id && $order_id) {
           //  $t_date = date('Y-m-d');
 
-            $xdate = explode('-', $pay_date);
+            $xdate = explode('-', trim($pay_date));
             $t_date = date('Y-m-d');
             if (count($xdate) > 1) {
                 $t_date = $xdate[2] . '-' . $xdate[1] . '-' . $xdate[0];
@@ -109,7 +109,7 @@ class PaymentreceiveController extends Controller
                     $model_line->payment_amount = $pay_amount;
                     $model_line->payment_channel_id = $payment_channel_id;
                     $model_line->status = 1;
-                    if($model_line->save()){
+                    if($model_line->save(false)){
                         $status = true;
                         $this->updatePaymenttransline($customer_id, $order_id, $pay_amount, $payment_channel_id);
                     }
