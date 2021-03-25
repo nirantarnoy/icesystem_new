@@ -77,7 +77,7 @@ class PaymentreceiveController extends Controller
             $t_date = date('Y-m-d');
             $check_record = $this->checkHasRecord($customer_id, $t_date);
             if($check_record != null){
-                if(count($check_record) > 0){
+                //if(count($check_record) > 0){
                     $model_line = new \common\models\PaymentReceiveLine();
                     $model_line->payment_receive_id = $check_record->id;
                     $model_line->order_id = $order_id;
@@ -88,7 +88,7 @@ class PaymentreceiveController extends Controller
                         $status = true;
                         $this->updatePaymenttransline($customer_id, $order_id, $pay_amount, $payment_channel_id);
                     }
-                }
+               // }
             }else{
                 $model = new \backend\models\PaymentReceive();
                 $model->trans_date = date('Y-m-d H:i:s');
