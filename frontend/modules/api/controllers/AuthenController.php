@@ -47,8 +47,8 @@ class AuthenController extends Controller
                                 'user_id' => '' . $model->id,
                                 'emp_code' => $model_info->code,
                                 'emp_name' => $model_info->fname . ' ' . $model_info->lname,
-                       //         'emp_photo' => 'http://119.59.100.74/icesystem/backend/web/uploads/images/employee/' . $model_info->photo
-                                'emp_photo' => 'http://192.168.1.120/icesystem/backend/web/uploads/images/employee/' . $model_info->photo,
+                                'emp_photo' => 'http://119.59.100.74/icesystem/backend/web/uploads/images/employee/' . $model_info->photo,
+                          //      'emp_photo' => 'http://192.168.1.120/icesystem/backend/web/uploads/images/employee/' . $model_info->photo,
                                 'emp_route_id' => $car_info ==null?0:$car_info[0]['route_id'],
                                 'emp_route_name' => $car_info ==null?0:$car_info[0]['route_name'],
                                 'emp_car_id' => $car_info ==null?0:$car_info[0]['car_id'],
