@@ -215,7 +215,7 @@ class OrderController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $car_id = $req_data['car_id'];
-        $order_date = $req_data['order_date'];
+        $api_date = $req_data['order_date'];
 
         $data = [];
         if ($car_id) {
