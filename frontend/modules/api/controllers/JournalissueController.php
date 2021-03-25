@@ -58,7 +58,7 @@ class JournalissueController extends Controller
                             'issue_no' => \backend\models\Journalissue::findNum($value->issue_id),
                             'product_id' => $value->product_id,
                             'product_name' => \backend\models\Product::findName($value->product_id),
-                            'image' => 'http://192.168.1.120/icesystem/backend/web/uploads/images/products/'.$product_image,
+                            'image' => 'http://119.59.100.74/icesystem/backend/web/uploads/images/products/'.$product_image,
                             'issue_qty' => $value->qty,
                             'avl_qty' => $value->avl_qty,
                             'price' => 0,
