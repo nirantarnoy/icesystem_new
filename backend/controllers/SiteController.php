@@ -100,51 +100,51 @@ class SiteController extends Controller
         $order_lastest = \common\models\QuerySaleLastest::find()->all();
 
 
-        $sql = "select sale_channel_type,sum(m1) as m1 ,sum(m2) as m2,sum(m3) as m3,sum(m4) as m4,sum(m5) as m5,sum(m6) as m6,sum(m7) as m7,sum(m8) as m8,sum(m9) as m9,sum(m10) as m10,sum(m11) as m11,sum(m12) as m12 from query_sale_amount_by_sale_type";
-        if ($f_date != null && $t_date != null) {
-            $sql .= " where date(order_date) >='" . date('Y-m-d', strtotime($f_date)) . "' and date(order_date) <='" . date('Y-m-d', strtotime($t_date))."'";
-        }
-        $sql.=" group by sale_channel_type";
-//echo $sql;return;
-        $query = \Yii::$app->db->createCommand($sql)->queryAll();
-        $category = ['มค.', 'กพ.', 'มีค.', 'เมษ.', 'พค.', 'มิย.', 'กค', 'สค', 'กย', 'ตค', 'พย', 'ธค'];
-        $data_by_type = [];
-        for ($i = 0; $i <= count($query) - 1; $i++) {
-            array_push($data_by_type, [
-                //  'type' => 'column',
-                'name' => $query[$i]['sale_channel_type'],
-                'data' => [
-                    ($query[$i]['m1'] * 1), ($query[$i]['m2'] * 1), ($query[$i]['m3'] * 1), ($query[$i]['m4'] * 1),
-                    ($query[$i]['m5'] * 1), ($query[$i]['m6'] * 1), ($query[$i]['m7'] * 1), ($query[$i]['m8'] * 1),
-                    ($query[$i]['m9'] * 1), ($query[$i]['m10'] * 1), ($query[$i]['m11'] * 1), ($query[$i]['m12'] * 1)
-                ]
-            ]);
-        }
-
-        $sql2 = "select code,name,sum(total_amount) as total_amount from query_sale_amount_by_product WHERE total_amount > 0";
-        if ($f_date != null && $t_date != null) {
-            $sql2 .= " AND date(order_date) >='" . date('Y-m-d', strtotime($f_date)) . "' and date(order_date) <='" . date('Y-m-d', strtotime($t_date))."'";
-        }
-        $sql2.=" group by code";
-//        echo $sql2;
-//        return;
-        $query2 = \Yii::$app->db->createCommand($sql2)->queryAll();
-        $data_by_prod_type = [];
-        $data_prod_data = [];
-        for ($i = 0; $i <= count($query2) - 1; $i++) {
-            array_push($data_prod_data, [
-                'name' => $query2[$i]['name'],
-                'y' => (float)$query2[$i]['total_amount'],
-                'selected' => false
-            ]);
-
-        }
-
-        array_push($data_by_prod_type, [
-                'name' => 'ยอดขาย',
-                'data' => $data_prod_data
-            ]
-        );
+//        $sql = "select sale_channel_type,sum(m1) as m1 ,sum(m2) as m2,sum(m3) as m3,sum(m4) as m4,sum(m5) as m5,sum(m6) as m6,sum(m7) as m7,sum(m8) as m8,sum(m9) as m9,sum(m10) as m10,sum(m11) as m11,sum(m12) as m12 from query_sale_amount_by_sale_type";
+//        if ($f_date != null && $t_date != null) {
+//            $sql .= " where date(order_date) >='" . date('Y-m-d', strtotime($f_date)) . "' and date(order_date) <='" . date('Y-m-d', strtotime($t_date))."'";
+//        }
+//        $sql.=" group by sale_channel_type";
+////echo $sql;return;
+//        $query = \Yii::$app->db->createCommand($sql)->queryAll();
+//        $category = ['มค.', 'กพ.', 'มีค.', 'เมษ.', 'พค.', 'มิย.', 'กค', 'สค', 'กย', 'ตค', 'พย', 'ธค'];
+//        $data_by_type = [];
+//        for ($i = 0; $i <= count($query) - 1; $i++) {
+//            array_push($data_by_type, [
+//                //  'type' => 'column',
+//                'name' => $query[$i]['sale_channel_type'],
+//                'data' => [
+//                    ($query[$i]['m1'] * 1), ($query[$i]['m2'] * 1), ($query[$i]['m3'] * 1), ($query[$i]['m4'] * 1),
+//                    ($query[$i]['m5'] * 1), ($query[$i]['m6'] * 1), ($query[$i]['m7'] * 1), ($query[$i]['m8'] * 1),
+//                    ($query[$i]['m9'] * 1), ($query[$i]['m10'] * 1), ($query[$i]['m11'] * 1), ($query[$i]['m12'] * 1)
+//                ]
+//            ]);
+//        }
+//
+//        $sql2 = "select code,name,sum(total_amount) as total_amount from query_sale_amount_by_product WHERE total_amount > 0";
+//        if ($f_date != null && $t_date != null) {
+//            $sql2 .= " AND date(order_date) >='" . date('Y-m-d', strtotime($f_date)) . "' and date(order_date) <='" . date('Y-m-d', strtotime($t_date))."'";
+//        }
+//        $sql2.=" group by code";
+////        echo $sql2;
+////        return;
+//        $query2 = \Yii::$app->db->createCommand($sql2)->queryAll();
+//        $data_by_prod_type = [];
+//        $data_prod_data = [];
+//        for ($i = 0; $i <= count($query2) - 1; $i++) {
+//            array_push($data_prod_data, [
+//                'name' => $query2[$i]['name'],
+//                'y' => (float)$query2[$i]['total_amount'],
+//                'selected' => false
+//            ]);
+//
+//        }
+//
+//        array_push($data_by_prod_type, [
+//                'name' => 'ยอดขาย',
+//                'data' => $data_prod_data
+//            ]
+//        );
 //        ['name' => 'Test',
 //            'data' => [
 //                ['name' => 'Chrome',
@@ -163,9 +163,9 @@ class SiteController extends Controller
             'order_cnt' => $order_cnt,
             'order_pos_cnt' => $order_pos_cnt,
             'order_normal_cnt' => $order_normal_cnt,
-            'data_by_type' => $data_by_type,
-            'data_by_prod_type' => $data_by_prod_type,
-            'category' => $category,
+//            'data_by_type' => $data_by_type,
+//            'data_by_prod_type' => $data_by_prod_type,
+//            'category' => $category,
             'f_date' => $f_date,
             't_date' => $t_date,
             'order_lastest' => $order_lastest,

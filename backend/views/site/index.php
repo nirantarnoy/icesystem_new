@@ -147,14 +147,14 @@ if ($f_date != null && $t_date != null) {
                     <!--                        </div>-->
                     <!--                    </div>-->
                     <!-- /.card -->
-                    <div class="card">
-                        <div class="card-header border-0">
-                            <div class="d-flex justify-content-between">
-                                <h3 class="card-title">ยอดขายแยกประเภทขาย</h3>
-                                <a href="javascript:void(0);">รายละเอียด</a>
-                            </div>
-                        </div>
-                        <div class="card-body">
+<!--                    <div class="card">-->
+<!--                        <div class="card-header border-0">-->
+<!--                            <div class="d-flex justify-content-between">-->
+<!--                                <h3 class="card-title">ยอดขายแยกประเภทขาย</h3>-->
+<!--                                <a href="javascript:void(0);">รายละเอียด</a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="card-body">-->
                             <!--                            <div class="d-flex">-->
                             <!--                                <p class="d-flex flex-column">-->
                             <!--                                    <span class="text-bold text-lg">18,230.00</span>-->
@@ -162,36 +162,36 @@ if ($f_date != null && $t_date != null) {
                             <!--                                </p>-->
                             <!--                            </div>-->
                             <!-- /.d-flex -->
-
-                            <div class="position-relative mb-12">
-                                <?php
-                                echo Highcharts::widget([
-                                    'setupOptions' => [
-                                        'lang' => [
-                                            'numericSymbols' => null,
-                                            'thousandsSep' => ','
-                                        ]
-                                    ],
-                                    'options' => [
-                                        'title' => ['text' => ''],
-                                        'subtitle' => ['text' => ''],
-                                        'tooltip' => [
-                                            'pointFormat' => "<b style='color: red;font-weight: bold'>{point.y:,.0f}</b> บาท"
-                                        ],
-                                        'xAxis' => [
-                                            'categories' => $category
-                                        ],
-                                        'yAxis' => [
-                                            'title' => ['text' => 'ยอดเงิน']
-                                        ],
-                                        'series' => $data_by_type
-                                    ]
-                                ]);
-                                ?>
-                            </div>
-
-                        </div>
-                    </div>
+<!---->
+<!--                            <div class="position-relative mb-12">-->
+<!--                                --><?php
+//                                echo Highcharts::widget([
+//                                    'setupOptions' => [
+//                                        'lang' => [
+//                                            'numericSymbols' => null,
+//                                            'thousandsSep' => ','
+//                                        ]
+//                                    ],
+//                                    'options' => [
+//                                        'title' => ['text' => ''],
+//                                        'subtitle' => ['text' => ''],
+//                                        'tooltip' => [
+//                                            'pointFormat' => "<b style='color: red;font-weight: bold'>{point.y:,.0f}</b> บาท"
+//                                        ],
+//                                        'xAxis' => [
+//                                            'categories' => $category
+//                                        ],
+//                                        'yAxis' => [
+//                                            'title' => ['text' => 'ยอดเงิน']
+//                                        ],
+//                                        'series' => $data_by_type
+//                                    ]
+//                                ]);
+//                                ?>
+<!--                            </div>-->
+<!---->
+<!--                        </div>-->
+<!--                    </div>-->
 
                     <!--                     -------->
 
@@ -244,14 +244,14 @@ if ($f_date != null && $t_date != null) {
                 </div>
                 <!-- /.col-md-6 -->
                 <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-header border-0">
-                            <div class="d-flex justify-content-between">
-                                <h3 class="card-title">ยอดขายแยกตามประเภทสินค้า</h3>
-                                <a href="javascript:void(0);">รายละเอียด</a>
-                            </div>
-                        </div>
-                        <div class="card-body">
+<!--                    <div class="card">-->
+<!--                        <div class="card-header border-0">-->
+<!--                            <div class="d-flex justify-content-between">-->
+<!--                                <h3 class="card-title">ยอดขายแยกตามประเภทสินค้า</h3>-->
+<!--                                <a href="javascript:void(0);">รายละเอียด</a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="card-body">-->
                             <!--                            <div class="d-flex">-->
                             <!--                                <p class="d-flex flex-column">-->
                             <!--                                    <span class="text-bold text-lg">18,230.00</span>-->
@@ -265,44 +265,44 @@ if ($f_date != null && $t_date != null) {
                             <!--                                </p>-->
                             <!--                            </div>-->
                             <!-- /.d-flex -->
-
-                            <div class="position-relative mb-4">
-                                <?php
-                                //  print_r($data_by_prod_type);
-                                echo Highcharts::widget([
-                                    'setupOptions' => [
-                                        'lang' => [
-                                            'numericSymbols' => null,
-                                            'thousandsSep' => ','
-                                        ]
-                                    ],
-                                    'options' => [
-                                        'chart' => [
-                                            'type' => 'pie',
-                                        ],
-                                        'tooltip' => [
-                                            'pointFormat' => "<b style='color: red;font-weight: bold'>{point.y:,.0f}</b> บาท"
-                                        ],
-                                        'allowPointSelect' => true,
-                                        'title' => ['text' => ''],
-                                        'subtitle' => ['text' => ''],
-                                        'showInLegend' => true,
-                                        'xAxis' => [
-                                            'categories' => ''
-                                        ],
-                                        'yAxis' => [
-                                            'title' => ['text' => 'ยอดเงิน']
-                                        ],
-                                        'series' => [
-                                            $data_by_prod_type[0]
-                                        ]
-                                    ]
-                                ]);
-                                ?>
-                            </div>
-
-                        </div>
-                    </div>
+<!---->
+<!--                            <div class="position-relative mb-4">-->
+<!--                                --><?php
+//                                //  print_r($data_by_prod_type);
+//                                echo Highcharts::widget([
+//                                    'setupOptions' => [
+//                                        'lang' => [
+//                                            'numericSymbols' => null,
+//                                            'thousandsSep' => ','
+//                                        ]
+//                                    ],
+//                                    'options' => [
+//                                        'chart' => [
+//                                            'type' => 'pie',
+//                                        ],
+//                                        'tooltip' => [
+//                                            'pointFormat' => "<b style='color: red;font-weight: bold'>{point.y:,.0f}</b> บาท"
+//                                        ],
+//                                        'allowPointSelect' => true,
+//                                        'title' => ['text' => ''],
+//                                        'subtitle' => ['text' => ''],
+//                                        'showInLegend' => true,
+//                                        'xAxis' => [
+//                                            'categories' => ''
+//                                        ],
+//                                        'yAxis' => [
+//                                            'title' => ['text' => 'ยอดเงิน']
+//                                        ],
+//                                        'series' => [
+//                                            $data_by_prod_type[0]
+//                                        ]
+//                                    ]
+//                                ]);
+//                                ?>
+<!--                            </div>-->
+<!---->
+<!--                        </div>-->
+<!--                    </div>-->
                     <!-- /.card -->
 
                     <div class="card">
