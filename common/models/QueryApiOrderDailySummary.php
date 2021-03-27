@@ -19,6 +19,7 @@ use Yii;
  * @property int|null $payment_method_id
  * @property int|null $pay_type
  * @property string|null $payment_method_name
+ * @property float|null $line_qty
  */
 class QueryApiOrderDailySummary extends \yii\db\ActiveRecord
 {
@@ -38,7 +39,7 @@ class QueryApiOrderDailySummary extends \yii\db\ActiveRecord
         return [
             [['id', 'status', 'car_ref_id', 'customer_id', 'payment_method_id', 'pay_type'], 'integer'],
             [['order_date'], 'safe'],
-            [['line_total'], 'number'],
+            [['line_total', 'line_qty'], 'number'],
             [['order_no', 'code', 'name', 'payment_method_name'], 'string', 'max' => 255],
         ];
     }
@@ -61,6 +62,7 @@ class QueryApiOrderDailySummary extends \yii\db\ActiveRecord
             'payment_method_id' => 'Payment Method ID',
             'pay_type' => 'Pay Type',
             'payment_method_name' => 'Payment Method Name',
+            'line_qty' => 'Line Qty',
         ];
     }
 }

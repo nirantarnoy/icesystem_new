@@ -253,6 +253,7 @@ class OrderController extends Controller
                         'payment_method' => $value->payment_method_name,
                         'payment_method_id' => $value->pay_type,
                         'total_amount' => $value->line_total == null ? 0 : $value->line_total,
+                        'total_qty' => $value->line_qty == null ? 0 : $value->line_qty,
                     ]);
                 }
             }
