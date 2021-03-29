@@ -60,7 +60,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                     <?php echo Select2::widget([
                         'name' => 'customer_id',
                         'value' => 1,
-                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['sort_name' => null])->orFilterHaving(['sort_name'=>''])->all(), 'id', function ($data) {
+                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['sort_name' => null])->orFilterWhere(['sort_name'=>''])->all(), 'id', function ($data) {
                             return $data->code . ' ' . $data->name;
                         }),
                         'options' => [
