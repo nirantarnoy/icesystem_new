@@ -57,10 +57,11 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
             <div class="col-lg-8">
                 <div class="input-group" style="margin-left: 10px;">
                     <!--                    <input type="text" class="form-control find-customer" value="">-->
+<!--                    ->where(['sort_name' => null])->orFilterWhere(['sort_name'=>''])-->
                     <?php echo Select2::widget([
                         'name' => 'customer_id',
                         'value' => 1,
-                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['sort_name' => null])->orFilterWhere(['sort_name'=>''])->all(), 'id', function ($data) {
+                        'data' => ArrayHelper::map(\backend\models\Customer::find()->all(), 'id', function ($data) {
                             return $data->code . ' ' . $data->name;
                         }),
                         'options' => [
