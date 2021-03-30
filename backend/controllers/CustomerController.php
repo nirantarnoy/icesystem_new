@@ -106,7 +106,7 @@ class CustomerController extends Controller
             }
 
             $model->code = $model->getLastNo();
-
+            $model->sort_name = $model->sort_name == null?'':$model->sort_name;
             if($model->save(false)){
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
@@ -146,6 +146,7 @@ class CustomerController extends Controller
                 $photo->saveAs(Yii::getAlias('@backend') . '/web/uploads/images/customer/' . $photo_name);
                 $model->shop_photo = $photo_name;
             }
+            $model->sort_name = $model->sort_name == null?'':$model->sort_name;
             if($model->save(false)){
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
