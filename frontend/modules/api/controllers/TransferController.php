@@ -29,10 +29,10 @@ class TransferController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
 
-        $car_id = $req_data['target_car_id'];
+//        $car_id = $req_data['target_car_id'];
         $product_id = $req_data['product_id'];
-        $qty = $req_data['qty'];
-        $sale_price = $req_data['price'];
+//        $qty = $req_data['qty'];
+//        $sale_price = $req_data['price'];
 
 //        $order_id = \Yii::$app->request->post('transfer_order_id');
 //        $order_target_id = \Yii::$app->request->post('order_target');
