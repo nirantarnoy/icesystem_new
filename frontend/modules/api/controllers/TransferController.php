@@ -23,40 +23,44 @@ class TransferController extends Controller
         ];
     }
     public function actionAddtransfer(){
+        $status  = false;
+        $data = [];
+
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
-        $route_id = $req_data['route_id'];
-        
-        $order_id = \Yii::$app->request->post('transfer_order_id');
-        $order_target_id = \Yii::$app->request->post('order_target');
-        $line_prod = \Yii::$app->request->post('line_issue_product_id');
-        $line_qty = \Yii::$app->request->post('line_trans_qty');
+        $car_id = $req_data['target_car_id'];
 
-        if ($order_id && $order_target_id) {
-            if ($line_prod != null) {
-                $trans_date = date('d/m/Y');
-                $model = new \backend\models\Journaltransfer();
-                $model->journal_no = $model->getLastNo($trans_date);
-                $model->trans_date = date('Y-m-d');
-                $model->order_ref_id = $order_id;
-                $model->order_target_id = $order_target_id;
-                $model->status = 1;
-                if ($model->save(false)) {
-                    if (count($line_prod) > 0) {
-                        for ($i = 0; $i <= count($line_prod) - 1; $i++) {
-                            if ($line_qty[$i] <= 0) continue;
-                            $model_line = new \backend\models\Transferline();
-                            $model_line->transfer_id = $model->id;
-                            $model_line->product_id = $line_prod[$i];
-                            $model_line->sale_price = 0;
-                            $model_line->qty = $line_qty[$i];
-                            $model_line->status = 1;
-                            $model_line->save();
-                        }
-                    }
-                }
-            }
-        }
+//        $order_id = \Yii::$app->request->post('transfer_order_id');
+//        $order_target_id = \Yii::$app->request->post('order_target');
+//        $line_prod = \Yii::$app->request->post('line_issue_product_id');
+//        $line_qty = \Yii::$app->request->post('line_trans_qty');
+
+        return ['status' => $status, 'data' => $car_id];
+//        if ($order_id && $order_target_id) {
+//            if ($line_prod != null) {
+//                $trans_date = date('d/m/Y');
+//                $model = new \backend\models\Journaltransfer();
+//                $model->journal_no = $model->getLastNo($trans_date);
+//                $model->trans_date = date('Y-m-d');
+//                $model->order_ref_id = $order_id;
+//                $model->order_target_id = $order_target_id;
+//                $model->status = 1;
+//                if ($model->save(false)) {
+//                    if (count($line_prod) > 0) {
+//                        for ($i = 0; $i <= count($line_prod) - 1; $i++) {
+//                            if ($line_qty[$i] <= 0) continue;
+//                            $model_line = new \backend\models\Transferline();
+//                            $model_line->transfer_id = $model->id;
+//                            $model_line->product_id = $line_prod[$i];
+//                            $model_line->sale_price = 0;
+//                            $model_line->qty = $line_qty[$i];
+//                            $model_line->status = 1;
+//                            $model_line->save();
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
     public function actionInlist()
     {
