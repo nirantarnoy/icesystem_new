@@ -36,7 +36,7 @@ class JournalTransfer extends \yii\db\ActiveRecord
         return [
             [['journal_no'],'unique'],
             [['trans_date'], 'safe'],
-            [['order_ref_id', 'order_target_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['order_ref_id', 'order_target_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','from_car_id','to_car_id'], 'integer'],
             [['journal_no'], 'string', 'max' => 255],
         ];
     }
@@ -53,6 +53,8 @@ class JournalTransfer extends \yii\db\ActiveRecord
             'order_ref_id' => 'Order Ref ID',
             'order_target_id' => 'Order Target ID',
             'status' => 'Status',
+            'from_car_id' => 'from car',
+            'to_car_id' => 'to car',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Update At',

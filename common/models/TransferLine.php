@@ -34,7 +34,7 @@ class TransferLine extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['transfer_id', 'product_id', 'qty', 'created_at', 'status', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['transfer_id', 'product_id', 'qty', 'created_at', 'status', 'created_by', 'updated_at', 'updated_by','avl_qty'], 'integer'],
             [['sale_price'], 'number'],
         ];
     }
@@ -50,6 +50,7 @@ class TransferLine extends \yii\db\ActiveRecord
             'product_id' => 'Product ID',
             'sale_price' => 'Sale Price',
             'qty' => 'Qty',
+            'avl_qty' => 'Avl Qty',
             'created_at' => 'Created At',
             'status' => 'Status',
             'created_by' => 'Created By',

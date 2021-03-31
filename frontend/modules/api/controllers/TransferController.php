@@ -48,6 +48,8 @@ class TransferController extends Controller
                 $model->trans_date = date('Y-m-d');
                 $model->order_ref_id = 1;
                 $model->order_target_id = 1;
+                $model->from_car_id = 1;
+                $model->to_car_id = $car_id;
                 $model->status = 1;
                 if ($model->save(false)) {
                     if (count($data_list) > 0) {
@@ -59,6 +61,7 @@ class TransferController extends Controller
                             $model_line->product_id = $data_list[$i]['product_id'];
                             $model_line->sale_price = $data_list[$i]['price'];
                             $model_line->qty = $data_list[$i]['qty'];
+                            $model_line->avl_qty = $data_list[$i]['qty'];
                             $model_line->status = 1;
                             if($model_line->save(false)){
                                 $status = true;
@@ -74,22 +77,25 @@ class TransferController extends Controller
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
-        $route_id = $req_data['route_id'];
+        $car_id = $req_data['car_id'];
 
         $data = [];
         $status = false;
-        if($route_id){
+        if($car_id){
           //  $model = \common\models\JournalTransfer::find()->where(['delivery_route_id'=>$route_id])->all();
-            $model = \common\models\JournalTransfer::find()->all();
+            $model = \common\models\JournalTransfer::find()->where(['to_car_id'=>$car_id])->all();
             if ($model) {
                 $status = true;
                 foreach ($model as $value) {
+                    $model_line_avl_qty = \common\models\TransferLine::find()->where(['transfer_id'=>$value->id])->sum('avl_qty');
                     array_push($data, [
                         'transfer_id' => $value->id,
                         'journal_no' => $value->journal_no,
                         'to_route' => $value->order_target_id,
                         'to_car_no' => "001",
-                        'to_order_no' => $value->order_ref_id
+                        'to_order_no' => $value->order_ref_id,
+                        'from_car_id' => $value->from_car_id,
+                        'qty' => $model_line_avl_qty
                     ]);
                 }
             }
