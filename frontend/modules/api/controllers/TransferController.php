@@ -40,7 +40,7 @@ class TransferController extends Controller
 //        $line_qty = \Yii::$app->request->post('line_trans_qty');
 
 
-        //if ($car_id != null) {
+        if ($car_id != null) {
             //if ($data_list != null) {
                 $trans_date = date('d/m/Y');
                 $model = new \backend\models\Journaltransfer();
@@ -67,7 +67,7 @@ class TransferController extends Controller
                     }
                 }
            // }
-        //}
+        }
         return ['status' => $status, 'data' => count($data_list)];
     }
     public function actionInlist()
