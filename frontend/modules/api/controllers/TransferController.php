@@ -112,12 +112,15 @@ class TransferController extends Controller
             if ($model) {
                 $status = true;
                 foreach ($model as $value) {
+                    $model_line_qty = \common\models\TransferLine::find()->where(['transfer_id'=>$value->id])->sum('qty');
+
                     array_push($data, [
                         'transfer_id' => $value->id,
                         'journal_no' => $value->journal_no,
                         'to_route' => $value->order_target_id,
                         'to_car_no' => "001",
-                        'to_order_no' => $value->order_ref_id
+                        'to_order_no' => $value->order_ref_id,
+                        'qty' => $model_line_qty
                     ]);
                 }
             }
