@@ -29,8 +29,8 @@ class TransferController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
 
-//        $car_id = $req_data['target_car_id'];
-        $product_id = $req_data['product_id'];
+        $car_id = $req_data['target_car_id'];
+        $data_list = $req_data['data'];
 //        $qty = $req_data['qty'];
 //        $sale_price = $req_data['price'];
 
@@ -68,7 +68,7 @@ class TransferController extends Controller
 //                }
 //            }
 //        }
-        return ['status' => $status, 'data' => $product_id];
+        return ['status' => $status, 'data' => $data_list];
     }
     public function actionInlist()
     {
