@@ -68,7 +68,7 @@ class TransferController extends Controller
 //                }
 //            }
 //        }
-        return ['status' => $status, 'data' => $data_list];
+        return ['status' => $status, 'data' => $data_list[0]];
     }
     public function actionInlist()
     {
