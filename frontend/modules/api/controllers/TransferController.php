@@ -40,34 +40,34 @@ class TransferController extends Controller
 //        $line_qty = \Yii::$app->request->post('line_trans_qty');
 
 
-//        if ($car_id != null) {
-//            if ($data_list != null) {
-//                $trans_date = date('d/m/Y');
-//                $model = new \backend\models\Journaltransfer();
-//                $model->journal_no = $model->getLastNo($trans_date);
-//                $model->trans_date = date('Y-m-d');
-//                $model->order_ref_id = 1;
-//                $model->order_target_id = 1;
-//                $model->status = 1;
-//                if ($model->save(false)) {
-//                    if (count($data_list) > 0) {
-//                        for ($i = 0; $i <= count($data_list) - 1; $i++) {
-//                            if ($data_list[$i]['qty'] <= 0) continue;
-//
-//                            $model_line = new \backend\models\Transferline();
-//                            $model_line->transfer_id = $model->id;
-//                            $model_line->product_id = $data_list[$i]['product_id'];
-//                            $model_line->sale_price = $data_list[$i]['price'];
-//                            $model_line->qty = $data_list[$i]['qty'];
-//                            $model_line->status = 1;
-//                            if($model_line->save(false)){
-//                                $status = true;
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
+        if ($car_id != null) {
+            //if ($data_list != null) {
+                $trans_date = date('d/m/Y');
+                $model = new \backend\models\Journaltransfer();
+                $model->journal_no = $model->getLastNo($trans_date);
+                $model->trans_date = date('Y-m-d');
+                $model->order_ref_id = 1;
+                $model->order_target_id = 1;
+                $model->status = 1;
+                if ($model->save(false)) {
+                    if (count($data_list) > 0) {
+                        for ($i = 0; $i <= count($data_list) - 1; $i++) {
+                            if ($data_list[$i]['qty'] <= 0) continue;
+
+                            $model_line = new \backend\models\Transferline();
+                            $model_line->transfer_id = $model->id;
+                            $model_line->product_id = $data_list[$i]['product_id'];
+                            $model_line->sale_price = $data_list[$i]['price'];
+                            $model_line->qty = $data_list[$i]['qty'];
+                            $model_line->status = 1;
+                            if($model_line->save(false)){
+                                $status = true;
+                            }
+                        }
+                    }
+                }
+           // }
+        }
         return ['status' => $status, 'data' => count($data_list)];
     }
     public function actionInlist()
