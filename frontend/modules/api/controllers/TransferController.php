@@ -124,7 +124,7 @@ class TransferController extends Controller
                         'transfer_id' => $value->id,
                         'journal_no' => $value->journal_no,
                         'to_route' => $value->order_target_id,
-                        'to_car_no' => "001",
+                        'to_car_no' => \backend\models\Car::findName($value->to_car_id),
                         'to_order_no' => $value->order_ref_id,
                         'qty' => $model_line_qty
                     ]);
