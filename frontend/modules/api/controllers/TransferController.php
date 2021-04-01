@@ -32,6 +32,7 @@ class TransferController extends Controller
         $from_car_id = $req_data['from_car_id'];
         $to_car_id = $req_data['to_car_id'];
         $data_list = $req_data['data'];
+        $issue_id = $req_data['issue_id'];
 //        $qty = $req_data['qty'];
 //        $sale_price = $req_data['price'];
 
@@ -65,6 +66,7 @@ class TransferController extends Controller
                             $model_line->avl_qty = $data_list[$i]['qty'];
                             $model_line->status = 1;
                             if($model_line->save(false)){
+                                $this->updateIssue($issue_id[$i],$data_list[$i]['product_id'],$data_list[$i]['qty']);
                                 $status = true;
                             }
                         }
@@ -73,6 +75,16 @@ class TransferController extends Controller
            // }
         }
         return ['status' => $status, 'data' => count($data_list)];
+    }
+
+    public function updateIssue($issue_id, $product_id ,$qty){
+        if($issue_id){
+            $model = \common\models\JournalIssueLine::find()->where(['issue_id'=>$issue_id,'product_id'=>$product_id])->one();
+            if($model){
+                $model->avl_qty = ($model->avl_qty - $qty);
+                $model->save(false);
+            }
+        }
     }
     public function actionInlist()
     {
