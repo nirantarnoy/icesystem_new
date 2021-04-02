@@ -32,7 +32,7 @@ class TransferController extends Controller
         $from_car_id = $req_data['from_car_id'];
         $to_car_id = $req_data['to_car_id'];
         $data_list = $req_data['data'];
-        $issue_id = $req_data['issue_id'];
+        //$issue_id = $req_data['issue_id'];
 //        $qty = $req_data['qty'];
 //        $sale_price = $req_data['price'];
 
@@ -42,12 +42,12 @@ class TransferController extends Controller
 //        $line_qty = \Yii::$app->request->post('line_trans_qty');
 
 
-        if ($from_car_id != null && $to_car_id != null && $issue_id != null) {
+        if ($from_car_id != null && $to_car_id != null) {
             //if ($data_list != null) {
                 $trans_date = date('Y/m/d');
                 $model = new \backend\models\Journaltransfer();
                 $model->journal_no = $model->getLastNo($trans_date);
-                $model->trans_date = date('Y-m-d');
+                $model->trans_date = date('Y-m-d H:i:s');
                 $model->order_ref_id = 1;
                 $model->order_target_id = 1;
                 $model->from_car_id = $from_car_id;
@@ -66,7 +66,7 @@ class TransferController extends Controller
                             $model_line->avl_qty = $data_list[$i]['qty'];
                             $model_line->status = 1;
                             if($model_line->save(false)){
-                                //$this->updateIssue($issue_id[$i],$data_list[$i]['product_id'],$data_list[$i]['qty']);
+                                $this->updateIssue($data_list[$i]['issue_id'],$data_list[$i]['product_id'],$data_list[$i]['qty']);
                                 $status = true;
                             }
                         }
