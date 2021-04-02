@@ -60,14 +60,14 @@ class ProductController extends Controller
         $customer_id = 0;
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
-        $customer_id = $req_data['customer_id'];
+      //  $customer_id = $req_data['customer_id'];
         $route_id = $req_data['route_id'];
         $issue_date = $req_data['issue_date'];
 
         $data = [];
         $status = false;
 
-        if ($customer_id != null && $route_id != null) {
+        if ($route_id != null) {
             $trans_date = date('Y/m/d');
             $t_date = null;
             $exp_order_date = explode(' ', $issue_date);
