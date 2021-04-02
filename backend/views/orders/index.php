@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return \backend\models\Car::findName($data->car_ref_id);
                 }
             ],
-//            [
+            [
                 'label' => 'ยอดรับชำระ',
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
