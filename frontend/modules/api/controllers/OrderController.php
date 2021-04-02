@@ -93,8 +93,12 @@ class OrderController extends Controller
                         $modelx->line_total = ($modelx->qty * $price);
                         $modelx->status = 1;
                         if ($modelx->save(false)) {
-
                             $status = true;
+                            $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id'=>$issue_id,'product_id'=>$product_id])->one();
+                            if($model_update_issue_line){
+                                $model_update_issue_line->avl_qty = ($model_update_issue_line->avl_qty - (int)$qty);
+                                $model_update_issue_line->save(false);
+                            }
                         }
                     }else{
                         $model_line = new \backend\models\Orderline();
