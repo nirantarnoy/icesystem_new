@@ -96,6 +96,7 @@ class ProductController extends Controller
                             'code' => $value->code,
                             'name' => $value->name,
                             'sale_price' => $value->sale_price,
+                            'issue_id' =>$value->issue_id,
                         ]);
                     }
                 }
