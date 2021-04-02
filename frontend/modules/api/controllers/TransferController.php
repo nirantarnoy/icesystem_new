@@ -42,7 +42,7 @@ class TransferController extends Controller
 //        $line_qty = \Yii::$app->request->post('line_trans_qty');
 
 
-        if ($from_car_id != null && $to_car_id != null) {
+        if ($from_car_id != null && $to_car_id != null && $issue_id != null) {
             //if ($data_list != null) {
                 $trans_date = date('Y/m/d');
                 $model = new \backend\models\Journaltransfer();
@@ -66,7 +66,7 @@ class TransferController extends Controller
                             $model_line->avl_qty = $data_list[$i]['qty'];
                             $model_line->status = 1;
                             if($model_line->save(false)){
-                                $this->updateIssue($issue_id[$i],$data_list[$i]['product_id'],$data_list[$i]['qty']);
+                                //$this->updateIssue($issue_id[$i],$data_list[$i]['product_id'],$data_list[$i]['qty']);
                                 $status = true;
                             }
                         }
