@@ -25,6 +25,7 @@ class JournalissueController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $route_id = $req_data['route_id'];
+       // $car_id = $req_data['car_id'];
         $issue_date = $req_data['issue_date'];
 
         $data = [];
