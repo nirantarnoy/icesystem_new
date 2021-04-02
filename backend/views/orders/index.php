@@ -82,29 +82,29 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
 //            [
-//                'label' => 'ยอดรับชำระ',
-//                'headerOptions' => ['style' => 'text-align: right'],
-//                'contentOptions' => ['style' => 'text-align: right'],
-//                'value' => function ($data) {
-//                    return number_format(\backend\models\Paymentreceive::findPayorderamt($data->id));
-//                }
-//            ],
-//            [
-//                'label' => 'เครดิต/เชื่อ',
-//                'headerOptions' => ['style' => 'text-align: right'],
-//                'contentOptions' => ['style' => 'text-align: right'],
-//                'value' => function ($data) {
-//                    return number_format(\backend\models\Orders::findordercredit($data->id));
-//                }
-//            ],
-//            [
-//                'label' => 'สด',
-//                'headerOptions' => ['style' => 'text-align: right'],
-//                'contentOptions' => ['style' => 'text-align: right'],
-//                'value' => function ($data) {
-//                    return number_format(\backend\models\Orders::findordercash($data->id));
-//                }
-//            ],
+                'label' => 'ยอดรับชำระ',
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
+                'value' => function ($data) {
+                    return number_format(\backend\models\Paymentreceive::findPayorderamt($data->id));
+                }
+            ],
+            [
+                'label' => 'เครดิต/เชื่อ',
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
+                'value' => function ($data) {
+                    return number_format(\backend\models\Orders::findordercredit($data->id));
+                }
+            ],
+            [
+                'label' => 'สด',
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
+                'value' => function ($data) {
+                    return number_format(\backend\models\Orders::findordercash($data->id));
+                }
+            ],
 //            [
 //                'attribute' => 'order_total_amt',
 //                'headerOptions' => ['style' => 'text-align: right'],
