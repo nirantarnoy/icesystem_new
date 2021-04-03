@@ -334,7 +334,6 @@ class OrderController extends Controller
                         $modelx->line_total = ($modelx->qty * $price);
                         $modelx->status = 1;
                         if ($modelx->save(false)) {
-
                             $status = true;
                         }
                     }else{
@@ -351,10 +350,10 @@ class OrderController extends Controller
                             $order_total_all += $model_line->line_total;
                             $status = true;
 
-                            $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id'=>$issue_id,'product_id'=>$product_id])->one();
-                            if($model_update_issue_line){
-                                $model_update_issue_line->avl_qty = $model_update_issue_line->avl_qty - $qty;
-                                $model_update_issue_line->save(false);
+                            $model_update_transfer_line = \common\models\TransferLine::find()->where(['transfer_id'=>$issue_id,'product_id'=>$product_id])->one();
+                            if($model_update_transfer_line){
+                                $model_update_transfer_line->avl_qty = $model_update_transfer_line->avl_qty - $qty;
+                                $model_update_transfer_line->save(false);
                             }
                         }
                     }
@@ -391,23 +390,15 @@ class OrderController extends Controller
                         $order_total_all += $model_line->line_total;
                         $status = true;
 
-                        $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id'=>$issue_id,'product_id'=>$product_id])->one();
-                        if($model_update_issue_line){
-                            $model_update_issue_line->avl_qty = $model_update_issue_line->avl_qty - $qty;
-                            $model_update_issue_line->save(false);
+                        $model_update_transfer_line = \common\models\TransferLine::find()->where(['transfer_id'=>$issue_id,'product_id'=>$product_id])->one();
+                        if($model_update_transfer_line){
+                            $model_update_transfer_line->avl_qty = $model_update_transfer_line->avl_qty - $qty;
+                            $model_update_transfer_line->save(false);
                         }
                     }
                     $model->order_total_amt = $order_total_all;
                     $model->save(false);
 
-                    if ($model->issue_id > 0) {
-                        $model_issue = \backend\models\Journalissue::find()->where(['id' => $model->issue_id])->one();
-                        if ($model_issue) {
-                            $model_issue->status = 2;
-                            $model_issue->order_ref_id = $model->id;
-                            $model_issue->save();
-                        }
-                    }
                 }
             }
         }
