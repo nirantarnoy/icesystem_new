@@ -100,18 +100,24 @@ class TransferController extends Controller
             if ($model) {
                 $status = true;
                 foreach ($model as $value) {
-                    $model_line_avl_qty = \common\models\TransferLine::find()->where(['transfer_id'=>$value->id])->sum('avl_qty');
-                    array_push($data, [
-                        'transfer_id' => $value->id,
-                        'journal_no' => $value->journal_no,
-                        'to_route' => $value->order_target_id,
-                        'from_car_id' => $value->from_car_id,
-                        'from_car_name' => \backend\models\Car::findName($value->from_car_id),
-                        'product_id' => $value->product_id,
-                        'product_name' => \backend\models\Product::findName($value->product_id),
-                        'qty' => $model_line_avl_qty,
-                        'sale_price' => $value->sale_price,
-                    ]);
+                    //$model_line_avl_qty = \common\models\TransferLine::find()->where(['transfer_id'=>$value->id])->sum('avl_qty');
+                    $model_line = \common\models\TransferLine::find()->where(['transfer_id'=>$value->id])->all();
+                    if($model_line){
+                        foreach ($model_line as $value2){
+                            array_push($data, [
+                                'transfer_id' => $value->id,
+                                'journal_no' => $value->journal_no,
+                                'to_route' => $value->order_target_id,
+                                'from_car_id' => $value->from_car_id,
+                                'from_car_name' => \backend\models\Car::findName($value->from_car_id),
+                                'product_id' => $value2->product_id,
+                                'product_name' => \backend\models\Product::findName($value2->product_id),
+                                'qty' => $value2->avl_qty,
+                                'sale_price' => $value2->sale_price,
+                            ]);
+                        }
+                    }
+
                 }
             }
         }
