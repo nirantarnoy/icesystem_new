@@ -296,6 +296,7 @@ class OrderController extends Controller
             $issue_id = $req_data['issue_id'];
             $route_id = $req_data['route_id'];
             $car_id = $req_data['car_id'];
+            $transfer_id = $req_data['transfer_id'];
         }
 
         $data = [];

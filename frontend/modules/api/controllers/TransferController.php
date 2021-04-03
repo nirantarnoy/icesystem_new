@@ -107,7 +107,10 @@ class TransferController extends Controller
                         'to_route' => $value->order_target_id,
                         'from_car_id' => $value->from_car_id,
                         'from_car_name' => \backend\models\Car::findName($value->from_car_id),
+                        'product_id' => $value->product_id,
+                        'product_name' => \backend\models\Product::findName($value->product_id),
                         'qty' => $model_line_avl_qty,
+                        'sale_price' => $value->sale_price,
                     ]);
                 }
             }
