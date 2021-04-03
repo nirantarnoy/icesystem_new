@@ -350,7 +350,7 @@ class OrderController extends Controller
                             $order_total_all += $model_line->line_total;
                             $status = true;
 
-                            $model_update_transfer_line = \common\models\TransferLine::find()->where(['transfer_id'=>$issue_id,'product_id'=>$product_id])->one();
+                            $model_update_transfer_line = \common\models\TransferLine::find()->where(['transfer_id'=>$transfer_id,'product_id'=>$product_id])->one();
                             if($model_update_transfer_line){
                                 $model_update_transfer_line->avl_qty = $model_update_transfer_line->avl_qty - $qty;
                                 $model_update_transfer_line->save(false);
@@ -390,7 +390,7 @@ class OrderController extends Controller
                         $order_total_all += $model_line->line_total;
                         $status = true;
 
-                        $model_update_transfer_line = \common\models\TransferLine::find()->where(['transfer_id'=>$issue_id,'product_id'=>$product_id])->one();
+                        $model_update_transfer_line = \common\models\TransferLine::find()->where(['transfer_id'=>$transfer_id,'product_id'=>$product_id])->one();
                         if($model_update_transfer_line){
                             $model_update_transfer_line->avl_qty = $model_update_transfer_line->avl_qty - $qty;
                             $model_update_transfer_line->save(false);
