@@ -23,6 +23,7 @@ class OrderController extends Controller
                     'listbycustomer' => ['POST'],
                     'deleteorder' => ['POST'],
                     'deleteorderline' => ['POST'],
+                    'deleteordercustomer' => ['POST'],
                     'customercredit' => ['POST']
                 ],
             ],
@@ -481,6 +482,23 @@ class OrderController extends Controller
             }
         }
 
+        return ['status' => $status, 'data' => $data];
+    }
+
+    public function actionDeleteordercustomer()
+    {
+        $status = false;
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        $order_id = $req_data['order_id'];
+        $customer_id = $req_data['customer_id'];
+
+        $data = [];
+        if ($order_id != null && $customer_id != null) {
+           if(\common\models\OrderLine::updateAll(['qty'=>0,'price'=>0],['order_id'=>$order_id,'customer_id'=>$customer_id])){
+            $status = true;
+           }
+        }
         return ['status' => $status, 'data' => $data];
     }
 
