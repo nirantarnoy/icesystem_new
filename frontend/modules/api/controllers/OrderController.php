@@ -56,6 +56,7 @@ class OrderController extends Controller
             $issue_id = $req_data['issue_id'];
             $route_id = $req_data['route_id'];
             $car_id = $req_data['car_id'];
+            $payment_type_id = $res_data['payment_type_id'];
         }
 
         $data = [];
@@ -76,9 +77,7 @@ class OrderController extends Controller
 //                $sale_date = $t_date;
 //            }
             $sale_time = date('H:i:s');
-
             $order_total_all = 0;
-
             $has_order = $this->hasOrder($sale_date,$route_id,$car_id);
             if ($has_order != null) {
                 $has_order_id = $has_order->id;
@@ -122,7 +121,6 @@ class OrderController extends Controller
                         }
                     }
 
-
 //                    $model->order_total_amt = $order_total_all;
 //                    $model->save(false);
                 }
@@ -150,6 +148,7 @@ class OrderController extends Controller
                     $model_line->line_total = ($qty * $price);
                     $model_line->price_group_id = $price_group_id;
                     $model_line->status = 1;
+                    $model_line->sale_payment_method_id = $payment_type_id;
                     if ($model_line->save(false)) {
                         $order_total_all += $model_line->line_total;
                         $status = true;
