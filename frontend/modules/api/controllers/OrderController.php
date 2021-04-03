@@ -495,7 +495,7 @@ class OrderController extends Controller
 
         $data = [];
         if ($order_id != null && $customer_id != null) {
-           if(\common\models\OrderLine::updateAll(['qty'=>0,'price'=>0],['order_id'=>$order_id,'customer_id'=>$customer_id])){
+           if(\common\models\OrderLine::updateAll(['qty'=>0,'price'=>0,'line_total'=>0],['order_id'=>$order_id,'customer_id'=>$customer_id])){
             $status = true;
            }
         }
