@@ -30,6 +30,7 @@ use yii\widgets\ActiveForm;
             ],
             'pluginOptions' => [
                 'allowClear' => true,
+                'width'=> '300px',
             ]
         ])->label(false) ?>
         <span style="margin-left: 5px;"></span>
@@ -43,6 +44,7 @@ use yii\widgets\ActiveForm;
             ],
             'pluginOptions' => [
                 'allowClear' => true,
+                'width'=> '300px',
             ]
         ])->label(false) ?>
     </div>
