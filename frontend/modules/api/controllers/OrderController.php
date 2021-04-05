@@ -162,7 +162,6 @@ class OrderController extends Controller
                     }
                     $model->order_total_amt = $order_total_all;
                     $model->save(false);
-
                     if ($model->issue_id > 0) {
                         $model_issue = \backend\models\Journalissue::find()->where(['id' => $model->issue_id])->one();
                         if ($model_issue) {
@@ -263,7 +262,6 @@ class OrderController extends Controller
                 }
             }
         }
-
         return ['status' => $status, 'data' => $data];
     }
 
@@ -398,7 +396,6 @@ class OrderController extends Controller
                     }
                     $model->order_total_amt = $order_total_all;
                     $model->save(false);
-
                 }
             }
         }

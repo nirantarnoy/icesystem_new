@@ -97,6 +97,15 @@
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="index.php?r=stocksum" class="nav-link stocksum">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>
+                                    สินค้าคงเหลือ
+                                    <!--                                <span class="right badge badge-danger">New</span>-->
+                                </p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item has-treeview has-sub">

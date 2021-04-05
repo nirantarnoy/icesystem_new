@@ -1,0 +1,65 @@
+<?php
+
+namespace common\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "stock_trans".
+ *
+ * @property int $id
+ * @property int|null $company_id
+ * @property int|null $branch_id
+ * @property string|null $journal_no
+ * @property string|null $trans_date
+ * @property int|null $product_id
+ * @property int|null $warehouse_id
+ * @property int|null $location_id
+ * @property string|null $lot_no
+ * @property int|null $qty
+ * @property int|null $created_at
+ * @property int|null $created_by
+ */
+class StockTrans extends \yii\db\ActiveRecord
+{
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return 'stock_trans';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['company_id', 'branch_id', 'product_id', 'warehouse_id', 'location_id', 'qty', 'created_at', 'created_by'], 'integer'],
+            [['trans_date'], 'safe'],
+            [['journal_no', 'lot_no'], 'string', 'max' => 255],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'company_id' => 'Company ID',
+            'branch_id' => 'Branch ID',
+            'journal_no' => 'Journal No',
+            'trans_date' => 'Trans Date',
+            'product_id' => 'Product ID',
+            'warehouse_id' => 'Warehouse ID',
+            'location_id' => 'Location ID',
+            'lot_no' => 'Lot No',
+            'qty' => 'Qty',
+            'created_at' => 'Created At',
+            'created_by' => 'Created By',
+        ];
+    }
+}
