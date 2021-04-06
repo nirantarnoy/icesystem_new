@@ -71,7 +71,7 @@ $wh_date = \backend\models\Warehouse::find()->where(['id'=>6])->all();
                     <input type="text" name="line_item_name[]" value="" class="form-control line-item-name" readonly>
                 </td>
                 <td>
-                    <input type="number" class="form-control line-qty" value="0" min="0" name="line_qty[]">
+                    <input type="number" class="form-control line-qty" value="0" min="0" name="line_qty[]" onchange="calall()">
                 </td>
                 <td style="width: 5%;text-align: center">
                     <div class="btn btn-danger btn-sm removecart-item" onclick="removecartitem($(this))"><i class="fa fa-trash"></i></div>
