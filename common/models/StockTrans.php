@@ -36,7 +36,7 @@ class StockTrans extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['company_id', 'branch_id', 'product_id', 'warehouse_id', 'location_id', 'qty', 'created_at', 'created_by'], 'integer'],
+            [['company_id', 'branch_id', 'product_id', 'warehouse_id', 'location_id', 'qty', 'created_at', 'created_by','stock_type','activity_type_id'], 'integer'],
             [['trans_date'], 'safe'],
             [['journal_no', 'lot_no'], 'string', 'max' => 255],
         ];
@@ -51,13 +51,15 @@ class StockTrans extends \yii\db\ActiveRecord
             'id' => 'ID',
             'company_id' => 'Company ID',
             'branch_id' => 'Branch ID',
-            'journal_no' => 'Journal No',
-            'trans_date' => 'Trans Date',
-            'product_id' => 'Product ID',
-            'warehouse_id' => 'Warehouse ID',
-            'location_id' => 'Location ID',
+            'journal_no' => 'เลขที่',
+            'trans_date' => 'วันที่',
+            'product_id' => 'รหัสสินค้า',
+            'warehouse_id' => 'คลังสินค้า',
+            'stock_type' => 'ประเภทสต๊อก',
+            'activity_type_id' => 'กิจกรรม',
+            'location_id' => 'Location',
             'lot_no' => 'Lot No',
-            'qty' => 'Qty',
+            'qty' => 'จำนวน',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
         ];

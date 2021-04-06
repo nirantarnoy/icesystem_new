@@ -28,15 +28,6 @@ $prod_data = \backend\models\Product::find()->all();
                 ]) ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'delivery_route_id')->widget(Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(), 'id', 'name'),
-                'options' => [
-                    'placeholder' => '--เลือกสายส่ง--',
-                    'onchange' => 'route_change($(this))'
-                ]
-            ]) ?>
-        </div>
-        <div class="col-lg-3">
             <?= $form->field($model, 'status')->textInput(['readonly' => 'readonly', 'value' => $model->isNewRecord ? 'Open' : \backend\helpers\IssueStatus::getTypeById($model->status)]) ?>
         </div>
     </div>
@@ -72,11 +63,14 @@ $prod_data = \backend\models\Product::find()->all();
                         <td><input type="text" class="form-control line-prod-name"
                                    name="line_prod_name[]" value="" disabled>
                         </td>
+                        <td><input type="text" class="form-control line-avl-qty"
+                                   name="line_avl_qty[]" value="" disabled>
+                        </td>
                         <td>
                             <input type="hidden" class="line-issue-sale-price"
                                    name="line_issue_line_price[]" value="">
                             <input type="number" class="line-qty form-control" name="line_qty[]"
-                                   value="" min="0">
+                                   value="" min="0"  onchange="checkstock($(this))">
                         </td>
                         <td style="text-align: center">
                             <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
@@ -102,11 +96,14 @@ $prod_data = \backend\models\Product::find()->all();
                                            name="line_prod_name[]"
                                            value="<?=\backend\models\Product::findName($value2->product_id);?>" disabled>
                                 </td>
+                                <td><input type="text" class="form-control line-avl-qty"
+                                           name="line_avl_qty[]" value="" disabled>
+                                </td>
                                 <td>
                                     <input type="hidden" class="line-issue-sale-price"
                                            name="line_issue_line_price[]" value="<?= $value2->sale_price ?>">
                                     <input type="number" class="line-qty form-control" name="line_qty[]"
-                                           value="<?= $value2->qty ?>" min="0">
+                                           value="<?= $value2->qty ?>" min="0"  onchange="checkstock($(this))">
                                 </td>
 
                                 <td style="text-align: center">
@@ -131,11 +128,14 @@ $prod_data = \backend\models\Product::find()->all();
                             <td><input type="text" class="form-control line-prod-name"
                                        name="line_prod_name[]" value="" disabled>
                             </td>
+                            <td><input type="text" class="form-control line-avl-qty"
+                                       name="line_avl_qty[]" value="" disabled>
+                            </td>
                             <td>
                                 <input type="hidden" class="line-issue-sale-price"
                                        name="line_issue_line_price[]" value="">
                                 <input type="number" class="line-qty form-control" name="line_qty[]"
-                                       value="" min="0">
+                                       value="" min="0" onchange="checkstock($(this))">
                             </td>
                             <td style="text-align: center">
                                 <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
@@ -146,14 +146,14 @@ $prod_data = \backend\models\Product::find()->all();
                 <?php endif; ?>
                 <?php //endforeach; ?>
                 </tbody>
-<!--                <tfoot>-->
-<!--                <tr>-->
-<!--                    <td>-->
-<!--                        <div class="btn btn-primary" onclick="showfind($(this))"><i-->
-<!--                                    class="fa fa-plus-circle"></i></div>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                </tfoot>-->
+                <tfoot>
+                <tr>
+                    <td>
+                        <div class="btn btn-primary" onclick="showfind($(this))"><i
+                                    class="fa fa-plus-circle"></i></div>
+                    </td>
+                </tr>
+                </tfoot>
             </table>
         </div>
     </div>
@@ -266,6 +266,7 @@ function showfind(e){
         var code = e.closest('tr').find('.line-find-code').val();
         var name = e.closest('tr').find('.line-find-name').val();
         var price = e.closest('tr').find('.line-find-price').val();
+        var onhand = e.closest('tr').find('.line-onhand').val();
         if (id) {
             if (e.hasClass('btn-outline-success')) {
                 var obj = {};
@@ -273,6 +274,7 @@ function showfind(e){
                 obj['code'] = code;
                 obj['name'] = name;
                 obj['price'] = price;
+                obj['onhand'] = onhand;
                 selecteditem.push(obj);
                 
                 e.removeClass('btn-outline-success');
@@ -312,6 +314,7 @@ function showfind(e){
                 var line_prod_code = selecteditem[i]['code'];
                 var line_prod_name = selecteditem[i]['name'];
                 var line_prod_price = selecteditem[i]['price'];
+                var line_onhand = selecteditem[i]['onhand'];
                 
                  if(check_dup(line_prod_id) == 1){
                         alert("รายการสินค้า " +line_prod_code+ " มีในรายการแล้ว");
@@ -325,6 +328,7 @@ function showfind(e){
                     tr.closest("tr").find(".line-prod-code").val(line_prod_code);
                     tr.closest("tr").find(".line-prod-name").val(line_prod_name);
                     tr.closest("tr").find(".line-price").val(line_prod_price);
+                    tr.closest("tr").find(".line-avl-qty").val(line_onhand);
 
                     //cal_num();
                     console.log(line_prod_code);
@@ -340,6 +344,7 @@ function showfind(e){
                     clone.find(".line-prod-code").val(line_prod_code);
                     clone.find(".line-prod-name").val(line_prod_name);
                     clone.find(".line-price").val(line_prod_price);
+                    clone.find(".line-avl-qty").val(line_onhand);
 
                     clone.attr("data-var", "");
                     clone.find('.rec-id').val("");

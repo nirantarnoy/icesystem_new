@@ -820,10 +820,10 @@ $js = <<<JS
        var xx2 = $(".slip-print-do").val();
         //alert(xx);
         if(xx !="empty"){
-           myPrint();
+          // myPrint();
         }
         if(xx2 !="empty"){
-           myPrint2();
+          // myPrint2();
         }
      setInterval(function (){
           var dt = new Date();

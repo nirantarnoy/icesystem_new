@@ -98,6 +98,33 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="index.php?r=productionrec" class="nav-link productionrec">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>
+                                    บันทึกเข้าคลัง
+                                    <!--                                <span class="right badge badge-danger">New</span>-->
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="index.php?r=issuerefill" class="nav-link issuerefill">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>
+                                    เบิกสินค้าเติม
+                                    <!--                                <span class="right badge badge-danger">New</span>-->
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="index.php?r=stocktrans" class="nav-link stocktrans">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>
+                                    ประวัติรับเข้า-ออกคลัง
+                                    <!--                                <span class="right badge badge-danger">New</span>-->
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="index.php?r=stocksum" class="nav-link stocksum">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>
@@ -239,6 +266,12 @@
                             <a href="index.php?r=paymentreceive/index" class="nav-link paymentreceive">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>ชำระหนี้</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="index.php?r=closeorder" class="nav-link closeorder">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>จบการขาย</p>
                             </a>
                         </li>
                     </ul>

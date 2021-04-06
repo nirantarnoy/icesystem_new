@@ -71,11 +71,11 @@ class JournalissueController extends Controller
             $model->journal_no = $model->getLastNo($sale_date);
             $model->trans_date = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
+            $model->reason_id = 1;
             if ($model->save()) {
                 if ($prod_id != null) {
                     for ($i = 0; $i <= count($prod_id) - 1; $i++) {
                         if ($prod_id[$i] == '') continue;
-
                         $model_line = new \backend\models\Journalissueline();
                         $model_line->issue_id = $model->id;
                         $model_line->product_id = $prod_id[$i];
@@ -83,7 +83,9 @@ class JournalissueController extends Controller
                         $model_line->avl_qty = $line_qty[$i];
                         $model_line->sale_price = $line_issue_price[$i];
                         $model_line->status = 1;
-                        $model_line->save();
+                        if($model_line->save()){
+                            $this->updateStock($prod_id[$i],$line_qty[$i],1);
+                        }
                     }
                 }
                 $session = \Yii::$app->session;
@@ -96,6 +98,26 @@ class JournalissueController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    public function updateStock($product_id,$qty,$wh_id){
+        if($product_id!= null && $qty > 0){
+            $model_trans = new \backend\models\Stocktrans();
+            $model_trans->journal_no = '';
+            $model_trans->trans_date = date('Y-m-d H:i:s');
+            $model_trans->product_id = $product_id;
+            $model_trans->qty = $qty;
+            $model_trans->warehouse_id = 1;
+            $model_trans->stock_type = 2; // 1 in 2 out
+            $model_trans->activity_type_id = 2; // 1 prod rec 2 issue car
+            if($model_trans->save(false)){
+                $model = \backend\models\Stocksum::find()->where(['warehouse_id'=>1,'product_id'=>$product_id])->one();
+                if($model){
+                    $model->qty = $model->qty - (int)$qty;
+                    $model->save(false);
+                }
+            }
+        }
     }
 
     public function actionUpdate($id)
@@ -190,6 +212,7 @@ class JournalissueController extends Controller
                 $model_prod_price = \common\models\QueryCategoryPrice::find()->where(['delivery_route_id' => $model->delivery_route_id])->orderBy(['price_group_name' => SORT_ASC, 'product_id' => SORT_ASC])->all();
                 if ($model_prod_price) {
                     foreach ($model_prod_price as $value) {
+                        $prod_stock = $this->getStock($value->product_id);
                         $html .= '<tr>';
                         $html .= '<td>
                                 <input type="hidden" class="line-prod-id" name="line_prod_id[]"
@@ -198,13 +221,15 @@ class JournalissueController extends Controller
                             </td>';
                         $html .= ' <td>' . $value->name . '</td>';
                         $html .= ' <td>' . $value->price_group_name . '</td>';
+                        $html .= ' <td>' . $prod_stock . '</td>';
                         $html .= '
                                 <td>
+                                <input type="hidden" class="line-avl-qty" name="line_avl_qty[]" value="' . $prod_stock . '">
                                 <input type="hidden" class="line-issue-sale-price" name="line_issue_line_price[]" value="' . $value->sale_price . '">
-                                <input type="number" class="line-qty form-control" name="line_qty[]" value="0" min="0">
+                                <input type="number" class="line-qty form-control" name="line_qty[]" value="0" min="0" onchange="checkstock($(this))">
                                 </td>
                                 <td style="text-align: center">
-                                    <div class="btn btn-danger btn-sm" onclick="deleteline($(this))"><i
+                                    <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
                                                 class="fa fa-trash"></i>
                                     </div>
                                 </td>
@@ -216,5 +241,15 @@ class JournalissueController extends Controller
         }
 
         return $html;
+    }
+    public function getStock($prod_id){
+        $qty = 0;
+        if($prod_id!=null){
+            $model= \backend\models\Stocksum::find()->where(['product_id'=>$prod_id,'warehouse_id'=>1])->one();
+            if($model){
+                $qty = $model->qty;
+            }
+        }
+        return $qty;
     }
 }

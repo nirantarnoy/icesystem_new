@@ -1,8 +1,9 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\StocksumSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -11,36 +12,52 @@ $this->title = 'สินค้าคงคลัง';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="stocksum-index">
-<!--    <p>-->
-<!--        --><?php ////echo Html::a('Create Stocksum', ['create'], ['class' => 'btn btn-success']) ?>
-<!--    </p>-->
+    <!--    <p>-->
+    <!--        --><?php ////echo Html::a('Create Stocksum', ['create'], ['class' => 'btn btn-success']) ?>
+    <!--    </p>-->
 
     <?php Pjax::begin(); ?>
-    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-       // 'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'yii\grid\SerialColumn',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],],
 
-           // 'id',
+            // 'id',
 //            'company_id',
 //            'branch_id',
             [
-                    'attribute' => 'product_id',
-                    'value' => function($data){
-                      return \backend\models\Product::findName();
-                    }
+                'attribute' => 'product_id',
+                'value' => function ($data) {
+                    return \backend\models\Product::findName($data->product_id);
+                }
             ],
-            'warehouse_id',
-            'qty',
+            [
+                'attribute' => 'warehouse_id',
+                'value' => function ($data) {
+                    return \backend\models\Warehouse::findName($data->warehouse_id);
+                }
+            ],
+            [
+                'attribute' => 'qty',
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
+            ],
             //'location_id',
             //'lot_no',
-            'updated_at',
+            [
+                'attribute' => 'updated_at',
+                'value' => function ($data) {
+                    return date('d/m/Y H:i:s');
+                }
+            ],
             //'created_at',
 
-         //   ['class' => 'yii\grid\ActionColumn'],
+            //   ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 

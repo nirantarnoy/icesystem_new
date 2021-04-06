@@ -166,7 +166,20 @@ class PosController extends Controller
                         $model_order_line->price_group_id = 0;
                         $model_order_line->line_total = ($line_price[$i] * $line_qty[$i]);
                         $model_order_line->status = 1;
-                        $model_order_line->save(false);
+                        if($model_order_line->save(false)){
+
+                            $model_stock = new \backend\models\Stocktrans();
+                            $model_stock->journal_no = '';
+                            $model_stock->trans_date = date('Y-m-d H:i:s');
+                            $model_stock->product_id = $product_list[$i];
+                            $model_stock->qty = $line_qty[$i];
+                            $model_stock->warehouse_id = 1;
+                            $model_stock->stock_type = 2;
+                            $model_stock->activity_type_id = 5; // 1 prod rec 2 issue car
+                            if($model_stock->save()){
+                                $this->updateSummary($product_list[$i],1,$line_qty[$i]);
+                            }
+                        }
                     }
                 }
 
@@ -267,6 +280,22 @@ class PosController extends Controller
         $session = \Yii::$app->session;
         $session->setFlash('msg', 'บันทึกรายการเรียบร้อย');
         return $this->redirect(['pos/index']);
+    }
+
+    public function updateSummary($product_id, $wh_id, $qty){
+        if($wh_id != null && $product_id != null && $qty > 0){
+            $model = \backend\models\Stocksum::find()->where(['warehouse_id'=>$wh_id,'product_id'=>$product_id])->one();
+            if($model){
+                $model->qty = ($model->qty - (int)$qty);
+                $model->save(false);
+            }else{
+                $model_new = new \backend\models\Stocksum();
+                $model_new->warehouse_id = $wh_id;
+                $model_new->product_id = $product_id;
+                $model_new->qty = $qty;
+                $model_new->save(false);
+            }
+        }
     }
 
     public function updateorderpayment($order_id, $order_amt, $pay_amt)

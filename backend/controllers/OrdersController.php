@@ -1575,8 +1575,4 @@ class OrdersController extends Controller
         }
     }
 
-    public function actionCloseorder(){
-
-    }
-
 }
