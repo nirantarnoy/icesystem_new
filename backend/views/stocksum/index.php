@@ -46,6 +46,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'qty',
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
+                'value' => function ($data) {
+                    return number_format($data->qty);
+                }
             ],
             //'location_id',
             //'lot_no',
