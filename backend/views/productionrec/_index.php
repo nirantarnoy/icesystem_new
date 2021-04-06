@@ -71,7 +71,7 @@ $wh_date = \backend\models\Warehouse::find()->where(['id'=>6])->all();
                     <input type="text" name="line_item_name[]" value="" class="form-control line-item-name" readonly>
                 </td>
                 <td>
-                    <input type="number" class="form-control line-qty" value="0" min="0" name="line_qty[]" onchange="calall()">
+                    <input type="number" class="form-control line-qty" value="0" min="0" name="line_qty[]" onchange="calall()" onclick="edit_qty($(this))">
                 </td>
                 <td style="width: 5%;text-align: center">
                     <div class="btn btn-danger btn-sm removecart-item" onclick="removecartitem($(this))"><i class="fa fa-trash"></i></div>
@@ -83,6 +83,123 @@ $wh_date = \backend\models\Warehouse::find()->where(['id'=>6])->all();
     </div>
 </div>
 
+<div id="editQtyModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #2b669a">
+                <div class="row" style="text-align: center;width: 100%;color: white">
+                    <div class="col-lg-12">
+                        <span><h3 class="popup-product" style="color: white"></h3></span>
+                        <input type="hidden" class="line-edit-amount" value="">
+                    </div>
+                </div>
+            </div>
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <input type="number" class="form-control edit-amount" min="1"
+                               style="font-size: 50px;height: 60px;text-align: center" value="0">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="1"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">1
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="2"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">2
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="3"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">3
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="4"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">4
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="5"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">5
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="6"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">6
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="7"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">7
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="8"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">8
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="9"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">9
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="btn btn-outline-primary" data-var="0"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))">0
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="btn btn-outline-danger" data-var="-1"
+                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
+                             onclick="calpayprice2($(this))"> Clear
+                        </div>
+                    </div>
+                    <!--                    <div class="col-lg-3">-->
+                    <!--                        <div class="btn btn-outline-primary" data-var="8"-->
+                    <!--                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"-->
+                    <!--                             onclick="calpayprice($(this))">8-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline-success btn-add-cart" data-dismiss="modalx" onclick="sumitchangeqty($(this))">
+                    <i class="fa fa-check"></i> ตกลง
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                            class="fa fa-close text-danger"></i> ยกเลิก
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 <?php
 $js=<<<JS
@@ -231,6 +348,40 @@ function addCommas(nStr) {
             x1 = x1.replace(rgx, '$1' + ',' + '$2');
         }
         return x1 + x2;
+}
+function edit_qty(e){
+    var line_product_id = e.closest("tr").find(".line-item-id").val();
+    $(".line-edit-amount").val(line_product_id);
+    $(".edit-amount").val(0);
+    $("#editQtyModal").modal("show");
+}
+function sumitchangeqty(e){
+     var new_amt = $(".edit-amount").val();
+     var update_product_line = $(".line-edit-amount").val();
+     $("table.table-cart tbody tr").each(function(){
+         var p_line = $(this).closest('tr').find('.line-item-id').val();
+         if(p_line == update_product_line){
+             $(this).closest('tr').find('.line-qty').val(new_amt).change();
+         }
+     });
+     //alert(new_amt);
+     $("#editQtyModal").modal("hide");
+}
+function calpayprice2(e){
+    var price_val = e.attr('data-var');
+    var c_pay = "";
+    if(price_val == "-1"){
+        $(".edit-amount").val(0);
+    }else{
+        if($(".edit-amount").val() == 0){
+            c_pay = price_val;
+        }else{
+            c_pay = ''+$(".edit-amount").val()+price_val;
+        }
+       
+    }
+    
+    $(".edit-amount").val(c_pay);
 }
 JS;
 
