@@ -45,7 +45,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'qty',
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
-
+                'value' => function ($data) {
+                    return number_format($data->qty);
+                }
             ],
             [
                 'attribute' => 'stock_type',
