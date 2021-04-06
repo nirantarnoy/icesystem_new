@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
-                    return \backend\models\Paymentreceive::findPayamt($data->id);
+                    return number_format(\backend\models\Paymentreceive::findPayamt($data->id));
                 }
             ],
             //'crated_by',

@@ -98,7 +98,7 @@ function removecartitem(e){
              tr.find('.line-qty').val('0');
              tr.find('.line-qty').prop('disabled','disabled');
              tr.find('td:eq(0)').html('');
-             tr.find('.line-warehouse-id').val(1).change();
+             tr.find('.line-warehouse-id').val(6).change();
              tr.find('.line-item-name').html('');
              tr.find('.removecart-item').hide();
              clearall();
