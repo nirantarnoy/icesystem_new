@@ -173,7 +173,7 @@ class PosController extends Controller
                             $model_stock->trans_date = date('Y-m-d H:i:s');
                             $model_stock->product_id = $product_list[$i];
                             $model_stock->qty = $line_qty[$i];
-                            $model_stock->warehouse_id = 1;
+                            $model_stock->warehouse_id = 6;
                             $model_stock->stock_type = 2;
                             $model_stock->activity_type_id = 5; // 1 prod rec 2 issue car
                             if($model_stock->save()){

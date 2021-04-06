@@ -9,7 +9,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'รายการ�
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
-$wh_data = \backend\models\Warehouse::find()->where(['id' => 1])->all();
+$wh_data = \backend\models\Warehouse::find()->where(['id' => 6])->all();
 ?>
 <div class="car-view">
     <form id="form-submit" method="post" action="<?= \yii\helpers\Url::to(['closeorder/submitorderclose'], true) ?>">
