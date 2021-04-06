@@ -148,7 +148,7 @@ function addcart(e){
             tr.closest('tr').find('.line-item-id').val(prod_id);
             tr.closest('tr').find('.line-item-name').val(prod_name);
             tr.closest('tr').find('.line-qty').val(qty);
-            tr.closest('tr').find('.line-warehouse-id').val(1).change();
+            tr.closest('tr').find('.line-warehouse-id').val(6).change();
             tr.closest('tr').find('.line-qty').prop("disabled","");
             tr.closest('tr').find('.removecart-item').show();
             line_cal(tr);
@@ -157,7 +157,7 @@ function addcart(e){
             clone.find(".line-item-id").val(prod_id);
             clone.find(".line-item-name").val(prod_name);
             clone.find('.line-qty').val(qty);
-            tr.closest('tr').find('.line-warehouse-id').val(1).change();
+            tr.closest('tr').find('.line-warehouse-id').val(6).change();
             tr.after(clone);
             line_cal(clone);
         }
