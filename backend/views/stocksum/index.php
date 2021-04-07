@@ -55,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'updated_at',
                 'value' => function ($data) {
-                    return date('d/m/Y H:i:s');
+                    return date('d/m/Y H:i:s', $data->updated_at);
                 }
             ],
             //'created_at',
