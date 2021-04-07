@@ -221,7 +221,7 @@ class PricegroupController extends Controller
     public function getStock($prod_id){
         $qty = 0;
         if($prod_id!=null){
-            $model= \backend\models\Stocksum::find()->where(['product_id'=>$prod_id,'warehouse_id'=>1])->one();
+            $model= \backend\models\Stocksum::find()->where(['product_id'=>$prod_id,'warehouse_id'=>6])->one();
             if($model){
                 $qty = $model->qty;
             }
