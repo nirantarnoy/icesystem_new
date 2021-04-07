@@ -70,12 +70,27 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'qty',
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
+                'value' => function($data){
+                    return number_format($data->qty);
+                }
             ],
             [
                 'attribute' => 'sale_qty',
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
+                'value' => function($data){
+                    return number_format($data->sale_qty);
+                }
             ],
             [
                 'attribute' => 'avl_qty',
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
+                'value' => function($data){
+                    return number_format($data->avl_qty);
+                }
             ],
             [
 
