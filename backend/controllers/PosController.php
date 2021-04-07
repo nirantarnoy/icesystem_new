@@ -177,7 +177,7 @@ class PosController extends Controller
                             $model_stock->stock_type = 2;
                             $model_stock->activity_type_id = 5; // 1 prod rec 2 issue car
                             if($model_stock->save()){
-                                $this->updateSummary($product_list[$i],1,$line_qty[$i]);
+                                $this->updateSummary($product_list[$i],6,$line_qty[$i]);
                             }
                         }
                     }
