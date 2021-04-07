@@ -49,7 +49,7 @@ class Stocksum extends \common\models\StockSum
 
     public function findStock($product_id, $warehouse_id){
         $model = Stocksum::find()->where(['product_id'=>$product_id,'warehouse_id'=>$warehouse_id])->one();
-        return count($model)>0?$model->qty:0;
+        return $model != null?$model->qty:0;
     }
 //    public function findName($id){
 //        $model = Cartype::find()->where(['id'=>$id])->one();
