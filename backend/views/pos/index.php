@@ -57,13 +57,13 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
             <div class="col-lg-8">
                 <div class="input-group" style="margin-left: 10px;">
                     <!--                    <input type="text" class="form-control find-customer" value="">-->
-<!--                    ->where(['sort_name' => null])->orFilterWhere(['sort_name'=>''])-->
+                    <!--                    ->where(['sort_name' => null])->orFilterWhere(['sort_name'=>''])-->
                     <?php
                     $s_name = '';
                     echo Select2::widget([
                         'name' => 'customer_id',
                         'value' => 1,
-                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['sort_name'=>$s_name])->all(), 'id', function ($data) {
+                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['sort_name' => $s_name])->all(), 'id', function ($data) {
                             return $data->code . ' ' . $data->name;
                         }),
                         'options' => [
@@ -141,7 +141,10 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                         <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
                         <?php $product_data = \backend\models\Product::find()->where(['is_pos_item' => 1])->orderBy(['item_pos_seq' => SORT_ASC])->all(); ?>
                         <?php foreach ($product_data as $value): ?>
-                            <?php $i += 1; ?>
+                            <?php
+                            $i += 1;
+                            $product_onhand = \backend\models\Stocksum::findStock($value->id, 6);
+                            ?>
                             <div class="col-lg-3 product-items">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
                                 <div class="card" style="heightc: 200px;">
@@ -170,6 +173,9 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                                                        value="<?= $value->name ?>">
                                                 <input type="hidden"
                                                        class="list-item-price fix-list-item-price-<?= $i ?>"
+                                                       value="<?= $value->sale_price ?>">
+                                                <input type="hidden"
+                                                       class="list-item-onhand fix-list-item-onhand-<?= $i ?>"
                                                        value="<?= $value->sale_price ?>">
                                                 <div class="btn-group" style="width: 100%">
                                                     <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"
@@ -278,6 +284,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                                 <input type="hidden" class="cart-product-id" name="cart_product_id[]" value="">
                                 <input type="hidden" class="cart-price" name="cart_price[]" value="">
                                 <input type="hidden" class="cart-total-price" name="cart_total_price[]" value="">
+                                <input type="hidden" class="cart-product-onhand" name="cart_product_onhand[]" value="">
                                 <div class="btn btn-danger btn-sm removecart-item" onclick="removecartitem($(this))"><i
                                             class="fa fa-minus"></i></div>
                             </td>
@@ -776,17 +783,18 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                              onclick="calpayprice2($(this))"> Clear
                         </div>
                     </div>
-<!--                    <div class="col-lg-3">-->
-<!--                        <div class="btn btn-outline-primary" data-var="8"-->
-<!--                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"-->
-<!--                             onclick="calpayprice($(this))">8-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <!--                    <div class="col-lg-3">-->
+                    <!--                        <div class="btn btn-outline-primary" data-var="8"-->
+                    <!--                             style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"-->
+                    <!--                             onclick="calpayprice($(this))">8-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
                 </div>
             </div>
 
             <div class="modal-footer">
-                <button class="btn btn-outline-success btn-add-cart" data-dismiss="modalx" onclick="sumitchangeqty($(this))">
+                <button class="btn btn-outline-success btn-add-cart" data-dismiss="modalx"
+                        onclick="sumitchangeqty($(this))">
                     <i class="fa fa-check"></i> ตกลง
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal"><i
@@ -1072,9 +1080,7 @@ function getproduct_price(e){
                                    _this.find(".list-item-price").val(data[0]['basic_price']);
                                    _this.find(".item-price").html(data[0]['basic_price']); 
                               }
-                             
                        }
-                                         
                    }
           });                               
      });
@@ -1288,6 +1294,7 @@ function addcart2(e){
      //alert(prod_id);
     var qty = 1;
     var price =$(".fix-list-item-price-"+ids).val();
+    var onhand =$(".fix-list-item-onhand-"+ids).val();
     var tr = $(".table-cart tbody tr:last");
      
     var check_old = check_dup(prod_id);
@@ -1297,6 +1304,10 @@ function addcart2(e){
         if(id == prod_id){
             var old_qty = $(this).closest('tr').find('.cart-qty').val();
             var new_qty = parseFloat(old_qty) + parseFloat(qty);
+            if(parseFloat(new_qty) > parseFloat(onhand)){
+                alert('จำนวนสินค้าในสต๊อกไม่เพียงพอ');
+                return false;
+            }
             $(this).closest('tr').find('.cart-qty').val(new_qty);
             line_cal($(this));
         }
@@ -1341,6 +1352,7 @@ function reducecart2(e){
     // alert(prod_id);
     var qty = -1;
     var price = $(".list-item-price-"+ids).val();
+    var onhand = $(".list-item-onhand-"+ids).val();
     var tr = $(".table-cart tbody tr:last");
      
     var check_old = check_dup(prod_id);
@@ -1371,6 +1383,7 @@ function addcartdivcustomer(e){
      //alert(prod_id);
     var qty = 1;
     var price =$(".list-item-price-"+ids).val();
+    var onhand =$(".list-item-onhand-"+ids).val();
     var tr = $(".table-cart tbody tr:last");
      
     var check_old = check_dup(prod_id);
@@ -1423,6 +1436,7 @@ function reducecartdivcustomer(e){
     // alert(prod_id);
     var qty = -1;
     var price = $(".list-item-price-"+ids).val();
+    var onhand = $(".list-item-onhand-"+ids).val();
     var tr = $(".table-cart tbody tr:last");
      
     var check_old = check_dup(prod_id);

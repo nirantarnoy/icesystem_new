@@ -47,10 +47,10 @@ class Stocksum extends \common\models\StockSum
         ];
     }
 
-//    public function findUnitname($id){
-//        $model = Unit::find()->where(['id'=>$id])->one();
-//        return count($model)>0?$model->name:'';
-//    }
+    public function findStock($product_id, $warehouse_id){
+        $model = Stocksum::find()->where(['product_id'=>$product_id,'warehouse_id'=>$warehouse_id])->one();
+        return count($model)>0?$model->qty:0;
+    }
 //    public function findName($id){
 //        $model = Cartype::find()->where(['id'=>$id])->one();
 //        return $model != null?$model->name:'';
