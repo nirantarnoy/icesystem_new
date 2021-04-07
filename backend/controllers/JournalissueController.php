@@ -84,7 +84,7 @@ class JournalissueController extends Controller
                         $model_line->sale_price = $line_issue_price[$i];
                         $model_line->status = 1;
                         if($model_line->save()){
-                            $this->updateStock($prod_id[$i],$line_qty[$i],1);
+                            $this->updateStock($prod_id[$i],$line_qty[$i],6);
                         }
                     }
                 }
@@ -168,7 +168,6 @@ class JournalissueController extends Controller
                             \common\models\Journalissueline::deleteAll(['id' => $x[$m]]);
                         }
                     }
-
                 }
                 $session = \Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกรายการเรียบร้อย');
