@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
-                    return date('d/m/Y H:i:s', $data->updated_at);
+                    return date('d/m/Y H:i:s', $data->updated_at==null?$data->created_at: $data->updated_at);
                 }
             ],
             //'created_at',
