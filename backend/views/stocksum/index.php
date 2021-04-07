@@ -54,6 +54,8 @@ $this->params['breadcrumbs'][] = $this->title;
             //'lot_no',
             [
                 'attribute' => 'updated_at',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
                     return date('d/m/Y H:i:s', $data->updated_at);
                 }
