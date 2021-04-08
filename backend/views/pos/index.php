@@ -88,7 +88,8 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                         <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
                         <?php $product_data = \backend\models\Product::find()->all(); ?>
                         <?php foreach ($product_data as $value): ?>
-                            <?php $i += 1; ?>
+
+                            <?php $i += 1; $product_onhand = \backend\models\Stocksum::findStock($value->id, 1);?>
                             <div class="col-lg-3 product-items">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
                                 <div class="card" style="heightc: 200px;">
@@ -116,6 +117,9 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                                                        value="<?= $value->name ?>">
                                                 <input type="hidden" class="list-item-price list-item-price-<?= $i ?>"
                                                        value="<?= $value->sale_price ?>">
+                                                <input type="hidden"
+                                                       class="list-item-onhand fix-list-item-onhand-<?= $i ?>"
+                                                       value="<?= $product_onhand ?>">
                                                 <div class="btn-group" style="width: 100%">
                                                     <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"
                                                          onclick="reducecartdivcustomer($(this))"><i
@@ -143,7 +147,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                         <?php foreach ($product_data as $value): ?>
                             <?php
                             $i += 1;
-                            $product_onhand = \backend\models\Stocksum::findStock($value->id, 6);
+                            $product_onhand = \backend\models\Stocksum::findStock($value->id, 1);
                             ?>
                             <div class="col-lg-3 product-items">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
@@ -176,7 +180,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                                                        value="<?= $value->sale_price ?>">
                                                 <input type="hidden"
                                                        class="list-item-onhand fix-list-item-onhand-<?= $i ?>"
-                                                       value="<?= $value->sale_price ?>">
+                                                       value="<?= $product_onhand ?>">
                                                 <div class="btn-group" style="width: 100%">
                                                     <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"
                                                          onclick="reducecart2($(this))"><i class="fa fa-minus"></i>
@@ -696,6 +700,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                     <div class="col-lg-12">
                         <span><h3 class="popup-product" style="color: white"></h3></span>
                         <input type="hidden" class="line-edit-amount" value="">
+                        <input type="hidden" class="line-edit-onhand" value="">
                     </div>
                 </div>
             </div>
@@ -706,7 +711,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                 <div class="row">
                     <div class="col-lg-12">
                         <input type="number" class="form-control edit-amount" min="1"
-                               style="font-size: 50px;height: 60px;text-align: center" value="0">
+                               style="font-size: 50px;height: 60px;text-align: center" value="0" onchange="checkonhand($(this))">
                     </div>
                 </div>
                 <br>
@@ -1056,6 +1061,7 @@ function calpayprice2(e){
     $(".edit-amount").val(c_pay);
 }
 function getproduct_price(e){
+   
     var ids = e.val();
     if(ids > 0){
         $(".sale-customer-id").val(ids);
@@ -1258,6 +1264,7 @@ function addcart(e){
     }else{
         if(tr.closest('tr').find('.cart-product-id').val() == ''){
             tr.closest('tr').find('.cart-product-id').val(prod_id);
+           
             tr.closest('tr').find('.cart-qty').val(qty);
             tr.closest('tr').find('.cart-price').val(price);
             tr.closest('tr').find('td:eq(1)').html(prod_code);
@@ -1292,11 +1299,12 @@ function addcart2(e){
     var prod_code = $(".fix-list-item-code-"+ids).val();
     var prod_name = $(".fix-list-item-name-"+ids).val();
      //alert(prod_id);
-    var qty = 1;
+    var qty = 0;
     var price =$(".fix-list-item-price-"+ids).val();
     var onhand =$(".fix-list-item-onhand-"+ids).val();
     var tr = $(".table-cart tbody tr:last");
      
+  
     var check_old = check_dup(prod_id);
     if(check_old == 1){
         $(".table-cart tbody tr").each(function(){
@@ -1305,6 +1313,7 @@ function addcart2(e){
             var old_qty = $(this).closest('tr').find('.cart-qty').val();
             var new_qty = parseFloat(old_qty) + parseFloat(qty);
             if(parseFloat(new_qty) > parseFloat(onhand)){
+                //alert(onhand);
                 alert('จำนวนสินค้าในสต๊อกไม่เพียงพอ');
                 return false;
             }
@@ -1316,6 +1325,7 @@ function addcart2(e){
         if(tr.closest('tr').find('.cart-product-id').val() == ''){
             // alert('has');
             tr.closest('tr').find('.cart-product-id').val(prod_id);
+             tr.closest('tr').find('.cart-product-onhand').val(onhand);
             tr.closest('tr').find('.cart-qty').val(qty);
             tr.closest('tr').find('.cart-price').val(price);
             tr.closest('tr').find('td:eq(1)').html(prod_code);
@@ -1328,7 +1338,6 @@ function addcart2(e){
             line_cal(tr);
         }else{
             var clone = tr.clone();
-            
             clone.find(".cart-product-id").val(prod_id);
             clone.find('.cart-qty').val(qty);
             clone.find('.cart-price').val(price);
@@ -1572,13 +1581,36 @@ function myPrint2(){
 }
 
 function edit_qty(e){
+   // alert();
     var line_product_id = e.closest("tr").find(".cart-product-id").val();
+    var line_product_onhand = e.closest("tr").find(".cart-product-onhand").val();
     $(".line-edit-amount").val(line_product_id);
+    $(".line-edit-onhand").val(line_product_onhand);
     $(".edit-amount").val(0);
     $("#editQtyModal").modal("show");
 }
+function checkonhand(e){
+    var c_val = e.val();
+    var line_product_onhand = $(".line-edit-onhand").val();
+   // alert(line_product_onhand);
+    if(parseFloat(c_val) > parseFloat(line_product_onhand)){
+        e.val(0);
+        alert('จำนวนไม่พอสำหรับการขาย');
+        return false;
+    }
+}
 
 function sumitchangeqty(e){
+    
+    var c_val = $(".edit-amount").val();
+    var line_product_onhand = $(".line-edit-onhand").val();
+   // alert(line_product_onhand);
+    if(parseFloat(c_val) > parseFloat(line_product_onhand)){
+        $(".edit-amount").val(0);
+        alert('จำนวนไม่พอสำหรับการขาย');
+        return false;
+    }
+    
      var new_amt = $(".edit-amount").val();
      var update_product_line = $(".line-edit-amount").val();
      $("table.table-cart tbody tr").each(function(){

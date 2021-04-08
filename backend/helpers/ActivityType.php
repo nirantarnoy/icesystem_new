@@ -9,7 +9,8 @@ class ActivityType
         '2' => 'เบิกขึ้นรถ',
         '3' => 'เบิกเติม',
         '4' => 'คืนขายหน่วยรถ',
-        '5' => 'เบิกขาย POS'
+        '5' => 'เบิกขาย POS',
+        '6' => 'ปรับยอด'
     ];
 
     private static $dataobj = [
@@ -17,7 +18,8 @@ class ActivityType
         ['id' => '2', 'name' => 'เบิกขึ้นรถ'],
         ['id' => '3', 'name' => 'เบิกเติม'],
         ['id' => '4', 'name' => 'คืนขายหน่วยรถ'],
-        ['id' => '5', 'name' => 'เบิกขาย POS']
+        ['id' => '5', 'name' => 'เบิกขาย POS'],
+        ['id' => '6', 'name' => 'ปรับยอด']
     ];
 
     public static function asArray()

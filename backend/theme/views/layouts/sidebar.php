@@ -116,6 +116,15 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="index.php?r=adjustment" class="nav-link adjustment">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>
+                                    ปรับสต๊อก
+                                    <!--                                <span class="right badge badge-danger">New</span>-->
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="index.php?r=stocktrans" class="nav-link stocktrans">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>
