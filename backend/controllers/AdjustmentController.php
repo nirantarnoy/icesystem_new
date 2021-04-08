@@ -76,8 +76,15 @@ class AdjustmentController extends Controller
             $warehouse = \Yii::$app->request->post('line_warehouse_id');
             $qty = \Yii::$app->request->post('line_qty');
             $stock_type = \Yii::$app->request->post('line_stock_type');
+
+            $x_date = explode('/', $model->trans_date);
+            $sale_date = date('Y-m-d');
+            if (count($x_date) > 1) {
+                $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
+            }
+
             $model->journal_no = '';
-            $model->trans_date = date('Y-m-d H:i:s');
+            $model->trans_date = date('Y-m-d', strtotime($sale_date));
             if($model->save()){
                 if($product != null){
                     for($i=0;$i<=count($product)-1;$i++){

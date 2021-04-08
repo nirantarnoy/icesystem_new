@@ -89,7 +89,10 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                         <?php $product_data = \backend\models\Product::find()->all(); ?>
                         <?php foreach ($product_data as $value): ?>
 
-                            <?php $i += 1; $product_onhand = \backend\models\Stocksum::findStock($value->id, 1);?>
+                            <?php
+                            $i += 1;
+                            $product_onhand = \backend\models\Stocksum::findStock($value->id, 6);
+                            ?>
                             <div class="col-lg-3 product-items">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
                                 <div class="card" style="heightc: 200px;">
@@ -147,7 +150,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                         <?php foreach ($product_data as $value): ?>
                             <?php
                             $i += 1;
-                            $product_onhand = \backend\models\Stocksum::findStock($value->id, 1);
+                            $product_onhand = \backend\models\Stocksum::findStock($value->id, 6);
                             ?>
                             <div class="col-lg-3 product-items">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
