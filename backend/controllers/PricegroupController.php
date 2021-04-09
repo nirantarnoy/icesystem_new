@@ -218,10 +218,53 @@ class PricegroupController extends Controller
         }
         echo $html;
     }
+    public function actionProductdata2()
+    {
+        $company = \Yii::$app->request->post('company');
+        $branch = \Yii::$app->request->post('branch');
+        $warehouse = \Yii::$app->request->post('warehouse');
+
+        $html = '';
+        $model = null;
+//        if($company !=''){
+//            $model = \backend\models\Product::find()->where(['OR',['LIKE','code',$txt],['LIKE','name',$txt]])->all();
+//        }else{
+        $model = \backend\models\Product::find()->all();
+       // }
+        foreach ($model as $value) {
+            $prod_stock = $this->getStock2($company,$branch,$warehouse,$value->id);
+            //$prod_stock = 0;
+            $html .= '<tr>';
+            $html .= '<td style="text-align: center">
+                        <div class="btn btn-outline-success btn-sm" onclick="addselecteditem($(this))" data-var="' . $value->id . '">เลือก</div>
+                        <input type="hidden" class="line-find-code" value="' . $value->code . '">
+                        <input type="hidden" class="line-find-name" value="' . $value->name . '">
+                        <input type="hidden" class="line-find-price" value="' . $value->sale_price . '">
+                        <input type="hidden" class="line-onhand" value="' . $prod_stock . '">
+                       </td>';
+            $html .= '<td>' . $value->code . '</td>';
+            $html .= '<td>' . $value->name . '</td>';
+            $html .= '<td>' . number_format($value->std_cost) . '</td>';
+            $html .= '<td>' . number_format($value->sale_price) . '</td>';
+            $html .= '<td style="text-align: right">' . number_format($prod_stock) . '</td>';
+            $html .= '</tr>';
+        }
+        echo $html;
+    }
     public function getStock($prod_id){
         $qty = 0;
         if($prod_id!=null){
             $model= \backend\models\Stocksum::find()->where(['product_id'=>$prod_id,'warehouse_id'=>6])->one();
+            if($model){
+                $qty = $model->qty;
+            }
+        }
+        return $qty;
+    }
+    public function getStock2($company,$branch,$warehouse,$product_id){
+        $qty = 0;
+        if($company!=null && $branch!=null && $warehouse!=null && $product_id != null){
+            $model= \backend\models\Stocksum::find()->where(['product_id'=>$product_id,'warehouse_id'=>$warehouse,'company_id'=>$company,'branch_id'=>$branch])->one();
             if($model){
                 $qty = $model->qty;
             }

@@ -87,7 +87,7 @@ class BranchtransferController extends Controller
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
             $model->trans_date = date('Y-m-d', strtotime($sale_date));
-
+            $model->journal_no = $model->getLastNo();
             if ($model->save()) {
                 if ($product != null && $from_company != null && $to_company != null && $to_branch != null && $to_warehouse != null) {
                     for ($i = 0; $i <= count($product) - 1; $i++) {
@@ -106,7 +106,7 @@ class BranchtransferController extends Controller
                         if ($model_line->save()) {
                             // update from
                             $model_stock_trans = new \backend\models\Stocktrans();
-                            $model_stock_trans->journal_no = '';
+                            $model_stock_trans->journal_no = $model->getLastNo();
                             $model_stock_trans->trans_date = date('Y-m-d H:i:s');
                             $model_stock_trans->product_id = $product[$i];
                             $model_stock_trans->warehouse_id = $from_warehouse[$i];
@@ -124,7 +124,7 @@ class BranchtransferController extends Controller
 
                             // update to
                             $model_stock_trans2 = new \backend\models\Stocktrans();
-                            $model_stock_trans2->journal_no = '';
+                            $model_stock_trans2->journal_no = $model->getLastNo();
                             $model_stock_trans2->trans_date = date('Y-m-d H:i:s');
                             $model_stock_trans2->product_id = $product[$i];
                             $model_stock_trans2->warehouse_id = $to_warehouse[$i];

@@ -27,7 +27,7 @@ class Orders extends \yii\db\ActiveRecord
             [['vat_amt', 'vat_per', 'order_total_amt'], 'number'],
             [['order_no', 'customer_name'], 'string', 'max' => 255],
             [['payment_method_id', 'payment_term_id', 'is_approve_status'], 'safe'],
-            [['sale_channel_id'], 'integer'],
+            [['sale_channel_id','emp_count'], 'integer'],
             [['branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['branch_id' => 'id']],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'id']],
         ];

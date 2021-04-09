@@ -55,9 +55,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'text-align: center'],
             ],
             'journal_no',
-            'trans_date',
+            [
+                'attribute' => 'trans_date',
+                'value' => function ($data) {
+                    return date('d/m/Y H:i:s', strtotime($data->trans_date));
+                }
+            ],
             'description',
-           // 'status',
+            // 'status',
             //'created_at',
             //'created_by',
             //'updated_at',

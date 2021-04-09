@@ -26,7 +26,12 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'company_id',
 //            'branch_id',
             'journal_no',
-            'trans_date',
+            [
+                'attribute' => 'trans_date',
+                'value' => function ($data) {
+                    return date('d/m/Y H:i:s', strtotime($data->trans_date));
+                }
+            ],
             [
                 'attribute' => 'product_id',
                 'value' => function ($data) {

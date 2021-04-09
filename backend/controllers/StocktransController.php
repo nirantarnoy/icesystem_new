@@ -35,6 +35,7 @@ class StocktransController extends Controller
     {
         $searchModel = new StocktransSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setSort(['defaultOrder'=>['id'=>SORT_DESC]]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -70,7 +71,7 @@ class StocktransController extends Controller
         if($wh_id != null){
              for($i=0;$i<=count($wh_id)-1;$i++){
                  $model = new \backend\models\Stocktrans();
-                 $model->journal_no = '';
+                 $model->journal_no = $model->getLastNo();
                  $model->trans_date = date('Y-m-d H:i:s');
                  $model->product_id = $prodid[$i];
                  $model->qty = $qty[$i];
