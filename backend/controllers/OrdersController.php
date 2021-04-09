@@ -101,6 +101,7 @@ class OrdersController extends Controller
             $model->status = 1;
             $model->sale_channel_id = 1;
             if ($model->save(false)) {
+                $this->updateEmpqty($model->id);
                 if ($price_group_list_arr != null) {
                     for ($x = 0; $x <= count($price_group_list_arr) - 1; $x++) {
                         if ($price_group_list_arr[$x] == '') {
@@ -205,6 +206,20 @@ class OrdersController extends Controller
             'model' => $model,
 
         ]);
+    }
+
+    public function updateEmpqty($order_id)
+    {
+        $model = \backend\models\Orders::find()->where(['id' => $order_id])->one();
+        if($model) {
+            $x = \common\models\QueryCarDailyEmpCount::find()->where(['car_id' => $model->car_ref_id, 'date(trans_date)' => date('Y-m-d', strtotime($model->order_date))])->one();
+            if ($x) {
+                echo $x->emp_qty . '<br />';
+                $model_update = \backend\models\Orders::find()->where(['id' => $order_id])->one();
+                $model_update->emp_count = $x->emp_qty;
+                $model_update->save(false);
+            }
+        }
     }
 
     public function actionUpdate($id)
@@ -1090,7 +1105,7 @@ class OrdersController extends Controller
         $trans_date = \Yii::$app->request->post('order_date');
 
         $data = [];
-        $emp_count = 0;
+        // $emp_count = 0;
         $html = '';
         if ($id) {
             $x_date = explode('/', $trans_date);
@@ -1112,9 +1127,9 @@ class OrdersController extends Controller
 
             }
         }
-      //  echo $html;
-        array_push($data, ['emp_count' => $emp_count, 'html' => $html]);
-        return json_encode($data);
+        echo $html;
+        //  array_push($data, ['emp_count' => $emp_count, 'html' => $html]);
+        // return json_encode($data);
 
     }
 
