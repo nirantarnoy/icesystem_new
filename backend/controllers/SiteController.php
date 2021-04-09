@@ -187,6 +187,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            $_SESSION['user_group_id'] = \backend\models\User::findGroup(\Yii::$app->user->id);
             return $this->goBack();
         } else {
             $model->password = '';

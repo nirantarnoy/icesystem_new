@@ -1,7 +1,14 @@
 <?php
 $this->title = 'บันทึกสินค้าเข้าคลัง';
 $prod_data = \backend\models\Product::find()->all();
-$wh_date = \backend\models\Warehouse::find()->where(['id'=>6])->all();
+$wh_date = null;
+
+if($_SESSION['user_group_id'] ==1){
+    $wh_date = \backend\models\Warehouse::find()->all();
+}else{
+    $wh_date = \backend\models\Warehouse::find()->where(['id'=>6])->all();
+}
+
 ?>
 <div class="row">
     <div class="col-lg-4">

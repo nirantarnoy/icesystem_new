@@ -37,6 +37,23 @@ use yii\widgets\ActiveForm;
                     'placeholder' => '--เลือกพนักงาน--'
                 ]
             ])->label('พนักงาน') ?>
+
+            <?= $form->field($model, 'company_id')->Widget(\kartik\select2\Select2::className(),[
+                'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Company::find()->all(),'id','name'),
+                'options'=>[
+                    'placeholder'=>'--เลือกบริษัท--',
+                    'onchange'=>'showbranch($(this))',
+                ]
+            ])->label('บริษัท') ?>
+
+            <?= $form->field($model, 'branch_id')->Widget(\kartik\select2\Select2::className(),[
+                'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Branch::find()->all(),'id','name'),
+                'options'=>[
+                    'class'=>'warehouse-branc-id',
+                    'placeholder'=>'--เลือกสาขา--'
+                ]
+            ])->label('สาขา') ?>
+
             <?= $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className())->label(false) ?>
 
             <?php //echo $form->field($model, 'roles')->checkboxList($model->getAllRoles())->label(false) ?>
@@ -50,3 +67,30 @@ use yii\widgets\ActiveForm;
         <?php ActiveForm::end(); ?>
 
     </div>
+    <?php
+    $url_to_show_branch = \yii\helpers\Url::to(['warehouse/findbranch'],true);
+    $js=<<<JS
+$(function(){
+    //alert();
+});
+
+function showbranch(e){
+    var com_id = e.val();
+    if(com_id){
+             $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_show_branch",
+              'data': {'com_id': com_id},
+              'success': function(data) {
+                 // alert(data);
+                 $(".warehouse-branc-id").html(data);
+                 }
+              });
+    }
+     
+}
+JS;
+    $this->registerJs($js,static::POS_END);
+    ?>

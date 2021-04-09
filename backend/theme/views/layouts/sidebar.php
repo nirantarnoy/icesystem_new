@@ -124,6 +124,17 @@
                                 </p>
                             </a>
                         </li>
+                        <?php if($_SESSION['user_group_id'] == 1):?>
+                        <li class="nav-item">
+                            <a href="index.php?r=branchtransfer" class="nav-link branchtransfer">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>
+                                    โอนระหว่างสาขา
+                                    <!--                                <span class="right badge badge-danger">New</span>-->
+                                </p>
+                            </a>
+                        </li>
+                        <?php endif;?>
                         <li class="nav-item">
                             <a href="index.php?r=stocktrans" class="nav-link stocktrans">
                                 <i class="far fa-circlez nav-icon"></i>
@@ -428,6 +439,7 @@
 <!--                        </li>-->
                     </ul>
                 </li>
+                <?php if($_SESSION['user_group_id'] == 1):?>
                 <li class="nav-item has-treeview has-sub">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-user"></i>
@@ -458,6 +470,7 @@
                         </li>
                     </ul>
                 </li>
+                <?php endif;?>
                 <li class="nav-item has-treeview has-sub">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-database"></i>

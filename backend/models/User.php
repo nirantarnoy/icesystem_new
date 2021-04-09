@@ -50,4 +50,8 @@ class User extends \common\models\User
         $model = User::find()->where(['id'=>$id])->one();
         return $model!= null?$model->username:'';
     }
+    public function findGroup($id){
+        $model = User::find()->where(['id'=>$id])->one();
+        return $model!= null?$model->group_id:0;
+    }
 }
