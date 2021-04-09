@@ -35,7 +35,7 @@ class OrdersController extends Controller
     public function actionIndex()
     {
 
-        $model = \backend\models\Orders::find()->all();
+        $model = \backend\models\Orders::find()->where(['emp_count'=>null])->all();
         foreach ($model as $value){
             $x = \common\models\QueryCarDailyEmpCount::find()->where(['car_id'=>$value->car_ref_id,'date(trans_date)'=>date('Y-m-d',strtotime($value->order_date))])->one();
             if($x){
