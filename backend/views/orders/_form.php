@@ -678,18 +678,18 @@ $js = <<<JS
    if(ids){
                $.ajax({
               'type':'post',
-              'dataType': 'html',
+              'dataType': 'json',
               'async': false,
               'url': "$url_to_get_car_emp",
               'data': {'id': ids,'order_date': trans_date},
               'success': function(data) {
                   // alert(data);
-                  if(data == ''){
+                  if(data == null){
                       $(".text-car-emp").removeClass('badge-info');
                       $(".text-car-emp").addClass('badge-danger');
                       $(".text-car-emp").html('ไม่พบรายชื่อพนักงาน');
                   }else{
-                      $(".text-car-emp").html(data);
+                      $(".text-car-emp").html(data[0]['html']);
                   }
               }
          });

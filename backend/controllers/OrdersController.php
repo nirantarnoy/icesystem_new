@@ -35,19 +35,30 @@ class OrdersController extends Controller
     public function actionIndex()
     {
 
-        $pageSize = \Yii::$app->request->post("perpage");
-        $searchModel = new OrdersSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->limit(300);
-        $dataProvider->setSort(['defaultOrder' => ['order_date' => SORT_DESC, 'order_no' => SORT_DESC]]);
-        $dataProvider->pagination->defaultPageSize = 50;
-        $dataProvider->pagination->pageSize = $pageSize;
+        $model = \backend\models\Orders::find()->all();
+        foreach ($model as $value){
+            $x = \common\models\QueryCarDailyEmpCount::find()->where(['car_id'=>$value->car_ref_id,'date(trans_date)'=>date('Y-m-d',strtotime($value->order_date))])->one();
+            if($x){
+                echo $x->emp_qty.'<br />';
+                $model_update = \backend\models\Orders::find()->where(['id'=>$value->id])->one();
+                $model_update->emp_count = $x->emp_qty;
+                $model_update->save(false);
+            }
+        }
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'perpage' => $pageSize,
-        ]);
+//        $pageSize = \Yii::$app->request->post("perpage");
+//        $searchModel = new OrdersSearch();
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//        $dataProvider->query->limit(300);
+//        $dataProvider->setSort(['defaultOrder' => ['order_date' => SORT_DESC, 'order_no' => SORT_DESC]]);
+//        $dataProvider->pagination->defaultPageSize = 50;
+//        $dataProvider->pagination->pageSize = $pageSize;
+//
+//        return $this->render('index', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//            'perpage' => $pageSize,
+//        ]);
     }
 
     public function actionView($id)
@@ -1078,6 +1089,8 @@ class OrdersController extends Controller
         $id = \Yii::$app->request->post('id');
         $trans_date = \Yii::$app->request->post('order_date');
 
+        $data = [];
+        $emp_count = 0;
         $html = '';
         if ($id) {
             $x_date = explode('/', $trans_date);
@@ -1091,6 +1104,7 @@ class OrdersController extends Controller
             $i = 0;
             foreach ($model as $value) {
                 $i += 1;
+                $emp_count += 1;
                 $emp_code = \backend\models\Employee::findCode($value->employee_id);
                 $emp_fullname = \backend\models\Employee::findFullName($value->employee_id);
 
@@ -1098,8 +1112,8 @@ class OrdersController extends Controller
 
             }
         }
-
-        echo $html;
+        array_push($data, ['emp_count' => $emp_count, 'html' => $html]);
+        return json_encode($data);
     }
 
     public function actionDeletecaremp()
@@ -1289,11 +1303,11 @@ class OrdersController extends Controller
         $order_pay_date = date('Y-m-d H:i:s');
         $x_date = explode('/', $pay_date);
         if (count($x_date) > 1) {
-            $order_pay_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0]. ' '. date('H:i:s');
+            $order_pay_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0] . ' ' . date('H:i:s');
         }
 
-       // echo date('Y-m-d H:i:s',strtotime($order_pay_date));return;
-      //    print_r(Yii::$app->request->post());
+        // echo date('Y-m-d H:i:s',strtotime($order_pay_date));return;
+        //    print_r(Yii::$app->request->post());
 //        echo '<br />';
         //  print_r($pay_term);
 //
@@ -1303,7 +1317,7 @@ class OrdersController extends Controller
         if ($order_id > 0 && $customer_id != null) {
             $model = new \backend\models\Paymenttrans();
             $model->trans_no = $model->getLastNo();
-            $model->trans_date = date('Y-m-d H:i:s',strtotime($order_pay_date));
+            $model->trans_date = date('Y-m-d H:i:s', strtotime($order_pay_date));
             $model->order_id = $order_id;
             $model->status = 0;
             if ($model->save(false)) {
@@ -1318,7 +1332,7 @@ class OrdersController extends Controller
                         $model_line->customer_id = $customer_id[$i];
                         $model_line->payment_method_id = $pay_method[$i];
                         $model_line->payment_term_id = $pay_term[$i] == null ? 0 : $pay_term[$i];
-                        $model_line->payment_date = date('Y-m-d H:i:s',strtotime($order_pay_date));
+                        $model_line->payment_date = date('Y-m-d H:i:s', strtotime($order_pay_date));
                         $model_line->payment_amount = $pay_amount[$i];
                         $model_line->total_amount = 0;
                         $model_line->order_ref_id = $order_id;
@@ -1494,7 +1508,7 @@ class OrdersController extends Controller
                 $model_line = \backend\models\Transferline::find()->where(['transfer_id' => $model->id])->all();
                 foreach ($model_line as $value) {
                     $a_qty = $value->qty;
-                    $s_qty = $this->checkTransferOnhand($model->id,$value->product_id);
+                    $s_qty = $this->checkTransferOnhand($model->id, $value->product_id);
                     $a_qty = $a_qty - $s_qty;
 
                     $html .= '<tr>';
@@ -1533,11 +1547,12 @@ class OrdersController extends Controller
         return $html;
     }
 
-    public function checkTransferOnhand($tranfer_id,$product_id){
+    public function checkTransferOnhand($tranfer_id, $product_id)
+    {
         $sale_qty = 0;
-        if($tranfer_id && $product_id){
-            $model = \common\models\OrderTransferSale::find()->where(['transfer_id'=>$tranfer_id,'product_id'=>$product_id])->sum('qty');
-            if($model != null){
+        if ($tranfer_id && $product_id) {
+            $model = \common\models\OrderTransferSale::find()->where(['transfer_id' => $tranfer_id, 'product_id' => $product_id])->sum('qty');
+            if ($model != null) {
                 $sale_qty = $model;
             }
         }
@@ -1557,7 +1572,7 @@ class OrdersController extends Controller
         if ($order_id) {
             if ($product_list != null) {
                 for ($i = 0; $i <= count($product_list) - 1; $i++) {
-                    if($line_qty[$i]==0 || $line_qty[$i] == null)continue;
+                    if ($line_qty[$i] == 0 || $line_qty[$i] == null) continue;
                     $model = new \common\models\OrderTransferSale();
                     $model->order_id = $order_id;
                     $model->transfer_id = $transfer_id[$i];
