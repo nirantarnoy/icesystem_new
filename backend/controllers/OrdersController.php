@@ -35,30 +35,30 @@ class OrdersController extends Controller
     public function actionIndex()
     {
 
-        $model = \backend\models\Orders::find()->where(['emp_count'=>null])->all();
-        foreach ($model as $value){
-            $x = \common\models\QueryCarDailyEmpCount::find()->where(['car_id'=>$value->car_ref_id,'date(trans_date)'=>date('Y-m-d',strtotime($value->order_date))])->one();
-            if($x){
-                echo $x->emp_qty.'<br />';
-                $model_update = \backend\models\Orders::find()->where(['id'=>$value->id])->one();
-                $model_update->emp_count = $x->emp_qty;
-                $model_update->save(false);
-            }
-        }
+//        $model = \backend\models\Orders::find()->where(['emp_count'=>null])->all();
+//        foreach ($model as $value){
+//            $x = \common\models\QueryCarDailyEmpCount::find()->where(['car_id'=>$value->car_ref_id,'date(trans_date)'=>date('Y-m-d',strtotime($value->order_date))])->one();
+//            if($x){
+//                echo $x->emp_qty.'<br />';
+//                $model_update = \backend\models\Orders::find()->where(['id'=>$value->id])->one();
+//                $model_update->emp_count = $x->emp_qty;
+//                $model_update->save(false);
+//            }
+//        }
 
-//        $pageSize = \Yii::$app->request->post("perpage");
-//        $searchModel = new OrdersSearch();
-//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-//        $dataProvider->query->limit(300);
-//        $dataProvider->setSort(['defaultOrder' => ['order_date' => SORT_DESC, 'order_no' => SORT_DESC]]);
-//        $dataProvider->pagination->defaultPageSize = 50;
-//        $dataProvider->pagination->pageSize = $pageSize;
-//
-//        return $this->render('index', [
-//            'searchModel' => $searchModel,
-//            'dataProvider' => $dataProvider,
-//            'perpage' => $pageSize,
-//        ]);
+        $pageSize = \Yii::$app->request->post("perpage");
+        $searchModel = new OrdersSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->limit(300);
+        $dataProvider->setSort(['defaultOrder' => ['order_date' => SORT_DESC, 'order_no' => SORT_DESC]]);
+        $dataProvider->pagination->defaultPageSize = 50;
+        $dataProvider->pagination->pageSize = $pageSize;
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'perpage' => $pageSize,
+        ]);
     }
 
     public function actionView($id)
@@ -1104,7 +1104,7 @@ class OrdersController extends Controller
             $i = 0;
             foreach ($model as $value) {
                 $i += 1;
-                $emp_count += 1;
+                //$emp_count += 1;
                 $emp_code = \backend\models\Employee::findCode($value->employee_id);
                 $emp_fullname = \backend\models\Employee::findFullName($value->employee_id);
 
@@ -1112,8 +1112,10 @@ class OrdersController extends Controller
 
             }
         }
+      //  echo $html;
         array_push($data, ['emp_count' => $emp_count, 'html' => $html]);
         return json_encode($data);
+
     }
 
     public function actionDeletecaremp()

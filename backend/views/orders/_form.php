@@ -678,7 +678,7 @@ $js = <<<JS
    if(ids){
                $.ajax({
               'type':'post',
-              'dataType': 'json',
+              'dataType': 'html',
               'async': false,
               'url': "$url_to_get_car_emp",
               'data': {'id': ids,'order_date': trans_date},
@@ -689,6 +689,7 @@ $js = <<<JS
                       $(".text-car-emp").addClass('badge-danger');
                       $(".text-car-emp").html('ไม่พบรายชื่อพนักงาน');
                   }else{
+                     // $(".text-car-emp").html(data);
                       $(".text-car-emp").html(data[0]['html']);
                   }
               }
