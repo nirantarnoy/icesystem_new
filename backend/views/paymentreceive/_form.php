@@ -124,7 +124,7 @@ $js = <<<JS
 var removelist = [];
 var selecteditem = [];
 $(function(){
-   
+   calpayment();
 });
 
 function linepaychange(e){
