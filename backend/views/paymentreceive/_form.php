@@ -149,6 +149,9 @@ function calpayment(){
          var rem_amt = $(this).closest('tr').find('.line-remain-qty').val();
        //  alert(x);
          x = parseFloat(x);
+         if(x=='' && x== null){
+             x=0;
+         }
          pay_total = parseFloat(pay_total) + parseFloat(x);
          remain_amount = parseFloat(rem_amt) + parseFloat(rem_amt);
     });
