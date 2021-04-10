@@ -40,6 +40,7 @@ class CloseorderController extends Controller
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new OrderfinishedsumSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andFilterWhere(['>','qty',0]);
         $dataProvider->query->limit(100);
         $dataProvider->setSort(['defaultOrder' => ['order_date' => SORT_DESC, 'order_no' => SORT_DESC]]);
         $dataProvider->pagination->defaultPageSize = 50;
