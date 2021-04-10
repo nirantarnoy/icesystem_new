@@ -82,6 +82,17 @@ use yii\widgets\ActiveForm;
     </div>
     <br>
     <div class="row">
+        <div class="col-lg-1">
+        </div>
+        <div class="col-lg-3">
+            <label for=""><?= $model->getAttributeLabel('is_reprocess') ?></label>
+            <?php echo $form->field($model, 'is_reprocess')->widget(\toxor88\switchery\Switchery::className(),['options'=>['label'=>'','class'=>'form-control']])->label(false) ?>
+        </div>
+        <div class="col-lg-8">
+        </div>
+    </div>
+    <br>
+    <div class="row">
         <div class="col-lg-1"></div>
         <div class="col-lg-10">
             <div class="form-group">

@@ -40,7 +40,7 @@ class Warehouse extends \yii\db\ActiveRecord
     {
         return [
             [['code'],'unique'],
-            [['status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by','is_reprocess'], 'integer'],
             [['code', 'name', 'description', 'photo'], 'string', 'max' => 255],
             [['branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['branch_id' => 'id']],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'id']],
@@ -59,6 +59,7 @@ class Warehouse extends \yii\db\ActiveRecord
             'description' => Yii::t('app', 'รายละเอียด'),
             'photo' => Yii::t('app', 'Photo'),
             'status' => Yii::t('app', 'สถานะ'),
+            'is_reprocess' => Yii::t('app', 'คลัง Reprocess'),
             'company_id' => Yii::t('app', 'บริษัท'),
             'branch_id' => Yii::t('app', 'สาขา'),
             'created_at' => Yii::t('app', 'Created At'),
