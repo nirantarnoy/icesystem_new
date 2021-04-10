@@ -149,7 +149,7 @@ function calpayment(){
          var rem_amt = $(this).closest('tr').find('.line-remain-qty').val();
         // alert(x);
          
-         if(x=='' && x== null){
+         if(x=='' || x== null){
              x=0;
          }else{
              x = parseFloat(x);
@@ -158,8 +158,8 @@ function calpayment(){
          remain_amount += parseFloat(rem_amt) + parseFloat(rem_amt);
     });
    // alert(pay_total);
-    $(".table-list tfoot tr").find(".line-pay-remain").html(addCommas(parseFloat(remain_amount)));
-    $(".table-list tfoot tr").find(".line-pay-total").html(addCommas(parseFloat(pay_total)));
+    $(".table-list tfoot tr").find(".line-pay-remain").html(addCommas(parseFloat(remain_amount).toFixed(2)));
+    $(".table-list tfoot tr").find(".line-pay-total").html(addCommas(parseFloat(pay_total).toFixed(2)));
 }
 
 function getpaymentrec(e){
