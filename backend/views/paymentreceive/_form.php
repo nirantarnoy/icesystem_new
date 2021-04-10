@@ -147,17 +147,19 @@ function calpayment(){
     $(".table-list tbody tr").each(function(){
          var x = $(this).closest('tr').find('.line-pay').val();
          var rem_amt = $(this).closest('tr').find('.line-remain-qty').val();
-         alert(x);
-         x = parseFloat(x);
+        // alert(x);
+         
          if(x=='' && x== null){
              x=0;
+         }else{
+             x = parseFloat(x);
          }
-         pay_total = parseFloat(pay_total) + 0;
+         pay_total = parseFloat(pay_total) + x;
          remain_amount = parseFloat(rem_amt) + parseFloat(rem_amt);
     });
-    alert(pay_total);
-    $(".table-list tfoot tr").find(".line-pay-remain").val(remain_amount);
-    $(".table-list tfoot tr").find(".line-pay-total").val(pay_total);
+   // alert(pay_total);
+    $(".table-list tfoot tr").find(".line-pay-remain").html(remain_amount);
+    $(".table-list tfoot tr").find(".line-pay-total").html(pay_total);
 }
 
 function getpaymentrec(e){
