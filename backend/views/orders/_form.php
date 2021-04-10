@@ -68,7 +68,7 @@ if($order_issue_list != null){
     <div class="row">
         <div class="col-lg-3">
             <?php $filter_status = $model->isNewRecord ? 1 : 1; ?>
-            <?php $model->issue_id = $issue_data;?>s
+            <?php $model->issue_id = $issue_data;?>
             <?= $form->field($model, 'issue_id')->Widget(\kartik\select2\Select2::className(), [
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Journalissue::find()->where(['status'=>$filter_status])->all(), 'id', 'journal_no'),
                 'options' => [
@@ -936,7 +936,7 @@ function addIssueorder(e){
               'url': "$url_to_register_issue",
               'data': {'order_id': order_id,'issue_list': e.val()},
               'success': function(data) {
-                 alert(data);
+                // alert(data);
               },
               'error': function(err){
                   alert('Data error');
