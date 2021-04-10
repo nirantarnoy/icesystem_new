@@ -91,7 +91,7 @@ $t_date = date('d/m/Y');
                                 <input type="hidden" class="line-remain-qty" value="<?= $value->remain_amount ?>">
                             </td>
                             <td>
-                                <input type="number" class="form-control line-pay" name="line_pay[]" value=""
+                                <input type="number" class="form-control line-pay" name="line_pay[]" value="0" min="0"
                                        onchange="linepaychange($(this))">
                             </td>
                         </tr>
