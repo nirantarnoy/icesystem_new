@@ -79,7 +79,7 @@ class OrdersController extends Controller
             $price_group_list = \Yii::$app->request->post('price_group_list');
             $price_group_list_arr = explode(',', $price_group_list);
 
-          //  print_r($model->issue_id);return;
+            //  print_r($model->issue_id);return;
 
 //            var_dump(Yii::$app->request->post());
 //            return;
@@ -191,35 +191,36 @@ class OrdersController extends Controller
 //                }
 
 
-//                if($model->issue_id !=null){
-//                    for($i=0;$i<=count($model->issue_id)-1;$i++){
+//                if ($model->issue_id != null) {
+//                    for ($i = 0; $i <= count($model->issue_id) - 1; $i++) {
 //                        $model_issue = \backend\models\Journalissue::find()->where(['id' => $model->issue_id[$i]])->one();
 //                        if ($model_issue) {
 //                            $model_issue->status = 2;
 //                            $model_issue->order_ref_id = $model->id;
 //                            $model_issue->save();
 //                        }
-//                        $model_loop_issue = \backend\models\Journalissueline::find()->where(['issue_id'=>$model->issue_id[$i]])->all();
-//                        foreach($model_loop_issue as $val2){
+//                        $model_loop_issue = \backend\models\Journalissueline::find()->where(['issue_id' => $model->issue_id[$i]])->all();
+//                        foreach ($model_loop_issue as $val2) {
 //                            $model_order_stock = new \common\models\OrderStock();
 //                            $model_order_stock->issue_id = $model_issue[$i];
 //                            $model_order_stock->product_id = 1;
-//                            $model_order_stock->qty = 1;
+//                            $model_order_stock->qty = $val2->qty;
 //                            $model_order_stock->used_qty = 0;
-//                            $model_order_stock->avl_qty = 1;
+//                            $model_order_stock->avl_qty = $val2->qty;
 //                            $model_order_stock->order_id = $model->id;
 //                            $model_order_stock->save();
 //                        }
 //                    }
 //                }
-                if ($model->issue_id > 0) {
-                    $model_issue = \backend\models\Journalissue::find()->where(['id' => $model->issue_id])->one();
-                    if ($model_issue) {
-                        $model_issue->status = 2;
-                        $model_issue->order_ref_id = $model->id;
-                        $model_issue->save();
-                    }
-                }
+
+//                if ($model->issue_id > 0) {
+//                    $model_issue = \backend\models\Journalissue::find()->where(['id' => $model->issue_id])->one();
+//                    if ($model_issue) {
+//                        $model_issue->status = 2;
+//                        $model_issue->order_ref_id = $model->id;
+//                        $model_issue->save();
+//                    }
+//                }
 
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกรายการเรียบร้อย');
@@ -235,7 +236,7 @@ class OrdersController extends Controller
     public function updateEmpqty($order_id)
     {
         $model = \backend\models\Orders::find()->where(['id' => $order_id])->one();
-        if($model) {
+        if ($model) {
             $x = \common\models\QueryCarDailyEmpCount::find()->where(['car_id' => $model->car_ref_id, 'date(trans_date)' => date('Y-m-d', strtotime($model->order_date))])->one();
             if ($x) {
                 echo $x->emp_qty . '<br />';
@@ -252,7 +253,7 @@ class OrdersController extends Controller
         $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
 
         $model_has_transfer = \backend\models\Journaltransfer::find()->where(['order_target_id' => $id, 'status' => 1])->one();
-
+        $order_issue_list = \common\models\OrderStock::find()->where(['order_id'=>$id])->all();
         //$model_car_emp  = \common\models\CarDaily::find()->where()->all();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -351,7 +352,8 @@ class OrdersController extends Controller
         return $this->render('update', [
             'model' => $model,
             'model_line' => $model_line,
-            'model_has_transfer' => $model_has_transfer
+            'model_has_transfer' => $model_has_transfer,
+            'order_issue_list' => $order_issue_list
         ]);
     }
 
@@ -631,21 +633,24 @@ class OrdersController extends Controller
         return $html;
     }
 
-    public function getAvlqty($product_id, $issue_id){
+    public function getAvlqty($product_id, $issue_id)
+    {
         $qty = 0;
-        if($product_id && $issue_id){
-            $model = \common\models\OrderStock::find()->where(['issue_id'=>$issue_id,'product_id'=>$product_id])->one();
-            if($model){
+        if ($product_id && $issue_id) {
+            $model = \common\models\OrderStock::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
+            if ($model) {
                 $qty = $model->avl_qty;
             }
         }
         return $qty;
     }
-    public function actionOrderstockqtyUpdate($product_id, $issue_id, $qty){
+
+    public function actionOrderstockqtyUpdate($product_id, $issue_id, $qty)
+    {
         $qty = 0;
-        if($product_id && $issue_id && $qty > 0){
-            $model = \common\models\OrderStock::find()->where(['issue_id'=>$issue_id,'product_id'=>$product_id])->one();
-            if($model){
+        if ($product_id && $issue_id && $qty > 0) {
+            $model = \common\models\OrderStock::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
+            if ($model) {
                 $model->used_qty = $qty;
                 $model->avl_qty = $model->qty - $model->used_qty;
                 $model->save(false);
@@ -1116,7 +1121,7 @@ class OrdersController extends Controller
                 foreach ($model as $value) {
                     $i += 1;
                     $selected = '';
-                    if($value->is_driver ==1){
+                    if ($value->is_driver == 1) {
                         $selected = 'selected';
                     }
                     $emp_code = \backend\models\Employee::findCode($value->employee_id);
@@ -1127,8 +1132,8 @@ class OrdersController extends Controller
                     $html .= '<td><input type="text" class="form-control line-car-emp-name" name="line_car_emp_name[]" value="' . $emp_fullname . '" readonly></td>';
                     $html .= ' <td>
                                         <select name="line_car_driver[]" class="form-control line-car-driver" id="">
-                                            <option value="1" '.$selected.'>YES</option>
-                                            <option value="0" '.$selected.'>NO</option>
+                                            <option value="1" ' . $selected . '>YES</option>
+                                            <option value="0" ' . $selected . '>NO</option>
                                         </select>
                                     </td>';
                     $html .= '<td>
@@ -1672,4 +1677,37 @@ class OrdersController extends Controller
         }
     }
 
+    public function actionRegisterissue(){
+
+        $order_id = \Yii::$app->request->post('order_id');
+        $issuelist = \Yii::$app->request->post('issue_list');
+
+        if($order_id != null && $issuelist != null){
+          //  $issue_data = explode(',', $issuelist);
+//            print_r($issuelist[0]);
+            if($issuelist != null){
+                for($i=0;$i<=count($issuelist)-1;$i++){
+                    $model_check_has_issue = \common\models\OrderStock::find()->where(['order_id'=>$order_id,'issue_id'=>$issuelist[$i]])->count();
+                    if($model_check_has_issue)continue;
+                    $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id'=>$issuelist[$i]])->all();
+                    foreach ($model_issue_line as $val2) {
+                        $model_order_stock = new \common\models\OrderStock();
+                        $model_order_stock->issue_id = $issuelist[$i];
+                        $model_order_stock->product_id = $val2->product_id;
+                        $model_order_stock->qty = $val2->qty;
+                        $model_order_stock->used_qty = 0;
+                        $model_order_stock->avl_qty = $val2->qty;
+                        $model_order_stock->order_id = $order_id;
+                        if($model_order_stock->save(false)){
+                            $model_update_issue_status = \common\models\JournalIssue::find()->where(['id'=>$issuelist[$i]])->one();
+                            if($model_check_has_issue){
+                                $model_check_has_issue->status = 2;
+                                $model_check_has_issue->save(false);
+                            }
+                        }
+                    }
+                }
+            }
+       }
+    }
 }

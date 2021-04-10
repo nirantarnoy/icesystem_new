@@ -16,7 +16,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'แก้ไข');
     <?= $this->render('_form', [
         'model' => $model,
         'model_line' => $model_line,
-        'model_has_transfer' => $model_has_transfer
+        'model_has_transfer' => $model_has_transfer,
+        'order_issue_list' => $order_issue_list
     ]) ?>
 
 </div>

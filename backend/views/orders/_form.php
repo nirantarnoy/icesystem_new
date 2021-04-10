@@ -3,6 +3,11 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+$issue_data = [];
+foreach ($order_issue_list as $value){
+  array_push($issue_data, $value->issue_id);
+}
+
 ?>
 <div class="orders-form">
     <input type="hidden" class="page-status" data-var="<?= $model->id ?>" value="<?= $model->isNewRecord ? 0 : 1 ?>">
@@ -60,13 +65,15 @@ use yii\widgets\ActiveForm;
     <div class="row">
         <div class="col-lg-3">
             <?php $filter_status = $model->isNewRecord ? 1 : 2; ?>
+            <?php $model->issue_id = $issue_data;?>
             <?= $form->field($model, 'issue_id')->Widget(\kartik\select2\Select2::className(), [
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Journalissue::find()->where(['status'=>$filter_status])->all(), 'id', 'journal_no'),
                 'options' => [
                     'id' => 'issue-id',
-                    'disabled' => 'disabled',
+                   // 'disabled' => '',
                     'placeholder' => '--เลือกใบเบิก--',
-                   // 'multiple' => true,
+                    'multiple' => true,
+                    'onchange'=>'addIssueorder($(this))',
                 ]
             ]) ?>
         </div>
@@ -408,6 +415,7 @@ $url_to_get_payment_list = \yii\helpers\Url::to(['orders/find-payment-list'], tr
 $url_to_get_condition = \yii\helpers\Url::to(['orders/getpaycondition'], true);
 $url_to_get_payment_trans = \yii\helpers\Url::to(['orders/getpaytrans'], true);
 $url_to_get_transfer_sale_item = \yii\helpers\Url::to(['orders/gettransfer-sale-item'], true);
+$url_to_register_issue = \yii\helpers\Url::to(['orders/registerissue'], true);
 $js = <<<JS
   var removelist = [];
   var selecteditem = [];
@@ -909,6 +917,29 @@ function transfersaleqtychange(e){
           e.val(a_qty);
           return false;
       }
+}
+
+function addIssueorder(e){
+      alert(e.val());
+      var order_id = $(".current_id").val();
+      if(e.val() != '' && order_id != null)
+      {
+            $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_register_issue",
+              'data': {'order_id': order_id,'issue_list': e.val()},
+              'success': function(data) {
+                 alert(data);
+              },
+              'error': function(err){
+                  alert('Data error');
+              }
+                 
+            });  
+      }
+      
 }
 
 function addCommas(nStr) {
