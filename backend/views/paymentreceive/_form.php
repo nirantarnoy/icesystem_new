@@ -152,7 +152,7 @@ function calpayment(){
          if(x=='' && x== null){
              x=0;
          }
-         pay_total = parseFloat(pay_total) + parseFloat(x);
+         pay_total = parseFloat(pay_total) + 0;
          remain_amount = parseFloat(rem_amt) + parseFloat(rem_amt);
     });
     alert(pay_total);
