@@ -1693,6 +1693,7 @@ class OrdersController extends Controller
                     if ($model_check_has_issue) continue;
                     $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issuelist[$i]])->all();
                     foreach ($model_issue_line as $val2) {
+                        if($val2->qty <= 0 || $val2->qty != null)continue;
                         $model_order_stock = new \common\models\OrderStock();
                         $model_order_stock->issue_id = $issuelist[$i];
                         $model_order_stock->product_id = $val2->product_id;
@@ -1702,12 +1703,33 @@ class OrdersController extends Controller
                         $model_order_stock->order_id = $order_id;
                         if ($model_order_stock->save(false)) {
                             $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issuelist[$i]])->one();
-                            if ($model_check_has_issue) {
+                            if ($model_update_issue_status) {
                                 $model_check_has_issue->status = 2;
                                 $model_check_has_issue->save(false);
+
                             }
+                            $this->updateStock($val2->product_id,$val2->qty,6,'');
                         }
                     }
+                }
+            }
+        }
+    }
+    public function updateStock($product_id,$qty,$wh_id,$journal_no){
+        if($product_id!= null && $qty > 0){
+            $model_trans = new \backend\models\Stocktrans();
+            $model_trans->journal_no = $journal_no;
+            $model_trans->trans_date = date('Y-m-d H:i:s');
+            $model_trans->product_id = $product_id;
+            $model_trans->qty = $qty;
+            $model_trans->warehouse_id = 6;
+            $model_trans->stock_type = 2; // 1 in 2 out
+            $model_trans->activity_type_id = 2; // 1 prod rec 2 issue car
+            if($model_trans->save(false)){
+                $model = \backend\models\Stocksum::find()->where(['warehouse_id'=>6,'product_id'=>$product_id])->one();
+                if($model){
+                    $model->qty = $model->qty - (int)$qty;
+                    $model->save(false);
                 }
             }
         }
