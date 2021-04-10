@@ -124,7 +124,7 @@ $js = <<<JS
 var removelist = [];
 var selecteditem = [];
 $(function(){
-   calpayment();
+   
 });
 
 function linepaychange(e){
@@ -180,6 +180,7 @@ function getpaymentrec(e){
                  }
               });
     }
+    calpayment();
 }
 function checkpaytype(e){
     var type_ = e.val();
