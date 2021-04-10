@@ -98,7 +98,7 @@ $model_new = $model_car;
 <?php endif; ?>
 
 <div id="empModal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -129,6 +129,7 @@ $model_new = $model_car;
                                     <th style="text-align: center" width="5%">#</th>
                                     <th>รหัส</th>
                                     <th>ชื่อ-นามสกุล</th>
+                                    <th>คนขับ</th>
                                     <th width="5%">-</th>
                                 </tr>
                                 </thead>
@@ -142,6 +143,12 @@ $model_new = $model_car;
                                     <td>
                                         <input type="text" class="form-control line-car-emp-name"
                                                name="line_car_emp_name[]" value="" readonly>
+                                    </td>
+                                    <td>
+                                        <select name="line_car_driver[]" class="form-control line-car-driver" id="">
+                                            <option value="1">YES</option>
+                                            <option value="0">NO</option>
+                                        </select>
                                     </td>
                                     <td>
                                         <input type="hidden" class="line-car-emp-id" value="" name="line_car_emp_id[]">

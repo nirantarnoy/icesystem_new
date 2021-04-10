@@ -190,6 +190,7 @@ class CardailyController extends Controller
         $route_id = \Yii::$app->request->post('route_id');
         $t_date = \Yii::$app->request->post('selected_date');
         $emp_id = \Yii::$app->request->post('line_car_emp_id');
+        $isdriver = \Yii::$app->request->post('line_car_driver');
 
 
         if($route_id == null || $route_id == ''){
@@ -217,6 +218,7 @@ class CardailyController extends Controller
                         $model->car_id = $car_id;
                         $model->employee_id = $emp_id[$i];
                         $model->trans_date = $t_date;
+                        $model->is_driver = $isdriver;
                         $model->status = 1;
                         $model->save(false);
                     }
@@ -275,6 +277,7 @@ class CardailyController extends Controller
                     $model_assign_line = new \backend\models\Cardaily();
                     $model_assign_line->car_id = $line_value->car_id;
                     $model_assign_line->employee_id = $line_value->employee_id;
+                    $model_assign_line->is_driver = $line_value->is_driver;
                     $model_assign_line->status = 1;
                     $model_assign_line->trans_date = date('Y-m-d', strtotime($to_date));
                     if ($model_assign_line->save(false)) {

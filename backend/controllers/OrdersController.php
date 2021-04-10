@@ -79,6 +79,8 @@ class OrdersController extends Controller
             $price_group_list = \Yii::$app->request->post('price_group_list');
             $price_group_list_arr = explode(',', $price_group_list);
 
+            print_r($model->issue_id);return;
+
 //            var_dump(Yii::$app->request->post());
 //            return;
 //             print_r($line_customer_id);return;
@@ -188,6 +190,28 @@ class OrdersController extends Controller
 //                    }
 //                }
 
+
+//                if($model->issue_id !=null){
+//                    for($i=0;$i<=count($model->issue_id)-1;$i++){
+//                        $model_issue = \backend\models\Journalissue::find()->where(['id' => $model->issue_id[$i]])->one();
+//                        if ($model_issue) {
+//                            $model_issue->status = 2;
+//                            $model_issue->order_ref_id = $model->id;
+//                            $model_issue->save();
+//                        }
+//                        $model_loop_issue = \backend\models\Journalissueline::find()->where(['issue_id'=>$model->issue_id[$i]])->all();
+//                        foreach($model_loop_issue as $val2){
+//                            $model_order_stock = new \common\models\OrderStock();
+//                            $model_order_stock->issue_id = $model_issue[$i];
+//                            $model_order_stock->product_id = 1;
+//                            $model_order_stock->qty = 1;
+//                            $model_order_stock->used_qty = 0;
+//                            $model_order_stock->avl_qty = 1;
+//                            $model_order_stock->order_id = $model->id;
+//                            $model_order_stock->save();
+//                        }
+//                    }
+//                }
                 if ($model->issue_id > 0) {
                     $model_issue = \backend\models\Journalissue::find()->where(['id' => $model->issue_id])->one();
                     if ($model_issue) {
@@ -1097,6 +1121,12 @@ class OrdersController extends Controller
                     $html .= '<td style="text-align: center">' . $i . '</td>';
                     $html .= '<td><input type="text" class="form-control line-car-emp-code" name="line_car_emp_code[]" value="' . $emp_code . '" readonly></td>';
                     $html .= '<td><input type="text" class="form-control line-car-emp-name" name="line_car_emp_name[]" value="' . $emp_fullname . '" readonly></td>';
+                    $html .= ' <td>
+                                        <select name="line_car_driver[]" class="form-control line-car-driver" id="">
+                                            <option value="1">YES</option>
+                                            <option value="0">NO</option>
+                                        </select>
+                                    </td>';
                     $html .= '<td>
                                <input type="hidden" class="line-car-emp-id" value="' . $value->employee_id . '" name="line_car_emp_id[]">
                                <input type="hidden" class="line-car-daily-id" value="' . $value->id . '" name="line_car_daily_id[]">
