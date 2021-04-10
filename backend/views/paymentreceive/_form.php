@@ -158,8 +158,8 @@ function calpayment(){
          remain_amount += parseFloat(rem_amt) + parseFloat(rem_amt);
     });
    // alert(pay_total);
-    $(".table-list tfoot tr").find(".line-pay-remain").html(remain_amount);
-    $(".table-list tfoot tr").find(".line-pay-total").html(pay_total);
+    $(".table-list tfoot tr").find(".line-pay-remain").html(addCommas(parseFloat(remain_amount)));
+    $(".table-list tfoot tr").find(".line-pay-total").html(addCommas(parseFloat(pay_total)));
 }
 
 function getpaymentrec(e){
@@ -221,7 +221,17 @@ function cal_linenum() {
            // cal_all();
         }
     }
-
+function addCommas(nStr) {
+        nStr += '';
+        var x = nStr.split('.');
+        var x1 = x[0];
+        var x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+ }
 JS;
 
 $this->registerJs($js, static::POS_END);
