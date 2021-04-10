@@ -152,6 +152,7 @@ function calpayment(){
          pay_total = parseFloat(pay_total) + parseFloat(x);
          remain_amount = parseFloat(rem_amt) + parseFloat(rem_amt);
     });
+    alert(pay_total);
     $(".table-list tfoot tr").find(".line-pay-remain").val(remain_amount);
     $(".table-list tfoot tr").find(".line-pay-total").val(pay_total);
 }
