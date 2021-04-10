@@ -146,17 +146,16 @@ function calpayment(){
     var remain_amount = 0;
     $(".table-list tbody tr").each(function(){
          var x = $(this).closest('tr').find('.line-pay').val();
-         var rem_amt = $(this).closest('tr').find('.line-remain-qty').val();
-        // alert(x);
-         
+        // var rem_amt = $(this).closest('tr').find('.line-remain-qty').val();
+       
          if(x=='' || x== null){
              x=0;
          }
-         pay_total += parseFloat(pay_total) + parseFloat(x);
-         remain_amount += parseFloat(rem_amt) + parseFloat(rem_amt);
+         pay_total += parseFloat(x);
+         //remain_amount += parseFloat(rem_amt) + parseFloat(rem_amt);
     });
    // alert(pay_total);
-    $(".table-list tfoot tr").find(".line-pay-remain").html(addCommas(parseFloat(remain_amount).toFixed(2)));
+   // $(".table-list tfoot tr").find(".line-pay-remain").html(addCommas(parseFloat(remain_amount).toFixed(2)));
     $(".table-list tfoot tr").find(".line-pay-total").html(addCommas(parseFloat(pay_total).toFixed(2)));
 }
 
