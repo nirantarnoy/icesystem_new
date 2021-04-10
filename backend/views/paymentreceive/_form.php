@@ -88,10 +88,10 @@ $t_date = date('d/m/Y');
                                 <input type="text" class="form-control line-remain" style="text-align: right"
                                        name="line_remain[]" value="<?= number_format($value->remain_amount, 2) ?>"
                                        readonly>
-                                <input type="hidden" class="line-remain-qty" value="<?= $value->remain_amount ?>">
+                                <input type="hidden" class="line-remain-qty" value="<?= $value->remain_amount?>">
                             </td>
                             <td>
-                                <input type="number" class="form-control line-pay" name="line_pay[]" value="0" min="0"
+                                <input type="number" class="form-control line-pay" name="line_pay[]" value="<?=$value->payment_amount?>>" min="0"
                                        onchange="linepaychange($(this))">
                             </td>
                         </tr>
