@@ -611,7 +611,7 @@ $js = <<<JS
       var line_price = e.attr('data-var');
       var line_onhand = e.closest("tr").find(".line-product-onhand").val();
       
-      alert(line_onhand);
+      //alert(line_onhand);
     
       var line_total = 0;
       var line_sale_price_total = 0;

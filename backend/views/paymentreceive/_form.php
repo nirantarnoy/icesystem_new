@@ -24,6 +24,13 @@ $t_date = date('d/m/Y');
             ]) ?>
         </div>
         <div class="col-lg-4">
+            <?php
+            $disabled = false;
+            if(!$model->isNewRecord){
+
+            }
+            ?>
+
             <?= $form->field($model, 'customer_id')->widget(\kartik\select2\Select2::className(), [
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customer::find()->all(), 'id', function ($data) {
                     return $data->code . ' ' . $data->name;
