@@ -4,9 +4,12 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 $issue_data = [];
-foreach ($order_issue_list as $value){
-  array_push($issue_data, $value->issue_id);
+if($order_issue_list != null){
+    foreach ($order_issue_list as $value){
+        array_push($issue_data, $value->issue_id);
+    }
 }
+
 
 ?>
 <div class="orders-form">
@@ -704,6 +707,8 @@ $js = <<<JS
                   }
               }
          });
+               
+               $("form#order-form").submit();
    }
  }
  
@@ -920,7 +925,7 @@ function transfersaleqtychange(e){
 }
 
 function addIssueorder(e){
-      alert(e.val());
+    //  alert(e.val());
       var order_id = $(".current_id").val();
       if(e.val() != '' && order_id != null)
       {

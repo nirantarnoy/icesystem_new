@@ -224,7 +224,8 @@ class OrdersController extends Controller
 
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกรายการเรียบร้อย');
-                return $this->redirect(['index']);
+                //   return $this->redirect(['index']);
+                return $this->redirect(['orders/update', 'id' => $model->id]);
             }
         }
         return $this->render('create', [
@@ -253,7 +254,7 @@ class OrdersController extends Controller
         $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
 
         $model_has_transfer = \backend\models\Journaltransfer::find()->where(['order_target_id' => $id, 'status' => 1])->one();
-        $order_issue_list = \common\models\OrderStock::find()->where(['order_id'=>$id])->all();
+        $order_issue_list = \common\models\OrderStock::find()->where(['order_id' => $id])->all();
         //$model_car_emp  = \common\models\CarDaily::find()->where()->all();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -1677,19 +1678,20 @@ class OrdersController extends Controller
         }
     }
 
-    public function actionRegisterissue(){
+    public function actionRegisterissue()
+    {
 
         $order_id = \Yii::$app->request->post('order_id');
         $issuelist = \Yii::$app->request->post('issue_list');
 
-        if($order_id != null && $issuelist != null){
-          //  $issue_data = explode(',', $issuelist);
+        if ($order_id != null && $issuelist != null) {
+            //  $issue_data = explode(',', $issuelist);
 //            print_r($issuelist[0]);
-            if($issuelist != null){
-                for($i=0;$i<=count($issuelist)-1;$i++){
-                    $model_check_has_issue = \common\models\OrderStock::find()->where(['order_id'=>$order_id,'issue_id'=>$issuelist[$i]])->count();
-                    if($model_check_has_issue)continue;
-                    $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id'=>$issuelist[$i]])->all();
+            if ($issuelist != null) {
+                for ($i = 0; $i <= count($issuelist) - 1; $i++) {
+                    $model_check_has_issue = \common\models\OrderStock::find()->where(['order_id' => $order_id, 'issue_id' => $issuelist[$i]])->count();
+                    if ($model_check_has_issue) continue;
+                    $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issuelist[$i]])->all();
                     foreach ($model_issue_line as $val2) {
                         $model_order_stock = new \common\models\OrderStock();
                         $model_order_stock->issue_id = $issuelist[$i];
@@ -1698,9 +1700,9 @@ class OrdersController extends Controller
                         $model_order_stock->used_qty = 0;
                         $model_order_stock->avl_qty = $val2->qty;
                         $model_order_stock->order_id = $order_id;
-                        if($model_order_stock->save(false)){
-                            $model_update_issue_status = \common\models\JournalIssue::find()->where(['id'=>$issuelist[$i]])->one();
-                            if($model_check_has_issue){
+                        if ($model_order_stock->save(false)) {
+                            $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issuelist[$i]])->one();
+                            if ($model_check_has_issue) {
                                 $model_check_has_issue->status = 2;
                                 $model_check_has_issue->save(false);
                             }
@@ -1708,6 +1710,6 @@ class OrdersController extends Controller
                     }
                 }
             }
-       }
+        }
     }
 }
