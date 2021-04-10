@@ -60,6 +60,9 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'description')->textarea(['maxlength' => true]) ?>
         </div>
         <div class="col-lg-4">
+            <?php echo $form->field($model, 'is_com_cal')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label() ?>
+        </div>
+        <div class="col-lg-4">
             <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label() ?>
 
         </div>

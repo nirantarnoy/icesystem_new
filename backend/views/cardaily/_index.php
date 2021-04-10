@@ -106,12 +106,10 @@ $model_new = $model_car;
                     <div class="col-lg-9">
                         <h4><i class="fa fa-user text-success"></i> พนักงานประจำรถ</h4>
                     </div>
-
                     <div class="col-lg-3" style="text-align: right">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                 </div>
-
             </div>
             <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
             <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->

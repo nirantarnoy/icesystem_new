@@ -218,9 +218,15 @@ class CardailyController extends Controller
                         $model->car_id = $car_id;
                         $model->employee_id = $emp_id[$i];
                         $model->trans_date = $t_date;
-                        $model->is_driver = $isdriver;
+                        $model->is_driver = $isdriver[$i];
                         $model->status = 1;
                         $model->save(false);
+                    }else{
+                        $model = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date,'employee_id'=>$emp_id[$i]])->one();
+                        if($model){
+                            $model->is_driver = $isdriver[$i];
+                            $model->save();
+                        }
                     }
 
                 }

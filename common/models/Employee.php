@@ -45,7 +45,7 @@ class Employee extends \yii\db\ActiveRecord
     {
         return [
             [['code'],'unique'],
-            [['gender', 'position', 'salary_type', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['gender', 'position', 'salary_type', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by','is_com_cal'], 'integer'],
             [['emp_start'], 'safe'],
             [['code', 'fname', 'lname', 'description', 'photo'], 'string', 'max' => 255],
             [['branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['branch_id' => 'id']],
@@ -69,6 +69,7 @@ class Employee extends \yii\db\ActiveRecord
             'emp_start' => Yii::t('app', 'วันที่เริ่มงาน'),
             'description' => Yii::t('app', 'รายละเอียด'),
             'photo' => Yii::t('app', 'Photo'),
+            'is_com_cal' => Yii::t('app', 'คิดค่าคอมมิชชั่น'),
             'status' => Yii::t('app', 'สถานะ'),
             'company_id' => Yii::t('app', 'Company ID'),
             'branch_id' => Yii::t('app', 'Branch ID'),
