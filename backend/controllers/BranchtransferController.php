@@ -15,16 +15,14 @@ use yii\filters\VerbFilter;
  */
 class BranchtransferController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
+    public $enableCsrfValidation = false;
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete' => ['POST','GET'],
                 ],
             ],
         ];
@@ -188,7 +186,9 @@ class BranchtransferController extends Controller
      */
     public function actionDelete($id)
     {
+
         $this->findModel($id)->delete();
+        \common\models\BranchTransferLine::deleteAll(['journal_id'=>$id]);
 
         return $this->redirect(['index']);
     }

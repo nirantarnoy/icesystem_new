@@ -33,7 +33,7 @@ $model_to_com = \backend\models\Company::find()->all();
     <br/>
     <div class="row">
         <div class="col-lg-12">
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered table-striped" id="table-list">
                 <thead>
                 <tr>
                     <th>#</th>
@@ -52,29 +52,24 @@ $model_to_com = \backend\models\Company::find()->all();
                 <tr>
                     <td></td>
                     <td>
-                        <input type="text" name="" class="form-control line-product-name" value="PB">
-                        <input type="hidden" name="line_product_id[]" class="line-product-id" value="1">
+                        <input type="text" name="" class="form-control line-product-name" value="" required>
+                        <input type="hidden" name="line_product_id[]" class="line-product-id" value="" >
                     </td>
                     <td>
-                        <select name="line_from_company[]" class="form-control line-select-from-company" id=""
-                                style="background-color: #44ab7d;color: white;" onchange="getBranch($(this))">
-                            <option value="-1">--เลือก--</option>
-                            <?php foreach ($model_from_com as $value): ?>
-                                <option value="<?= $value->id ?>"><?= $value->name ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                        <input type="hidden" name="line_from_company[]" class="line-from-company" value="">
+                        <input type="text" name="" class="form-control line-from-company-name"
+                               style="background-color: #44ab7d;color: white" value="">
                     </td>
                     <td>
-                        <select name="line_from_branch[]" class="form-control line-select-from-branch" id=""
-                                style="background-color: #44ab7d;color: white;" onchange="getWarehouse($(this))">
-                            <option value="-1">--เลือก--</option>
-                        </select>
+                        <input type="hidden" name="line_from_branch[]" class="line-from-branch" value="">
+                        <input type="text" name="" class="form-control line-from-branch-name"
+                               style="background-color: #44ab7d;color: white" value="">
                     </td>
                     <td>
-                        <select name="line_from_warehouse[]" class="form-control line-select-from-warehouse" id=""
-                                style="background-color: #44ab7d;color: white;">
-                            <option value="-1">--เลือก--</option>
-                        </select>
+                        <input type="hidden" name="line_from_warehouse[]" class="line-from-warehouse" value="">
+                        <input type="text" name="" class="form-control line-from-warehouse-name"
+                               style="background-color: #44ab7d;color: white" value="">
+
                     </td>
                     <td>
                         <select name="line_to_company[]" class="form-control" id=""
@@ -98,7 +93,7 @@ $model_to_com = \backend\models\Company::find()->all();
                         </select>
                     </td>
                     <td>
-                        <input type="number" class="form-control line-qty" name="line_qty[]" value="" disabled>
+                        <input type="number" class="form-control line-qty" name="line_qty[]" min="0" value="" disabled>
                     </td>
                     <td>
                         <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
@@ -135,14 +130,14 @@ $model_to_com = \backend\models\Company::find()->all();
                 <div class="row" style="width: 100%">
                     <div class="col-lg-11">
                         <h4>เลือกสินค้าสำหรับโอนสาขา</h4>
-<!--                        <div class="input-group">-->
-<!--                            <input type="text" class="form-control search-item" placeholder="ค้นหาสินค้า">-->
-<!--                            <span class="input-group-addon">-->
-<!--                                        <button type="submit" class="btn btn-primary btn-search-submit">-->
-<!--                                            <span class="fa fa-search"></span>-->
-<!--                                        </button>-->
-<!--                                    </span>-->
-<!--                        </div>-->
+                        <!--                        <div class="input-group">-->
+                        <!--                            <input type="text" class="form-control search-item" placeholder="ค้นหาสินค้า">-->
+                        <!--                            <span class="input-group-addon">-->
+                        <!--                                        <button type="submit" class="btn btn-primary btn-search-submit">-->
+                        <!--                                            <span class="fa fa-search"></span>-->
+                        <!--                                        </button>-->
+                        <!--                                    </span>-->
+                        <!--                        </div>-->
                     </div>
                     <div class="col-lg-1">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -177,7 +172,7 @@ $model_to_com = \backend\models\Company::find()->all();
                         </select>
                     </div>
                 </div>
-                <br />
+                <br/>
                 <input type="hidden" name="line_qc_product" class="line_qc_product" value="">
                 <table class="table table-bordered table-striped table-find-list" width="100%">
                     <thead>
@@ -237,7 +232,7 @@ $(function(){
       });
 });
 function whchange(e){
-    var wh1 = e.closest('tr').find('.line-select-from-warehouse').val();
+    var wh1 = e.closest('tr').find('.line-from-warehouse').val();
     var wh2 = e.closest('tr').find('.line-select-to-warehouse').val();
     if(wh1 == wh2){
         alert('คลังสินค้าซ้ำกัน');
@@ -362,6 +357,9 @@ function getOnhand(){
 }
 
 function showfind(e){
+    $(".search-company").val(-1).change();
+    $(".search-branch").val(-1).change();
+    $(".search-warehouse").val(-1).change();
     //alert();
       $.ajax({
               'type':'post',
@@ -383,6 +381,14 @@ function showfind(e){
         var name = e.closest('tr').find('.line-find-name').val();
         var price = e.closest('tr').find('.line-find-price').val();
         var onhand = e.closest('tr').find('.line-onhand').val();
+        
+        var company = $(".search-company").val();
+        var branch = $(".search-branch").val();
+        var warehouse = $(".search-warehouse").val();
+        var company_name = $(".search-company option:selected").text();
+        var branch_name = $(".search-branch option:selected").text();
+        var warehouse_name = $(".search-warehouse option:selected").text();
+        
         if (id) {
             if (e.hasClass('btn-outline-success')) {
                 var obj = {};
@@ -391,6 +397,12 @@ function showfind(e){
                 obj['name'] = name;
                 obj['price'] = price;
                 obj['onhand'] = onhand;
+                obj['company'] = company;
+                obj['branch'] = branch;
+                obj['warehouse'] = warehouse;
+                obj['company_name'] = company_name;
+                obj['branch_name'] = branch_name;
+                obj['warehouse_name'] = warehouse_name;
                 selecteditem.push(obj);
                 
                 e.removeClass('btn-outline-success');
@@ -431,6 +443,12 @@ function showfind(e){
                 var line_prod_id = selecteditem[i]['id'];
                 var line_prod_code = selecteditem[i]['code'];
                 var line_prod_name = selecteditem[i]['name'];
+                var line_from_company = selecteditem[i]['company'];
+                var line_from_branch = selecteditem[i]['branch'];
+                var line_from_warehouse = selecteditem[i]['warehouse'];
+                var line_from_company_name = selecteditem[i]['company_name'];
+                var line_from_branch_name = selecteditem[i]['branch_name'];
+                var line_from_warehouse_name = selecteditem[i]['warehouse_name'];
                 
                  if(check_dup(line_prod_id) == 1){
                         alert("รายการสินค้า " +line_prod_code+ " มีในรายการแล้ว");
@@ -442,6 +460,13 @@ function showfind(e){
                 if (tr.closest("tr").find(".line-product-id").val() == "") {
                     tr.closest("tr").find(".line-product-id").val(line_prod_id);
                     tr.closest("tr").find(".line-product-name").val(line_prod_name);
+                    
+                    tr.closest("tr").find(".line-from-company").val(line_from_company);
+                    tr.closest("tr").find(".line-from-branch").val(line_from_branch);
+                    tr.closest("tr").find(".line-from-warehouse").val(line_from_warehouse);
+                    tr.closest("tr").find(".line-from-company-name").val(line_from_company_name);
+                    tr.closest("tr").find(".line-from-branch-name").val(line_from_branch_name);
+                    tr.closest("tr").find(".line-from-warehouse-name").val(line_from_warehouse_name);
                     //alert();
                 } else {
                     console.log(line_prod_code);
@@ -450,6 +475,12 @@ function showfind(e){
                     var clone = tr.clone();
                     clone.find(".line-product-id").val(line_prod_id);
                     clone.find(".line-product-name").val(line_prod_name);
+                    clone.find(".line-from-company").val(line_from_company);
+                    clone.find(".line-from-branch").val(line_from_branch);
+                    clone.find(".line-from-warehouse").val(line_from_warehouse);
+                    tr.closest("tr").find(".line-from-company-name").val(line_from_company_name);
+                    tr.closest("tr").find(".line-from-branch-name").val(line_from_branch_name);
+                    tr.closest("tr").find(".line-from-warehouse-name").val(line_from_warehouse_name);
                     clone.attr("data-var", "");
                     clone.find('.rec-id').val("");
 

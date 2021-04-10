@@ -64,6 +64,20 @@ class OrderfinishedSearch extends QuerySaleFinished
             'route_name' => $this->route_name
         ]);
 
+        $sale_date = null;
+        if ($this->order_date != null) {
+            $x_date = explode('/', $this->order_date);
+            $sale_date = date('Y-m-d');
+            if (count($x_date) > 1) {
+                $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
+            }
+            $this->order_date = date('Y-m-d', strtotime($sale_date));
+            $query->andFilterWhere(['date(order_date)' => date('Y-m-d', strtotime($sale_date))]);
+        }else{
+            $this->order_date = date('Y-m-d');
+            $query->andFilterWhere(['date(order_date)' => date('Y-m-d')]);
+        }
+
         if($this->globalSearch != ''){
             $query->orFilterWhere(['like', 'order_no', $this->globalSearch])
                 ->orFilterWhere(['like', 'route_name', $this->globalSearch]);

@@ -585,21 +585,49 @@ class OrdersController extends Controller
         $model = \common\models\QueryProductByPriceGroup::find()->where(['price_group_id' => $price_group_id])->all();
         $i = 0;
         foreach ($model as $value) {
-
             $i += 1;
             $input_name = "line_qty_" . $value->code . $price_group_id . "[]";
             $input_name_price = "line_sale_price_" . $value->code . $price_group_id . "[]";
             $input_name_price_cal = "line_sale_price_cal" . $value->code . $price_group_id . "[]";
             $line_prod_code = $value->code . $price_group_id . '[]';
+            $line_prod_onhand = "line_product_onhand" . $value->code . "[]";
+
+            //$issue_avl_qty = getAvlqty($value->product_id,$issue_id);
+
+            $line_onhand_qty = 100;
             $html .= '<td>
                        <input type="hidden" class="line-qty-' . $i . '">
                        <input type="hidden" class="line-product-code" name="' . $line_prod_code . '" value="' . $value->code . '">
                        <input type="hidden" class="line-sale-price" name="' . $input_name_price . '" value="' . $value->sale_price . '">
                        <input type="hidden" class="line-sale-price-cal" name="' . $input_name_price_cal . '" value="' . $value->sale_price . '">
+                       <input type="hidden" class="line-product-onhand" name="' . $line_prod_onhand . '" value="' . $line_onhand_qty . '">
                        <input type="number" name="' . $input_name . '" data-var="' . $value->sale_price . '" style="text-align: center" class="form-control" min="0" value="0" onchange="line_qty_cal($(this))">
                   </td>';
         }
         return $html;
+    }
+
+    public function getAvlqty($product_id, $issue_id){
+        $qty = 0;
+        if($product_id && $issue_id){
+            $model = \common\models\OrderStock::find()->where(['issue_id'=>$issue_id,'product_id'=>$product_id])->one();
+            if($model){
+                $qty = $model->avl_qty;
+            }
+        }
+        return $qty;
+    }
+    public function actionOrderstockqtyUpdate($product_id, $issue_id, $qty){
+        $qty = 0;
+        if($product_id && $issue_id && $qty > 0){
+            $model = \common\models\OrderStock::find()->where(['issue_id'=>$issue_id,'product_id'=>$product_id])->one();
+            if($model){
+                $model->used_qty = $qty;
+                $model->avl_qty = $model->qty - $model->used_qty;
+                $model->save(false);
+            }
+        }
+        return true;
     }
 
     public function actionFindSaledata()
@@ -665,11 +693,14 @@ class OrdersController extends Controller
             $input_name_price = "line_sale_price_" . $value->code . "[]";
             $input_name_price_cal = "line_sale_price_cal" . $value->code . "[]";
             $line_prod_code = $value->code . '[]';
+            $line_prod_onhand = "line_product_onhand" . $value->code . "[]";
+            $line_onhand_qty = 100;
             $html .= '<td>
                        <input type="hidden" class="line-qty-' . $i . '">
                        <input type="hidden" class="line-product-code" name="' . $line_prod_code . '" value="' . $value->code . '">
                        <input type="hidden" class="line-sale-price" name="' . $input_name_price . '" value="' . $value->sale_price . '">
                        <input type="hidden" class="line-sale-price-cal" name="' . $input_name_price_cal . '" value="' . $value->sale_price . '">
+                       <input type="hidden" class="line-product-onhand" name="' . $line_prod_onhand . '" value="' . $line_onhand_qty . '">
                        <input type="number" name="' . $input_name . '" data-var="' . $value->sale_price . '" style="text-align: center" class="form-control" min="0" value="0" onchange="line_qty_cal($(this))">
                   </td>';
         }

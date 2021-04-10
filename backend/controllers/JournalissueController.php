@@ -84,7 +84,7 @@ class JournalissueController extends Controller
                         $model_line->sale_price = $line_issue_price[$i];
                         $model_line->status = 1;
                         if($model_line->save()){
-                            $this->updateStock($prod_id[$i],$line_qty[$i],6);
+                            $this->updateStock($prod_id[$i],$line_qty[$i],6,$model->journal_no);
                         }
                     }
                 }
@@ -100,10 +100,10 @@ class JournalissueController extends Controller
         ]);
     }
 
-    public function updateStock($product_id,$qty,$wh_id){
+    public function updateStock($product_id,$qty,$wh_id,$journal_no){
         if($product_id!= null && $qty > 0){
             $model_trans = new \backend\models\Stocktrans();
-            $model_trans->journal_no = '';
+            $model_trans->journal_no = $journal_no;
             $model_trans->trans_date = date('Y-m-d H:i:s');
             $model_trans->product_id = $product_id;
             $model_trans->qty = $qty;
