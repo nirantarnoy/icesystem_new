@@ -154,8 +154,8 @@ function calpayment(){
          }else{
              x = parseFloat(x);
          }
-         pay_total = parseFloat(pay_total) + x;
-         remain_amount = parseFloat(rem_amt) + parseFloat(rem_amt);
+         pay_total += parseFloat(pay_total) + x;
+         remain_amount += parseFloat(rem_amt) + parseFloat(rem_amt);
     });
    // alert(pay_total);
     $(".table-list tfoot tr").find(".line-pay-remain").html(remain_amount);
