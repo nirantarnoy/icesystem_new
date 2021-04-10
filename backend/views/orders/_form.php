@@ -66,7 +66,7 @@ use yii\widgets\ActiveForm;
                     'id' => 'issue-id',
                     'disabled' => 'disabled',
                     'placeholder' => '--เลือกใบเบิก--',
-                    'multiple' => true,
+                   // 'multiple' => true,
                 ]
             ]) ?>
         </div>
