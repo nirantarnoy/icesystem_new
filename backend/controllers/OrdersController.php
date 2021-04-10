@@ -1115,6 +1115,10 @@ class OrdersController extends Controller
             if ($model) {
                 foreach ($model as $value) {
                     $i += 1;
+                    $selected = '';
+                    if($value->is_driver ==1){
+                        $selected = 'selected';
+                    }
                     $emp_code = \backend\models\Employee::findCode($value->employee_id);
                     $emp_fullname = \backend\models\Employee::findFullName($value->employee_id);
                     $html .= '<tr>';
@@ -1123,8 +1127,8 @@ class OrdersController extends Controller
                     $html .= '<td><input type="text" class="form-control line-car-emp-name" name="line_car_emp_name[]" value="' . $emp_fullname . '" readonly></td>';
                     $html .= ' <td>
                                         <select name="line_car_driver[]" class="form-control line-car-driver" id="">
-                                            <option value="1">YES</option>
-                                            <option value="0">NO</option>
+                                            <option value="1" '.$selected.'>YES</option>
+                                            <option value="0" '.$selected.'>NO</option>
                                         </select>
                                     </td>';
                     $html .= '<td>
