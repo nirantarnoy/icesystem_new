@@ -1124,6 +1124,14 @@ class OrdersController extends Controller
                     $selected = '';
                     if ($value->is_driver == 1) {
                         $selected = 'selected';
+                    }else{
+                        $selected = '';
+                    }
+                    $selected2 = '';
+                    if ($value->is_driver == 0) {
+                        $selected2 = 'selected';
+                    }else{
+                        $selected2 = '';
                     }
                     $emp_code = \backend\models\Employee::findCode($value->employee_id);
                     $emp_fullname = \backend\models\Employee::findFullName($value->employee_id);
@@ -1134,7 +1142,7 @@ class OrdersController extends Controller
                     $html .= ' <td>
                                         <select name="line_car_driver[]" class="form-control line-car-driver" id="">
                                             <option value="1" ' . $selected . '>YES</option>
-                                            <option value="0" ' . $selected . '>NO</option>
+                                            <option value="0" ' . $selected2 . '>NO</option>
                                         </select>
                                     </td>';
                     $html .= '<td>

@@ -212,20 +212,20 @@ class CardailyController extends Controller
             if ($emp_id != null) {
                // count($emp_id);return;
                 for ($i = 0; $i <= count($emp_id) - 1; $i++) {
-                    if($emp_id[$i]=='' || $emp_id == null)continue;
+                    if($emp_id[$i]=='')$emp_id[$i]=0;
                     if(!$this->checkOld($emp_id[$i], $car_id, $t_date)){
                         $model = new \backend\models\Cardaily();
                         $model->car_id = $car_id;
                         $model->employee_id = $emp_id[$i];
                         $model->trans_date = $t_date;
-                        $model->is_driver = $isdriver[$i];
+                        $model->is_driver = $isdriver[$i] == 1 ? 1:0;
                         $model->status = 1;
                         $model->save(false);
                     }else{
-                        $model = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date,'employee_id'=>$emp_id[$i]])->one();
+                        $model = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date,'employee_id'=>$emp_id[$i],'car_id'=>$car_id])->one();
                         if($model){
-                            $model->is_driver = $isdriver[$i];
-                            $model->save();
+                            $model->is_driver = $isdriver[$i] == 1 ? 1:0;
+                            $model->save(false);
                         }
                     }
 
