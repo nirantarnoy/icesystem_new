@@ -7,7 +7,7 @@ use yii\helpers\Html;
 
 $this->title = 'แก้ไขใบเบิก: ' . $model->journal_no;
 $this->params['breadcrumbs'][] = ['label' => 'ใบเบิก', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => $model->journal_no, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'แก้ไข';
 ?>
 <div class="journalissue-update">

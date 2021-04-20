@@ -6,7 +6,16 @@ use kartik\select2\Select2;
 
 
 $prod_data = \backend\models\Product::find()->all();
-
+function getStock($prod_id){
+        $qty = 0;
+        if($prod_id!=null){
+            $model= \backend\models\Stocksum::find()->where(['product_id'=>$prod_id,'warehouse_id'=>6])->one();
+            if($model){
+                $qty = $model->qty;
+            }
+        }
+        return $qty;
+    }
 ?>
 
 <div class="journalissue-form">
@@ -52,7 +61,7 @@ $prod_data = \backend\models\Product::find()->all();
                     <th>รหัสสินค้า</th>
                     <th>ชื่อสินค้า</th>
                     <th style="width: 15%">คงเหลือ</th>
-                    <th style="width: 15%">จำนวนเบิก</th>
+                    <th style="width: 15%;text-align: right">จำนวนเบิก</th>
                     <th style="width: 10%"></th>
                 </tr>
                 </thead>
@@ -78,16 +87,23 @@ $prod_data = \backend\models\Product::find()->all();
                             <input type="number" class="line-qty form-control" name="line_qty[]"
                                    value="" min="0">
                         </td>
+                        <td>
+                        </td>
                         <td style="text-align: center">
+                            <?php if(!$model->isNewRecord):?>
                             <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
                                         class="fa fa-trash"></i></div>
+                            <?php endif;?>
                         </td>
                     </tr>
                 <?php else: ?>
                     <?php if ($model_line != null): ?>
                         <?php $i = 0; ?>
                         <?php foreach ($model_line as $value2): ?>
-                            <?php $i += 1; ?>
+                            <?php
+                            $i += 1;
+                            $prod_stock = getStock($value2->product_id);
+                            ?>
                             <tr data-var="<?= $value2->id ?>">
                                 <td style="text-align: center;"> <?= $i ?></td>
 
@@ -97,7 +113,7 @@ $prod_data = \backend\models\Product::find()->all();
                                     <input type="text" class="form-control line-prod-code"
                                            name="line_prod_code[]"
                                            value="<?= \backend\models\Product::findCode($value2->product_id); ?>"
-                                           ondblclick="showfind($(this))"></td>
+                                           ondblclick="showfind($(this))" disabled></td>
                                 <td><input type="text" class="form-control line-prod-name"
                                            name="line_prod_name[]"
                                            value="<?=\backend\models\Product::findName($value2->product_id);?>" disabled>
@@ -106,13 +122,17 @@ $prod_data = \backend\models\Product::find()->all();
                                     <input type="hidden" class="line-issue-sale-price"
                                            name="line_issue_line_price[]" value="<?= $value2->sale_price ?>">
                                     <input type="number" class="line-qty form-control" name="line_qty[]"
-                                           value="<?= $value2->qty ?>" min="0">
+                                           value="<?= $prod_stock ?>" min="0" disabled>
                                 </td>
-
+                                <td style="text-align: right">
+                                    <?=number_format($value2->qty);?>
+                                </td>
                                 <td style="text-align: center">
+                                     <?php if($model->status ==1):?>
                                     <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
                                                 class="fa fa-trash"></i>
                                     </div>
+                                    <?php endif;?>
                                 </td>
                             </tr>
 

@@ -191,27 +191,27 @@ class OrdersController extends Controller
 //                }
 
 
-//                if ($model->issue_id != null) {
-//                    for ($i = 0; $i <= count($model->issue_id) - 1; $i++) {
-//                        $model_issue = \backend\models\Journalissue::find()->where(['id' => $model->issue_id[$i]])->one();
-//                        if ($model_issue) {
-//                            $model_issue->status = 2;
-//                            $model_issue->order_ref_id = $model->id;
-//                            $model_issue->save();
-//                        }
-//                        $model_loop_issue = \backend\models\Journalissueline::find()->where(['issue_id' => $model->issue_id[$i]])->all();
-//                        foreach ($model_loop_issue as $val2) {
-//                            $model_order_stock = new \common\models\OrderStock();
-//                            $model_order_stock->issue_id = $model_issue[$i];
-//                            $model_order_stock->product_id = 1;
-//                            $model_order_stock->qty = $val2->qty;
-//                            $model_order_stock->used_qty = 0;
-//                            $model_order_stock->avl_qty = $val2->qty;
-//                            $model_order_stock->order_id = $model->id;
-//                            $model_order_stock->save();
-//                        }
-//                    }
-//                }
+                if ($model->issue_id != null) {
+                    for ($i = 0; $i <= count($model->issue_id) - 1; $i++) {
+                        $model_issue = \backend\models\Journalissue::find()->where(['id' => $model->issue_id[$i]])->one();
+                        if ($model_issue) {
+                            $model_issue->status = 2;
+                            $model_issue->order_ref_id = $model->id;
+                            $model_issue->save();
+                        }
+                        $model_loop_issue = \backend\models\Journalissueline::find()->where(['issue_id' => $model->issue_id[$i]])->all();
+                        foreach ($model_loop_issue as $val2) {
+                            $model_order_stock = new \common\models\OrderStock();
+                            $model_order_stock->issue_id = $model_issue->id;
+                            $model_order_stock->product_id = 1;
+                            $model_order_stock->qty = $val2->qty;
+                            $model_order_stock->used_qty = 0;
+                            $model_order_stock->avl_qty = $val2->qty;
+                            $model_order_stock->order_id = $model->id;
+                            $model_order_stock->save();
+                        }
+                    }
+                }
 
 //                if ($model->issue_id > 0) {
 //                    $model_issue = \backend\models\Journalissue::find()->where(['id' => $model->issue_id])->one();
@@ -308,20 +308,20 @@ class OrdersController extends Controller
                                         if ($model_has != null) {
                                             $model_has->qty = $line_x_qty;
                                             $model_has->price = $line_x_price;
-                                            //$moedl_has->bill_no = $customer_line_bill[$i];
+                                            $model_has->bill_no = $customer_line_bill[$i];
                                             $model_has->line_total = ($line_x_qty * $line_x_price);
                                             $model_has->save(false);
                                         } else {
-                                            $model_line = new \backend\models\Orderline();
-                                            $model_line->order_id = $model->id;
-                                            $model_line->customer_id = $customer_id[$i];
-                                            //$model_line->bill_no = $customer_line_bill[$i];
-                                            $model_line->product_id = $prods->id;
-                                            $model_line->qty = $line_x_qty;
-                                            $model_line->price = $line_x_price;
-                                            $model_line->line_total = ($line_x_qty * $line_x_price);
-                                            $model_line->price_group_id = $price_list_loop;
-                                            $model_line->save(false);
+                                            $model_line_new = new \backend\models\Orderline();
+                                            $model_line_new->order_id = $model->id;
+                                            $model_line_new->customer_id = $customer_id[$i];
+                                            $model_line_new->bill_no = $customer_line_bill[$i];
+                                            $model_line_new->product_id = $prods->id;
+                                            $model_line_new->qty = $line_x_qty;
+                                            $model_line_new->price = $line_x_price;
+                                            $model_line_new->line_total = ($line_x_qty * $line_x_price);
+                                            $model_line_new->price_group_id = $price_list_loop;
+                                            $model_line_new->save(false);
                                         }
 
                                         // }
