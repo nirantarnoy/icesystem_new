@@ -696,7 +696,7 @@ $js = <<<JS
               'url': "$url_to_get_car_emp",
               'data': {'id': ids,'order_date': trans_date},
               'success': function(data) {
-                  // alert(data);
+                   alert(data);
                   if(data == ''){
                       $(".text-car-emp").removeClass('badge-info');
                       $(".text-car-emp").addClass('badge-danger');

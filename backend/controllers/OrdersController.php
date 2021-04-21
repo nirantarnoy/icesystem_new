@@ -2,8 +2,12 @@
 
 namespace backend\controllers;
 
+use backend\models\Cardaily;
+use backend\models\Employee;
 use backend\models\Orderline;
-use backend\models\WarehouseSearch;
+//use backend\models\WarehouseSearch;
+use backend\models\Pricegroup;
+use common\models\PriceCustomerType;
 use Yii;
 use backend\models\Orders;
 use backend\models\OrdersSearch;
@@ -74,7 +78,7 @@ class OrdersController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             set_time_limit(0);
             $price_group_list_arr = null;
-            $line_customer_id = \Yii::$app->request->post('line_customer_id');
+           // $line_customer_id = \Yii::$app->request->post('line_customer_id');
             $line_price = \Yii::$app->request->post('line_qty_cal');
             $price_group_list = \Yii::$app->request->post('price_group_list');
             $price_group_list_arr = explode(',', $price_group_list);
@@ -472,9 +476,9 @@ class OrdersController extends Controller
                         $is_active = 'active';
                         $x += 1;
                     }
-                    $model_type = \common\models\PriceCustomerType::find()->where(['customer_type_id' => $value_->customer_type_id])->groupBy('price_group_id')->one();
+                    $model_type = PriceCustomerType::find()->where(['customer_type_id' => $value_->customer_type_id])->groupBy('price_group_id')->one();
                     if ($model_type) {
-                        $pricegroup_name = \backend\models\Pricegroup::findName($model_type->price_group_id);
+                        $pricegroup_name = Pricegroup::findName($model_type->price_group_id);
                         array_push($price_group_list, $model_type->price_group_id);
                         $html .= '
                        <li class="nav-item">
@@ -529,7 +533,7 @@ class OrdersController extends Controller
     {
         $html = '';
         if ($price_group_id > 0) {
-            $model_customer_type = \common\models\PriceCustomerType::find()->where(['price_group_id' => $price_group_id])->all();
+            $model_customer_type = PriceCustomerType::find()->where(['price_group_id' => $price_group_id])->all();
             $html .= '<thead>';
             $html .= '<tr>';
             $html .= '<th style="width: 5%;text-align: center"><input type="checkbox" class="selected-all-item"></th>';
@@ -760,7 +764,7 @@ class OrdersController extends Controller
                         $x += 1;
                     }
 
-                    $pricegroup_name = \backend\models\Pricegroup::findName($value->price_group_id);
+                    $pricegroup_name = Pricegroup::findName($value->price_group_id);
                     array_push($price_group_list, $value->price_group_id);
                     $html .= '
                        <li class="nav-item">
@@ -1082,9 +1086,9 @@ class OrdersController extends Controller
         $html = '';
         $model = null;
         if ($txt != '') {
-            $model = \backend\models\Employee::find()->where(['OR', ['LIKE', 'code', $txt], ['LIKE', 'fname', $txt], ['LIKE', 'lname', $txt]])->all();
+            $model = Employee::find()->where(['OR', ['LIKE', 'code', $txt], ['LIKE', 'fname', $txt], ['LIKE', 'lname', $txt]])->all();
         } else {
-            $model = \backend\models\Employee::find()->all();
+            $model = Employee::find()->all();
         }
         foreach ($model as $value) {
             $html .= '<tr>';
@@ -1116,7 +1120,7 @@ class OrdersController extends Controller
             }
             $t_date = date('Y-m-d', strtotime($t_date));
 
-            $model = \backend\models\Cardaily::find()->where(['car_id' => $id, 'trans_date' => $t_date])->all();
+            $model = Cardaily::find()->where(['car_id' => $id, 'trans_date' => $t_date])->all();
             $i = 0;
             if ($model) {
                 foreach ($model as $value) {
@@ -1133,8 +1137,8 @@ class OrdersController extends Controller
                     }else{
                         $selected2 = '';
                     }
-                    $emp_code = \backend\models\Employee::findCode($value->employee_id);
-                    $emp_fullname = \backend\models\Employee::findFullName($value->employee_id);
+                    $emp_code = Employee::findCode($value->employee_id);
+                    $emp_fullname = Employee::findFullName($value->employee_id);
                     $html .= '<tr>';
                     $html .= '<td style="text-align: center">' . $i . '</td>';
                     $html .= '<td><input type="text" class="form-control line-car-emp-code" name="line_car_emp_code[]" value="' . $emp_code . '" readonly></td>';
@@ -1194,13 +1198,13 @@ class OrdersController extends Controller
             }
             $t_date = date('Y-m-d', strtotime($t_date));
 
-            $model = \backend\models\Cardaily::find()->where(['car_id' => $id, 'date(trans_date)' => $t_date])->all();
+            $model = Cardaily::find()->where(['car_id' => $id, 'date(trans_date)' => $t_date])->all();
             $i = 0;
             foreach ($model as $value) {
                 $i += 1;
                 //$emp_count += 1;
-                $emp_code = \backend\models\Employee::findCode($value->employee_id);
-                $emp_fullname = \backend\models\Employee::findFullName($value->employee_id);
+                $emp_code = Employee::findCode($value->employee_id);
+                $emp_fullname = Employee::findFullName($value->employee_id);
 
                 $html .= $emp_fullname . ' , ';
 
@@ -1217,7 +1221,7 @@ class OrdersController extends Controller
         $id = \Yii::$app->request->post('id');
         $res = 0;
         if ($id) {
-            if (\backend\models\Cardaily::deleteAll(['id' => $id])) {
+            if (Cardaily::deleteAll(['id' => $id])) {
                 $res += 1;
             }
         }
