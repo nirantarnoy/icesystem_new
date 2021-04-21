@@ -46,7 +46,9 @@ if($order_issue_list != null){
         </div>
         <div class="col-lg-3">
             <?= $form->field($model, 'car_ref_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Car::find()->all(), 'id', 'name'),
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Car::find()->all(), 'id', function($data){
+                    return $data->code.' '.$data->name;
+                }),
                 'options' => [
                     'id' => 'car-ref-id',
                     'disabled' => 'disabled',
@@ -696,7 +698,7 @@ $js = <<<JS
               'url': "$url_to_get_car_emp",
               'data': {'id': ids,'order_date': trans_date},
               'success': function(data) {
-                   alert(data);
+                  // alert(data);
                   if(data == ''){
                       $(".text-car-emp").removeClass('badge-info');
                       $(".text-car-emp").addClass('badge-danger');

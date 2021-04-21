@@ -406,7 +406,7 @@ class OrdersController extends Controller
                 $model_car = \backend\models\Car::find()->where(['sale_group_id' => $model->id])->all();
                 echo "<option value=''>--เลือกรถ--</option>";
                 foreach ($model_car as $value) {
-                    echo "<option value='" . $value->id . "'>$value->name</option>";
+                    echo "<option value='" . $value->id . "'>$value->code $value->name</option>";
                 }
             } else {
                 echo "<option></option>";
