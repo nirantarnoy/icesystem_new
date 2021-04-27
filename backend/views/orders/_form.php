@@ -10,6 +10,18 @@ if($order_issue_list != null){
     }
 }
 
+$this->registerCss('
+//   #table-sale-list {
+//       position: fixed;
+//       top: 0px; display:none;
+//       background-color:white;
+//   }
+   // .tablex-header-fixed {
+       // position: fixed;
+      //  top: 0px; display:none;
+       // background-color:white;
+   // }
+');
 
 ?>
 <div class="orders-form">
@@ -427,7 +439,26 @@ $js = <<<JS
   var checkeditem = [];
   var current_row = 0;
   var payment_remove_list = [];
+  
+  
+  
+  var tableOffset = null;
+  var headerx = null;
+  var fixedHeader = null;
+  
   $(function(){
+      // $(window).bind("scroll", function() {
+      //    // alert(tableOffset);
+      //       var offset = $(this).scrollTop();
+      // 
+      //       if (offset >= tableOffset && fixedHeader.is(":hidden")) {
+      //           fixedHeader.show();
+      //       }
+      //       else if (offset < tableOffset) {
+      //           fixedHeader.hide();
+      //       }
+      //   });
+      
      $("#order-date").datepicker({
        'format':'dd/mm/yyyy'
      });
@@ -532,6 +563,7 @@ $js = <<<JS
               'data': {'route_id': e.val()},
               'success': function(data) {
                   $(".list-detail").html(data);
+                     
               }
          });
          
@@ -573,6 +605,12 @@ $js = <<<JS
               }
          });
 
+            // tableOffset = $('table[id^="table-sale-list"]').offset().top;
+            // headerx = $('table[id^="table-sale-list"] > thead').clone();
+            // fixedHeader = $('table[id^="table-sale-list"]').append(headerx);
+                       
+           //alert(headerx);
+         
  }
  
  function getPaymentterm(e){

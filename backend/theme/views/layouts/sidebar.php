@@ -124,17 +124,19 @@
                                 </p>
                             </a>
                         </li>
-                        <?php if($_SESSION['user_group_id'] == 1):?>
-                        <li class="nav-item">
-                            <a href="index.php?r=branchtransfer" class="nav-link branchtransfer">
-                                <i class="far fa-circlez nav-icon"></i>
-                                <p>
-                                    โอนระหว่างสาขา
-                                    <!--                                <span class="right badge badge-danger">New</span>-->
-                                </p>
-                            </a>
-                        </li>
-                        <?php endif;?>
+                        <?php if (isset($_SESSION['user_group_id'])): ?>
+                            <?php if ($_SESSION['user_group_id'] == 1): ?>
+                                <li class="nav-item">
+                                    <a href="index.php?r=branchtransfer" class="nav-link branchtransfer">
+                                        <i class="far fa-circlez nav-icon"></i>
+                                        <p>
+                                            โอนระหว่างสาขา
+                                            <!--                                <span class="right badge badge-danger">New</span>-->
+                                        </p>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        <?php endif; ?>
                         <li class="nav-item">
                             <a href="index.php?r=stocktrans" class="nav-link stocktrans">
                                 <i class="far fa-circlez nav-icon"></i>
@@ -431,46 +433,48 @@
                                 <p>รายงานขายแยกตามพนักงาน</p>
                             </a>
                         </li>
-<!--                        <li class="nav-item">-->
-<!--                            <a href="index.php?r=report" class="nav-link report">-->
-<!--                                <i class="far fa-circlez nav-icon"></i>-->
-<!--                                <p>รายรับ</p>-->
-<!--                            </a>-->
-<!--                        </li>-->
+                        <!--                        <li class="nav-item">-->
+                        <!--                            <a href="index.php?r=report" class="nav-link report">-->
+                        <!--                                <i class="far fa-circlez nav-icon"></i>-->
+                        <!--                                <p>รายรับ</p>-->
+                        <!--                            </a>-->
+                        <!--                        </li>-->
                     </ul>
                 </li>
-                <?php if($_SESSION['user_group_id'] == 1):?>
-                <li class="nav-item has-treeview has-sub">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-user"></i>
-                        <p>
-                            ผู้ใช้งาน
-                            <i class="fas fa-angle-left right"></i>
-                            <!--                                <span class="badge badge-info right">6</span>-->
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="index.php?r=usergroup" class="nav-link usergroup">
-                                <i class="far fa-circlez nav-icon"></i>
-                                <p>กลุ่มผู้ใช้งาน</p>
+                <?php if (isset($_SESSION['user_group_id'])): ?>
+                    <?php if ($_SESSION['user_group_id'] == 1): ?>
+                        <li class="nav-item has-treeview has-sub">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-user"></i>
+                                <p>
+                                    ผู้ใช้งาน
+                                    <i class="fas fa-angle-left right"></i>
+                                    <!--                                <span class="badge badge-info right">6</span>-->
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="index.php?r=usergroup" class="nav-link usergroup">
+                                        <i class="far fa-circlez nav-icon"></i>
+                                        <p>กลุ่มผู้ใช้งาน</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="index.php?r=user" class="nav-link user">
+                                        <i class="far fa-circlez nav-icon"></i>
+                                        <p>ผู้ใช้งาน</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="index.php?r=authitem" class="nav-link auth">
+                                        <i class="far fa-circlez nav-icon"></i>
+                                        <p>สิทธิ์การใช้งาน</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a href="index.php?r=user" class="nav-link user">
-                                <i class="far fa-circlez nav-icon"></i>
-                                <p>ผู้ใช้งาน</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="index.php?r=authitem" class="nav-link auth">
-                                <i class="far fa-circlez nav-icon"></i>
-                                <p>สิทธิ์การใช้งาน</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <?php endif;?>
+                    <?php endif; ?>
+                <?php endif; ?>
                 <li class="nav-item has-treeview has-sub">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-database"></i>

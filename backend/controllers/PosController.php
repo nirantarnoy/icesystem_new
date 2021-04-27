@@ -36,7 +36,10 @@ class PosController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index', 'print', 'printindex', 'dailysum', 'getcustomerprice', 'getoriginprice', 'closesale', 'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate'],
+                        'actions' => [
+                            'logout', 'index', 'print', 'printindex', 'dailysum', 'getcustomerprice', 'getoriginprice', 'closesale',
+                            'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate', 'posttrans'
+                        ],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -496,6 +499,36 @@ class PosController extends Controller
             'searchModel2' => $searchModel2,
             'dataProvider2' => $dataProvider2,
             'show_pos_date' => $t_date
+        ]);
+    }
+
+    public function actionPosttrans(){
+        $t_date = date('Y-m-d');
+
+//        $x_date = explode('/', $pos_date);
+//        if (count($x_date) > 1) {
+//            $t_date = $x_date[2] . '-' . $x_date[1] . '-' . $x_date[0];
+//        }
+        $order_qty = 0;
+        $order_amount = 0;
+        $production_qty = 0;
+
+        $model_order = \backend\models\Orders::find()->where(['date(order_date)'=>$t_date])->all();
+        if($model_order){
+            foreach ($model_order as $value){
+                $model_sale_qty = \backend\models\Orderline::find()->where(['order_id'=>$value->id])->sum('qty');
+                $order_qty = $order_qty + $model_sale_qty;
+            }
+            foreach ($model_order as $value){
+                $model_sale_amount = \backend\models\Orderline::find()->where(['order_id'=>$value->id])->sum('line_total');
+                $order_amount = $order_amount + $model_sale_amount;
+            }
+        }
+        $production_qty = \backend\models\Stocktrans::find()->where(['date(trans_date)'=>$t_date,'stock_type'=>1])->sum('qty');
+        return $this->render('_closesale',[
+            'order_qty' => $order_qty,
+            'order_amount' => $order_amount,
+            'production_qty' => $production_qty
         ]);
     }
 }

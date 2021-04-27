@@ -538,8 +538,8 @@ class OrdersController extends Controller
             $html .= '<tr>';
             $html .= '<th style="width: 5%;text-align: center"><input type="checkbox" class="selected-all-item"></th>';
             $html .= '<th style="width: 5%;text-align: center">#</th>';
-            $html .= '<th style="width: 8%">รหัสลูกค้า</th>';
-            $html .= '<th style="width: 15%">ชื่อลูกค้า</th>';
+//            $html .= '<th style="width: 8%">รหัสลูกค้า</th>';
+            $html .= '<th style="width: 10%">ชื่อลูกค้า</th>';
             $html .= '<th style="width: 8%;text-align: center">เลขที่บิล</th>';
             $html .= $this->getProductcolumn2($price_group_id);
             $html .= '<th style="width: 8%;text-align: right">รวมจำนวน</th>';
@@ -558,8 +558,9 @@ class OrdersController extends Controller
                         $html .= '<tr>';
                         $html .= '<td style="text-align: center"><input type="checkbox" class="selected-all-item"></td>';
                         $html .= '<td style="text-align: center">' . $i . '</td>';
-                        $html .= '<td>' . \backend\models\Customer::findCode($val->id) . '<input type="hidden" class="line-customer-id" name="line_customer_id' . $price_group_id . '[]" value="' . $val->id . '"></td>';
-                        $html .= '<td>' . \backend\models\Customer::findName($val->id) . '</td>';
+//                        $html .= '<td>' . \backend\models\Customer::findCode($val->id) . '<input type="hidden" class="line-customer-id" name="line_customer_id' . $price_group_id . '[]" value="' . $val->id . '"></td>';
+                        $html .= '<td>' . \backend\models\Customer::findName($val->id) . '<input type="hidden" class="line-customer-id" name="line_customer_id' . $price_group_id . '[]" value="' . $val->id . '"></td>';
+                  //      $html .= '<td>' . \backend\models\Customer::findName($val->id) . '</td>';
                         $html .= '<td><input type="text" style="background-color: #258faf;color: white" class="form-control" name="line_bill_no' . $price_group_id . '[]" value=""></td>';
                         $html .= $this->getProducttextfield2($price_group_id);
                         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right"></td>';
@@ -673,8 +674,8 @@ class OrdersController extends Controller
         $html .= '<tr>';
         $html .= '<th style="width: 5%;text-align: center"><input type="checkbox" class="selected-all-item"></th>';
         $html .= '<th style="width: 5%;text-align: center">#</th>';
-        $html .= '<th style="width: 8%">รหัสลูกค้า</th>';
-        $html .= '<th style="width: 15%">ชื่อลูกค้า</th>';
+        //$html .= '<th style="width: 8%">รหัสลูกค้า</th>';
+        $html .= '<th style="width: 10%">ชื่อลูกค้า</th>';
         $html .= $this->getProductcolumn($id);
         $html .= '<th style="width: 8%;text-align: right">รวมจำนวน</th>';
         $html .= '<th style="text-align: right">รวมเงิน</th>';
@@ -690,8 +691,9 @@ class OrdersController extends Controller
                 $html .= '<tr>';
                 $html .= '<td style="text-align: center"><input type="checkbox" class="selected-all-item"></td>';
                 $html .= '<td style="text-align: center">' . $i . '</td>';
-                $html .= '<td>' . \backend\models\Customer::findCode($value->id) . '<input type="hidden" class="line-customer-id" name="line_customer_id[]" value="' . $value->id . '"></td>';
-                $html .= '<td>' . \backend\models\Customer::findName($value->id) . '</td>';
+               // $html .= '<td>' . \backend\models\Customer::findCode($value->id) . '<input type="hidden" class="line-customer-id" name="line_customer_id[]" value="' . $value->id . '"></td>';
+                $html .= '<td>' . \backend\models\Customer::findName($value->id) . '<input type="hidden" class="line-customer-id" name="line_customer_id[]" value="' . $value->id . '"></td>';
+                //$html .= '<td>' . \backend\models\Customer::findName($value->id) . '</td>';
                 $html .= $this->getProducttextfield($id);
                 $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right"></td>';
                 $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"><input type="hidden" class="form-control line-total-price-cal" style="text-align: right"></td>';
@@ -846,7 +848,7 @@ class OrdersController extends Controller
             $html .= '<tr>';
             $html .= '<th style="width: 5%;text-align: center"><input type="checkbox" onchange="showselectpaymentall($(this))" class="selected-all-item"></th>';
             $html .= '<th style="width: 5%;text-align: center">#</th>';
-            $html .= '<th style="width: 8%">รหัสลูกค้า</th>';
+//            $html .= '<th style="width: 8%">รหัสลูกค้า</th>';
             $html .= '<th style="width: 15%">ชื่อลูกค้า</th>';
             $html .= '<th style="width: 10%">เลขที่บิล</th>';
             $html .= $this->getProductcolumn22($order_id, $price_group_id); // getProductcolumn2
@@ -871,8 +873,9 @@ class OrdersController extends Controller
                     $html .= '<tr>';
                     $html .= '<td style="text-align: center"><input type="checkbox" data-var="' . $value->customer_id . '" class="selected-line-item" onchange="showselectpayment($(this))"></td>';
                     $html .= '<td style="text-align: center' . $payment_color . '">' . $i . '</td>';
-                    $html .= '<td style="' . $payment_color . '"><a href="' . Url::to(['customer/view', 'id' => $value->customer_id], true) . '">' . $value->code . '</a><input type="hidden" class="line-customer-id" name="line_customer_id' . $price_group_id . '[]" value="' . $value->customer_id . '"></td>';
-                    $html .= '<td style="' . $payment_color . '">' . $value->name . '</td>';
+//                    $html .= '<td style="' . $payment_color . '"><a href="' . Url::to(['customer/view', 'id' => $value->customer_id], true) . '">' . $value->code . '</a><input type="hidden" class="line-customer-id" name="line_customer_id' . $price_group_id . '[]" value="' . $value->customer_id . '"></td>';
+                    $html .= '<td style="' . $payment_color . '"><a href="' . Url::to(['customer/view', 'id' => $value->customer_id], true) . '">' . $value->name . '</a><input type="hidden" class="line-customer-id" name="line_customer_id' . $price_group_id . '[]" value="' . $value->customer_id . '"></td>';
+//                    $html .= '<td style="' . $payment_color . '">' . $value->name . '</td>';
                     $html .= '<td><input type="text" style="background-color: #258faf;color: white" class="form-control" name="line_bill_no' . $price_group_id . '[]" value="' . $value->bill_no . '"></td>';
                     $html .= $this->getProducttextfieldUpdate2($order_id, $value->customer_id, $price_group_id, $has_payment);
                     $html .= '</tr>';

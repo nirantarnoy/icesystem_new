@@ -11,6 +11,12 @@ AppAsset::register($this);
 
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
 $cururl = Yii::$app->controller->id;
+
+$has_group = '';
+if(isset($_SESSION['user_group_id'])){
+    $has_group = $_SESSION['user_group_id'];
+}
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -80,9 +86,11 @@ $cururl = Yii::$app->controller->id;
     </style>
 </head>
 <body class="hold-transition sidebar-mini">
+<input type="hidden" id="has-group" value="<?=$has_group?>">
 <input type="hidden" id="current-url" value="<?= $cururl ?>">
-<?php $this->beginBody() ?>
 
+<?php $this->beginBody() ?>
+<a id="goto-login" href="<?=\yii\helpers\Url::to(['site/login'],true)?>"></a>
 <div class="wrapper">
     <!-- Navbar -->
     <?= $this->render('navbar', ['assetDir' => $assetDir]) ?>
@@ -131,6 +139,12 @@ $cururl = Yii::$app->controller->id;
 <script>
     var cururl = $("#current-url").val();
     $(function () {
+
+        var has_group = $("#has-group").val();
+
+        if(has_group == ''){
+            $("#goto-login").trigger('click');
+        }
         //---- active menu
         $("#perpage").change(function () {
             $("#form-perpage").submit();
