@@ -188,6 +188,13 @@ class SiteController extends Controller
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             $_SESSION['user_group_id'] = \backend\models\User::findGroup(\Yii::$app->user->id);
+
+            $model_log = new \common\models\LoginLog();
+            $model_log->user_id = \Yii::$app->user->id;
+            $model_log->login_date = date('Y-m-d H:i:s');
+            $model_log->status = 1;
+            $model_log->save(false);
+
             return $this->goBack();
         } else {
             $model->password = '';
@@ -206,7 +213,16 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
-        Yii::$app->user->logout();
+        $user_id = \Yii::$app->user->id;
+        if(Yii::$app->user->logout()){
+            $c_date = date('Y-m-d');
+            $model_logout = \common\models\LoginLog::find()->where(['user_id'=> $user_id,'date(login_date)'=>$c_date])->andFilterWhere(['status'=>1])->one();
+            if($model_logout){
+                $model_logout->logout_date = date('Y-m-d H:i:s');
+                $model_logout->status = 2;
+                $model_logout->save(false);
+            }
+        }
 
         return $this->goHome();
     }

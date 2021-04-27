@@ -503,6 +503,7 @@ class PosController extends Controller
     }
 
     public function actionPosttrans(){
+        $emp_id = 1;
         $t_date = date('Y-m-d');
 
 //        $x_date = explode('/', $pos_date);
@@ -513,17 +514,19 @@ class PosController extends Controller
         $order_amount = 0;
         $production_qty = 0;
 
-        $model_order = \backend\models\Orders::find()->where(['date(order_date)'=>$t_date])->all();
-        if($model_order){
-            foreach ($model_order as $value){
-                $model_sale_qty = \backend\models\Orderline::find()->where(['order_id'=>$value->id])->sum('qty');
-                $order_qty = $order_qty + $model_sale_qty;
-            }
-            foreach ($model_order as $value){
-                $model_sale_amount = \backend\models\Orderline::find()->where(['order_id'=>$value->id])->sum('line_total');
-                $order_amount = $order_amount + $model_sale_amount;
-            }
-        }
+//        $model_order = \backend\models\Orders::find()->where(['date(order_date)'=>$t_date])->all();
+//        if($model_order){
+//            foreach ($model_order as $value){
+//                $model_sale_qty = \backend\models\Orderline::find()->where(['order_id'=>$value->id])->sum('qty');
+//                $order_qty = $order_qty + $model_sale_qty;
+//            }
+//            foreach ($model_order as $value){
+//                $model_sale_amount = \backend\models\Orderline::find()->where(['order_id'=>$value->id])->sum('line_total');
+//                $order_amount = $order_amount + $model_sale_amount;
+//            }
+//        }
+        $order_qty = \common\models\QuerySalePosData::find()->where(['emp_sale_id'=>$emp_id,'date(order_date)'=>$t_date])->sum('qty');
+        $order_amount = \common\models\QuerySalePosData::find()->where(['emp_sale_id'=>$emp_id,'date(order_date)'=>$t_date])->sum('line_total');
         $production_qty = \backend\models\Stocktrans::find()->where(['date(trans_date)'=>$t_date,'stock_type'=>1])->sum('qty');
         return $this->render('_closesale',[
             'order_qty' => $order_qty,
@@ -531,4 +534,14 @@ class PosController extends Controller
             'production_qty' => $production_qty
         ]);
     }
+
+    public function actionSaledailyend(){
+        $emp_id = 1;
+        $t_date = date('Y-m-d');
+
+        $model_pos_qty = \common\models\QuerySalePosData::find()->where(['emp_sale_id'=>$emp_id])->sum('qty');
+        $model_pos_amount = \common\models\QuerySalePosData::find()->where(['emp_sale_id'=>$emp_id])->sum('line_total');
+
+    }
+
 }
