@@ -208,7 +208,7 @@ if ($show_pos_date != null) {
     </div>
     <div class="col-lg-2"></div>
     <div class="col-lg-6">
-        <div class="btn btn-success"><i class="fa fa-check"></i> ตรวจสอบยืนยันรายการ</div>
+        <a href="<?=\yii\helpers\Url::to(['pos/posttrans'],true)?>" class="btn btn-success"><i class="fa fa-check"></i> ตรวจสอบและปิดยอดขาย</a>
         <p><small>หมายเหตุ: </small><small class="text-danger">กรุณาตรวจสอบข้อมูลให้ครบถ้วนก่อนการยืนยันยอดการทำรายการก่อนส่งยอด</small>
         </p>
     </div>

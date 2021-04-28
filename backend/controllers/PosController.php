@@ -38,7 +38,7 @@ class PosController extends Controller
                     [
                         'actions' => [
                             'logout', 'index', 'print', 'printindex', 'dailysum', 'getcustomerprice', 'getoriginprice', 'closesale',
-                            'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate', 'posttrans'
+                            'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate', 'posttrans','saledailyend'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -503,8 +503,9 @@ class PosController extends Controller
     }
 
     public function actionPosttrans(){
-        $emp_id = 1;
-        $t_date = date('Y-m-d');
+        $user_id = \Yii::$app->user->id;
+        $user_login_time = \backend\models\User::findLogintime($user_id);
+        $t_date = date('Y-m-d H:i');
 
 //        $x_date = explode('/', $pos_date);
 //        if (count($x_date) > 1) {
@@ -525,22 +526,52 @@ class PosController extends Controller
 //                $order_amount = $order_amount + $model_sale_amount;
 //            }
 //        }
-        $order_qty = \common\models\QuerySalePosData::find()->where(['emp_sale_id'=>$emp_id,'date(order_date)'=>$t_date])->sum('qty');
-        $order_amount = \common\models\QuerySalePosData::find()->where(['emp_sale_id'=>$emp_id,'date(order_date)'=>$t_date])->sum('line_total');
-        $production_qty = \backend\models\Stocktrans::find()->where(['date(trans_date)'=>$t_date,'stock_type'=>1])->sum('qty');
+
+        $order_qty = \common\models\QuerySalePosData::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','order_date',$user_login_time,$t_date])->sum('qty');
+        $order_amount = \common\models\QuerySalePosData::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','order_date',$user_login_time,$t_date])->sum('line_total');
+        $order_cash_qty = \common\models\QuerySalePosData::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','order_date',$user_login_time,$t_date])->sum('qty');
+        $order_credit_qty = \common\models\QuerySalePosData::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','order_date',$user_login_time,$t_date])->sum('qty');
+
+        $order_cash_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','payment_date',$user_login_time,$t_date])->sum('payment_amount');
+        $order_credit_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','payment_date',$user_login_time,$t_date])->sum('payment_amount');
+        $production_qty = \backend\models\Stocktrans::find()->where(['stock_type'=>1])->andFilterWhere(['between','trans_date',$user_login_time,$t_date])->sum('qty');
         return $this->render('_closesale',[
             'order_qty' => $order_qty,
             'order_amount' => $order_amount,
+            'order_cash_qty' => $order_cash_qty,
+            'order_credit_qty' => $order_credit_qty,
+            'order_cash_amount' => $order_cash_amount,
+            'order_credit_amount' => $order_credit_amount,
             'production_qty' => $production_qty
         ]);
     }
 
     public function actionSaledailyend(){
-        $emp_id = 1;
+        $user_id = \Yii::$app->user->id;
         $t_date = date('Y-m-d');
 
-        $model_pos_qty = \common\models\QuerySalePosData::find()->where(['emp_sale_id'=>$emp_id])->sum('qty');
-        $model_pos_amount = \common\models\QuerySalePosData::find()->where(['emp_sale_id'=>$emp_id])->sum('line_total');
+        $total_qty = \Yii::$app->request->post('order_qty');
+        $total_amount = \Yii::$app->request->post('order_amount');
+        $total_cash_qty = \Yii::$app->request->post('order_cash_qty');
+        $total_credit_qty = \Yii::$app->request->post('order_credit_qty');
+        $total_cash_amount = \Yii::$app->request->post('order_cash_amount');
+        $total_credit_amount = \Yii::$app->request->post('order_credit_amount');
+        $total_production_qty = \Yii::$app->request->post('total_production_qty');
+
+        if($user_id != null){
+            $model = new \common\models\SaleDailySum();
+            $model->emp_id = $user_id;
+            $model->trans_date = date('Y-m-d H:i:s');
+            $model->total_cash_qty = 0;
+            $model->total_credit_qty = 0;
+            $model->total_cash_price = 0;
+            $model->total_credit_price = 0;
+            $model->total_prod_qty = 0;
+            $model->trans_shift = 0;
+            $model->balance_in = 0;
+            $model->status = 1; // close and cannot edit everything
+            $model->save();
+        }
 
     }
 

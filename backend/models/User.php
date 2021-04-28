@@ -1,5 +1,6 @@
 <?php
 namespace backend\models;
+use common\models\LoginLog;
 use Yii;
 use yii\db\ActiveRecord;
 date_default_timezone_set('Asia/Bangkok');
@@ -53,5 +54,10 @@ class User extends \common\models\User
     public function findGroup($id){
         $model = User::find()->where(['id'=>$id])->one();
         return $model!= null?$model->group_id:0;
+    }
+
+    public function findLogintime($id){
+        $model = LoginLog::find()->where(['user_id'=>$id])->one();
+        return $model!= null?date('H:i',strtotime($model->login_date)):'';
     }
 }
