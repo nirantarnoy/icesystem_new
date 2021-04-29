@@ -534,7 +534,7 @@ class PosController extends Controller
 
         $order_cash_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','payment_date',$user_login_time,$t_date])->sum('payment_amount');
         $order_credit_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','payment_date',$user_login_time,$t_date])->sum('payment_amount');
-        $production_qty = \backend\models\Stocktrans::find()->where(['stock_type'=>1])->andFilterWhere(['between','trans_date',$user_login_time,$t_date])->sum('qty');
+        $production_qty = \backend\models\Stocktrans::find()->where(['activity_type_id'=>1])->andFilterWhere(['between','trans_date',$user_login_time,$t_date])->sum('qty');
         return $this->render('_closesale',[
             'order_qty' => $order_qty,
             'order_amount' => $order_amount,
