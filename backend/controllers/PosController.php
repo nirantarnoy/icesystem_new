@@ -514,6 +514,8 @@ class PosController extends Controller
 //        }
         $order_qty = 0;
         $order_amount = 0;
+        $order_cash_qty = 0;
+        $order_credit_qty = 0;
         $production_qty = 0;
 
 //        $model_order = \backend\models\Orders::find()->where(['date(order_date)'=>$t_date])->all();
@@ -537,6 +539,7 @@ class PosController extends Controller
         $order_credit_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','payment_date',$user_login_datetime,$t_date])->sum('payment_amount');
         $production_qty = \backend\models\Stocktrans::find()->where(['activity_type_id'=>1])->andFilterWhere(['between','trans_date',$user_login_datetime,$t_date])->sum('qty');
 
+        echo $user_login_time;
        echo $order_cash_qty;
        echo $order_credit_qty;
 
