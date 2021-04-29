@@ -505,6 +505,7 @@ class PosController extends Controller
     public function actionPosttrans(){
         $user_id = \Yii::$app->user->id;
         $user_login_time = \backend\models\User::findLogintime($user_id);
+        $user_login_datetime = \backend\models\User::findLogindatetime($user_id);
         $t_date = date('Y-m-d H:i');
 
 //        $x_date = explode('/', $pos_date);
@@ -527,14 +528,14 @@ class PosController extends Controller
 //            }
 //        }
 
-        $order_qty = \common\models\QuerySalePosData::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','order_date',$user_login_time,$t_date])->sum('qty');
-        $order_amount = \common\models\QuerySalePosData::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','order_date',$user_login_time,$t_date])->sum('line_total');
-        $order_cash_qty = \common\models\QuerySalePosData::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','order_date',$user_login_time,$t_date])->sum('qty');
-        $order_credit_qty = \common\models\QuerySalePosData::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','order_date',$user_login_time,$t_date])->sum('qty');
+        $order_qty = \common\models\QuerySalePosData::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','order_date',$user_login_datetime,$t_date])->sum('qty');
+        $order_amount = \common\models\QuerySalePosData::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','order_date',$user_login_datetime,$t_date])->sum('line_total');
+        $order_cash_qty = \common\models\QuerySalePosData::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','order_date',$user_login_datetime,$t_date])->sum('qty');
+        $order_credit_qty = \common\models\QuerySalePosData::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','order_date',$user_login_datetime,$t_date])->sum('qty');
 
-        $order_cash_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','payment_date',$user_login_time,$t_date])->sum('payment_amount');
-        $order_credit_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','payment_date',$user_login_time,$t_date])->sum('payment_amount');
-        $production_qty = \backend\models\Stocktrans::find()->where(['activity_type_id'=>1])->andFilterWhere(['between','trans_date',$user_login_time,$t_date])->sum('qty');
+        $order_cash_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','payment_date',$user_login_datetime,$t_date])->sum('payment_amount');
+        $order_credit_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','payment_date',$user_login_datetime,$t_date])->sum('payment_amount');
+        $production_qty = \backend\models\Stocktrans::find()->where(['activity_type_id'=>1])->andFilterWhere(['between','trans_date',$user_login_datetime,$t_date])->sum('qty');
         return $this->render('_closesale',[
             'order_qty' => $order_qty,
             'order_amount' => $order_amount,

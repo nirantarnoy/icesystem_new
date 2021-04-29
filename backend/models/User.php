@@ -60,4 +60,8 @@ class User extends \common\models\User
         $model = LoginLog::find()->where(['user_id'=>$id])->one();
         return $model!= null?date('H:i',strtotime($model->login_date)):'';
     }
+    public function findLogindatetime($id){
+        $model = LoginLog::find()->where(['user_id'=>$id])->one();
+        return $model!= null?date('Y-m-d H:i:s',strtotime($model->login_date)):'';
+    }
 }
