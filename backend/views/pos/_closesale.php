@@ -46,6 +46,10 @@ $user_id = \Yii::$app->user->id;
         <div class="col-lg-2">
             <input type="text" class="form-control" name="order_cash_amount" value="<?= number_format($order_cash_amount) ?>" readonly>
         </div>
+        <div class="col-lg-2"><h5>เบิกเติม</h5></div>
+        <div class="col-lg-2">
+            <input type="text" class="form-control" name="order_refill_qty" value="<?= number_format($order_cash_amount) ?>" readonly>
+        </div>
     </div>
     <div style="height: 10px;"></div>
     <div class="row" style="text-align: right">
