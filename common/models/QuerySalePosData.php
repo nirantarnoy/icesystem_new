@@ -35,7 +35,7 @@ class QuerySalePosData extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'sale_channel_id', 'product_id', 'emp_sale_id'], 'integer'],
+            [['id', 'sale_channel_id', 'product_id', 'emp_sale_id','created_by'], 'integer'],
             [['order_date'], 'safe'],
             [['qty', 'price', 'line_total'], 'number'],
             [['order_no', 'code', 'name'], 'string', 'max' => 255],
@@ -59,6 +59,7 @@ class QuerySalePosData extends \yii\db\ActiveRecord
             'emp_sale_id' => 'Emp Sale ID',
             'code' => 'Code',
             'name' => 'Name',
+            'created_by' => 'Created By'
         ];
     }
 }
