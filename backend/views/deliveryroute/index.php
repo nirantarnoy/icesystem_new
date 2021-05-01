@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\bootstrap4\LinkPager;
@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'description',
             [
-                'label' => 'Customer Qty',
+                'label' => 'จำนวนลูกค้า',
                 'format' => 'raw',
                 'headerOptions' => ['style' => 'text-align:center;'],
                 'contentOptions' => ['style' => 'text-align: center'],
@@ -147,7 +147,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <table class="table table-bordered table-striped table-find-list" width="100%">
                     <thead>
                     <tr>
-                        <th>รหัสลูกค้า</th>
+                        <th>ข้อมูลลูกค้า</th>
                         <th>ชื่อลูกค้า</th>
                         <th>สถานะ</th>
                     </tr>

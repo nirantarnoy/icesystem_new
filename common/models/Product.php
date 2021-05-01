@@ -55,7 +55,7 @@ class Product extends \yii\db\ActiveRecord
             [['branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['branch_id' => 'id']],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'id']],
             [['barcode'],'string'],
-            [['stock_type','sale_status'],'integer']
+            [['stock_type','sale_status','is_pos_item','item_pos_seq'],'integer']
         ];
     }
 
@@ -75,7 +75,7 @@ class Product extends \yii\db\ActiveRecord
             'std_cost' => Yii::t('app', 'ต้นทุน'),
             'sale_price' => Yii::t('app', 'ราคาขาย'),
             'unit_id' => Yii::t('app', 'หน่วยนับ'),
-            'nw' => Yii::t('app', 'Nw'),
+            'nw' => Yii::t('app', 'น้ำหนัก'),
             'gw' => Yii::t('app', 'Gw'),
             'min_stock' => Yii::t('app', 'Min Stock'),
             'max_stock' => Yii::t('app', 'Max Stock'),
@@ -83,6 +83,8 @@ class Product extends \yii\db\ActiveRecord
             'company_id' => Yii::t('app', 'บริษัท'),
             'branch_id' => Yii::t('app', 'สาขา'),
             'barcode' => Yii::t('app', 'บาร์โค้ด'),
+            'is_pos_item' => 'ใช้กับลูกค้าเงินสด POS',
+            'item_pos_seq' => 'ลำดับแสดงรายการ',
             'sale_status' => Yii::t('app', 'สถานะขาย'),
             'stock_type' => Yii::t('app', 'ตัดสต๊อก'),
             'created_at' => Yii::t('app', 'Created At'),

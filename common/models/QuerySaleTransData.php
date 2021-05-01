@@ -40,7 +40,7 @@ class QuerySaleTransData extends \yii\db\ActiveRecord
         return [
             [['order_date'], 'safe'],
             [['vat_amt', 'qty', 'price'], 'number'],
-            [['order_channel_id', 'payment_method_id', 'product_id', 'customer_id'], 'integer'],
+            [['order_channel_id', 'payment_method_id', 'product_id', 'customer_id','order_id','price_group_id'], 'integer'],
             [['order_no', 'route_code', 'sale_grp_name', 'cus_name', 'cus_group_name', 'cus_type_name'], 'string', 'max' => 255],
         ];
     }

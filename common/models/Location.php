@@ -55,12 +55,12 @@ class Location extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'warehouse_id' => Yii::t('app', 'Warehouse ID'),
-            'code' => Yii::t('app', 'Code'),
-            'name' => Yii::t('app', 'Name'),
-            'description' => Yii::t('app', 'Description'),
+            'warehouse_id' => Yii::t('app', 'คลังสินค้า'),
+            'code' => Yii::t('app', 'รหัส'),
+            'name' => Yii::t('app', 'ชื่อ'),
+            'description' => Yii::t('app', 'รายละเอียด'),
             'photo' => Yii::t('app', 'Photo'),
-            'status' => Yii::t('app', 'Status'),
+            'status' => Yii::t('app', 'สถานะ'),
             'company_id' => Yii::t('app', 'Company ID'),
             'branch_id' => Yii::t('app', 'Branch ID'),
             'created_at' => Yii::t('app', 'Created At'),

@@ -2,13 +2,17 @@
 
 namespace backend\controllers;
 
+use backend\models\CustomersalehistorySearch;
+use backend\models\CustomersalepaySearch;
 use backend\models\DeliveryrouteSearch;
+use backend\models\Product;
 use Yii;
 use backend\models\Customer;
 use backend\models\CustomerSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * CustomerController implements the CRUD actions for Customer model.
@@ -58,8 +62,20 @@ class CustomerController extends Controller
      */
     public function actionView($id)
     {
+        $searchModel = new CustomersalehistorySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andFilterWhere(['customer_id'=>$id]);
+
+        $searchModel2 = new CustomersalepaySearch();
+        $dataProvider2 = $searchModel2->search(Yii::$app->request->queryParams);
+        $dataProvider2->query->andFilterWhere(['customer_id'=>$id]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'searchModel2' => $searchModel2,
+            'dataProvider2' => $dataProvider2,
         ]);
     }
 
@@ -82,7 +98,16 @@ class CustomerController extends Controller
 //            $model->delivery_route_id = $route;
 //            $model->customer_type_id = $cust_type;
 //            $model->status = $status;
-            if($model->save()){
+            $photo = UploadedFile::getInstance($model, 'shop_photo');
+            if (!empty($photo)) {
+                $photo_name = time() . "." . $photo->getExtension();
+                $photo->saveAs(Yii::getAlias('@backend') . '/web/uploads/images/customer/' . $photo_name);
+                $model->shop_photo = $photo_name;
+            }
+
+            $model->code = $model->getLastNo();
+            $model->sort_name = $model->sort_name == null?'':$model->sort_name;
+            if($model->save(false)){
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
                 return $this->redirect(['index']);
@@ -115,7 +140,14 @@ class CustomerController extends Controller
 //            $model->delivery_route_id = $route;
 //            $model->customer_type_id = $cust_type;
 //            $model->status = $status;
-            if($model->save()){
+            $photo = UploadedFile::getInstance($model, 'shop_photo');
+            if (!empty($photo)) {
+                $photo_name = time() . "." . $photo->getExtension();
+                $photo->saveAs(Yii::getAlias('@backend') . '/web/uploads/images/customer/' . $photo_name);
+                $model->shop_photo = $photo_name;
+            }
+            $model->sort_name = $model->sort_name == null?'':$model->sort_name;
+            if($model->save(false)){
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
                 return $this->redirect(['index']);
@@ -156,5 +188,30 @@ class CustomerController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+    public function actionDeletephoto()
+    {
+        $id = \Yii::$app->request->post('delete_id');
+        if ($id) {
+            $photo = $this->getPhotoName($id);
+            if ($photo != '') {
+                if (unlink('../web/uploads/images/customer/' . $photo)) {
+                    Customer::updateAll(['shop_photo' => ''], ['id' => $id]);
+                }
+            }
+
+        }
+        return $this->redirect(['customer/update', 'id' => $id]);
+    }
+    public function getPhotoName($id)
+    {
+        $photo_name = '';
+        if ($id) {
+            $model = Customer::find()->where(['id' => $id])->one();
+            if ($model) {
+                $photo_name = $model->shop_photo;
+            }
+        }
+        return $photo_name;
     }
 }

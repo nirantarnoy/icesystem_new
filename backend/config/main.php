@@ -12,9 +12,14 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [
-        'gridview' =>  [
+        'gridview' => [
             'class' => '\kartik\grid\Module'
-        ]
+        ],
+//        'api' => [
+//            'class' => 'backend\modules\api\Api',
+//            // 'basePath' => '@backend/modules/api',
+//            // 'class' => 'backend\modules\api\Module',
+//        ],
     ],
     'timeZone' => 'Asia/Bangkok',
 //    'aliases'=>[
@@ -42,9 +47,19 @@ return [
                 ],
             ],
         ],
+//        'request' => [
+//            'csrfParam' => '_csrf-backend',
+//            'enableCsrfValidation' => false,
+//        ],
         'request' => [
-            'csrfParam' => '_csrf-backend',
-            'enableCsrfValidation' => false,
+            'csrfParam' => '_csrf-frontend',
+            'class' => 'yii\web\Request',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ],
+//            'parsers' => [
+//                'application/json'=> \yii\web\JsonParser::class,
+//            ]
         ],
 //        [
 //            'session' =>[

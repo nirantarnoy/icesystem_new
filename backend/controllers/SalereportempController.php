@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\SaleorderbyempSearch;
 use backend\models\SalereportbyempSearch;
 use backend\models\SalereportempSearch;
 use \Yii;
@@ -12,16 +13,16 @@ class SalereportempController extends Controller
     public function actionIndex()
     {
 
-        $searchModel = new SalereportempSearch();
+        $searchModel = new SaleorderbyempSearch();
 //print_r(Yii::$app->request->queryParams);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         //   $dataProvider->query->andFilterWhere(['>','qty',0])->andFilterWhere(['customer_id'=>2247]);
         $dataProvider->query->andFilterWhere(['>', 'qty', 0]);
         $dataProvider->setSort([
-            'defaultOrder' => ['emp_id' => SORT_ASC, 'order_date' => SORT_ASC, 'payment_method_id' => SORT_ASC, 'customer_id' => SORT_ASC, 'product_id' => SORT_ASC]
+            'defaultOrder' => ['employee_id' => SORT_ASC, 'order_date' => SORT_ASC, 'payment_method_id' => SORT_ASC, 'customer_id' => SORT_ASC, 'product_id' => SORT_ASC]
         ]);
 
-        return $this->render('index', [
+        return $this->render('_index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -46,6 +47,23 @@ class SalereportempController extends Controller
             'dataProvider' => $dataProvider,
             'view_com_date' => $view_com_date,
             'view_emp_id' => $view_emp_id
+        ]);
+    }
+
+    public function actionEmpcomnew(){
+        $view_com_date = \Yii::$app->request->post('com_date');
+        $view_emp_id = \Yii::$app->request->post('emp_id');
+        $view_route_id = \Yii::$app->request->post('route_id');
+//        $searchModel = new SalereportbyempSearch();
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+
+        return $this->render('_newcom', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+            'view_com_date' => $view_com_date,
+            'view_emp_id' => $view_emp_id,
+            'view_route_id'=> $view_route_id,
         ]);
     }
 

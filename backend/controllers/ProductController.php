@@ -43,6 +43,7 @@ class ProductController extends Controller
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setSort(['defaultOrder' => ['item_pos_seq' => SORT_ASC]]);
         $dataProvider->pagination->pageSize = $pageSize;
 
         $modelupload = new \backend\models\Uploadfile();
@@ -244,7 +245,7 @@ class ProductController extends Controller
             print "\xEF\xBB\xBF";
 
             $model = Product::find()->all();
-           // $model = \common\models\QueryProducts::find()->all();
+            // $model = \common\models\QueryProducts::find()->all();
             if ($model) {
                 echo "<table border='1'>
                          <tr>

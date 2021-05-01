@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\PaymenttermSearch;
 use Yii;
 use backend\models\Position;
 use backend\models\PositionSearch;
@@ -35,12 +36,16 @@ class PositionController extends Controller
      */
     public function actionIndex()
     {
+        $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new PositionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
+        $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'perpage' => $pageSize,
         ]);
     }
 

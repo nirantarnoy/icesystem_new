@@ -53,10 +53,10 @@ class Unit extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'code' => Yii::t('app', 'Code'),
-            'name' => Yii::t('app', 'Name'),
-            'description' => Yii::t('app', 'Description'),
-            'status' => Yii::t('app', 'Status'),
+            'code' => Yii::t('app', 'รหัส'),
+            'name' => Yii::t('app', 'ชื่อ'),
+            'description' => Yii::t('app', 'รายละเอียด'),
+            'status' => Yii::t('app', 'สถานะ'),
             'company_id' => Yii::t('app', 'Company ID'),
             'branch_id' => Yii::t('app', 'Branch ID'),
             'created_at' => Yii::t('app', 'Created At'),

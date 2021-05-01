@@ -1,7 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+//use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -52,8 +53,14 @@ $this->params['breadcrumbs'][] = '/' . $this->title;
         //'tableOptions' => ['class' => 'table table-hover'],
         'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b> <span> เพิ่มรายการโดยการคลิกที่ปุ่ม </span><span class="text-success">"สร้างใหม่"</span></div>',
         'columns' => [
+//            [
+//                'class' => 'yii\grid\SerialColumn',
+//                'headerOptions' => ['style' => 'text-align: center'],
+//                'contentOptions' => ['style' => 'text-align: center'],
+//            ],
             [
-                'class' => 'yii\grid\SerialColumn',
+                'attribute' => 'item_pos_seq',
+                'label' => '#',
                 'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center'],
             ],
@@ -78,7 +85,7 @@ $this->params['breadcrumbs'][] = '/' . $this->title;
                     return \backend\models\Productgroup::findName($data->product_group_id);
                 }
             ],
-            'barcode',
+            'nw',
             [
                 'attribute' => 'stock_type',
                 'format' => 'raw',

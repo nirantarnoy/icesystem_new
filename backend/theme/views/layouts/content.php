@@ -2,6 +2,7 @@
 /* @var $content string */
 
 use yii\bootstrap4\Breadcrumbs;
+use yii\web\Session;
 ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -28,7 +29,7 @@ use yii\bootstrap4\Breadcrumbs;
         <!-- Main content -->
     <div class="content" style="padding: 15px;background-color: white">
         <div id="btn-show-alert"></div>
-        <?php $session = Yii::$app->session;
+        <?php $session = \Yii::$app->session;
         if ($session->getFlash('msg')): ?>
             <input type="hidden" class="alert-msg" value="<?= $session->getFlash('msg'); ?>">
         <?php endif; ?>

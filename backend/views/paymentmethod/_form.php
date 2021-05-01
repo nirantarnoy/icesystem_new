@@ -18,6 +18,13 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
+            <?= $form->field($model, 'pay_type')->Widget(\kartik\select2\Select2::className(), [
+                'data' => \yii\helpers\ArrayHelper::map(\backend\helpers\PayType::asArrayObject(), 'id', 'name'),
+                'options' => [
+                    'id' => 'pay-type',
+                ]
+            ])->label('หมวดหมู่') ?>
+
             <?php echo $form->field($model, 'note')->textarea(['maxlength' => true]) ?>
 
             <label for=""><?= $model->getAttributeLabel('status') ?></label>

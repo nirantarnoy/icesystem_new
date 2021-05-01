@@ -8,10 +8,6 @@ use kartik\select2\Select2;
 use toxor88\switchery\Switchery;
 use kartik\checkbox\CheckboxX;
 
-
-/* @var $this yii\web\View */
-/* @var $model backend\models\Sequence */
-/* @var $form yii\widgets\ActiveForm */
 ?>
     <div class="panel panel-headlin">
         <div class="panel-heading">
@@ -31,14 +27,14 @@ use kartik\checkbox\CheckboxX;
                                 </div>
                               </div>
                               <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">คำตั้งต้น 
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">คำตั้งต้น
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                    <?= $form->field($model, 'prefix')->textInput(['maxlength' => true,'class'=>'form-control','id'=>'prefix','onchange'=>'calrunno();','style'=>'text-transform: uppercase;'])->label(false) ?>
                                 </div>
                               </div>
-                             
-                               
+
+
                               <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">ปรับรูปแบบ
                                 </label>
@@ -60,25 +56,25 @@ use kartik\checkbox\CheckboxX;
                                             'options'=>['id'=>'use_day','onchange'=>'calrunno();']
                                             ]);?>
                                     </div>
-                                  
+
                                 </div>
                               </div>
                                <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">สัญลักษ์ 
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">สัญลักษ์
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                    <?= $form->field($model, 'symbol')->textInput(['maxlength' => true,'class'=>'form-control','id'=>'symbol','onchange'=>'calrunno();'])->label(false) ?>
                                 </div>
                               </div>
                               <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">ค่าต่ำสุด 
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">ค่าต่ำสุด
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                    <?= $form->field($model, 'minimum')->textInput(['maxlength' => true,'class'=>'form-control','id'=>'minimum'])->label(false) ?>
                                 </div>
                               </div>
                                 <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">ค่าสูงสุด 
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">ค่าสูงสุด
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                    <?= $form->field($model, 'maximum')->textInput(['maxlength' => true,'class'=>'form-control','id'=>'maximum','onchange'=>'calrunno();'])->label(false) ?>
@@ -91,9 +87,9 @@ use kartik\checkbox\CheckboxX;
                                    <?= $form->field($model, 'currentnum')->textInput(['maxlength' => true,'class'=>'form-control'])->label(false) ?>
                                 </div>
                               </div>
-                             
+
                               <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">สถานะ 
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">สถานะ
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                    <?php echo $form->field($model, 'status')->widget(Switchery::className(),['options'=>['label'=>'','class'=>'form-control']])->label(false) ?>
@@ -101,13 +97,13 @@ use kartik\checkbox\CheckboxX;
                               </div>
 
                               <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">ผลลัพธ์ 
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">ผลลัพธ์
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                    <h1><p class="show_result"></p></h1>
                                 </div>
                               </div>
-                          
+
 
                              <div class="ln_solid"></div>
                         <div class="form-group">
@@ -120,7 +116,7 @@ use kartik\checkbox\CheckboxX;
                         </div>
                     </div>
 
-<?php 
+<?php
 $this->registerJs('
     $(function(){
           var pre = $("#prefix").val().toUpperCase();
@@ -180,13 +176,14 @@ $this->registerJs('
             }
             if($("#use_month").val()==1){
                var dt = new Date().getMonth()+1;
-               ismonth = dt;
+            
+               ismonth = dt < 10?"0"+dt:dt;
             }else{
                ismonth = "";
             }
             if($("#use_day").val()==1){
                var dt = new Date().getDate();
-               isday = dt;
+               isday = dt < 10?"0"+dt:dt;
             }else{
                isday = "";
             }

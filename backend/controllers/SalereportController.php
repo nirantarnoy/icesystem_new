@@ -9,7 +9,8 @@ use yii\web\Controller;
 class SalereportController extends Controller{
     public function actionIndex(){
 
-        $searchModel = new SalereportSearch();
+        //$searchModel = new SalereportSearch();
+        $searchModel = new \backend\models\SaleorderbyrouteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
      //   $dataProvider->query->andFilterWhere(['>','qty',0])->andFilterWhere(['customer_id'=>2247]);
         $dataProvider->query->andFilterWhere(['>','qty',0]);
@@ -17,7 +18,7 @@ class SalereportController extends Controller{
             'defaultOrder'=>['route_code'=>SORT_ASC,'order_date'=>SORT_ASC,'payment_method_id'=>SORT_ASC,'customer_id'=>SORT_ASC,'product_id'=>SORT_ASC]
         ]);
 
-        return $this->render('index', [
+        return $this->render('_index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);

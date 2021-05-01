@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\SalecomSearch;
 use Yii;
 use backend\models\Paymentterm;
 use backend\models\PaymenttermSearch;
@@ -35,12 +36,16 @@ class PaymenttermController extends Controller
      */
     public function actionIndex()
     {
+        $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new PaymenttermSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
+        $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'perpage' => $pageSize,
         ]);
     }
 
@@ -66,8 +71,12 @@ class PaymenttermController extends Controller
     {
         $model = new Paymentterm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if( $model->save()){
+                $session = Yii::$app->session;
+                $session->setFlash('msg', 'บันทึกข้อมูลค้าเรียบร้อย');
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('create', [
@@ -86,8 +95,12 @@ class PaymenttermController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if( $model->save()){
+                $session = Yii::$app->session;
+                $session->setFlash('msg', 'บันทึกข้อมูลค้าเรียบร้อย');
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('update', [
@@ -105,8 +118,10 @@ class PaymenttermController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+            $session = Yii::$app->session;
+            $session->setFlash('msg', 'ลบข้อมูลเรียบร้อย');
+            return $this->redirect(['index']);
 
-        return $this->redirect(['index']);
     }
 
     /**

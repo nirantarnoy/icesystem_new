@@ -1,12 +1,12 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\bootstrap4\LinkPager;
 
-$this->title = Yii::t('app', 'คำสั่งซื้อ');
+$this->title = Yii::t('app', 'ใบสั่งขาย');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="orders-index">
@@ -24,9 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="form-group">
                     <label>แสดง </label>
                     <select class="form-control" name="perpage" id="perpage">
-                        <option value="20" <?= $perpage == '20' ? 'selected' : '' ?>>20</option>
-                        <option value="50" <?= $perpage == '50' ? 'selected' : '' ?> >50</option>
-                        <option value="100" <?= $perpage == '100' ? 'selected' : '' ?>>100</option>
+                        <option value="50" <?= $perpage == '50' ? 'selected' : '' ?>>50</option>
+                        <option value="100" <?= $perpage == '100' ? 'selected' : '' ?> >100</option>
+                        <option value="150" <?= $perpage == '150' ? 'selected' : '' ?>>150</option>
                     </select>
                     <label> รายการ</label>
                 </div>
@@ -69,15 +69,51 @@ $this->params['breadcrumbs'][] = $this->title;
 //            ],
 //            'customer_type',
 //            'customer_name',
-
             [
-                'attribute' => 'order_total_amt',
+                'attribute' => 'order_channel_id',
+                'value' => function ($data) {
+                    return \backend\models\Deliveryroute::findName($data->order_channel_id);
+                }
+            ],
+            [
+                'attribute' => 'car_ref_id',
+                'value' => function ($data) {
+                    return \backend\models\Car::findName($data->car_ref_id);
+                }
+            ],
+            [
+                'label' => 'ยอดรับชำระ',
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
-                    return number_format($data->order_total_amt);
+                    return number_format(\backend\models\Paymentreceive::findPayorderamt($data->id));
                 }
             ],
+            [
+                'label' => 'เครดิต/เชื่อ',
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
+                'value' => function ($data) {
+                    return number_format(\backend\models\Orders::findordercredit($data->id));
+                }
+            ],
+            [
+                'label' => 'สด',
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
+                'value' => function ($data) {
+                    return number_format(\backend\models\Orders::findordercash($data->id));
+                }
+            ],
+//            [
+//                'attribute' => 'order_total_amt',
+//                'headerOptions' => ['style' => 'text-align: right'],
+//                'contentOptions' => ['style' => 'text-align: right'],
+//                'value' => function ($data) {
+//                   // return number_format($data->order_total_amt);
+//                    return number_format(\backend\models\Paymentreceive::findPayorderamt($data->id) + \backend\models\Orders::findordercash($data->id));
+//                }
+//            ],
             //'vat_per',
             //'order_total_amt',
             //'emp_sale_id',
@@ -90,9 +126,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
                     if ($data->status == 1) {
-                        return '<div class="badge badge-success">Closed</div>';
+                        return '<div class="badge badge-success">Open</div>';
                     } else {
-                        return '<div class="badge badge-secondary">Open</div>';
+                        return '<div class="badge badge-secondary">Closed</div>';
                     }
                 }
             ],

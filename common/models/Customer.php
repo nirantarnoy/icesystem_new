@@ -44,13 +44,13 @@ class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['code'],'unique'],
+            [['code','name'],'unique'],
             [['customer_group_id', 'delivery_route_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['active_date'], 'safe'],
-            [['code', 'name', 'description', 'location_info', 'logo', 'shop_photo'], 'string', 'max' => 255],
+            [['code', 'name', 'description', 'location_info', 'logo', 'shop_photo','address','address2','phone','branch_no','sort_name'], 'string', 'max' => 255],
             [['branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['branch_id' => 'id']],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'id']],
-            [['customer_type_id'],'integer']
+            [['customer_type_id','payment_method_id','payment_term_id',],'integer']
         ];
     }
 
@@ -61,17 +61,24 @@ class Customer extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'code' => Yii::t('app', 'Code'),
-            'name' => Yii::t('app', 'Name'),
-            'description' => Yii::t('app', 'Description'),
-            'customer_group_id' => Yii::t('app', 'Group'),
-            'customer_type_id' => Yii::t('app', 'Type'),
-            'location_info' => Yii::t('app', 'Location Info'),
-            'delivery_route_id' => Yii::t('app', 'Delivery Route ID'),
-            'active_date' => Yii::t('app', 'Active Date'),
+            'code' => Yii::t('app', 'รหัสลูกค้า'),
+            'name' => Yii::t('app', 'ชื่อ'),
+            'description' => Yii::t('app', 'รายละเอียด'),
+            'customer_group_id' => Yii::t('app', 'กลุ่มลูกค้า'),
+            'customer_type_id' => Yii::t('app', 'ประเภทลูกค้า'),
+            'location_info' => Yii::t('app', 'พิกัดแผนที่'),
+            'delivery_route_id' => Yii::t('app', 'สายส่ง'),
+            'active_date' => Yii::t('app', 'วันที่เริ่มใช้งาน'),
             'logo' => Yii::t('app', 'Logo'),
+            'sort_name' => 'รหัสสาย',
             'shop_photo' => Yii::t('app', 'Shop Photo'),
-            'status' => Yii::t('app', 'Status'),
+            'status' => Yii::t('app', 'สถานะ'),
+            'payment_method_id' => Yii::t('app', 'วิธีชำระเงิน'),
+            'payment_term_id' => Yii::t('app', 'เงื่อนไขชำระเงิน'),
+            'address' => Yii::t('app', 'ที่อยู่วางบิล'),
+            'address2' => Yii::t('app', 'ที่อยู่ส่งของ'),
+            'phone' => Yii::t('app', 'โทร'),
+            'branch_no' => Yii::t('app', 'รหัสสาขา'),
             'company_id' => Yii::t('app', 'Company ID'),
             'branch_id' => Yii::t('app', 'Branch ID'),
             'created_at' => Yii::t('app', 'Created At'),

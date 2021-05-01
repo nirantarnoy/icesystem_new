@@ -138,4 +138,22 @@ class WarehouseController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+    public function actionFindbranch(){
+        $id = \Yii::$app->request->post('com_id');
+        $html = '';
+        if($id){
+            $model = \backend\models\Branch::find()->where(['company_id'=>$id])->all();
+            if($model){
+                foreach ($model as $value){
+                    $html.='<option value="'.$value->id.'">';
+                    $html.= $value->name;
+                    $html.='</option>';
+                }
+
+            }
+
+        }
+        echo $html;
+
+    }
 }

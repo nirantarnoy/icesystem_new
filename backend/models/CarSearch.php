@@ -17,6 +17,7 @@ class CarSearch extends Car
         return [
             [['id', 'car_type_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['code', 'name', 'description', 'plate_number', 'photo'], 'safe'],
+            [['globalSearch'],'string']
         ];
     }
 
@@ -67,11 +68,14 @@ class CarSearch extends Car
             'updated_by' => $this->updated_by,
         ]);
 
-        $query->andFilterWhere(['like', 'code', $this->code])
-            ->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['like', 'plate_number', $this->plate_number])
-            ->andFilterWhere(['like', 'photo', $this->photo]);
+        if($this->globalSearch !=''){
+            $query->orFilterWhere(['like', 'code', $this->globalSearch])
+                ->orFilterWhere(['like', 'name', $this->globalSearch])
+                ->orFilterWhere(['like', 'description', $this->globalSearch])
+                ->orFilterWhere(['like', 'plate_number', $this->globalSearch])
+                ->orFilterWhere(['like', 'photo', $this->globalSearch]);
+        }
+
 
         return $dataProvider;
     }

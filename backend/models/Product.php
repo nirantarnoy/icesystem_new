@@ -55,6 +55,14 @@ class Product extends \common\models\Product
         $model = Product::find()->where(['id'=>$id])->one();
         return $model !=null?$model->name:'';
     }
+    public function findPhoto($id){
+        $model = Product::find()->where(['id'=>$id])->one();
+        return $model !=null?$model->photo:'';
+    }
+    public function findInfo($id){
+        $model = Product::find()->where(['id'=>$id])->one();
+        return $model !=null?$model : null;
+    }
 //    public function findUnitid($code){
 //        $model = Unit::find()->where(['name'=>$code])->one();
 //        return count($model)>0?$model->id:0;

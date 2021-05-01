@@ -7,11 +7,15 @@ use Yii;
 /**
  * This is the model class for table "query_customer_price".
  *
- * @property int $customer_id
- * @property int|null $price_group_id
+ * @property int $id
+ * @property string|null $code
+ * @property string|null $name
+ * @property int|null $customer_type_id
+ * @property int $cus_id
+ * @property string|null $cus_code
+ * @property string|null $cus_name
  * @property int|null $product_id
  * @property float|null $sale_price
- * @property int|null $customer_type_id
  */
 class QueryCustomerPrice extends \yii\db\ActiveRecord
 {
@@ -29,8 +33,9 @@ class QueryCustomerPrice extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'price_group_id', 'product_id', 'customer_type_id'], 'integer'],
+            [['id', 'customer_type_id', 'cus_id', 'product_id','delivery_route_id'], 'integer'],
             [['sale_price'], 'number'],
+            [['code', 'name', 'cus_code', 'cus_name'], 'string', 'max' => 255],
         ];
     }
 
@@ -40,11 +45,15 @@ class QueryCustomerPrice extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'customer_id' => 'Customer ID',
-            'price_group_id' => 'Price Group ID',
+            'id' => 'ID',
+            'code' => 'Code',
+            'name' => 'Name',
+            'customer_type_id' => 'Customer Type ID',
+            'cus_id' => 'Cus ID',
+            'cus_code' => 'Cus Code',
+            'cus_name' => 'Cus Name',
             'product_id' => 'Product ID',
             'sale_price' => 'Sale Price',
-            'customer_type_id' => 'Customer Type ID',
         ];
     }
 }

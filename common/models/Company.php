@@ -59,17 +59,18 @@ class Company extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'code' => Yii::t('app', 'Code'),
-            'name' => Yii::t('app', 'Name'),
-            'engname' => Yii::t('app', 'Engname'),
-            'taxid' => Yii::t('app', 'Taxid'),
+            'code' => Yii::t('app', 'รหัส'),
+            'name' => Yii::t('app', 'ชื่อ'),
+            'engname' => Yii::t('app', 'ชื่อภาษาอังกฤษ'),
+            'taxid' => Yii::t('app', 'เลขที่เสียภาษี'),
             'logo' => Yii::t('app', 'Logo'),
+            'address' => Yii::t('app', 'ที่อยู่'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'created_by' => Yii::t('app', 'Created By'),
             'updated_by' => Yii::t('app', 'Updated By'),
             'tenant_id' => Yii::t('app', 'Tenant ID'),
-            'status' => Yii::t('app', 'Status'),
+            'status' => Yii::t('app', 'สถานะ'),
         ];
     }
 

@@ -11,6 +11,12 @@ AppAsset::register($this);
 
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
 $cururl = Yii::$app->controller->id;
+
+$has_group = '';
+if(isset($_SESSION['user_group_id'])){
+    $has_group = $_SESSION['user_group_id'];
+}
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -22,6 +28,8 @@ $cururl = Yii::$app->controller->id;
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= "vorapat" ?></title>
     <link rel="shortcut icon" href="<?php echo Yii::$app->getUrlManager()->baseUrl; ?>/sst.ico" type="image/x-icon"/>
+
+    <link rel="stylesheet" href="plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 
     <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
     <!-- Google Font: Source Sans Pro -->
@@ -35,6 +43,8 @@ $cururl = Yii::$app->controller->id;
     <style>
         @font-face {
             font-family: 'Kanit-Regular';
+            /*font-family: 'TH-Sarabun-New';*/
+            /*src: url('fonts/THSarabunNew.ttf') format('truetype');*/
             src: url('fonts/Kanit-Regular.ttf') format('truetype');
             /*src: url('../../backend/web/fonts/Kanit-Regular.ttf') format('truetype');*/
             /* src: url('../fonts/thsarabunnew-webfont.eot?#iefix') format('embedded-opentype'),
@@ -76,9 +86,11 @@ $cururl = Yii::$app->controller->id;
     </style>
 </head>
 <body class="hold-transition sidebar-mini">
+<input type="hidden" id="has-group" value="<?=$has_group?>">
 <input type="hidden" id="current-url" value="<?= $cururl ?>">
-<?php $this->beginBody() ?>
 
+<?php $this->beginBody() ?>
+<a id="goto-login" href="<?=\yii\helpers\Url::to(['site/login'],true)?>"></a>
 <div class="wrapper">
     <!-- Navbar -->
     <?= $this->render('navbar', ['assetDir' => $assetDir]) ?>
@@ -118,9 +130,21 @@ $cururl = Yii::$app->controller->id;
 
 <script src="js/sweetalert.min.js"></script>
 
+<!-- OPTIONAL SCRIPTS -->
+<script src="plugins/chart.js/Chart.min.js"></script>
+<script src="dist/js/demo.js"></script>
+<script src="dist/js/pages/dashboard3.js"></script>
+<script src="js/module_index_delete.js"></script>
+
 <script>
     var cururl = $("#current-url").val();
     $(function () {
+
+        var has_group = $("#has-group").val();
+
+        if(has_group == ''){
+            $("#goto-login").trigger('click');
+        }
         //---- active menu
         $("#perpage").change(function () {
             $("#form-perpage").submit();
@@ -157,9 +181,9 @@ $cururl = Yii::$app->controller->id;
         $("#btn-show-alert").click(function () {
             var msg = $(".alert-msg").val();
             var msg_error = $(".alert-msg-error").val();
-            // alert(msg);
+             //alert(msg);
             if (msg != '' && typeof (msg) !== "undefined") {
-               // alert(msg);
+               //alert(msg);
                 Toast.fire({
                     type: 'success',
                     title: msg
@@ -180,11 +204,7 @@ $cururl = Yii::$app->controller->id;
 
 
 </script>
-<!-- OPTIONAL SCRIPTS -->
-<script src="plugins/chart.js/Chart.min.js"></script>
-<script src="dist/js/demo.js"></script>
-<script src="dist/js/pages/dashboard3.js"></script>
-<script src="js/module_index_delete.js"></script>
+
 </body>
 </html>
 <?php $this->endPage() ?>

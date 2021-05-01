@@ -40,7 +40,7 @@ class Sequence extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['plant_id', 'module_id', 'use_year', 'use_month', 'use_day', 'minimum', 'maximum', 'currentnum', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['plant_id', 'module_id', 'use_year', 'use_month', 'use_day', 'minimum', 'maximum', 'currentnum', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by','company_id','branch_id'], 'integer'],
             [['prefix', 'symbol'], 'string', 'max' => 255],
         ];
     }

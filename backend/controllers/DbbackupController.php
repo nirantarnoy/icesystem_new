@@ -230,10 +230,9 @@ class DbbackupController extends Controller
     public function actionExrestore()
     {
         $host = "localhost";
-        $username = "root";
-       // $password = "'" . "kie4410610217" . "'";
-        $password = "";
-        $database_name = "vorapat";
+        $username = "admin_root";
+        $password = "wZ39hSCL4";
+        $database_name = "admin_icesystem";
         $date_string = time();
 
         $cmd = '';
