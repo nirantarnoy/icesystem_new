@@ -36,7 +36,7 @@ class SaleDailySum extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['product_id', 'total_cash_qty', 'total_credit_qty', 'balance_in', 'total_prod_qty', 'emp_id', 'trans_shift', 'status','total_refill'], 'integer'],
+            [['product_id', 'total_cash_qty', 'total_credit_qty', 'balance_in', 'total_prod_qty', 'emp_id', 'trans_shift', 'status','issue_refill_qty'], 'integer'],
             [['total_cash_price', 'total_credit_price'], 'number'],
             [['trans_date'], 'safe'],
         ];
@@ -60,7 +60,7 @@ class SaleDailySum extends \yii\db\ActiveRecord
             'trans_shift' => 'Trans Shift',
             'trans_date' => 'Trans Date',
             'status' => 'Status',
-            'total_refill' => 'Total Refill'
+            'issue_refill_qty' => 'Total Refill'
         ];
     }
 }

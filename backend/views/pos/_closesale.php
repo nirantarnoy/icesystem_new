@@ -3,7 +3,7 @@ $this->title = 'สรุปยอดขายประจำวัน';
 $user_id = \Yii::$app->user->id;
 ?>
 <br/>
-<form action="">
+<form id="form-sale-end" action="<?=\yii\helpers\Url::to(['pos/saledailyend'],true)?>" method="post">
     <input type="hidden" name="close_date" value="<?=date('Y-m-d')?>">
     <input type="hidden" name="close_from_time" value="<?=\backend\models\User::findLogintime($user_id)?>">
     <input type="hidden" name="close_to_time" value="<?=date('H:i')?>">
@@ -80,5 +80,5 @@ $user_id = \Yii::$app->user->id;
             <div class="btn btn-success btn-lg"><i class="fa fa-save"></i> บันทึกปิดการขาย</div>
         </div>
     </div>
-
+    <input type="submit" value="ok">
 </form>
