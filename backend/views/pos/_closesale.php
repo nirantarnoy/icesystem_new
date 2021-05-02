@@ -126,8 +126,8 @@ $t_date = date('Y-m-d H:i:s');
             <?php foreach ($order_product_item as $value): ?>
                 <?php
                    $production_rec_qty = getProdDaily($value->product_id,$user_login_time,$t_date);
-                $order_cash_qty = getOrderCashQty($user_id,$user_login_datetime,$t_date);
-                $order_credit_qty = getOrderCreditQty($user_id,$user_login_datetime,$t_date);
+                $order_cash_qty = getOrderCashQty($value->product_id,$user_id,$user_login_datetime,$t_date);
+                $order_credit_qty = getOrderCreditQty($value->product_id,$user_id,$user_login_datetime,$t_date);
                 ?>
                 <tr>
                     <td style="text-align: left">
@@ -169,18 +169,18 @@ function getProdDaily($product_id,$user_login_datetime,$t_date){
     return $qty;
 }
 
-function getOrderCashQty($user_id,$user_login_datetime,$t_date){
+function getOrderCashQty($product_id,$user_id,$user_login_datetime,$t_date){
     $qty = 0;
     if($user_id != null){
-        $qty = \common\models\QuerySaleDataSummary::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['LIKE','name','สด'])->sum('qty');
+        $qty = \common\models\QuerySaleDataSummary::find()->where(['created_by' => $user_id,'product_id'=>$product_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['LIKE','name','สด'])->sum('qty');
     }
 
     return $qty;
 }
-function getOrderCreditQty($user_id,$user_login_datetime,$t_date){
+function getOrderCreditQty($product_id,$user_id,$user_login_datetime,$t_date){
     $qty = 0;
     if($user_id != null){
-         $qty = \common\models\QuerySaleDataSummary::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['NOT LIKE','name','สด'])->sum('qty');
+         $qty = \common\models\QuerySaleDataSummary::find()->where(['created_by' => $user_id,'product_id'=>$product_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['NOT LIKE','name','สด'])->sum('qty');
     }
 
     return $qty;
