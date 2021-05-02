@@ -128,30 +128,49 @@ $t_date = date('Y-m-d H:i:s');
                    $production_rec_qty = getProdDaily($value->product_id,$user_login_time,$t_date);
                 $order_cash_qty = getOrderCashQty($value->product_id,$user_id,$user_login_datetime,$t_date);
                 $order_credit_qty = getOrderCreditQty($value->product_id,$user_id,$user_login_datetime,$t_date);
+                $balance_in = 0;
+                $balance_out = 0;
+                $order_cash_amount = 0;
+                $order_credit_amount = 0;
                 ?>
                 <tr>
                     <td style="text-align: left">
                         <input type="hidden" name="line_prod_id[]" value="<?=$value->product_id?>">
                         <?=\backend\models\Product::findName($value->product_id)?>
                     </td>
-                    <td style="text-align: right"></td>
+                    <td style="text-align: right">
+                        <input type="hidden" name="line_balance_in[]" value="<?=$balance_in?>">
+                        <?=$balance_in?>
+                    </td>
                     <td style="text-align: right">
                         <input type="hidden" name="line_production_qty[]" value="<?=$production_rec_qty?>">
                         <?=number_format($production_rec_qty)?>
                     </td>
                     <td style="text-align: right">
+                        <input type="hidden" name="line_cash_qty[]" value="<?=$order_cash_qty?>">
                         <?=number_format($order_cash_qty)?>
                     </td>
                     <td style="text-align: right">
+                        <input type="hidden" name="line_credit_qty[]" value="<?=$order_credit_qty?>">
                         <?=number_format($order_credit_qty)?>
                     </td>
                     <td style="text-align: right">
                         <?=number_format($order_cash_qty + $order_credit_qty)?>
                     </td>
-                    <td style="text-align: right"></td>
-                    <td style="text-align: right"></td>
-                    <td style="text-align: right"></td>
-                    <td style="text-align: right"></td>
+                    <td style="text-align: right">
+                        <input type="hidden" name="line_cash_amount[]" value="<?=$order_cash_amount?>">
+                        <?=number_format($order_cash_amount)?>
+                    </td>
+                    <td style="text-align: right">
+                        <input type="hidden" name="line_credit_amount[]" value="<?=$order_credit_amount?>">
+                        <?=number_format($order_credit_amount)?>
+                    </td>
+                    <td style="text-align: right">
+                        <?=number_format($order_cash_amount + $order_credit_amount)?>
+                    </td>
+                    <td style="text-align: right">
+                        <?=number_format($balance_out)?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
@@ -181,6 +200,15 @@ function getOrderCreditQty($product_id,$user_id,$user_login_datetime,$t_date){
     $qty = 0;
     if($user_id != null){
          $qty = \common\models\QuerySaleDataSummary::find()->where(['created_by' => $user_id,'product_id'=>$product_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['NOT LIKE','name','สด'])->sum('qty');
+    }
+
+    return $qty;
+}
+
+function getOrderCashAmount($product_id,$user_id,$user_login_datetime,$t_date){
+    $qty = 0;
+    if($user_id != null){
+        $qty =\common\models\QuerySalePosPayDaily::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'payment_date', $user_login_datetime, $t_date])->andFilterWhere(['LIKE','name','สด'])->sum('payment_amount');
     }
 
     return $qty;
