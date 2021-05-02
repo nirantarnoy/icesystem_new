@@ -142,7 +142,7 @@ $t_date = date('Y-m-d H:i:s');
                     $order_cash_amount = 0;
                     $order_credit_amount = 0;
 
-                    $balance_out = ($total_production_qty - $total_order_cash_qty - $total_order_credit_qty);
+                    $balance_out = ($production_rec_qty - $order_cash_qty - $order_credit_qty);
                     ?>
                     <tr>
                         <td style="text-align: left">
