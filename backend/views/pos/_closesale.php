@@ -5,6 +5,7 @@ $user_id = \Yii::$app->user->id;
 $user_login_time = \backend\models\User::findLogintime($user_id);
 $user_login_datetime = \backend\models\User::findLogindatetime($user_id);
 $t_date = date('Y-m-d H:i:s');
+$user_login_datetime = $user_login_datetime == ''?date('Y-m-d H:i:s'):$user_login_datetime;
 
 echo $user_login_datetime;
 ?>
