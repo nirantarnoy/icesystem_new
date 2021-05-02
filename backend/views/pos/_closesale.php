@@ -73,6 +73,13 @@ $user_id = \Yii::$app->user->id;
             <input type="text" class="form-control" name="order_amount" value="<?= number_format($order_amount) ?>" readonly>
         </div>
     </div>
+    <div style="height: 10px;"></div>
+    <div class="row" style="text-align: right">
+        <div class="col-lg-2"><h5>ยอดยกไป</h5></div>
+        <div class="col-lg-2">
+            <input type="text" class="form-control" name="order_qty" value="<?= number_format($production_qty-$order_qty) ?>" readonly>
+        </div>
+    </div>
     <br/>
     <hr/>
     <div class="row" style="text-align: center">
