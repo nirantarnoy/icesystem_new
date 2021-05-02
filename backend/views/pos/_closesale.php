@@ -139,9 +139,10 @@ $t_date = date('Y-m-d H:i:s');
                     $total_production_qty = $total_production_qty + $production_rec_qty;
 
                     $balance_in = 0;
-                    $balance_out = 0;
                     $order_cash_amount = 0;
                     $order_credit_amount = 0;
+
+                    $balance_out = ($total_production_qty - $total_order_cash_qty - $total_order_credit_qty);
                     ?>
                     <tr>
                         <td style="text-align: left">
