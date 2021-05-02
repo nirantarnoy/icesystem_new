@@ -6,7 +6,7 @@ $user_login_time = \backend\models\User::findLogintime($user_id);
 $user_login_datetime = \backend\models\User::findLogindatetime($user_id);
 $t_date = date('Y-m-d H:i:s');
 
-//echo $user_login_datetime;
+echo $user_login_datetime;
 ?>
 <br/>
 <form id="form-sale-end" action="<?= \yii\helpers\Url::to(['pos/saledailyend'], true) ?>" method="post">
