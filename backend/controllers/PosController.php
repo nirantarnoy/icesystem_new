@@ -519,6 +519,7 @@ class PosController extends Controller
         $order_cash_qty = 0;
         $order_credit_qty = 0;
         $production_qty = 0;
+        $order_product_item = null;
 
 //        $model_order = \backend\models\Orders::find()->where(['date(order_date)'=>$t_date])->all();
 //        if($model_order){
@@ -538,6 +539,8 @@ class PosController extends Controller
 //        $order_credit_qty = \common\models\QuerySalePosData::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->sum('qty');
         $order_cash_qty = \common\models\QuerySaleDataSummary::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['LIKE','name','สด'])->sum('qty');
         $order_credit_qty = \common\models\QuerySaleDataSummary::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['NOT LIKE','name','สด'])->sum('qty');
+
+        $order_product_item = \common\models\QuerySaleDataSummary::find()->select('product_id')->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->groupBy('product_id')->all();
 
         $order_cash_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'payment_date', $user_login_datetime, $t_date])->andFilterWhere(['LIKE','name','สด'])->sum('payment_amount');
         $order_credit_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'payment_date', $user_login_datetime, $t_date])->andFilterWhere(['NOT LIKE','name','สด'])->sum('payment_amount');
@@ -559,7 +562,8 @@ class PosController extends Controller
             'order_cash_amount' => $order_cash_amount,
             'order_credit_amount' => $order_credit_amount,
             'production_qty' => $production_qty,
-            'issue_refill_qty' => $issue_refill_qty
+            'issue_refill_qty' => $issue_refill_qty,
+            'order_product_item' => $order_product_item
         ]);
     }
 
