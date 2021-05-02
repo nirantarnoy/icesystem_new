@@ -570,45 +570,49 @@ class PosController extends Controller
     public function actionSaledailyend()
     {
         $user_id = \Yii::$app->user->id;
-        $user_login_time = \backend\models\User::findLogintime($user_id);
-        $user_login_datetime = \backend\models\User::findLogindatetime($user_id);
-        $t_date = date('Y-m-d H:i:s');
+//        $user_login_time = \backend\models\User::findLogintime($user_id);
+//        $user_login_datetime = \backend\models\User::findLogindatetime($user_id);
+//        $t_date = date('Y-m-d H:i:s');
 
-        $total_qty = \Yii::$app->request->post('order_qty');
-        $total_amount = \Yii::$app->request->post('order_amount');
-        $total_cash_qty = \Yii::$app->request->post('order_cash_qty');
-        $total_credit_qty = \Yii::$app->request->post('order_credit_qty');
-        $total_cash_amount = \Yii::$app->request->post('order_cash_amount');
-        $total_credit_amount = \Yii::$app->request->post('order_credit_amount');
-        $total_production_qty = \Yii::$app->request->post('total_production_qty');
+        $line_prod_id = \Yii::$app->request->post('line_prod_id');
+        $line_balance_in = \Yii::$app->request->post('line_balance_in');
+        $line_balance_out = \Yii::$app->request->post('line_balance_out');
+        $line_production_qty = \Yii::$app->request->post('line_production_qty');
+        $line_cash_qty = \Yii::$app->request->post('line_cash_qty');
+        $line_credit_qty = \Yii::$app->request->post('line_credit_qty');
+        $line_cash_amount = \Yii::$app->request->post('line_cash_amount');
+        $line_credit_amount = \Yii::$app->request->post('line_credit_amount');
 
 
-        $order_cash_qty = \common\models\QuerySaleDataSummary::find()->select(['product_id', 'SUM(qty) as qty'])->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['LIKE','name','สด'])->groupBy('product_id')->all();
-        $order_cash_amount = \common\models\QuerySaleDataSummary::find()->select(['product_id', 'SUM(line_total) as line_total'])->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->groupBy('product_id')->all();
+        //     $order_cash_qty = \common\models\QuerySaleDataSummary::find()->select(['product_id', 'SUM(qty) as qty'])->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['LIKE','name','สด'])->groupBy('product_id')->all();
+  //      $order_cash_amount = \common\models\QuerySaleDataSummary::find()->select(['product_id', 'SUM(line_total) as line_total'])->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->groupBy('product_id')->all();
 //        $order_credit_qty = \common\models\QuerySalePosData::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','order_date',$user_login_datetime,$t_date])->sum('qty');
 //
 //
-//        if($user_id != null){
-//            $model = new \common\models\SaleDailySum();
-//            $model->emp_id = $user_id;
-//            $model->trans_date = date('Y-m-d H:i:s');
-//            $model->total_cash_qty = 0;
-//            $model->total_credit_qty = 0;
-//            $model->total_cash_price = 0;
-//            $model->total_credit_price = 0;
-//            $model->total_prod_qty = 0;
-//            $model->trans_shift = 0;
-//            $model->balance_in = 0;
-//            $model->status = 1; // close and cannot edit everything
-//            $model->save();
-//        }
+        if($user_id != null && $line_prod_id != null){
+            for($i=0;$i<=count($line_prod_id)-1;$i++){
+                $model = new \common\models\SaleDailySum();
+                $model->emp_id = $user_id;
+                $model->trans_date = date('Y-m-d H:i:s');
+                $model->total_cash_qty = $line_cash_qty[$i];
+                $model->total_credit_qty = $line_credit_qty[$i];
+                $model->total_cash_price = $line_cash_amount[$i];
+                $model->total_credit_price = $line_credit_amount[$i];
+                $model->total_prod_qty = $line_production_qty[$i];
+                $model->trans_shift = 0;
+                $model->balance_in = $line_balance_in[$i];
+                $model->balance_out = $line_balance_out[$i];
+                $model->status = 1; // close and cannot edit everything
+                $model->save();
+            }
+        }
 
-        foreach ($order_cash_qty as $value){
-            echo $value->product_id.' = '. $value->qty.'<br />';
-        }
-        foreach ($order_cash_amount as $value2){
-            echo $value2->product_id.' = '. $value2->line_total.'<br />';
-        }
+//        foreach ($order_cash_qty as $value){
+//            echo $value->product_id.' = '. $value->qty.'<br />';
+//        }
+//        foreach ($order_cash_amount as $value2){
+//            echo $value2->product_id.' = '. $value2->line_total.'<br />';
+//        }
 
     }
 

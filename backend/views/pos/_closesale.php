@@ -119,11 +119,23 @@ $t_date = date('Y-m-d H:i:s');
                 </tr>
                 </thead>
                 <tbody>
+                <?php
+                $total_order_cash_qty = 0;
+                $total_order_credit_qty = 0;
+                $total_order_cash_amount = 0;
+                $total_order_credit_amount = 0;
+                $total_production_qty = 0;
+                ?>
                 <?php foreach ($order_product_item as $value): ?>
                     <?php
                     $production_rec_qty = getProdDaily($value->product_id, $user_login_time, $t_date);
                     $order_cash_qty = getOrderCashQty($value->product_id, $user_id, $user_login_datetime, $t_date);
                     $order_credit_qty = getOrderCreditQty($value->product_id, $user_id, $user_login_datetime, $t_date);
+
+                    $total_order_cash_qty = $total_order_cash_qty + $order_cash_qty;
+                    $total_order_credit_qty = $total_order_credit_qty + $order_credit_qty;
+                    $total_production_qty = $total_production_qty + $production_rec_qty;
+
                     $balance_in = 0;
                     $balance_out = 0;
                     $order_cash_amount = 0;
@@ -165,18 +177,47 @@ $t_date = date('Y-m-d H:i:s');
                             <?= number_format($order_cash_amount + $order_credit_amount) ?>
                         </td>
                         <td style="text-align: right">
+                            <input type="hidden" name="line_balance_out[]" value="<?= $balance_out ?>">
                             <?= number_format($balance_out) ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
+                <tfoot>
+                <tr style="background-color: #99c5de">
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: right;font-weight: bold">
+                        <?=number_format($total_production_qty)?>
+                    </td>
+                    <td style="text-align: right;font-weight: bold">
+                        <?=number_format($total_order_cash_qty)?>
+                    </td>
+                    <td style="text-align: right;font-weight: bold">
+                        <?=number_format($total_order_credit_qty)?>
+                    </td>
+                    <td style="text-align: right;font-weight: bold">
+                        <?=number_format($total_order_credit_qty + $total_order_cash_qty)?>
+                    </td>
+                    <td style="text-align: right;font-weight: bold">
+                        <?=number_format($total_order_cash_amount)?>
+                    </td>
+                    <td style="text-align: right;font-weight: bold">
+                        <?=number_format($total_order_credit_amount)?>
+                    </td>
+                    <td style="text-align: right;font-weight: bold">
+                        <?=number_format($total_order_cash_amount + $total_order_credit_amount)?>
+                    </td>
+                    <td></td>
+                </tr>
+                </tfoot>
             </table>
         </div>
     </div>
     <br />
     <div class="row" style="text-align: center">
         <div class="col-lg-12">
-            <div class="btn btn-success btn-lg"><i class="fa fa-save"></i> บันทึกปิดการขาย</div>
+            <div class="btn btn-success btn-lg" onclick="submittotal($(this));"><i class="fa fa-save"></i> บันทึกปิดการขาย</div>
         </div>
     </div>
 </form>
@@ -221,4 +262,16 @@ function getOrderCashAmount($product_id, $user_id, $user_login_datetime, $t_date
     return $qty;
 }
 
+?>
+
+<?php
+$js=<<<JS
+  function submittotal(e){
+    if(confirm('คุณต้องการทำรายการนี้ใช่หรือไม่ ?')){
+        $("form#form-sale-end").submit();
+    }
+}
+JS;
+
+$this->registerJs($js,static::POS_END);
 ?>
