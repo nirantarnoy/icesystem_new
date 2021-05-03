@@ -1,11 +1,20 @@
 <?php
+
+use common\models\LoginLog;
+
 $this->title = 'สรุปยอดขายประจำวัน';
 
 $user_id = \Yii::$app->user->id;
 $user_login_time = \backend\models\User::findLogintime($user_id);
-$user_login_datetime = \backend\models\User::findLogindatetime($user_id);
+$user_login_datetime = '';
 $t_date = date('Y-m-d H:i:s');
-$user_login_datetime = $user_login_datetime == ''?date('Y-m-d H:i:s'):$user_login_datetime;
+$model_c_login = LoginLog::find()->where(['user_id'=>$user_id, 'status'=> 1])->andFilterWhere(['date(login_date)'=>date('Y-m-d')])->one();
+if($model_c_login != null){
+    $user_login_datetime = date('Y-m-d H:i:s', strtotime($model_c_login->login_date));
+}else{
+    $user_login_datetime = date('Y-m-d H:i:s');
+}
+
 
 echo $user_login_datetime; //return;
 ?>

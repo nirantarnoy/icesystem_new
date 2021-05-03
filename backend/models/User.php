@@ -62,7 +62,7 @@ class User extends \common\models\User
     }
     public function findLogindatetime($id){
         $c_date = date('Y-m-d');
-        $model = LoginLog::find()->where(['user_id'=>$id, 'status'=> 1])->andFilterWhere(['date(login_date)' => $c_date])->one();
+        $model = LoginLog::find()->where(['user_id'=>$id, 'status'=> 1])->one();
         return $model!= null?date('Y-m-d H:i:s',strtotime($model->login_date)):'';
     }
 }
