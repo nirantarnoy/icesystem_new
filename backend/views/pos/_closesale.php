@@ -148,7 +148,7 @@ echo $user_login_datetime; //return;
                     $total_order_credit_qty = $total_order_credit_qty + $order_credit_qty;
                     $total_production_qty = $total_production_qty + $production_rec_qty;
 
-                    $balance_in = 0;
+                    $balance_in = getBalancein($value->product_id);
                     $order_cash_amount = 0;
                     $order_credit_amount = 0;
 
@@ -272,6 +272,14 @@ function getOrderCashAmount($product_id, $user_id, $user_login_datetime, $t_date
         $qty = \common\models\QuerySalePosPayDaily::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'payment_date', $user_login_datetime, $t_date])->andFilterWhere(['LIKE', 'name', 'สด'])->sum('payment_amount');
     }
 
+    return $qty;
+}
+
+function getBalancein($product_id){
+    $qty = 0;
+    if($product_id != null){
+        $qty = \common\models\SaleBalanceOut::find()->where(['product_id'=>$product_id, 'status'=>1])->sum('qty');
+    }
     return $qty;
 }
 
