@@ -601,6 +601,7 @@ class PosController extends Controller
                 $model = new \common\models\SaleDailySum();
                 $model->emp_id = $user_id;
                 $model->trans_date = date('Y-m-d H:i:s');
+                $model->product_id = $line_prod_id[$i];
                 $model->total_cash_qty = $line_cash_qty[$i];
                 $model->total_credit_qty = $line_credit_qty[$i];
                 $model->total_cash_price = $line_cash_amount[$i];
@@ -610,7 +611,15 @@ class PosController extends Controller
                 $model->balance_in = $line_balance_in[$i];
                 $model->balance_out = $line_balance_out[$i];
                 $model->status = 1; // close and cannot edit everything
-                $model->save();
+                if($model->save()){
+                    $model_balance_out = new \common\models\SaleBalanceOut();
+                    $model_balance_out->user_id = $user_id;
+                    $model_balance_out->product_id = $line_prod_id[$i];
+                    $model_balance_out->trans_date = date('Y-m-d H:i:s');
+                    $model_balance_out->balance_out = $line_balance_out[$i];
+                    $model_balance_out->status = 1;
+                    $model_balance_out->save();
+                }
             }
         }
 
