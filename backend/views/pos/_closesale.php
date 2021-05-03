@@ -278,7 +278,7 @@ function getOrderCashAmount($product_id, $user_id, $user_login_datetime, $t_date
 function getBalancein($product_id){
     $qty = 0;
     if($product_id != null){
-        $qty = \common\models\SaleBalanceOut::find()->where(['product_id'=>$product_id, 'status'=>1])->sum('qty');
+        $qty = \common\models\SaleBalanceOut::find()->where(['product_id'=>$product_id, 'status'=>1])->sum('balance_out');
     }
     return $qty;
 }
