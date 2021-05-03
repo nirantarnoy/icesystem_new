@@ -229,9 +229,9 @@ echo $user_login_datetime; //return;
 function getProdDaily($product_id, $user_login_datetime, $t_date)
 {
     $qty = 0;
-    if ($product_id != null) {
-        $qty = \backend\models\Stocktrans::find()->where(['activity_type_id' => 1])->andFilterWhere(['product_id' => $product_id])->andFilterWhere(['between', 'trans_date', $user_login_datetime, $t_date])->sum('qty');
-    }
+//    if ($product_id != null) {
+//        $qty = \backend\models\Stocktrans::find()->where(['activity_type_id' => 1])->andFilterWhere(['product_id' => $product_id])->andFilterWhere(['between', 'trans_date', $user_login_datetime, $t_date])->sum('qty');
+//    }
 
     return $qty;
 }
