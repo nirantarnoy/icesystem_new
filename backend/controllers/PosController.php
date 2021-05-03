@@ -507,8 +507,13 @@ class PosController extends Controller
     {
         $user_id = \Yii::$app->user->id;
         $user_login_time = \backend\models\User::findLogintime($user_id);
-        $user_login_datetime = \backend\models\User::findLogindatetime($user_id);
+        $user_login_datetime = '';
         $t_date = date('Y-m-d H:i:s');
+        if($model_c_login != null){
+            $user_login_datetime = date('Y-m-d H:i:s', strtotime($model_c_login->login_date));
+        }else{
+            $user_login_datetime = date('Y-m-d H:i:s');
+        }
 
 //        $x_date = explode('/', $pos_date);
 //        if (count($x_date) > 1) {
