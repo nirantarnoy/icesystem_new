@@ -161,7 +161,7 @@ echo $user_login_datetime; //return;
                         </td>
                         <td style="text-align: right">
                             <input type="hidden" name="line_balance_in[]" value="<?= $balance_in ?>">
-                            <?= $balance_in ?>
+                            <?= number_format($balance_in) ?>
                         </td>
                         <td style="text-align: right">
                             <input type="hidden" name="line_production_qty[]" value="<?= $production_rec_qty ?>">
