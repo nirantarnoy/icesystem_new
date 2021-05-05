@@ -161,7 +161,7 @@ echo $user_login_datetime; //return;
                     $order_cash_amount = 0;
                     $order_credit_amount = 0;
 
-                    $balance_out = ($production_rec_qty + $balance_in_qty) - ($order_cash_qty - $order_credit_qty);
+                    $balance_out = ($production_rec_qty + $balance_in_qty) - ($order_cash_qty + $order_credit_qty);
                     $total_balance_out = $total_balance_out + $balance_out;
                     ?>
                     <tr>
