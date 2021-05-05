@@ -154,7 +154,7 @@ echo $user_login_datetime; //return;
 
                     if ($balance_in != null) {
                         $balance_in_id = $balance_in[0]['id'];
-                        //$balance_in_qty = $balance_in[0]['qty']==null?0:$balance_in[0]['qty'];
+                        $balance_in_qty = $balance_in[0]['qty']==null?0:$balance_in[0]['qty'];
                     }
 
                     $order_cash_amount = 0;
@@ -292,7 +292,7 @@ function getBalancein($product_id)
     if ($product_id != null) {
         $model = \common\models\SaleBalanceOut::find()->where(['product_id' => $product_id, 'status' => 1])->one();
         if ($model) {
-            array_push($data, ['id' => $model->id, 'qty' => 'balance_out']);
+            array_push($data, ['id' => $model->id, 'qty' => $model->balance_out]);
         }
     }
     return $data;
