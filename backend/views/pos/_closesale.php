@@ -181,12 +181,12 @@ echo $user_login_datetime; //return;
     <div class="row" style="text-align: right">
         <div class="col-lg-2"><h5>ยอดยกมา</h5></div>
         <div class="col-lg-2">
-            <input type="text" class="form-control" value="0" readonly name="balance_in">
+            <input type="text" class="form-control" value="<?=number_format($total_balance_in)?>" readonly name="balance_in">
         </div>
         <div class="col-lg-2"><h5>ยอดผลิต</h5></div>
         <div class="col-lg-2">
             <input type="text" class="form-control" name="today_production_qty"
-                   value="<?= number_format($production_qty) ?>" readonly>
+                   value="<?= number_format($total_production_qty) ?>" readonly>
         </div>
         <div class="col-lg-2"><h5>ยอดคืน</h5></div>
         <div class="col-lg-2">
@@ -216,7 +216,7 @@ echo $user_login_datetime; //return;
         <div class="col-lg-2"><h5>ขายเชื่อ(จำนวน)</h5></div>
         <div class="col-lg-2">
             <input type="text" class="form-control" name="order_credit_qty"
-                   value="<?= number_format($order_credit_qty) ?>" readonly>
+                   value="<?= number_format($total_order_credit_qty) ?>" readonly>
         </div>
         <div class="col-lg-2"><h5>ขายเชื่อ(เงิน)</h5></div>
         <div class="col-lg-2">
@@ -228,7 +228,7 @@ echo $user_login_datetime; //return;
     <div class="row" style="text-align: right">
         <div class="col-lg-2"><h5>ขายทั้งหมด(จำนวน)</h5></div>
         <div class="col-lg-2">
-            <input type="text" class="form-control" name="order_qty" value="<?= number_format($order_qty) ?>" readonly>
+            <input type="text" class="form-control" name="order_qty" value="<?= number_format($total_order_cash_qty) ?>" readonly>
         </div>
         <div class="col-lg-2"><h5>ขายทั้งหมด(เงิน)</h5></div>
         <div class="col-lg-2">
@@ -241,7 +241,7 @@ echo $user_login_datetime; //return;
         <div class="col-lg-2"><h5>ยอดยกไป</h5></div>
         <div class="col-lg-2">
             <input type="text" class="form-control" name="order_qty"
-                   value="<?= number_format($production_qty - $order_qty) ?>" readonly>
+                   value="<?=number_format($total_balance_out)?>" readonly>
         </div>
     </div>
     <br/>
