@@ -137,6 +137,7 @@ echo $user_login_datetime; //return;
                 $total_order_cash_amount = 0;
                 $total_order_credit_amount = 0;
                 $total_production_qty = 0;
+                $total_balance_out = 0;
                 ?>
                 <?php foreach ($order_product_item as $value): ?>
                     <?php
@@ -160,7 +161,8 @@ echo $user_login_datetime; //return;
                     $order_cash_amount = 0;
                     $order_credit_amount = 0;
 
-                    $balance_out = ($production_rec_qty - $order_cash_qty - $order_credit_qty);
+                    $balance_out = ($production_rec_qty + $balance_in_qty) - ($order_cash_qty - $order_credit_qty);
+                    $total_balance_out = $total_balance_out + $balance_out;
                     ?>
                     <tr>
                         <td style="text-align: left">
@@ -230,7 +232,9 @@ echo $user_login_datetime; //return;
                     <td style="text-align: right;font-weight: bold">
                         <?= number_format($total_order_cash_amount + $total_order_credit_amount) ?>
                     </td>
-                    <td></td>
+                    <td style="text-align: right;font-weight: bold">
+                        <?=number_format($total_balance_out);?>
+                    </td>
                 </tr>
                 </tfoot>
             </table>
