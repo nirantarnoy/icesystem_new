@@ -154,7 +154,7 @@ echo $user_login_datetime; //return;
 
                     if ($balance_in != null) {
                         $balance_in_id = $balance_in[0]['id'];
-                        $balance_in_qty = $balance_in[0]['qty'];
+                        $balance_in_qty = $balance_in[0]['qty']==null?0:$balance_in[0]['qty'];
                     }
 
                     $order_cash_amount = 0;
