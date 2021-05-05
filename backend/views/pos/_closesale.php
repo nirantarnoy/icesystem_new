@@ -23,6 +23,146 @@ echo $user_login_datetime; //return;
     <input type="hidden" name="close_date" value="<?= date('Y-m-d') ?>">
     <input type="hidden" name="close_from_time" value="<?= \backend\models\User::findLogintime($user_id) ?>">
     <input type="hidden" name="close_to_time" value="<?= date('H:i') ?>">
+
+    <!--    <input type="submit" value="ok">-->
+
+
+    <br/>
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>สินค้า</th>
+                    <th style="text-align: right">ยอดยกมา</th>
+                    <th style="text-align: right">ยอดผลิต</th>
+                    <th style="text-align: right">ขายสด(จำนวน)</th>
+                    <th style="text-align: right">ขายเชื่อ(จำนวน)</th>
+                    <th style="text-align: right">รวม</th>
+                    <th style="text-align: right">ขายสด(เงิน)</th>
+                    <th style="text-align: right">ขายเชื่อ(เงิน)</th>
+                    <th style="text-align: right">รวม</th>
+                    <th style="text-align: right">
+                        ยอดยกไป
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                $total_order_cash_qty = 0;
+                $total_order_credit_qty = 0;
+                $total_order_cash_amount = 0;
+                $total_order_credit_amount = 0;
+                $total_production_qty = 0;
+                $total_balance_in = 0;
+                $total_balance_out = 0;
+                ?>
+                <?php foreach ($order_product_item as $value): ?>
+                    <?php
+                    $production_rec_qty = getProdDaily($value->product_id, $user_login_datetime, $t_date);
+                    $order_cash_qty = getOrderCashQty($value->product_id, $user_id, $user_login_datetime, $t_date);
+                    $order_credit_qty = getOrderCreditQty($value->product_id, $user_id, $user_login_datetime, $t_date);
+
+                    $total_order_cash_qty = $total_order_cash_qty + $order_cash_qty;
+                    $total_order_credit_qty = $total_order_credit_qty + $order_credit_qty;
+                    $total_production_qty = $total_production_qty + $production_rec_qty;
+
+                    $balance_in = getBalancein($value->product_id);
+                    $balance_in_id = 0;
+                    $balance_in_qty = 0;
+
+                    if ($balance_in != null) {
+                        $balance_in_id = $balance_in[0]['id'];
+                        $balance_in_qty = $balance_in[0]['qty'] == null ? 0 : $balance_in[0]['qty'];
+                    }
+
+                    $order_cash_amount = 0;
+                    $order_credit_amount = 0;
+
+                    $total_balance_in = $total_balance_in + $balance_in_qty;
+
+                    $balance_out = ($production_rec_qty + $balance_in_qty) - ($order_cash_qty + $order_credit_qty);
+                    $total_balance_out = $total_balance_out + $balance_out;
+                    ?>
+                    <tr>
+                        <td style="text-align: left">
+                            <input type="hidden" name="line_prod_id[]" value="<?= $value->product_id ?>">
+                            <?= \backend\models\Product::findName($value->product_id) ?>
+                        </td>
+                        <td style="text-align: right">
+                            <input type="hidden" name="line_balance_in_id" value="<?= $balance_in_id ?>">
+                            <input type="hidden" name="line_balance_in[]" value="<?= $balance_in_qty ?>">
+                            <?= number_format($balance_in_qty) ?>
+                        </td>
+                        <td style="text-align: right">
+                            <input type="hidden" name="line_production_qty[]" value="<?= $production_rec_qty ?>">
+                            <?= number_format($production_rec_qty) ?>
+                        </td>
+                        <td style="text-align: right">
+                            <input type="hidden" name="line_cash_qty[]" value="<?= $order_cash_qty ?>">
+                            <?= number_format($order_cash_qty) ?>
+                        </td>
+                        <td style="text-align: right">
+                            <input type="hidden" name="line_credit_qty[]" value="<?= $order_credit_qty ?>">
+                            <?= number_format($order_credit_qty) ?>
+                        </td>
+                        <td style="text-align: right">
+                            <?= number_format($order_cash_qty + $order_credit_qty) ?>
+                        </td>
+                        <td style="text-align: right">
+                            <input type="hidden" name="line_cash_amount[]" value="<?= $order_cash_amount ?>">
+                            <?= number_format($order_cash_amount) ?>
+                        </td>
+                        <td style="text-align: right">
+                            <input type="hidden" name="line_credit_amount[]" value="<?= $order_credit_amount ?>">
+                            <?= number_format($order_credit_amount) ?>
+                        </td>
+                        <td style="text-align: right">
+                            <?= number_format($order_cash_amount + $order_credit_amount) ?>
+                        </td>
+                        <td style="text-align: right">
+                            <input type="hidden" name="line_balance_out[]" value="<?= $balance_out ?>">
+                            <?= number_format($balance_out) ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+                <tfoot>
+                <tr style="background-color: #99c5de">
+                    <td></td>
+                    <td style="text-align: right;font-weight: bold">
+                        <?= number_format($total_balance_in) ?>
+                    </td>
+                    <td style="text-align: right;font-weight: bold">
+                        <?= number_format($total_production_qty) ?>
+                    </td>
+                    <td style="text-align: right;font-weight: bold">
+                        <?= number_format($total_order_cash_qty) ?>
+                    </td>
+                    <td style="text-align: right;font-weight: bold">
+                        <?= number_format($total_order_credit_qty) ?>
+                    </td>
+                    <td style="text-align: right;font-weight: bold">
+                        <?= number_format($total_order_credit_qty + $total_order_cash_qty) ?>
+                    </td>
+                    <td style="text-align: right;font-weight: bold">
+                        <?= number_format($total_order_cash_amount) ?>
+                    </td>
+                    <td style="text-align: right;font-weight: bold">
+                        <?= number_format($total_order_credit_amount) ?>
+                    </td>
+                    <td style="text-align: right;font-weight: bold">
+                        <?= number_format($total_order_cash_amount + $total_order_credit_amount) ?>
+                    </td>
+                    <td style="text-align: right;font-weight: bold">
+                        <?= number_format($total_balance_out); ?>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <br/>
     <div class="row">
         <div class="col-lg-3">
             <h4>วันที่ <span style="color: #ec4844"><?= date('d/m/Y') ?></span></h4>
@@ -107,145 +247,6 @@ echo $user_login_datetime; //return;
     <br/>
     <hr/>
 
-    <!--    <input type="submit" value="ok">-->
-
-
-    <br/>
-    <div class="row">
-        <div class="col-lg-12">
-            <table class="table table-striped table-bordered">
-                <thead>
-                <tr>
-                    <th>สินค้า</th>
-                    <th style="text-align: right">ยอดยกมา</th>
-                    <th style="text-align: right">ยอดผลิต</th>
-                    <th style="text-align: right">ขายสด(จำนวน)</th>
-                    <th style="text-align: right">ขายเชื่อ(จำนวน)</th>
-                    <th style="text-align: right">รวม</th>
-                    <th style="text-align: right">ขายสด(เงิน)</th>
-                    <th style="text-align: right">ขายเชื่อ(เงิน)</th>
-                    <th style="text-align: right">รวม</th>
-                    <th style="text-align: right">
-                        ยอดยกไป
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                $total_order_cash_qty = 0;
-                $total_order_credit_qty = 0;
-                $total_order_cash_amount = 0;
-                $total_order_credit_amount = 0;
-                $total_production_qty = 0;
-                $total_balance_in = 0;
-                $total_balance_out = 0;
-                ?>
-                <?php foreach ($order_product_item as $value): ?>
-                    <?php
-                    $production_rec_qty = getProdDaily($value->product_id, $user_login_datetime, $t_date);
-                    $order_cash_qty = getOrderCashQty($value->product_id, $user_id, $user_login_datetime, $t_date);
-                    $order_credit_qty = getOrderCreditQty($value->product_id, $user_id, $user_login_datetime, $t_date);
-
-                    $total_order_cash_qty = $total_order_cash_qty + $order_cash_qty;
-                    $total_order_credit_qty = $total_order_credit_qty + $order_credit_qty;
-                    $total_production_qty = $total_production_qty + $production_rec_qty;
-
-                    $balance_in = getBalancein($value->product_id);
-                    $balance_in_id = 0;
-                    $balance_in_qty = 0;
-
-                    if ($balance_in != null) {
-                        $balance_in_id = $balance_in[0]['id'];
-                        $balance_in_qty = $balance_in[0]['qty']==null?0:$balance_in[0]['qty'];
-                    }
-
-                    $order_cash_amount = 0;
-                    $order_credit_amount = 0;
-
-                    $total_balance_in = $total_balance_in + $balance_in_qty;
-
-                    $balance_out = ($production_rec_qty + $balance_in_qty) - ($order_cash_qty + $order_credit_qty);
-                    $total_balance_out = $total_balance_out + $balance_out;
-                    ?>
-                    <tr>
-                        <td style="text-align: left">
-                            <input type="hidden" name="line_prod_id[]" value="<?= $value->product_id ?>">
-                            <?= \backend\models\Product::findName($value->product_id) ?>
-                        </td>
-                        <td style="text-align: right">
-                            <input type="hidden" name="line_balance_in_id" value="<?= $balance_in_id ?>">
-                            <input type="hidden" name="line_balance_in[]" value="<?= $balance_in_qty ?>">
-                            <?= number_format($balance_in_qty) ?>
-                        </td>
-                        <td style="text-align: right">
-                            <input type="hidden" name="line_production_qty[]" value="<?= $production_rec_qty ?>">
-                            <?= number_format($production_rec_qty) ?>
-                        </td>
-                        <td style="text-align: right">
-                            <input type="hidden" name="line_cash_qty[]" value="<?= $order_cash_qty ?>">
-                            <?= number_format($order_cash_qty) ?>
-                        </td>
-                        <td style="text-align: right">
-                            <input type="hidden" name="line_credit_qty[]" value="<?= $order_credit_qty ?>">
-                            <?= number_format($order_credit_qty) ?>
-                        </td>
-                        <td style="text-align: right">
-                            <?= number_format($order_cash_qty + $order_credit_qty) ?>
-                        </td>
-                        <td style="text-align: right">
-                            <input type="hidden" name="line_cash_amount[]" value="<?= $order_cash_amount ?>">
-                            <?= number_format($order_cash_amount) ?>
-                        </td>
-                        <td style="text-align: right">
-                            <input type="hidden" name="line_credit_amount[]" value="<?= $order_credit_amount ?>">
-                            <?= number_format($order_credit_amount) ?>
-                        </td>
-                        <td style="text-align: right">
-                            <?= number_format($order_cash_amount + $order_credit_amount) ?>
-                        </td>
-                        <td style="text-align: right">
-                            <input type="hidden" name="line_balance_out[]" value="<?= $balance_out ?>">
-                            <?= number_format($balance_out) ?>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
-                <tfoot>
-                <tr style="background-color: #99c5de">
-                    <td></td>
-                    <td style="text-align: right;font-weight: bold">
-                        <?= number_format($total_balance_in) ?>
-                    </td>
-                    <td style="text-align: right;font-weight: bold">
-                        <?= number_format($total_production_qty) ?>
-                    </td>
-                    <td style="text-align: right;font-weight: bold">
-                        <?= number_format($total_order_cash_qty) ?>
-                    </td>
-                    <td style="text-align: right;font-weight: bold">
-                        <?= number_format($total_order_credit_qty) ?>
-                    </td>
-                    <td style="text-align: right;font-weight: bold">
-                        <?= number_format($total_order_credit_qty + $total_order_cash_qty) ?>
-                    </td>
-                    <td style="text-align: right;font-weight: bold">
-                        <?= number_format($total_order_cash_amount) ?>
-                    </td>
-                    <td style="text-align: right;font-weight: bold">
-                        <?= number_format($total_order_credit_amount) ?>
-                    </td>
-                    <td style="text-align: right;font-weight: bold">
-                        <?= number_format($total_order_cash_amount + $total_order_credit_amount) ?>
-                    </td>
-                    <td style="text-align: right;font-weight: bold">
-                        <?=number_format($total_balance_out);?>
-                    </td>
-                </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
-    <br/>
     <div class="row" style="text-align: center">
         <div class="col-lg-12">
             <div class="btn btn-success btn-lg" onclick="submittotal($(this));"><i class="fa fa-save"></i>
