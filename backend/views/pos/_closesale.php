@@ -197,7 +197,7 @@ echo $user_login_datetime; //return;
     <div class="row" style="text-align: right">
         <div class="col-lg-2"><h5>ขายสด(จำนวน)</h5></div>
         <div class="col-lg-2">
-            <input type="text" class="form-control" name="order_cash_qty" value="<?= number_format($order_cash_qty) ?>"
+            <input type="text" class="form-control" name="order_cash_qty" value="<?= number_format($total_order_cash_qty) ?>"
                    readonly>
         </div>
         <div class="col-lg-2"><h5>ขายสด(เงิน)</h5></div>
@@ -228,7 +228,7 @@ echo $user_login_datetime; //return;
     <div class="row" style="text-align: right">
         <div class="col-lg-2"><h5>ขายทั้งหมด(จำนวน)</h5></div>
         <div class="col-lg-2">
-            <input type="text" class="form-control" name="order_qty" value="<?= number_format($total_order_cash_qty) ?>" readonly>
+            <input type="text" class="form-control" name="order_qty" value="<?= number_format($total_order_cash_qty + $total_order_credit_qty) ?>" readonly>
         </div>
         <div class="col-lg-2"><h5>ขายทั้งหมด(เงิน)</h5></div>
         <div class="col-lg-2">
