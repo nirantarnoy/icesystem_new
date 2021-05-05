@@ -582,6 +582,7 @@ class PosController extends Controller
 //        $t_date = date('Y-m-d H:i:s');
 
         $line_prod_id = \Yii::$app->request->post('line_prod_id');
+        $line_balance_in_id = \Yii::$app->request->post('line_balance_in_id');
         $line_balance_in = \Yii::$app->request->post('line_balance_in');
         $line_balance_out = \Yii::$app->request->post('line_balance_out');
         $line_production_qty = \Yii::$app->request->post('line_production_qty');
@@ -618,7 +619,13 @@ class PosController extends Controller
                     $model_balance_out->trans_date = date('Y-m-d H:i:s');
                     $model_balance_out->balance_out = $line_balance_out[$i];
                     $model_balance_out->status = 1;
-                    $model_balance_out->save();
+                    if($model_balance_out->save()){
+                        $model_update = \common\models\SaleBalanceOut::find()->where(['id'=>$line_balance_in_id[$x]])->one();
+                        if($model_update){
+                            $model_update->status = 2;
+                            $model_update->save();
+                        }
+                    }
                 }
             }
         }

@@ -83,7 +83,7 @@ class AdjustmentController extends Controller
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
 
-            $model->journal_no = '';
+            $model->journal_no = $model->getLastNo();
             $model->trans_date = date('Y-m-d', strtotime($sale_date));
             if($model->save()){
                 if($product != null){

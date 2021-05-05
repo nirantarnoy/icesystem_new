@@ -8,10 +8,10 @@ $user_id = \Yii::$app->user->id;
 $user_login_time = \backend\models\User::findLogintime($user_id);
 $user_login_datetime = '';
 $t_date = date('Y-m-d H:i:s');
-$model_c_login = LoginLog::find()->where(['user_id'=>$user_id, 'status'=> 1])->andFilterWhere(['date(login_date)'=>date('Y-m-d')])->one();
-if($model_c_login != null){
+$model_c_login = LoginLog::find()->where(['user_id' => $user_id, 'status' => 1])->andFilterWhere(['date(login_date)' => date('Y-m-d')])->one();
+if ($model_c_login != null) {
     $user_login_datetime = date('Y-m-d H:i:s', strtotime($model_c_login->login_date));
-}else{
+} else {
     $user_login_datetime = date('Y-m-d H:i:s');
 }
 
@@ -149,6 +149,14 @@ echo $user_login_datetime; //return;
                     $total_production_qty = $total_production_qty + $production_rec_qty;
 
                     $balance_in = getBalancein($value->product_id);
+                    $balance_in_id = 0;
+                    $balance_in_qty = 0;
+
+                    if ($balance_in != null) {
+                        $balance_in_id = $balance_in[0]['id'];
+                        $balance_in_qty = $balance_in[0]['qty'];
+                    }
+
                     $order_cash_amount = 0;
                     $order_credit_amount = 0;
 
@@ -160,8 +168,9 @@ echo $user_login_datetime; //return;
                             <?= \backend\models\Product::findName($value->product_id) ?>
                         </td>
                         <td style="text-align: right">
-                            <input type="hidden" name="line_balance_in[]" value="<?= $balance_in ?>">
-                            <?= number_format($balance_in) ?>
+                            <input type="hidden" name="line_balance_in_id" value="<?= $balance_in_id ?>">
+                            <input type="hidden" name="line_balance_in[]" value="<?= $balance_in_qty ?>">
+                            <?= number_format($balance_in_qty) ?>
                         </td>
                         <td style="text-align: right">
                             <input type="hidden" name="line_production_qty[]" value="<?= $production_rec_qty ?>">
@@ -201,25 +210,25 @@ echo $user_login_datetime; //return;
                     <td></td>
                     <td></td>
                     <td style="text-align: right;font-weight: bold">
-                        <?=number_format($total_production_qty)?>
+                        <?= number_format($total_production_qty) ?>
                     </td>
                     <td style="text-align: right;font-weight: bold">
-                        <?=number_format($total_order_cash_qty)?>
+                        <?= number_format($total_order_cash_qty) ?>
                     </td>
                     <td style="text-align: right;font-weight: bold">
-                        <?=number_format($total_order_credit_qty)?>
+                        <?= number_format($total_order_credit_qty) ?>
                     </td>
                     <td style="text-align: right;font-weight: bold">
-                        <?=number_format($total_order_credit_qty + $total_order_cash_qty)?>
+                        <?= number_format($total_order_credit_qty + $total_order_cash_qty) ?>
                     </td>
                     <td style="text-align: right;font-weight: bold">
-                        <?=number_format($total_order_cash_amount)?>
+                        <?= number_format($total_order_cash_amount) ?>
                     </td>
                     <td style="text-align: right;font-weight: bold">
-                        <?=number_format($total_order_credit_amount)?>
+                        <?= number_format($total_order_credit_amount) ?>
                     </td>
                     <td style="text-align: right;font-weight: bold">
-                        <?=number_format($total_order_cash_amount + $total_order_credit_amount)?>
+                        <?= number_format($total_order_cash_amount + $total_order_credit_amount) ?>
                     </td>
                     <td></td>
                 </tr>
@@ -227,10 +236,12 @@ echo $user_login_datetime; //return;
             </table>
         </div>
     </div>
-    <br />
+    <br/>
     <div class="row" style="text-align: center">
         <div class="col-lg-12">
-            <div class="btn btn-success btn-lg" onclick="submittotal($(this));"><i class="fa fa-save"></i> บันทึกปิดการขาย</div>
+            <div class="btn btn-success btn-lg" onclick="submittotal($(this));"><i class="fa fa-save"></i>
+                บันทึกปิดการขาย
+            </div>
         </div>
     </div>
 </form>
@@ -275,18 +286,22 @@ function getOrderCashAmount($product_id, $user_id, $user_login_datetime, $t_date
     return $qty;
 }
 
-function getBalancein($product_id){
-    $qty = 0;
-    if($product_id != null){
-        $qty = \common\models\SaleBalanceOut::find()->where(['product_id'=>$product_id, 'status'=>1])->sum('balance_out');
+function getBalancein($product_id)
+{
+    $data = [];
+    if ($product_id != null) {
+        $model = \common\models\SaleBalanceOut::find()->where(['product_id' => $product_id, 'status' => 1])->one();
+        if ($model) {
+            array_push($data, ['id' => $model->id, 'qty' => 'balance_out']);
+        }
     }
-    return $qty;
+    return $data;
 }
 
 ?>
 
 <?php
-$js=<<<JS
+$js = <<<JS
   function submittotal(e){
     if(confirm('คุณต้องการทำรายการนี้ใช่หรือไม่ ?')){
         $("form#form-sale-end").submit();
@@ -294,5 +309,5 @@ $js=<<<JS
 }
 JS;
 
-$this->registerJs($js,static::POS_END);
+$this->registerJs($js, static::POS_END);
 ?>
