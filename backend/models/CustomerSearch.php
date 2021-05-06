@@ -5,10 +5,7 @@ namespace backend\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\Customer;
-
-/**
- * CustomerSearch represents the model behind the search form of `backend\models\Customer`.
- */
+use yii\web\Session;
 class CustomerSearch extends Customer
 {
     public $globalSearch;
@@ -71,6 +68,13 @@ class CustomerSearch extends Customer
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
         ]);
+
+        if(isset($_SESSION['user_company_id'])){
+            $query->andFilterWhere(['company_id'=>$_SESSION['user_company_id']]);
+        }
+        if(isset($_SESSION['user_branch_id'])){
+            $query->andFilterWhere(['branch_id'=>$_SESSION['user_branch_id']]);
+        }
 
         if($this->globalSearch != ''){
             $query->orFilterWhere(['like', 'code', $this->globalSearch])

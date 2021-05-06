@@ -184,9 +184,11 @@ class SiteController extends Controller
         }
 
         $this->layout = 'blank';
-
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            $model_info = \backend\models\User::find()->where(['id'=>\Yii::$app->user->id])->one();
+            $_SESSION['user_company_id'] = $model_info->company_id;
+            $_SESSION['user_branch_id'] = $model_info->branch_id;
             $_SESSION['user_group_id'] = \backend\models\User::findGroup(\Yii::$app->user->id);
 
             $model_log = new \common\models\LoginLog();
