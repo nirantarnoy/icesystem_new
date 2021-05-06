@@ -87,7 +87,7 @@ class IssuerefillController extends Controller
                         $model_line->sale_price = $line_issue_price[$i];
                         $model_line->status = 1;
                         if($model_line->save()){
-                            $this->updateStock($prod_id[$i],$line_qty[$i],1);
+                            $this->updateStock($prod_id[$i],$line_qty[$i],1,$model->journal_no);
                         }
                     }
                 }
@@ -102,16 +102,16 @@ class IssuerefillController extends Controller
             'model' => $model,
         ]);
     }
-    public function updateStock($product_id,$qty,$wh_id){
+    public function updateStock($product_id,$qty,$wh_id,$journal_no){
         if($product_id!= null && $qty > 0){
             $model_trans = new \backend\models\Stocktrans();
-            $model_trans->journal_no = '';
+            $model_trans->journal_no = $journal_no;
             $model_trans->trans_date = date('Y-m-d H:i:s');
             $model_trans->product_id = $product_id;
             $model_trans->qty = $qty;
             $model_trans->warehouse_id = 6;
             $model_trans->stock_type = 2; // 1 in 2 out
-            $model_trans->activity_type_id = 3; // 1 prod rec 2 issue car
+            $model_trans->activity_type_id = 18; // 1 prod rec 2 issue car
             if($model_trans->save(false)){
                 $model = \backend\models\Stocksum::find()->where(['warehouse_id'=>6,'product_id'=>$product_id])->one();
                 if($model){

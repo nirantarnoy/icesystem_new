@@ -77,7 +77,7 @@ class StocktransController extends Controller
                  $model->qty = $qty[$i];
                  $model->warehouse_id = $wh_id[$i];
                  $model->stock_type = 1;
-                 $model->activity_type_id = 1; // 1 prod rec 2 issue car
+                 $model->activity_type_id = 15; // 15 prod rec
                  if($model->save()){
                     $this->updateSummary($prodid[$i],$wh_id[$i],$qty[$i]);
                  }

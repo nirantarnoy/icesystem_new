@@ -171,15 +171,15 @@ class PosController extends Controller
                         $model_order_line->line_total = ($line_price[$i] * $line_qty[$i]);
                         $model_order_line->status = 1;
                         if ($model_order_line->save(false)) {
-
                             $model_stock = new \backend\models\Stocktrans();
-                            $model_stock->journal_no = '';
+                            $model_stock->journal_no = $model_order->order_no;
                             $model_stock->trans_date = date('Y-m-d H:i:s');
                             $model_stock->product_id = $product_list[$i];
                             $model_stock->qty = $line_qty[$i];
                             $model_stock->warehouse_id = 6;
                             $model_stock->stock_type = 2;
                             $model_stock->activity_type_id = 5; // 1 prod rec 2 issue car
+                            $model_stock->trans_ref_id = $model_order->id;
                             if ($model_stock->save()) {
                                 $this->updateSummary($product_list[$i], 6, $line_qty[$i]);
                             }
