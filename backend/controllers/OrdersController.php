@@ -1738,7 +1738,7 @@ class OrdersController extends Controller
             $model_trans->qty = $qty;
             $model_trans->warehouse_id = 6;
             $model_trans->stock_type = 2; // 1 in 2 out
-            $model_trans->activity_type_id = 2; // 1 prod rec 2 issue car
+            $model_trans->activity_type_id = 6; // 6 issue car
             if($model_trans->save(false)){
                 $model = \backend\models\Stocksum::find()->where(['warehouse_id'=>6,'product_id'=>$product_id])->one();
                 if($model){
