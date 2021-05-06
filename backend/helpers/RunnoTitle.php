@@ -62,7 +62,7 @@ class RunnoTitle
         ['id'=>16,'name' => 'ใบจ่ายเงิน','prefix'=>'INV'],
         ['id'=>17,'name' => 'ตรวจสอบคุณภาพ','prefix'=>'QC'],
         ['id'=>18,'name' => 'เบิกเติม','prefix'=>'IF'],
-        ['id'=>19,'name' => 'เบิกเติม','prefix'=>'TB']
+        ['id'=>19,'name' => 'โอนระหว่างสาขา','prefix'=>'TB']
     ];
     public static function asArray()
     {
