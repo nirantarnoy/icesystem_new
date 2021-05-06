@@ -125,7 +125,7 @@ class Branchtransfer extends \common\models\BranchTransfer
         $model = Stocktrans::find()->MAX('journal_no');
         //   $model = Orders::find()->where(['date(order_date)' => date('Y-m-d', strtotime($date))])->MAX('order_no');
 
-        $model_seq = \backend\models\Sequence::find()->where(['module_id' => 5])->one();
+        $model_seq = \backend\models\Sequence::find()->where(['module_id' => 19])->one();
         //$pre = \backend\models\Sequence::find()->where(['module_id'=>15])->one();
         $pre = '';
         $prefix = '';

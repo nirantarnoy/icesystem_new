@@ -109,7 +109,7 @@ class BranchtransferController extends Controller
                             $model_stock_trans->product_id = $product[$i];
                             $model_stock_trans->warehouse_id = $from_warehouse[$i];
                             $model_stock_trans->stock_type = 2;
-                            $model_stock_trans->activity_type_id = 7;
+                            $model_stock_trans->activity_type_id = 19;
                             $model_stock_trans->trans_ref_id = $model->id;
                             $model_stock_trans->qty = $line_qty[$i];
                             if($model_stock_trans->save()){
@@ -127,7 +127,7 @@ class BranchtransferController extends Controller
                             $model_stock_trans2->product_id = $product[$i];
                             $model_stock_trans2->warehouse_id = $to_warehouse[$i];
                             $model_stock_trans2->stock_type = 1;
-                            $model_stock_trans2->activity_type_id = 7;
+                            $model_stock_trans2->activity_type_id = 19;
                             $model_stock_trans2->trans_ref_id = $model->id;
                             $model_stock_trans2->qty = $line_qty[$i];
                             if($model_stock_trans2->save()){
