@@ -177,5 +177,6 @@ class Branchtransfer extends \common\models\BranchTransfer
                 return $prefix . '1';
             }
         }
+    }
 
 }

@@ -49,13 +49,13 @@ echo $user_login_datetime; //return;
                 </thead>
                 <tbody>
                 <?php
-                $total_order_cash_qty = 0;
-                $total_order_credit_qty = 0;
-                $total_order_cash_amount = 0;
-                $total_order_credit_amount = 0;
-                $total_production_qty = 0;
-                $total_balance_in = 0;
-                $total_balance_out = 0;
+                    $total_order_cash_qty = 0;
+                    $total_order_credit_qty = 0;
+                    $total_order_cash_amount = 0;
+                    $total_order_credit_amount = 0;
+                    $total_production_qty = 0;
+                    $total_balance_in = 0;
+                    $total_balance_out = 0;
                 ?>
                 <?php foreach ($order_product_item as $value): ?>
                     <?php
