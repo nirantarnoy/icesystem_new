@@ -95,7 +95,7 @@ class AdjustmentController extends Controller
                         $model_line->warehouse_id = $warehouse[$i];
                         $model_line->qty = $qty[$i];
                         $model_line->stock_type = $stock_type[$i];
-                        $model_line->activity_type_id = 6;
+                        $model_line->activity_type_id = 11;
                         if($model_line->save(false)){
                             $model_stock = \backend\models\Stocksum::find()->where(['warehouse_id'=>$warehouse[$i],'product_id'=>$product[$i]])->one();
                             if($model_stock){
