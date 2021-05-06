@@ -81,7 +81,7 @@ class CloseorderController extends Controller
                 $model->qty = $qty[$i];
                 $model->warehouse_id = $warehouse_id[$i];
                 $model->stock_type = 1;
-                $model->activity_type_id = 4; // 1 prod rec 2 issue car
+                $model->activity_type_id = 7; // 1 prod rec 2 issue car
                 if ($model->save()) {
                     $this->updateSummary($product_id[$i], $warehouse_id[$i], $qty[$i]);
                     $res += 1;
