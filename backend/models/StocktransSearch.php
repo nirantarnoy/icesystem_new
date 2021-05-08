@@ -70,6 +70,13 @@ class StocktransSearch extends Stocktrans
             'created_by' => $this->created_by,
         ]);
 
+        if(isset($_SESSION['user_company_id'])){
+            $query->andFilterWhere(['company_id'=>$_SESSION['user_company_id']]);
+        }
+        if(isset($_SESSION['user_branch_id'])){
+            $query->andFilterWhere(['branch_id'=>$_SESSION['user_branch_id']]);
+        }
+
         $query->andFilterWhere(['like', 'journal_no', $this->journal_no])
             ->andFilterWhere(['like', 'lot_no', $this->lot_no]);
 
