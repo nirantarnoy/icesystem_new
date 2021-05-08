@@ -19,16 +19,14 @@ use yii\web\UploadedFile;
  */
 class CustomerController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
+    public $enableCsrfValidation = false;
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete' => ['POST','GET'],
                 ],
             ],
         ];

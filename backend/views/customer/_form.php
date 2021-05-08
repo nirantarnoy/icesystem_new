@@ -76,7 +76,7 @@ if(isset($_SESSION['user_branch_id'])){
         </div>
         <div class="col-lg-3">
             <?= $form->field($model, 'payment_method_id')->widget(\kartik\select2\Select2::className(),[
-                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentmethod::find()->all(),'id','name'),
+                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentmethod::find()->where(['company_id'=>$company_id,'branch_id'=>$brach_id])->all(),'id','name'),
                 'options' => [
                         'placeholder'=>'--วิธีชำระเงิน--'
                 ]
@@ -86,7 +86,7 @@ if(isset($_SESSION['user_branch_id'])){
     <div class="row">
         <div class="col-lg-3">
             <?= $form->field($model, 'payment_term_id')->widget(\kartik\select2\Select2::className(),[
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentterm::find()->all(),'id','name'),
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentterm::find()->where(['company_id'=>$company_id,'branch_id'=>$brach_id])->all(),'id','name'),
                 'options' => [
                     'placeholder'=>'--เงื่อนไขชำระเงิน--'
                 ]

@@ -65,6 +65,14 @@ class SalegroupSearch extends Salegroup
             'updated_at' => $this->updated_at,
             'updated_by' => $this->updated_by,
         ]);
+
+        if (isset($_SESSION['user_company_id'])) {
+            $query->andFilterWhere(['company_id' => $_SESSION['user_company_id']]);
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $query->andFilterWhere(['branch_id' => $_SESSION['user_branch_id']]);
+        }
+
         if ($this->globalSearch != '') {
             $query->orFilterWhere(['like', 'code', $this->globalSearch])
                 ->orFilterWhere(['like', 'name', $this->globalSearch]);

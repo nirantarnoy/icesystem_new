@@ -3,9 +3,14 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\OrdersSearch */
-/* @var $form yii\widgets\ActiveForm */
+$company_id = 1;
+$brach_id = 1;
+if(isset($_SESSION['user_company_id'])){
+    $company_id = $_SESSION['user_company_id'];
+}
+if(isset($_SESSION['user_branch_id'])){
+    $brach_id = $_SESSION['user_branch_id'];
+}
 ?>
 
 <div class="orders-search">
@@ -24,7 +29,7 @@ use yii\widgets\ActiveForm;
                 <!--         <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>-->
                 <?= $form->field($model, 'globalSearch')->textInput(['placeholder' => 'เลขที่ขาย,รถ', 'class' => 'form-control', 'aria-describedby' => 'basic-addon1'])->label(false) ?>
                 <?= $form->field($model, 'order_channel_id')->widget(\kartik\select2\Select2::className(), [
-                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(), 'id', function ($data) {
+                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id'=>$company_id,'branch_id'=>$brach_id])->all(), 'id', function ($data) {
                         return $data->code . ' ' . $data->name;
                     }),
                     'options' => [

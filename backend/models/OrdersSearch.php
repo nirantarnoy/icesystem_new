@@ -5,10 +5,7 @@ namespace backend\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\Orders;
-
-/**
- * OrdersSearch represents the model behind the search form of `backend\models\Orders`.
- */
+use yii\web\Session;
 class OrdersSearch extends Orders
 {
     public $globalSearch;
@@ -78,6 +75,12 @@ class OrdersSearch extends Orders
 //            'created_by' => $this->created_by,
 //            'updated_by' => $this->updated_by,
         ]);
+        if(isset($_SESSION['user_company_id'])){
+            $query->andFilterWhere(['orders.company_id'=>$_SESSION['user_company_id']]);
+        }
+        if(isset($_SESSION['user_branch_id'])){
+            $query->andFilterWhere(['orders.branch_id'=>$_SESSION['user_branch_id']]);
+        }
         $query->andFilterWhere(['sale_channel_id' => 1]);
 
 //        if($this->order_date == null){
