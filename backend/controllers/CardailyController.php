@@ -10,12 +10,11 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-/**
- * CardailyController implements the CRUD actions for Cardaily model.
- */
+
 class CardailyController extends Controller
 {
     public $enableCsrfValidation = false;
+
     public function behaviors()
     {
         return [
@@ -36,20 +35,28 @@ class CardailyController extends Controller
     {
         // print_r(Yii::$app->request->queryParams);return;
 
+        $company_id = 1;
+        $brach_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $brach_id = $_SESSION['user_branch_id'];
+        }
 
         $save_emp_date = null;
         $save_emp_route = null;
 
-        if(!empty(\Yii::$app->request->queryParams[1]['trans_date'])){
-           // print_r(\Yii::$app->request->get());return;
-          //  echo "has data";return;
+        if (!empty(\Yii::$app->request->queryParams[1]['trans_date'])) {
+            // print_r(\Yii::$app->request->get());return;
+            //  echo "has data";return;
             $save_emp_date = date('Y-m-d', strtotime(\Yii::$app->request->queryParams[1]['trans_date']));
-           // echo $save_emp_date;return;
+            // echo $save_emp_date;return;
         }
-        if(!empty(\Yii::$app->request->queryParams[1]['route_id'])){
+        if (!empty(\Yii::$app->request->queryParams[1]['route_id'])) {
             $save_emp_route = \Yii::$app->request->get('route_id');
         }
-  //print_r(Yii::$app->request->queryParams[1]['route_id']);return;
+        //print_r(Yii::$app->request->queryParams[1]['route_id']);return;
         $route_type_id = null;
         $car_name = null;
         if (isset(Yii::$app->request->queryParams['CardailySearch'])) {
@@ -62,10 +69,10 @@ class CardailyController extends Controller
 
         $searchModel = new CardailySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+       
         if ($save_emp_route != null) {
-           $searchModel->route_id = $save_emp_route;
-           $dataProvider->query->andFilterWhere(['delivery_route_id' => $save_emp_route]);
+            $searchModel->route_id = $save_emp_route;
+            $dataProvider->query->andFilterWhere(['delivery_route_id' => $save_emp_route]);
         }
         if ($save_emp_date != null) {
 //            $x_date = explode('-', $save_emp_date);
@@ -81,9 +88,8 @@ class CardailyController extends Controller
         //echo $dataProvider->
 
 
-
         //  echo $route_type_id;return;
-        $query = \common\models\QueryCarRoute::find();
+        $query = \common\models\QueryCarRoute::find()->where(['company_id' => $company_id, 'branch_id' => $brach_id]);
         if ($route_type_id != null) {
             $query = $query->andFilterWhere(['delivery_route_id' => $route_type_id]);
         }
@@ -193,7 +199,7 @@ class CardailyController extends Controller
         $isdriver = \Yii::$app->request->post('line_car_driver');
 
 
-        if($route_id == null || $route_id == ''){
+        if ($route_id == null || $route_id == '') {
             $route_id = 0;
         }
 
@@ -210,21 +216,21 @@ class CardailyController extends Controller
         // print_r($emp_id);return;
         if ($car_id) {
             if ($emp_id != null) {
-               // count($emp_id);return;
+                // count($emp_id);return;
                 for ($i = 0; $i <= count($emp_id) - 1; $i++) {
-                    if($emp_id[$i]=='')$emp_id[$i]=0;
-                    if(!$this->checkOld($emp_id[$i], $car_id, $t_date)){
+                    if ($emp_id[$i] == '') $emp_id[$i] = 0;
+                    if (!$this->checkOld($emp_id[$i], $car_id, $t_date)) {
                         $model = new \backend\models\Cardaily();
                         $model->car_id = $car_id;
                         $model->employee_id = $emp_id[$i];
                         $model->trans_date = $t_date;
-                        $model->is_driver = $isdriver[$i] == 1 ? 1:0;
+                        $model->is_driver = $isdriver[$i] == 1 ? 1 : 0;
                         $model->status = 1;
                         $model->save(false);
-                    }else{
-                        $model = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date,'employee_id'=>$emp_id[$i],'car_id'=>$car_id])->one();
-                        if($model){
-                            $model->is_driver = $isdriver[$i] == 1 ? 1:0;
+                    } else {
+                        $model = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date, 'employee_id' => $emp_id[$i], 'car_id' => $car_id])->one();
+                        if ($model) {
+                            $model->is_driver = $isdriver[$i] == 1 ? 1 : 0;
                             $model->save(false);
                         }
                     }
@@ -236,7 +242,7 @@ class CardailyController extends Controller
 //        $searchModel = new CardailySearch();
 //        $searchModel->trans_date = $t_date;
 //        $searchModel->route_id = $route_id;
-        return $this->redirect(['index',['route_id'=>$route_id,'trans_date'=>$t_date]]);
+        return $this->redirect(['index', ['route_id' => $route_id, 'trans_date' => $t_date]]);
     }
 
     public function checkOld($emp_id, $car_id, $t_date)
@@ -268,17 +274,17 @@ class CardailyController extends Controller
                 $to_date = $b[2] . '/' . $b[1] . '/' . $b[0];
             }
 
-          //  $model = \backend\models\Cardaily::find()->where(['AND', ['>=', 'date(trans_date)', $from_date], ['<=', 'date(trans_date)', $to_date]])->all();
-            $model = \backend\models\Cardaily::find()->where(['date(trans_date)'=>$from_date])->all();
+            //  $model = \backend\models\Cardaily::find()->where(['AND', ['>=', 'date(trans_date)', $from_date], ['<=', 'date(trans_date)', $to_date]])->all();
+            $model = \backend\models\Cardaily::find()->where(['date(trans_date)' => $from_date])->all();
             if ($model) {
                 //foreach ($model as $value) {
-                \backend\models\Cardaily::deleteAll(['date(trans_date)'=>$to_date]);
+                \backend\models\Cardaily::deleteAll(['date(trans_date)' => $to_date]);
                 foreach ($model as $line_value) {
                     if ($this->check_dup($line_value->employee_id, $line_value->car_id, date('Y-m-d', strtotime($to_date)))) {
                         continue;
                     }
 
-                  //  \backend\models\Cardaily::deleteAll(['car_id'=>$line_value->car_id,'trans_date'=>$to_date]);
+                    //  \backend\models\Cardaily::deleteAll(['car_id'=>$line_value->car_id,'trans_date'=>$to_date]);
 
                     $model_assign_line = new \backend\models\Cardaily();
                     $model_assign_line->car_id = $line_value->car_id;
@@ -326,7 +332,7 @@ class CardailyController extends Controller
             $model = \common\models\CarEmp::find()->all();
             if ($model) {
                 //foreach ($model as $value) {
-                \backend\models\Cardaily::deleteAll(['date(trans_date)'=>$to_date]);
+                \backend\models\Cardaily::deleteAll(['date(trans_date)' => $to_date]);
                 foreach ($model as $line_value) {
                     $model_assign_line = new \backend\models\Cardaily();
                     $model_assign_line->car_id = $line_value->car_id;
