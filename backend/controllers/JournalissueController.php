@@ -57,6 +57,16 @@ class JournalissueController extends Controller
 
     public function actionCreate()
     {
+
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+
         $model = new Journalissue();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -69,7 +79,7 @@ class JournalissueController extends Controller
             if (count($x_date) > 1) {
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
-            $model->journal_no = $model->getLastNo($sale_date);
+            $model->journal_no = $model->getLastNo($sale_date, $company_id, $branch_id);
             $model->trans_date = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
             $model->reason_id = 1;
