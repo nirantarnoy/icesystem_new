@@ -4,11 +4,21 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 $issue_data = [];
-if($order_issue_list != null){
-    foreach ($order_issue_list as $value){
+if ($order_issue_list != null) {
+    foreach ($order_issue_list as $value) {
         array_push($issue_data, $value->issue_id);
     }
 }
+
+$company_id = 1;
+$branch_id = 1;
+if (isset($_SESSION['user_company_id'])) {
+    $company_id = $_SESSION['user_company_id'];
+}
+if (isset($_SESSION['user_branch_id'])) {
+    $branch_id = $_SESSION['user_branch_id'];
+}
+?>
 
 $this->registerCss('
 //   #table-sale-list {
@@ -16,11 +26,11 @@ $this->registerCss('
 //       top: 0px; display:none;
 //       background-color:white;
 //   }
-   // .tablex-header-fixed {
-       // position: fixed;
-      //  top: 0px; display:none;
-       // background-color:white;
-   // }
+// .tablex-header-fixed {
+// position: fixed;
+//  top: 0px; display:none;
+// background-color:white;
+// }
 ');
 
 ?>
@@ -44,7 +54,7 @@ $this->registerCss('
 
             ?>
             <?= $form->field($model, 'order_channel_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(), 'id', 'name'),
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'name'),
                 'options' => [
                     'id' => 'delivery-route-id',
                     'readonly' => 'readonly',
@@ -58,8 +68,8 @@ $this->registerCss('
         </div>
         <div class="col-lg-3">
             <?= $form->field($model, 'car_ref_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Car::find()->all(), 'id', function($data){
-                    return $data->code.' '.$data->name;
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Car::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', function ($data) {
+                    return $data->code . ' ' . $data->name;
                 }),
                 'options' => [
                     'id' => 'car-ref-id',
@@ -82,15 +92,15 @@ $this->registerCss('
     <div class="row">
         <div class="col-lg-3">
             <?php $filter_status = $model->isNewRecord ? 1 : 2; ?>
-            <?php $model->issue_id = $issue_data;?>
+            <?php $model->issue_id = $issue_data; ?>
             <?= $form->field($model, 'issue_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Journalissue::find()->where(['status'=>$filter_status])->all(), 'id', 'journal_no'),
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Journalissue::find()->where(['status' => $filter_status, 'company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'journal_no'),
                 'options' => [
                     'id' => 'issue-id',
-                   // 'disabled' => '',
+                    // 'disabled' => '',
                     'placeholder' => '--เลือกใบเบิก--',
                     'multiple' => true,
-                    'onchange'=>'addIssueorder($(this))',
+                    'onchange' => 'addIssueorder($(this))',
                 ]
             ]) ?>
         </div>
@@ -327,7 +337,7 @@ $this->registerCss('
                             <?php
                             echo \kartik\select2\Select2::widget([
                                 'name' => 'order_target',
-                                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Orders::find()->where(['status' => 1, 'sale_channel_id'=>1])->all(), 'id', function ($data) {
+                                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Orders::find()->where(['status' => 1, 'sale_channel_id' => 1, 'company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', function ($data) {
                                     return $data->order_no . ' (' . \backend\models\Deliveryroute::findName($data->order_channel_id) . ')';
                                 })
                             ])
@@ -391,19 +401,19 @@ $this->registerCss('
                 <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
 
                 <div class="modal-body">
-                   <table class="table table-bordered table-striped table-transfer-sale-list">
-                       <thead>
-                       <tr>
-                           <th>สินค้า</th>
-                           <th style="width: 15%">จำนวนคงคลัง</th>
-                           <th>ลูกค้า</th>
-                           <th>จำนวนขาย</th>
-                       </tr>
-                       </thead>
-                       <tbody>
+                    <table class="table table-bordered table-striped table-transfer-sale-list">
+                        <thead>
+                        <tr>
+                            <th>สินค้า</th>
+                            <th style="width: 15%">จำนวนคงคลัง</th>
+                            <th>ลูกค้า</th>
+                            <th>จำนวนขาย</th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
-                       </tbody>
-                   </table>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-outline-success btn-transfer-sale-submit" data-dismiss="modalx"><i
