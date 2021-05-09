@@ -102,7 +102,7 @@ class JournalissueController extends Controller
                         $model_line->sale_price = $line_issue_price[$i];
                         $model_line->status = 1;
                         if ($model_line->save()) {
-                            $this->updateStock($prod_id[$i], $line_qty[$i], $default_warehouse, $model->journal_no);
+                            $this->updateStock($prod_id[$i], $line_qty[$i], $default_warehouse, $model->journal_no, $company_id, $branch_id);
                         }
                     }
                 }
@@ -118,7 +118,7 @@ class JournalissueController extends Controller
         ]);
     }
 
-    public function updateStock($product_id, $qty, $wh_id, $journal_no)
+    public function updateStock($product_id, $qty, $wh_id, $journal_no,$company_id, $branch_id)
     {
         if ($product_id != null && $qty > 0) {
             $model_trans = new \backend\models\Stocktrans();
@@ -129,6 +129,8 @@ class JournalissueController extends Controller
             $model_trans->warehouse_id = $wh_id;
             $model_trans->stock_type = 2; // 1 in 2 out
             $model_trans->activity_type_id = 2; // 1 prod rec 2 issue car
+            $model_trans->company_id = $company_id;
+            $model_trans->branch_id = $branch_id;
             if ($model_trans->save(false)) {
                 $model = \backend\models\Stocksum::find()->where(['warehouse_id' => $wh_id, 'product_id' => $product_id])->one();
                 if ($model) {
