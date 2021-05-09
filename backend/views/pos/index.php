@@ -18,6 +18,9 @@ if (isset($_SESSION['user_branch_id'])) {
     $branch_id = $_SESSION['user_branch_id'];
 }
 
+echo $company_id.'<br />';
+echo $branch_id;
+
 if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
     $f_name = \Yii::$app->session->getFlash('msg-index');
     // echo $f_name;
