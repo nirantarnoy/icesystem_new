@@ -10,6 +10,16 @@ use yii\bootstrap4\LinkPager;
 
 $this->title = Yii::t('app', 'รหัสสินค้า');
 $this->params['breadcrumbs'][] = '/' . $this->title;
+
+$company_id = 1;
+$brach_id = 1;
+if(isset($_SESSION['user_company_id'])){
+    $company_id = $_SESSION['user_company_id'];
+}
+if(isset($_SESSION['user_branch_id'])){
+    $brach_id = $_SESSION['user_branch_id'];
+}
+
 ?>
 <div class="product-index">
     <?php Pjax::begin(); ?>
@@ -74,7 +84,7 @@ $this->params['breadcrumbs'][] = '/' . $this->title;
                 'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
-                    return \backend\models\Producttype::findName($data->product_type_id);
+                    return \backend\models\Producttype::findName($data->product_type_id, $company_id, $branch_id);
                 }
             ],
             [
@@ -82,7 +92,7 @@ $this->params['breadcrumbs'][] = '/' . $this->title;
                 'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
-                    return \backend\models\Productgroup::findName($data->product_group_id);
+                    return \backend\models\Productgroup::findName($data->product_group_id, $company_id, $branch_id);
                 }
             ],
             'nw',
@@ -104,7 +114,7 @@ $this->params['breadcrumbs'][] = '/' . $this->title;
                 'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
-                    return \backend\models\Unit::findName($data->unit_id);
+                    return \backend\models\Unit::findName($data->unit_id, $company_id, $branch_id);
                 }
             ],
             [

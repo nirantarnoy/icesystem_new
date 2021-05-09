@@ -51,8 +51,8 @@ class Productgroup extends \common\models\ProductGroup
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';
 //    }
-    public function findName($id){
-        $model = Productgroup::find()->where(['id'=>$id])->one();
+    public function findName($id,$company_id, $branch_id){
+        $model = Productgroup::find()->where(['id'=>$id,'company_id'=>$company_id,'branch_id'=>$branch_id])->one();
         return $model!=null?$model->name:'';
     }
 //    public function findUnitid($code){
