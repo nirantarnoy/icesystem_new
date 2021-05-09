@@ -152,9 +152,12 @@ class MainconfigController extends Controller
                     $modelx->address = $rowData[7];
                     $modelx->address2 = $rowData[8];
                     $modelx->phone = $rowData[10];
+                    $modelx->sort_name = $rowData[16];
                     //  $modelx->payment_method_id = $payment_method;
                     $modelx->payment_term_id = $payment_term;
                     $modelx->status = 1;
+                    $modelx->company_id = 1;
+                    $modelx->branch_id = 2;
                     if ($modelx->save(false)) {
                         $sale_price_group = $this->checkPricegroup($rowData[5],$rowData[6],$type_id);
                         $res += 1;
@@ -253,6 +256,8 @@ class MainconfigController extends Controller
                 $model_new->code = $name;
                 $model_new->name = $name;
                 $model_new->description = $name;
+                $model_new->company_id = 1;
+                $model_new->branch_id = 2;
                 // $model_new->status = 1;
                 if ($model_new->save()) {
                     $id = $model_new->id;
@@ -275,6 +280,8 @@ class MainconfigController extends Controller
                 $model_new->name = $name;
                 $model_new->description = $name;
                 $model_new->status = 1;
+                $model_new->company_id = 1;
+                $model_new->branch_id = 2;
                 if ($model_new->save()) {
                     $id = $model_new->id;
                 }
@@ -296,6 +303,8 @@ class MainconfigController extends Controller
                 $model_new->name = $name;
                 $model_new->description = $name;
                 $model_new->status = 1;
+                $model_new->company_id = 1;
+                $model_new->branch_id = 2;
                 if ($model_new->save(false)) {
                     $id = $model_new->id;
                 }
@@ -317,6 +326,8 @@ class MainconfigController extends Controller
                 $model_new->name = $name;
                 $model_new->note = $name;
                 $model_new->status = 1;
+                $model_new->company_id = 1;
+                $model_new->branch_id = 2;
                 if ($model_new->save()) {
                     $id = $model_new->id;
                 }
@@ -338,6 +349,8 @@ class MainconfigController extends Controller
                 $model_new->name = $name;
                 $model_new->description = $name;
                 $model_new->status = 1;
+                $model_new->company_id = 1;
+                $model_new->branch_id = 2;
                 if ($model_new->save()) {
                     $id = $model_new->id;
                 }
@@ -358,6 +371,8 @@ class MainconfigController extends Controller
                      $add_model->price_group_id = $model->id;
                      $add_model->customer_type_id = $type_id;
                      $add_model->status = 1;
+                     $add_model->company_id = 1;
+                     $add_model->branch_id = 2;
                      $add_model->save();
                  }
             } else {
@@ -366,6 +381,8 @@ class MainconfigController extends Controller
                 $model_new->name = $name;
                 $model_new->description = $name;
                 $model_new->status = 1;
+                $model_new->company_id = 1;
+                $model_new->branch_id = 2;
                 if ($model_new->save()) {
                     $model_add_type = \common\models\PriceCustomerType::find()->where(['price_group_id'=>$model_new->id,'customer_type_id'=>$type_id])->one();
                     if(!$model_add_type){
@@ -373,6 +390,8 @@ class MainconfigController extends Controller
                         $add_model->price_group_id = $model_new->id;
                         $add_model->customer_type_id = $type_id;
                         $add_model->status = 1;
+                        $add_model->company_id = 1;
+                        $add_model->branch_id = 2;
                         $add_model->save();
                     }
                 }

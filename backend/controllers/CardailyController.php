@@ -69,7 +69,7 @@ class CardailyController extends Controller
 
         $searchModel = new CardailySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-       
+
         if ($save_emp_route != null) {
             $searchModel->route_id = $save_emp_route;
             $dataProvider->query->andFilterWhere(['delivery_route_id' => $save_emp_route]);
@@ -86,7 +86,6 @@ class CardailyController extends Controller
             $dataProvider->query->andFilterWhere(['date(car_daily.trans_date)' => $trans_date])->all();
         }
         //echo $dataProvider->
-
 
         //  echo $route_type_id;return;
         $query = \common\models\QueryCarRoute::find()->where(['company_id' => $company_id, 'branch_id' => $brach_id]);
