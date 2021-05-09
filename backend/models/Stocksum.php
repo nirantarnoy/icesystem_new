@@ -16,13 +16,13 @@ class Stocksum extends \common\models\StockSum
                 ],
                 'value'=> time(),
             ],
-            'timestampcby' => [
-                'class' => \yii\behaviors\AttributeBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'created_by',
-                ],
-                'value' => Yii::$app->user->id,
-            ],
+//            'timestampcby' => [
+//                'class' => \yii\behaviors\AttributeBehavior::className(),
+//                'attributes' => [
+//                    ActiveRecord::EVENT_BEFORE_INSERT => 'created_by',
+//                ],
+//                'value' => Yii::$app->user->id,
+//            ],
 //            'timestamuby' => [
 //                'class' => \yii\behaviors\AttributeBehavior::className(),
 //                'attributes' => [

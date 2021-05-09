@@ -128,6 +128,15 @@ class PosController extends Controller
 
     public function actionClosesale()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+
         $pay_total_amount = \Yii::$app->request->post('sale_total_amount');
         $pay_amount = \Yii::$app->request->post('sale_pay_amount');
         $pay_change = \Yii::$app->request->post('sale_pay_change');
@@ -151,7 +160,7 @@ class PosController extends Controller
         }
         if ($customer_id) {
             $model_order = new \backend\models\Orders();
-            $model_order->order_no = $model_order->getLastNo($sale_date);
+            $model_order->order_no = $model_order->getLastNo($sale_date, $company_id, $branch_id);
             $model_order->order_date = date('Y-m-d H:i:s', strtotime($sale_date . ' ' . $sale_time));
             $model_order->customer_id = $customer_id;
             $model_order->sale_channel_id = 2; // pos
@@ -510,10 +519,10 @@ class PosController extends Controller
         $user_login_time = \backend\models\User::findLogintime($user_id);
         $user_login_datetime = '';
         $t_date = date('Y-m-d H:i:s');
-        $model_c_login = LoginLog::find()->where(['user_id'=>$user_id, 'status'=> 1])->andFilterWhere(['date(login_date)'=>date('Y-m-d')])->one();
-        if($model_c_login != null){
+        $model_c_login = LoginLog::find()->where(['user_id' => $user_id, 'status' => 1])->andFilterWhere(['date(login_date)' => date('Y-m-d')])->one();
+        if ($model_c_login != null) {
             $user_login_datetime = date('Y-m-d H:i:s', strtotime($model_c_login->login_date));
-        }else{
+        } else {
             $user_login_datetime = date('Y-m-d H:i:s');
         }
 
@@ -544,13 +553,13 @@ class PosController extends Controller
         $order_amount = \common\models\QuerySalePosData::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->sum('line_total');
 //        $order_cash_qty = \common\models\QuerySalePosData::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->sum('qty');
 //        $order_credit_qty = \common\models\QuerySalePosData::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->sum('qty');
-        $order_cash_qty = \common\models\QuerySaleDataSummary::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['LIKE','name','สด'])->sum('qty');
-        $order_credit_qty = \common\models\QuerySaleDataSummary::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['NOT LIKE','name','สด'])->sum('qty');
+        $order_cash_qty = \common\models\QuerySaleDataSummary::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['LIKE', 'name', 'สด'])->sum('qty');
+        $order_credit_qty = \common\models\QuerySaleDataSummary::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['NOT LIKE', 'name', 'สด'])->sum('qty');
 
         $order_product_item = \common\models\QuerySaleDataSummary::find()->select('product_id')->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->groupBy('product_id')->all();
 
-        $order_cash_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'payment_date', $user_login_datetime, $t_date])->andFilterWhere(['LIKE','name','สด'])->sum('payment_amount');
-        $order_credit_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'payment_date', $user_login_datetime, $t_date])->andFilterWhere(['NOT LIKE','name','สด'])->sum('payment_amount');
+        $order_cash_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'payment_date', $user_login_datetime, $t_date])->andFilterWhere(['LIKE', 'name', 'สด'])->sum('payment_amount');
+        $order_credit_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'payment_date', $user_login_datetime, $t_date])->andFilterWhere(['NOT LIKE', 'name', 'สด'])->sum('payment_amount');
         $production_qty = \backend\models\Stocktrans::find()->where(['activity_type_id' => 1])->andFilterWhere(['between', 'trans_date', $user_login_datetime, $t_date])->sum('qty');
         $issue_refill_qty = \backend\models\Stocktrans::find()->where(['activity_type_id' => 3])->andFilterWhere(['between', 'trans_date', $user_login_datetime, $t_date])->sum('qty');
 
@@ -593,12 +602,12 @@ class PosController extends Controller
 
 
         //     $order_cash_qty = \common\models\QuerySaleDataSummary::find()->select(['product_id', 'SUM(qty) as qty'])->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['LIKE','name','สด'])->groupBy('product_id')->all();
-  //      $order_cash_amount = \common\models\QuerySaleDataSummary::find()->select(['product_id', 'SUM(line_total) as line_total'])->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->groupBy('product_id')->all();
+        //      $order_cash_amount = \common\models\QuerySaleDataSummary::find()->select(['product_id', 'SUM(line_total) as line_total'])->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->groupBy('product_id')->all();
 //        $order_credit_qty = \common\models\QuerySalePosData::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','order_date',$user_login_datetime,$t_date])->sum('qty');
 //
 //
-        if($user_id != null && $line_prod_id != null){
-            for($i=0;$i<=count($line_prod_id)-1;$i++){
+        if ($user_id != null && $line_prod_id != null) {
+            for ($i = 0; $i <= count($line_prod_id) - 1; $i++) {
                 $model = new \common\models\SaleDailySum();
                 $model->emp_id = $user_id;
                 $model->trans_date = date('Y-m-d H:i:s');
@@ -612,16 +621,16 @@ class PosController extends Controller
                 $model->balance_in = $line_balance_in[$i];
                 $model->balance_out = $line_balance_out[$i];
                 $model->status = 1; // close and cannot edit everything
-                if($model->save()){
+                if ($model->save()) {
                     $model_balance_out = new \common\models\SaleBalanceOut();
                     $model_balance_out->user_id = $user_id;
                     $model_balance_out->product_id = $line_prod_id[$i];
                     $model_balance_out->trans_date = date('Y-m-d H:i:s');
                     $model_balance_out->balance_out = $line_balance_out[$i];
                     $model_balance_out->status = 1;
-                    if($model_balance_out->save()){
-                        $model_update = \common\models\SaleBalanceOut::find()->where(['id'=>$line_balance_in_id[$x]])->one();
-                        if($model_update){
+                    if ($model_balance_out->save()) {
+                        $model_update = \common\models\SaleBalanceOut::find()->where(['id' => $line_balance_in_id[$x]])->one();
+                        if ($model_update) {
                             $model_update->status = 2;
                             $model_update->save();
                         }
