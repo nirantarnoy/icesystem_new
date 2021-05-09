@@ -15,14 +15,15 @@ use yii\filters\VerbFilter;
  */
 class JournalissueController extends Controller
 {
-   public $enableCsrfValidation = false;
+    public $enableCsrfValidation = false;
+
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST','GET'],
+                    'delete' => ['POST', 'GET'],
                 ],
             ],
         ];
@@ -83,8 +84,8 @@ class JournalissueController extends Controller
                         $model_line->avl_qty = $line_qty[$i];
                         $model_line->sale_price = $line_issue_price[$i];
                         $model_line->status = 1;
-                        if($model_line->save()){
-                            $this->updateStock($prod_id[$i],$line_qty[$i],6,$model->journal_no);
+                        if ($model_line->save()) {
+                            $this->updateStock($prod_id[$i], $line_qty[$i], 6, $model->journal_no);
                         }
                     }
                 }
@@ -100,8 +101,9 @@ class JournalissueController extends Controller
         ]);
     }
 
-    public function updateStock($product_id,$qty,$wh_id,$journal_no){
-        if($product_id!= null && $qty > 0){
+    public function updateStock($product_id, $qty, $wh_id, $journal_no)
+    {
+        if ($product_id != null && $qty > 0) {
             $model_trans = new \backend\models\Stocktrans();
             $model_trans->journal_no = $journal_no;
             $model_trans->trans_date = date('Y-m-d H:i:s');
@@ -110,9 +112,9 @@ class JournalissueController extends Controller
             $model_trans->warehouse_id = 6;
             $model_trans->stock_type = 2; // 1 in 2 out
             $model_trans->activity_type_id = 2; // 1 prod rec 2 issue car
-            if($model_trans->save(false)){
-                $model = \backend\models\Stocksum::find()->where(['warehouse_id'=>6,'product_id'=>$product_id])->one();
-                if($model){
+            if ($model_trans->save(false)) {
+                $model = \backend\models\Stocksum::find()->where(['warehouse_id' => 6, 'product_id' => $product_id])->one();
+                if ($model) {
                     $model->qty = $model->qty - (int)$qty;
                     $model->save(false);
                 }
@@ -241,11 +243,25 @@ class JournalissueController extends Controller
 
         return $html;
     }
-    public function getStock($prod_id){
+
+    public function getStock($prod_id)
+    {
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+        $default_warehouse = 6;
+        if ($company_id == 1 && $branch_id == 2) {
+            $default_warehouse = 5;
+        }
         $qty = 0;
-        if($prod_id!=null){
-            $model= \backend\models\Stocksum::find()->where(['product_id'=>$prod_id,'warehouse_id'=>6])->one();
-            if($model){
+        if ($prod_id != null) {
+            $model = \backend\models\Stocksum::find()->where(['product_id' => $prod_id, 'warehouse_id' => $default_warehouse])->one();
+            if ($model) {
                 $qty = $model->qty;
             }
         }
