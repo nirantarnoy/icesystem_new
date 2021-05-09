@@ -4,18 +4,34 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
 
+$company_id = 1;
+$branch_id = 1;
+if (isset($_SESSION['user_company_id'])) {
+    $company_id = $_SESSION['user_company_id'];
+}
+if (isset($_SESSION['user_branch_id'])) {
+    $branch_id = $_SESSION['user_branch_id'];
+}
+
+$default_warehouse = 6;
+if ($company_id == 1 && $branch_id == 2) {
+    $default_warehouse = 5;
+}
+
 
 $prod_data = \backend\models\Product::find()->all();
-function getStock($prod_id){
-        $qty = 0;
-        if($prod_id!=null){
-            $model= \backend\models\Stocksum::find()->where(['product_id'=>$prod_id,'warehouse_id'=>6])->one();
-            if($model){
-                $qty = $model->qty;
-            }
+function getStock($prod_id, $warehouse)
+{
+    $qty = 0;
+    if ($prod_id != null) {
+        $model = \backend\models\Stocksum::find()->where(['product_id' => $prod_id, 'warehouse_id' => $warehouse])->one();
+        if ($model) {
+            $qty = $model->qty;
         }
-        return $qty;
     }
+    return $qty;
+}
+
 ?>
 
 <div class="journalissue-form">
@@ -38,7 +54,7 @@ function getStock($prod_id){
         </div>
         <div class="col-lg-3">
             <?= $form->field($model, 'delivery_route_id')->widget(Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(), 'id', 'name'),
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'name'),
                 'options' => [
                     'placeholder' => '--เลือกสายส่ง--',
                     'onchange' => 'route_change($(this))'
@@ -90,10 +106,10 @@ function getStock($prod_id){
                         <td>
                         </td>
                         <td style="text-align: center">
-                            <?php if(!$model->isNewRecord):?>
-                            <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
-                                        class="fa fa-trash"></i></div>
-                            <?php endif;?>
+                            <?php if (!$model->isNewRecord): ?>
+                                <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
+                                            class="fa fa-trash"></i></div>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php else: ?>
@@ -102,7 +118,7 @@ function getStock($prod_id){
                         <?php foreach ($model_line as $value2): ?>
                             <?php
                             $i += 1;
-                            $prod_stock = getStock($value2->product_id);
+                            $prod_stock = getStock($value2->product_id, $default_warehouse);
                             ?>
                             <tr data-var="<?= $value2->id ?>">
                                 <td style="text-align: center;"> <?= $i ?></td>
@@ -116,7 +132,8 @@ function getStock($prod_id){
                                            ondblclick="showfind($(this))" disabled></td>
                                 <td><input type="text" class="form-control line-prod-name"
                                            name="line_prod_name[]"
-                                           value="<?=\backend\models\Product::findName($value2->product_id);?>" disabled>
+                                           value="<?= \backend\models\Product::findName($value2->product_id); ?>"
+                                           disabled>
                                 </td>
                                 <td>
                                     <input type="hidden" class="line-issue-sale-price"
@@ -125,14 +142,14 @@ function getStock($prod_id){
                                            value="<?= $prod_stock ?>" min="0" disabled>
                                 </td>
                                 <td style="text-align: right">
-                                    <?=number_format($value2->qty);?>
+                                    <?= number_format($value2->qty); ?>
                                 </td>
                                 <td style="text-align: center">
-                                     <?php if($model->status ==1):?>
-                                    <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
-                                                class="fa fa-trash"></i>
-                                    </div>
-                                    <?php endif;?>
+                                    <?php if ($model->status == 1): ?>
+                                        <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
+                                                    class="fa fa-trash"></i>
+                                        </div>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
 
@@ -166,14 +183,14 @@ function getStock($prod_id){
                 <?php endif; ?>
                 <?php //endforeach; ?>
                 </tbody>
-<!--                <tfoot>-->
-<!--                <tr>-->
-<!--                    <td>-->
-<!--                        <div class="btn btn-primary" onclick="showfind($(this))"><i-->
-<!--                                    class="fa fa-plus-circle"></i></div>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                </tfoot>-->
+                <!--                <tfoot>-->
+                <!--                <tr>-->
+                <!--                    <td>-->
+                <!--                        <div class="btn btn-primary" onclick="showfind($(this))"><i-->
+                <!--                                    class="fa fa-plus-circle"></i></div>-->
+                <!--                    </td>-->
+                <!--                </tr>-->
+                <!--                </tfoot>-->
             </table>
         </div>
     </div>
