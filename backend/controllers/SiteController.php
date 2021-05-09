@@ -31,7 +31,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index','mas'],
+                        'actions' => ['logout', 'index', 'mas'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -68,12 +68,22 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+
         $f_date = null;
         $t_date = null;
 
         $dash_board = \Yii::$app->request->post('dashboard_date');
         $x_date = explode('-', trim($dash_board));
-        if($x_date != null){
+        if ($x_date != null) {
             if (count($x_date) > 1) {
                 $ff_date = $x_date[0];
                 $tt_date = $x_date[1];
@@ -84,19 +94,19 @@ class SiteController extends Controller
                 }
                 $ttt_date = explode('/', trim($tt_date));
                 if (count($ttt_date) > 0) {
-                    $t_date = $ttt_date[2]. '-' . $ttt_date[1] . '-' . $ttt_date[0];
+                    $t_date = $ttt_date[2] . '-' . $ttt_date[1] . '-' . $ttt_date[0];
                 }
             }
         }
 
 //        echo $f_date.' and '.$t_date;return;
 
-        $prod_cnt = \backend\models\Product::find()->count();
-        $route_cnt = \backend\models\Deliveryroute::find()->count();
-        $car_cnt = \backend\models\Car::find()->count();
-        $order_cnt = \backend\models\Orders::find()->count();
-        $order_pos_cnt = \backend\models\Orders::find()->where(['sale_channel_id' => 2])->count();
-        $order_normal_cnt = \backend\models\Orders::find()->where(['sale_channel_id' => 1])->count();
+        $prod_cnt = \backend\models\Product::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->count();
+        $route_cnt = \backend\models\Deliveryroute::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->count();
+        $car_cnt = \backend\models\Car::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->count();
+        $order_cnt = \backend\models\Orders::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->count();
+        $order_pos_cnt = \backend\models\Orders::find()->where(['sale_channel_id' => 2, 'company_id' => $company_id, 'branch_id' => $branch_id])->count();
+        $order_normal_cnt = \backend\models\Orders::find()->where(['sale_channel_id' => 1, 'company_id' => $company_id, 'branch_id' => $branch_id])->count();
         $order_lastest = \common\models\QuerySaleLastest::find()->all();
 
 
@@ -186,7 +196,7 @@ class SiteController extends Controller
         $this->layout = 'blank';
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            $model_info = \backend\models\User::find()->where(['id'=>\Yii::$app->user->id])->one();
+            $model_info = \backend\models\User::find()->where(['id' => \Yii::$app->user->id])->one();
             $_SESSION['user_company_id'] = $model_info->company_id;
             $_SESSION['user_branch_id'] = $model_info->branch_id;
             $_SESSION['user_group_id'] = \backend\models\User::findGroup(\Yii::$app->user->id);
@@ -216,10 +226,10 @@ class SiteController extends Controller
     public function actionLogout()
     {
         $user_id = \Yii::$app->user->id;
-        if(Yii::$app->user->logout()){
+        if (Yii::$app->user->logout()) {
             $c_date = date('Y-m-d');
-            $model_logout = \common\models\LoginLog::find()->where(['user_id'=> $user_id,'date(login_date)'=>$c_date])->andFilterWhere(['status'=>1])->one();
-            if($model_logout){
+            $model_logout = \common\models\LoginLog::find()->where(['user_id' => $user_id, 'date(login_date)' => $c_date])->andFilterWhere(['status' => 1])->one();
+            if ($model_logout) {
                 $model_logout->logout_date = date('Y-m-d H:i:s');
                 $model_logout->status = 2;
                 $model_logout->save(false);
