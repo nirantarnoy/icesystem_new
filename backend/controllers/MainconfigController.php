@@ -457,6 +457,10 @@ class MainconfigController extends Controller
             $modelnew->status = $value->status;
             $modelnew->company_id = 1;
             $modelnew->branch_id = 2;
+            $modelnew->sale_status = $value->sale_status;
+            $modelnew->stock_type = $value->stock_type;
+            $modelnew->is_pos_item = $value->is_pos_item;
+            $modelnew->item_pos_seq = $value->item_pos_seq;
             $modelnew->unit_id = $value->unit_id;
             $modelnew->save(false);
         }
