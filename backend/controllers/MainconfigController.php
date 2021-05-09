@@ -140,29 +140,29 @@ class MainconfigController extends Controller
                     $payment_method = $this->checkPaymethod($rowData[12]);
                     $payment_term = $this->checkPayterm($rowData[14]);
 
-                    $modelx = new \backend\models\Customer();
-                    $modelx->code = $rowData[0];
-                    $modelx->name = $rowData[1];
-                    $modelx->description = $rowData[11];
-                    $modelx->contact_name = $rowData[9];
-                    $modelx->branch_no = $rowData[2];
-                    $modelx->location_info = '';//$rowData[10];
-                    $modelx->customer_group_id = $group_id;
-                    $modelx->customer_type_id = $type_id;
-                    $modelx->delivery_route_id = $route_id;
-                    $modelx->address = $rowData[7];
-                    $modelx->address2 = $rowData[8];
-                    $modelx->phone = $rowData[10];
-                    $modelx->sort_name = $rowData[16];
-                    //  $modelx->payment_method_id = $payment_method;
-                    $modelx->payment_term_id = $payment_term;
-                    $modelx->status = 1;
-                    $modelx->company_id = 1;
-                    $modelx->branch_id = 2;
-                    if ($modelx->save(false)) {
-                       // $sale_price_group = $this->checkPricegroup($rowData[5],$rowData[6],$type_id);
-                        $res += 1;
-                    }
+//                    $modelx = new \backend\models\Customer();
+//                    $modelx->code = $rowData[0];
+//                    $modelx->name = $rowData[1];
+//                    $modelx->description = $rowData[11];
+//                    $modelx->contact_name = $rowData[9];
+//                    $modelx->branch_no = $rowData[2];
+//                    $modelx->location_info = '';//$rowData[10];
+//                    $modelx->customer_group_id = $group_id;
+//                    $modelx->customer_type_id = $type_id;
+//                    $modelx->delivery_route_id = $route_id;
+//                    $modelx->address = $rowData[7];
+//                    $modelx->address2 = $rowData[8];
+//                    $modelx->phone = $rowData[10];
+//                    $modelx->sort_name = $rowData[16];
+//                    //  $modelx->payment_method_id = $payment_method;
+//                    $modelx->payment_term_id = $payment_term;
+//                    $modelx->status = 1;
+//                    $modelx->company_id = 1;
+//                    $modelx->branch_id = 2;
+//                    if ($modelx->save(false)) {
+//                        $sale_price_group = $this->checkPricegroup($rowData[5],$rowData[6],$type_id);
+//                        $res += 1;
+//                    }
                 }
                 //    print_r($qty_text);return;
 
@@ -260,7 +260,7 @@ class MainconfigController extends Controller
                 $model_new->company_id = 1;
                 $model_new->branch_id = 2;
                 // $model_new->status = 1;
-                if ($model_new->save()) {
+                if ($model_new->save(false)) {
                     $id = $model_new->id;
                 }
             }
