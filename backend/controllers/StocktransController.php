@@ -77,7 +77,7 @@ class StocktransController extends Controller
         $prodid = \Yii::$app->request->post('line_item_id');
         $qty = \Yii::$app->request->post('line_qty');
 
-        print_r($prodid);return;
+       // print_r($prodid);return;
 
         if($wh_id != null){
              for($i=0;$i<=count($wh_id)-1;$i++){
