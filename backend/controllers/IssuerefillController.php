@@ -129,7 +129,7 @@ class IssuerefillController extends Controller
             $model_trans->trans_date = date('Y-m-d H:i:s');
             $model_trans->product_id = $product_id;
             $model_trans->qty = $qty;
-            $model_trans->warehouse_id = 6;
+            $model_trans->warehouse_id = $default_warehouse;
             $model_trans->stock_type = 2; // 1 in 2 out
             $model_trans->activity_type_id = 18; // 1 prod rec 2 issue car
             if ($model_trans->save(false)) {
