@@ -265,6 +265,15 @@ class OrdersController extends Controller
 
     public function actionUpdate($id)
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+
         $model = $this->findModel($id);
         $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
 
@@ -300,7 +309,7 @@ class OrdersController extends Controller
                         $customer_id = \Yii::$app->request->post('line_customer_id' . $price_group_list_arr[$x]);
                         $customer_line_bill = \Yii::$app->request->post('line_bill_no' . $price_group_list_arr[$x]);
                         if (count($customer_id) > 0) {
-                            $product_list = \backend\models\Product::find()->all();
+                            $product_list = \backend\models\Product::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
                             for ($i = 0; $i <= count($customer_id) - 1; $i++) {
                                 $cust_id = $customer_id[$i];
                                 $x_id = -1;
