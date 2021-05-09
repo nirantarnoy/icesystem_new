@@ -1,7 +1,6 @@
 <?php
 $this->title = 'บันทึกสินค้าเข้าคลัง';
-$prod_data = \backend\models\Product::find()->all();
-$wh_date = null;
+
 
 
 $company_id = 1;
@@ -16,6 +15,9 @@ $default_warehouse = 6;
 if($company_id==1 && $branch_id==2){
     $default_warehouse = 5;
 }
+
+$prod_data = \backend\models\Product::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
+$wh_date = null;
 
 if($_SESSION['user_group_id'] ==1){
     $wh_date = \backend\models\Warehouse::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
