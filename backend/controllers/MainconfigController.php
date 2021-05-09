@@ -429,6 +429,19 @@ class MainconfigController extends Controller
             $modelnew->save(false);
         }
     }
+    public function actionCartypecopy(){
+        $model = \backend\models\Cartype::find()->where(['company_id'=>1,'branch_id'=>1])->all();
+        foreach ($model as $value){
+            $modelnew = new \backend\models\Cartype();
+            $modelnew->code = $value->code;
+            $modelnew->description = $value->description;
+            $modelnew->name = $value->name;
+            $modelnew->status = $value->status;
+            $modelnew->company_id = 1;
+            $modelnew->branch_id = 2;
+            $modelnew->save(false);
+        }
+    }
     public function actionUnitcopy(){
         $model = \backend\models\Unit::find()->where(['company_id'=>1,'branch_id'=>1])->all();
         foreach ($model as $value){
