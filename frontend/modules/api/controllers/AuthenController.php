@@ -53,6 +53,8 @@ class AuthenController extends Controller
                                 'emp_route_name' => $car_info ==null?0:$car_info[0]['route_name'],
                                 'emp_car_id' => $car_info ==null?0:$car_info[0]['car_id'],
                                 'emp_car_name' => $car_info ==null?0:$car_info[0]['car_name'],
+                                'company_id' => $model->company_id,
+                                'branch_id' => $model->branch_id,
                             ]
                         );
                         $status = true;

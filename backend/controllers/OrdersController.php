@@ -1094,13 +1094,22 @@ class OrdersController extends Controller
 
     public function actionEmpdata()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+
         $txt = \Yii::$app->request->post('txt_search');
         $html = '';
         $model = null;
         if ($txt != '') {
-            $model = Employee::find()->where(['OR', ['LIKE', 'code', $txt], ['LIKE', 'fname', $txt], ['LIKE', 'lname', $txt]])->all();
+            $model = Employee::find()->where(['OR', ['LIKE', 'code', $txt], ['LIKE', 'fname', $txt], ['LIKE', 'lname', $txt]])->andFilterWhere(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
         } else {
-            $model = Employee::find()->all();
+            $model = Employee::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
         }
         foreach ($model as $value) {
             $html .= '<tr>';
@@ -1118,6 +1127,15 @@ class OrdersController extends Controller
 
     public function actionFindempdata()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+
         $id = \Yii::$app->request->post('car_id');
         $trans_date = \Yii::$app->request->post('trans_date');
 
@@ -1132,7 +1150,7 @@ class OrdersController extends Controller
             }
             $t_date = date('Y-m-d', strtotime($t_date));
 
-            $model = Cardaily::find()->where(['car_id' => $id, 'trans_date' => $t_date])->all();
+            $model = Cardaily::find()->where(['car_id' => $id, 'trans_date' => $t_date])->andFilterWhere(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
             $i = 0;
             if ($model) {
                 foreach ($model as $value) {
