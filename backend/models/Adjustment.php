@@ -1,7 +1,10 @@
 <?php
+
 namespace backend\models;
+
 use Yii;
 use yii\db\ActiveRecord;
+
 date_default_timezone_set('Asia/Bangkok');
 
 class Adjustment extends \common\models\JournalStock
@@ -9,12 +12,12 @@ class Adjustment extends \common\models\JournalStock
     public function behaviors()
     {
         return [
-            'timestampcdate'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_INSERT=>'created_at',
+            'timestampcdate' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'created_at',
                 ],
-                'value'=> time(),
+                'value' => time(),
             ],
 //            'timestampudate'=>[
 //                'class'=> \yii\behaviors\AttributeBehavior::className(),
@@ -23,12 +26,12 @@ class Adjustment extends \common\models\JournalStock
 //                ],
 //                'value'=> time(),
 //            ],
-            'timestampcby'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_INSERT=>'created_by',
+            'timestampcby' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'created_by',
                 ],
-                'value'=> Yii::$app->user->id,
+                'value' => Yii::$app->user->id,
             ],
 //            'timestamuby'=>[
 //                'class'=> \yii\behaviors\AttributeBehavior::className(),
@@ -60,12 +63,12 @@ class Adjustment extends \common\models\JournalStock
 //        return count($model)>0?$model->id:0;
 //    }
 
-    public static function getLastNo()
+    public static function getLastNo($company_id, $branch_id)
     {
-        $model = Stocktrans::find()->MAX('journal_no');
+        $model = Stocktrans::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->MAX('journal_no');
         //   $model = Orders::find()->where(['date(order_date)' => date('Y-m-d', strtotime($date))])->MAX('order_no');
 
-        $model_seq = \backend\models\Sequence::find()->where(['module_id' => 11])->one();
+        $model_seq = \backend\models\Sequence::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->where(['module_id' => 11])->one();
         //$pre = \backend\models\Sequence::find()->where(['module_id'=>15])->one();
         $pre = '';
         $prefix = '';

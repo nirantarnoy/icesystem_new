@@ -63,6 +63,15 @@ class StocktransController extends Controller
      */
     public function actionCreate()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+
         $trans_date = \Yii::$app->request->post('prodrecdate');
         $wh_id = \Yii::$app->request->post('line_warehouse_id');
         $prodid = \Yii::$app->request->post('line_item_id');
@@ -78,6 +87,8 @@ class StocktransController extends Controller
                  $model->warehouse_id = $wh_id[$i];
                  $model->stock_type = 1;
                  $model->activity_type_id = 15; // 15 prod rec
+                 $model->company_id = $company_id;
+                 $model->branch_id = $branch_id;
                  if($model->save()){
                     $this->updateSummary($prodid[$i],$wh_id[$i],$qty[$i]);
                  }

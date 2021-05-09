@@ -16,13 +16,14 @@ use yii\filters\VerbFilter;
 class IssuerefillController extends Controller
 {
     public $enableCsrfValidation = false;
+
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST','GET'],
+                    'delete' => ['POST', 'GET'],
                 ],
             ],
         ];
@@ -37,7 +38,7 @@ class IssuerefillController extends Controller
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new JournalissueSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andFilterWhere(['reason_id'=>3]);
+        $dataProvider->query->andFilterWhere(['reason_id' => 3]);
         $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
         $dataProvider->pagination->pageSize = $pageSize;
 
@@ -57,6 +58,16 @@ class IssuerefillController extends Controller
 
     public function actionCreate()
     {
+
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+
         $model = new Journalissue();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -69,9 +80,11 @@ class IssuerefillController extends Controller
             if (count($x_date) > 1) {
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
-            $model->journal_no = $model->getLastNo($sale_date);
+            $model->journal_no = $model->getLastNo($sale_date, $company_id, $branch_id);
             $model->trans_date = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
             $model->delivery_route_id = 0;
             $model->reason_id = 3;
             if ($model->save()) {
@@ -86,8 +99,8 @@ class IssuerefillController extends Controller
                         $model_line->avl_qty = $line_qty[$i];
                         $model_line->sale_price = $line_issue_price[$i];
                         $model_line->status = 1;
-                        if($model_line->save()){
-                            $this->updateStock($prod_id[$i],$line_qty[$i],1,$model->journal_no);
+                        if ($model_line->save()) {
+                            $this->updateStock($prod_id[$i], $line_qty[$i], 1, $model->journal_no, $company_id, $branch_id);
                         }
                     }
                 }
@@ -102,8 +115,15 @@ class IssuerefillController extends Controller
             'model' => $model,
         ]);
     }
-    public function updateStock($product_id,$qty,$wh_id,$journal_no){
-        if($product_id!= null && $qty > 0){
+
+    public function updateStock($product_id, $qty, $wh_id, $journal_no, $company_id, $branch_id)
+    {
+        $default_warehouse = 6;
+        if ($company_id == 1 && $branch_id == 2) {
+            $default_warehouse = 5;
+        }
+
+        if ($product_id != null && $qty > 0) {
             $model_trans = new \backend\models\Stocktrans();
             $model_trans->journal_no = $journal_no;
             $model_trans->trans_date = date('Y-m-d H:i:s');
@@ -112,15 +132,16 @@ class IssuerefillController extends Controller
             $model_trans->warehouse_id = 6;
             $model_trans->stock_type = 2; // 1 in 2 out
             $model_trans->activity_type_id = 18; // 1 prod rec 2 issue car
-            if($model_trans->save(false)){
-                $model = \backend\models\Stocksum::find()->where(['warehouse_id'=>6,'product_id'=>$product_id])->one();
-                if($model){
+            if ($model_trans->save(false)) {
+                $model = \backend\models\Stocksum::find()->where(['warehouse_id' => $default_warehouse, 'product_id' => $product_id])->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])->one();
+                if ($model) {
                     $model->qty = $model->qty - (int)$qty;
                     $model->save(false);
                 }
             }
         }
     }
+
     protected function findModel($id)
     {
         if (($model = Journalissue::findOne($id)) !== null) {

@@ -67,6 +67,16 @@ class BranchtransferController extends Controller
      */
     public function actionCreate()
     {
+
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+
         $model = new Branchtransfer();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -85,7 +95,9 @@ class BranchtransferController extends Controller
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
             $model->trans_date = date('Y-m-d', strtotime($sale_date));
-            $model->journal_no = $model->getLastNo();
+            $model->journal_no = $model->getLastNo($company_id, $branch_id);
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
             if ($model->save()) {
                 if ($product != null && $from_company != null && $to_company != null && $to_branch != null && $to_warehouse != null) {
                     for ($i = 0; $i <= count($product) - 1; $i++) {

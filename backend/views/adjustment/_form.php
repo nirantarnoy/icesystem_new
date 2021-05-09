@@ -3,7 +3,16 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$wh_data = \backend\models\Warehouse::find()->all();
+$company_id = 1;
+$branch_id = 1;
+if (isset($_SESSION['user_company_id'])) {
+    $company_id = $_SESSION['user_company_id'];
+}
+if (isset($_SESSION['user_branch_id'])) {
+    $branch_id = $_SESSION['user_branch_id'];
+}
+
+$wh_data = \backend\models\Warehouse::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
 ?>
 
 <div class="adjustment-form">
@@ -11,7 +20,7 @@ $wh_data = \backend\models\Warehouse::find()->all();
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
         <div class="col-lg-4">
-            <?= $form->field($model, 'journal_no')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
+            <?= $form->field($model, 'journal_no')->textInput(['maxlength' => true, 'readonly' => 'readonly']) ?>
         </div>
         <div class="col-lg-4">
             <?php $model->trans_date = $model->isNewRecord ? date('d/m/Y') : date('d/m/Y', strtotime($model->trans_date)); ?>
@@ -45,7 +54,8 @@ $wh_data = \backend\models\Warehouse::find()->all();
                 <tr>
                     <td></td>
                     <td>
-                        <input type="text" class="form-control line-product-name" name="line_product_name[]" value="" readonly>
+                        <input type="text" class="form-control line-product-name" name="line_product_name[]" value=""
+                               readonly>
                     </td>
                     <td>
                         <select name="line_warehouse_id[]" id="" class="form-control line-warehouse-id">
@@ -151,7 +161,7 @@ $wh_data = \backend\models\Warehouse::find()->all();
 <?php
 $url_to_find_item = \yii\helpers\Url::to(['pricegroup/productdata'], true);
 $url_to_get_price_group = \yii\helpers\Url::to(['journalissue/find-pricegroup'], true);
-$js=<<<JS
+$js = <<<JS
 var removelist = [];
   var selecteditem = [];
 $(function(){

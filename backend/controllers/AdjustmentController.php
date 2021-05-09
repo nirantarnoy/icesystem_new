@@ -69,6 +69,15 @@ class AdjustmentController extends Controller
      */
     public function actionCreate()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+
         $model = new Adjustment();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -83,7 +92,7 @@ class AdjustmentController extends Controller
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
 
-            $model->journal_no = $model->getLastNo();
+            $model->journal_no = $model->getLastNo($company_id, $branch_id);
             $model->trans_date = date('Y-m-d', strtotime($sale_date));
             if($model->save()){
                 if($product != null){
@@ -96,6 +105,8 @@ class AdjustmentController extends Controller
                         $model_line->qty = $qty[$i];
                         $model_line->stock_type = $stock_type[$i];
                         $model_line->activity_type_id = 11;
+                        $model_line->company_id = $company_id;
+                        $model_line->branch_id = $branch_id;
                         if($model_line->save(false)){
                             $model_stock = \backend\models\Stocksum::find()->where(['warehouse_id'=>$warehouse[$i],'product_id'=>$product[$i]])->one();
                             if($model_stock){

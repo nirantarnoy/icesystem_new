@@ -1,7 +1,10 @@
 <?php
+
 namespace backend\models;
+
 use Yii;
 use yii\db\ActiveRecord;
+
 date_default_timezone_set('Asia/Bangkok');
 
 class Branchtransfer extends \common\models\BranchTransfer
@@ -9,19 +12,19 @@ class Branchtransfer extends \common\models\BranchTransfer
     public function behaviors()
     {
         return [
-            'timestampcdate'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_INSERT=>'created_at',
+            'timestampcdate' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'created_at',
                 ],
-                'value'=> time(),
+                'value' => time(),
             ],
-            'timestampudate'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_INSERT=>'updated_at',
+            'timestampudate' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'updated_at',
                 ],
-                'value'=> time(),
+                'value' => time(),
             ],
 //            'timestampcby'=>[
 //                'class'=> \yii\behaviors\AttributeBehavior::className(),
@@ -37,12 +40,12 @@ class Branchtransfer extends \common\models\BranchTransfer
 //                ],
 //                'value'=> Yii::$app->user->identity->id,
 //            ],
-            'timestampupdate'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_UPDATE=>'updated_at',
+            'timestampupdate' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
                 ],
-                'value'=> time(),
+                'value' => time(),
             ],
         ];
     }
@@ -120,12 +123,12 @@ class Branchtransfer extends \common\models\BranchTransfer
 //        }
 //    }
 
-    public static function getLastNo()
+    public static function getLastNo($company_id, $branch_id)
     {
-        $model = Stocktrans::find()->MAX('journal_no');
+        $model = Stocktrans::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->MAX('journal_no');
         //   $model = Orders::find()->where(['date(order_date)' => date('Y-m-d', strtotime($date))])->MAX('order_no');
 
-        $model_seq = \backend\models\Sequence::find()->where(['module_id' => 19])->one();
+        $model_seq = \backend\models\Sequence::find()->where(['module_id' => 19, 'company_id' => $company_id, 'branch_id' => $branch_id])->one();
         //$pre = \backend\models\Sequence::find()->where(['module_id'=>15])->one();
         $pre = '';
         $prefix = '';
