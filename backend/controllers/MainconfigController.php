@@ -413,7 +413,7 @@ class MainconfigController extends Controller
             $modelnew->status = $value->status;
             $modelnew->company_id = 1;
             $modelnew->branch_id = 2;
-            $model->save(false);
+            $modelnew->save(false);
         }
     }
     public function actionProducttypecopy(){
@@ -426,7 +426,7 @@ class MainconfigController extends Controller
             $modelnew->status = $value->status;
             $modelnew->company_id = 1;
             $modelnew->branch_id = 2;
-            $model->save(false);
+            $modelnew->save(false);
         }
     }
     public function actionUnitcopy(){
@@ -439,7 +439,7 @@ class MainconfigController extends Controller
             $modelnew->status = $value->status;
             $modelnew->company_id = 1;
             $modelnew->branch_id = 2;
-            $model->save(false);
+            $modelnew->save(false);
         }
     }
     public function actionProductcopy(){
