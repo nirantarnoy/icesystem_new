@@ -64,6 +64,13 @@ class OrderfinishedSearch extends QuerySaleFinished
             'route_name' => $this->route_name
         ]);
 
+        if(isset($_SESSION['user_company_id'])){
+            $query->andFilterWhere(['company_id'=>$_SESSION['user_company_id']]);
+        }
+        if(isset($_SESSION['user_branch_id'])){
+            $query->andFilterWhere(['branch_id'=>$_SESSION['user_branch_id']]);
+        }
+
         $sale_date = null;
         if ($this->order_date != null) {
             $x_date = explode('/', $this->order_date);
