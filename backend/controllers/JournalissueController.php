@@ -67,6 +67,11 @@ class JournalissueController extends Controller
             $branch_id = $_SESSION['user_branch_id'];
         }
 
+        $default_warehouse = 6 ;
+        if($company_id == 1 && $branch_id ==2){
+            $default_warehouse = 5;
+        }
+
         $model = new Journalissue();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -97,7 +102,7 @@ class JournalissueController extends Controller
                         $model_line->sale_price = $line_issue_price[$i];
                         $model_line->status = 1;
                         if ($model_line->save()) {
-                            $this->updateStock($prod_id[$i], $line_qty[$i], 6, $model->journal_no);
+                            $this->updateStock($prod_id[$i], $line_qty[$i], $default_warehouse, $model->journal_no);
                         }
                     }
                 }
@@ -121,11 +126,11 @@ class JournalissueController extends Controller
             $model_trans->trans_date = date('Y-m-d H:i:s');
             $model_trans->product_id = $product_id;
             $model_trans->qty = $qty;
-            $model_trans->warehouse_id = 6;
+            $model_trans->warehouse_id = $wh_id;
             $model_trans->stock_type = 2; // 1 in 2 out
             $model_trans->activity_type_id = 2; // 1 prod rec 2 issue car
             if ($model_trans->save(false)) {
-                $model = \backend\models\Stocksum::find()->where(['warehouse_id' => 6, 'product_id' => $product_id])->one();
+                $model = \backend\models\Stocksum::find()->where(['warehouse_id' => $wh_id, 'product_id' => $product_id])->one();
                 if ($model) {
                     $model->qty = $model->qty - (int)$qty;
                     $model->save(false);
