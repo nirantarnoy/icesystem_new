@@ -8,6 +8,16 @@ $filename = "empty";
 $is_print_do = "";
 $filename_do = "empty";
 
+
+$company_id = 1;
+$branch_id = 1;
+if (isset($_SESSION['user_company_id'])) {
+    $company_id = $_SESSION['user_company_id'];
+}
+if (isset($_SESSION['user_branch_id'])) {
+    $branch_id = $_SESSION['user_branch_id'];
+}
+
 if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
     $f_name = \Yii::$app->session->getFlash('msg-index');
     // echo $f_name;
@@ -63,7 +73,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                     echo Select2::widget([
                         'name' => 'customer_id',
                         'value' => 1,
-                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['sort_name' => $s_name])->all(), 'id', function ($data) {
+                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['sort_name' => $s_name, 'company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', function ($data) {
                             return $data->code . ' ' . $data->name;
                         }),
                         'options' => [
@@ -86,7 +96,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                     <div class="row">
                         <?php $i = 0; ?>
                         <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
-                        <?php $product_data = \backend\models\Product::find()->all(); ?>
+                        <?php $product_data = \backend\models\Product::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(); ?>
                         <?php foreach ($product_data as $value): ?>
 
                             <?php
@@ -146,7 +156,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                     <div class="row">
                         <?php $i = 0; ?>
                         <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
-                        <?php $product_data = \backend\models\Product::find()->where(['is_pos_item' => 1])->orderBy(['item_pos_seq' => SORT_ASC])->all(); ?>
+                        <?php $product_data = \backend\models\Product::find()->where(['is_pos_item' => 1, 'company_id' => $company_id, 'branch_id' => $branch_id])->orderBy(['item_pos_seq' => SORT_ASC])->all(); ?>
                         <?php foreach ($product_data as $value): ?>
                             <?php
                             $i += 1;
@@ -714,7 +724,8 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                 <div class="row">
                     <div class="col-lg-12">
                         <input type="number" class="form-control edit-amount" min="1"
-                               style="font-size: 50px;height: 60px;text-align: center" value="0" onchange="checkonhand($(this))">
+                               style="font-size: 50px;height: 60px;text-align: center" value="0"
+                               onchange="checkonhand($(this))">
                     </div>
                 </div>
                 <br>
