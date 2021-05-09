@@ -160,7 +160,7 @@ class MainconfigController extends Controller
                     $modelx->company_id = 1;
                     $modelx->branch_id = 2;
                     if ($modelx->save(false)) {
-                        $sale_price_group = $this->checkPricegroup($rowData[5],$rowData[6],$type_id);
+                       // $sale_price_group = $this->checkPricegroup($rowData[5],$rowData[6],$type_id);
                         $res += 1;
                     }
                 }
