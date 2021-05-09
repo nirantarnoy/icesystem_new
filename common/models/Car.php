@@ -40,7 +40,7 @@ class Car extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['code'], 'unique'],
+           // [['code'], 'unique'],
             [['car_type_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['code', 'name', 'description', 'plate_number', 'photo'], 'string', 'max' => 255],
             [['emp_id'], 'safe'],
