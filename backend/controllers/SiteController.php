@@ -107,7 +107,7 @@ class SiteController extends Controller
         $order_cnt = \backend\models\Orders::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->count();
         $order_pos_cnt = \backend\models\Orders::find()->where(['sale_channel_id' => 2, 'company_id' => $company_id, 'branch_id' => $branch_id])->count();
         $order_normal_cnt = \backend\models\Orders::find()->where(['sale_channel_id' => 1, 'company_id' => $company_id, 'branch_id' => $branch_id])->count();
-        $order_lastest = \common\models\QuerySaleLastest::find()->all();
+        $order_lastest = \common\models\QuerySaleLastest::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
 
 
 //        $sql = "select sale_channel_type,sum(m1) as m1 ,sum(m2) as m2,sum(m3) as m3,sum(m4) as m4,sum(m5) as m5,sum(m6) as m6,sum(m7) as m7,sum(m8) as m8,sum(m9) as m9,sum(m10) as m10,sum(m11) as m11,sum(m12) as m12 from query_sale_amount_by_sale_type";
