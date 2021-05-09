@@ -264,7 +264,7 @@ function clearall(){
 function addcart(e){
     var ids = e.attr('data-id');
     var name = e.attr('data-var');
-   // alert(ids);
+    alert(ids);
      var prod_id = ids;
      var prod_name = name;
     //  //alert(prod_id);
