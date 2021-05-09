@@ -12,7 +12,6 @@ if (isset($_SESSION['user_branch_id'])) {
     $branch_id = $_SESSION['user_branch_id'];
 }
 ?>
-?>
 
 <div class="customer-search">
 
