@@ -15,6 +15,7 @@ use yii\web\UploadedFile;
 
 class MainconfigController extends Controller
 {
+    public $enableCsrfValidation = false;
     public function actionIndex()
     {
         $model_file = new Uploadfile();
