@@ -43,6 +43,8 @@ class OrderController extends Controller
         $route_id = 0;
         $api_date = null;
         $car_id = 0;
+        $company_id = 0;
+        $branch_id = 0;
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
@@ -57,7 +59,10 @@ class OrderController extends Controller
             $issue_id = $req_data['issue_id'];
             $route_id = $req_data['route_id'];
             $car_id = $req_data['car_id'];
-            $payment_type_id = $res_data['payment_type_id'];
+            $payment_type_id = $req_data['payment_type_id'];
+            $company_id = $req_data['company_id'];
+            $branch_id = $req_data['branch_id'];
+
         }
 
         $data = [];
@@ -79,7 +84,7 @@ class OrderController extends Controller
 //            }
             $sale_time = date('H:i:s');
             $order_total_all = 0;
-            $has_order = $this->hasOrder($sale_date,$route_id,$car_id);
+            $has_order = $this->hasOrder($sale_date, $route_id, $car_id);
             if ($has_order != null) {
                 $has_order_id = $has_order->id;
                 if ($has_order_id) {
@@ -87,20 +92,20 @@ class OrderController extends Controller
 
                     $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
 
-                    $modelx = \common\models\OrderLine::find()->where(['product_id'=>$product_id,'order_id'=>$has_order_id,'customer_id'=>$customer_id])->one();
-                    if($modelx){
+                    $modelx = \common\models\OrderLine::find()->where(['product_id' => $product_id, 'order_id' => $has_order_id, 'customer_id' => $customer_id])->one();
+                    if ($modelx) {
                         $modelx->qty = ($modelx->qty + $qty);
                         $modelx->line_total = ($modelx->qty * $price);
                         $modelx->status = 1;
                         if ($modelx->save(false)) {
                             $status = true;
-                            $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id'=>$issue_id,'product_id'=>$product_id])->one();
-                            if($model_update_issue_line){
+                            $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
+                            if ($model_update_issue_line) {
                                 $model_update_issue_line->avl_qty = ($model_update_issue_line->avl_qty - (int)$qty);
                                 $model_update_issue_line->save(false);
                             }
                         }
-                    }else{
+                    } else {
                         $model_line = new \backend\models\Orderline();
                         $model_line->order_id = $has_order_id;
                         $model_line->customer_id = $customer_id;
@@ -114,8 +119,8 @@ class OrderController extends Controller
                             $order_total_all += $model_line->line_total;
                             $status = true;
 
-                            $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id'=>$issue_id,'product_id'=>$product_id])->one();
-                            if($model_update_issue_line){
+                            $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
+                            if ($model_update_issue_line) {
                                 $model_update_issue_line->avl_qty = $model_update_issue_line->avl_qty - $qty;
                                 $model_update_issue_line->save(false);
                             }
@@ -137,6 +142,8 @@ class OrderController extends Controller
                 $model->issue_id = $issue_id;
                 $model->status = 1;
                 $model->created_by = $user_id;
+                $model->company_id = $company_id;
+                $model->branch_id = $branch_id;
                 if ($model->save(false)) {
                     //   $price = $this->findCustomerprice($customer_id, $product_id, $route_id);
                     $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
@@ -154,8 +161,8 @@ class OrderController extends Controller
                         $order_total_all += $model_line->line_total;
                         $status = true;
 
-                        $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id'=>$issue_id,'product_id'=>$product_id])->one();
-                        if($model_update_issue_line){
+                        $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
+                        if ($model_update_issue_line) {
                             $model_update_issue_line->avl_qty = $model_update_issue_line->avl_qty - $qty;
                             $model_update_issue_line->save(false);
                         }
@@ -173,7 +180,7 @@ class OrderController extends Controller
                 }
             }
         }
-      //  array_push($data,['data'=>$req_data]);
+        //  array_push($data,['data'=>$req_data]);
 
         return ['status' => $status, 'data' => $data];
     }
@@ -239,7 +246,7 @@ class OrderController extends Controller
                 $sale_date = $t_date;
             }
 
-            $model = \common\models\QueryApiOrderDailySummary::find()->where(['car_ref_id' => $car_id,'date(order_date)'=>$sale_date])->all();
+            $model = \common\models\QueryApiOrderDailySummary::find()->where(['car_ref_id' => $car_id, 'date(order_date)' => $sale_date])->all();
             // $model = \common\models\Orders::find()->where(['id'=>131])->all();
             //  $model = \common\models\Orders::find()->where(['car_ref_id' => $car_id])->all();
             if ($model) {
@@ -264,7 +271,6 @@ class OrderController extends Controller
         }
         return ['status' => $status, 'data' => $data];
     }
-
 
 
     public function actionAddordertransfer()
@@ -318,7 +324,7 @@ class OrderController extends Controller
 
             $order_total_all = 0;
 
-            $has_order = $this->hasOrder($sale_date,$route_id,$car_id);
+            $has_order = $this->hasOrder($sale_date, $route_id, $car_id);
             if ($has_order != null) {
                 $has_order_id = $has_order->id;
                 if ($has_order_id) {
@@ -326,15 +332,15 @@ class OrderController extends Controller
 
                     $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
 
-                    $modelx = \common\models\OrderLine::find()->where(['product_id'=>$product_id,'order_id'=>$has_order_id,'customer_id'=>$customer_id])->one();
-                    if($modelx){
+                    $modelx = \common\models\OrderLine::find()->where(['product_id' => $product_id, 'order_id' => $has_order_id, 'customer_id' => $customer_id])->one();
+                    if ($modelx) {
                         $modelx->qty = ($modelx->qty + $qty);
                         $modelx->line_total = ($modelx->qty * $price);
                         $modelx->status = 1;
                         if ($modelx->save(false)) {
                             $status = true;
                         }
-                    }else{
+                    } else {
                         $model_line = new \backend\models\Orderline();
                         $model_line->order_id = $has_order_id;
                         $model_line->customer_id = $customer_id;
@@ -348,8 +354,8 @@ class OrderController extends Controller
                             $order_total_all += $model_line->line_total;
                             $status = true;
 
-                            $model_update_transfer_line = \common\models\TransferLine::find()->where(['transfer_id'=>$transfer_id,'product_id'=>$product_id])->one();
-                            if($model_update_transfer_line){
+                            $model_update_transfer_line = \common\models\TransferLine::find()->where(['transfer_id' => $transfer_id, 'product_id' => $product_id])->one();
+                            if ($model_update_transfer_line) {
                                 $model_update_transfer_line->avl_qty = $model_update_transfer_line->avl_qty - $qty;
                                 $model_update_transfer_line->save(false);
                             }
@@ -388,8 +394,8 @@ class OrderController extends Controller
                         $order_total_all += $model_line->line_total;
                         $status = true;
 
-                        $model_update_transfer_line = \common\models\TransferLine::find()->where(['transfer_id'=>$transfer_id,'product_id'=>$product_id])->one();
-                        if($model_update_transfer_line){
+                        $model_update_transfer_line = \common\models\TransferLine::find()->where(['transfer_id' => $transfer_id, 'product_id' => $product_id])->one();
+                        if ($model_update_transfer_line) {
                             $model_update_transfer_line->avl_qty = $model_update_transfer_line->avl_qty - $qty;
                             $model_update_transfer_line->save(false);
                         }
@@ -415,7 +421,7 @@ class OrderController extends Controller
 
         $data = [];
         if ($customer_id) {
-            $model = \common\models\QueryApiOrderDaily::find()->where(['customer_id' => $customer_id])->andFilterWhere(['id'=>$order_id])->andFilterWhere(['>', 'qty', 0])->all();
+            $model = \common\models\QueryApiOrderDaily::find()->where(['customer_id' => $customer_id])->andFilterWhere(['id' => $order_id])->andFilterWhere(['>', 'qty', 0])->all();
             if ($model) {
                 $status = true;
                 foreach ($model as $value) {
@@ -484,9 +490,9 @@ class OrderController extends Controller
 
         $data = [];
         if ($order_id != null && $customer_id != null) {
-           if(\common\models\OrderLine::updateAll(['qty'=>0,'price'=>0,'line_total'=>0],['order_id'=>$order_id,'customer_id'=>$customer_id])){
-            $status = true;
-           }
+            if (\common\models\OrderLine::updateAll(['qty' => 0, 'price' => 0, 'line_total' => 0], ['order_id' => $order_id, 'customer_id' => $customer_id])) {
+                $status = true;
+            }
         }
         return ['status' => $status, 'data' => $data];
     }
