@@ -18,8 +18,8 @@ if (isset($_SESSION['user_branch_id'])) {
     $branch_id = $_SESSION['user_branch_id'];
 }
 
-echo $company_id.'<br />';
-echo $branch_id;
+//echo $company_id.'<br />';
+//echo $branch_id;
 
 if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
     $f_name = \Yii::$app->session->getFlash('msg-index');
@@ -75,8 +75,8 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                     $s_name = '';
                     echo Select2::widget([
                         'name' => 'customer_id',
-                        'value' => 1,
-                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['sort_name' => $s_name, 'company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', function ($data) {
+                       // 'value' => 1,
+                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', function ($data) {
                             return $data->code . ' ' . $data->name;
                         }),
                         'options' => [
