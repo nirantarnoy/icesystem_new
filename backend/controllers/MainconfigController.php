@@ -249,7 +249,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($name != '') {
-            $model = \backend\models\Deliveryroute::find()->where(['code' => $name])->one();
+            $model = \backend\models\Deliveryroute::find()->where(['code' => $name,'company_id'=>1,'branch_id'=>2])->one();
             if ($model) {
                 $id = $model->id;
             } else {
@@ -272,7 +272,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($name != '') {
-            $model = \backend\models\Customergroup::find()->where(['name' => $name])->one();
+            $model = \backend\models\Customergroup::find()->where(['name' => $name,'company_id'=>1,'branch_id'=>2])->one();
             if ($model) {
                 $id = $model->id;
             } else {
@@ -295,7 +295,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($name != '') {
-            $model = \backend\models\Customertype::find()->where(['code' => $name])->one();
+            $model = \backend\models\Customertype::find()->where(['code' => $name,'company_id'=>1,'branch_id'=>2])->one();
             if ($model) {
                 $id = $model->id;
             } else {
@@ -318,7 +318,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($name != '') {
-            $model = \backend\models\Paymentmethod::find()->where(['code' => $name])->one();
+            $model = \backend\models\Paymentmethod::find()->where(['code' => $name,'company_id'=>1,'branch_id'=>2])->one();
             if ($model) {
                 $id = $model->id;
             } else {
@@ -341,7 +341,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($name != '') {
-            $model = \backend\models\Paymentterm::find()->where(['code' => $name])->one();
+            $model = \backend\models\Paymentterm::find()->where(['code' => $name,'company_id'=>1,'branch_id'=>2])->one();
             if ($model) {
                 $id = $model->id;
             } else {
@@ -364,7 +364,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($code != '') {
-            $model = \backend\models\Pricegroup::find()->where(['code' => $code])->one();
+            $model = \backend\models\Pricegroup::find()->where(['code' => $code,'company_id'=>1,'branch_id'=>2])->one();
             if ($model) {
                  $model_add_type = \common\models\PriceCustomerType::find()->where(['price_group_id'=>$model->id,'customer_type_id'=>$type_id])->one();
                  if(!$model_add_type){
@@ -385,7 +385,7 @@ class MainconfigController extends Controller
                 $model_new->company_id = 1;
                 $model_new->branch_id = 2;
                 if ($model_new->save()) {
-                    $model_add_type = \common\models\PriceCustomerType::find()->where(['price_group_id'=>$model_new->id,'customer_type_id'=>$type_id])->one();
+                    $model_add_type = \common\models\PriceCustomerType::find()->where(['price_group_id'=>$model_new->id,'customer_type_id'=>$type_id,'company_id'=>1,'branch_id'=>2])->one();
                     if(!$model_add_type){
                         $add_model = new \common\models\PriceCustomerType();
                         $add_model->price_group_id = $model_new->id;
