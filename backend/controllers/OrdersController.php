@@ -74,6 +74,15 @@ class OrdersController extends Controller
 
     public function actionCreate()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+
         $model = new Orders();
         if ($model->load(Yii::$app->request->post())) {
             set_time_limit(0);
@@ -102,7 +111,7 @@ class OrdersController extends Controller
             if (count($x_date) > 1) {
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
-            $model->order_no = $model::getLastNo($sale_date);
+            $model->order_no = $model::getLastNo($sale_date, $company_id, $branch_id);
             $model->order_date = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
             $model->sale_channel_id = 1;
