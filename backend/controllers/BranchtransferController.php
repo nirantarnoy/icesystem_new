@@ -116,7 +116,7 @@ class BranchtransferController extends Controller
                         if ($model_line->save()) {
                             // update from
                             $model_stock_trans = new \backend\models\Stocktrans();
-                            $model_stock_trans->journal_no = $model->getLastNo();
+                            $model_stock_trans->journal_no = $model->getLastNo($company_id, $branch_id);
                             $model_stock_trans->trans_date = date('Y-m-d H:i:s');
                             $model_stock_trans->product_id = $product[$i];
                             $model_stock_trans->warehouse_id = $from_warehouse[$i];
@@ -134,7 +134,7 @@ class BranchtransferController extends Controller
 
                             // update to
                             $model_stock_trans2 = new \backend\models\Stocktrans();
-                            $model_stock_trans2->journal_no = $model->getLastNo();
+                            $model_stock_trans2->journal_no = $model->getLastNo($company_id, $branch_id);
                             $model_stock_trans2->trans_date = date('Y-m-d H:i:s');
                             $model_stock_trans2->product_id = $product[$i];
                             $model_stock_trans2->warehouse_id = $to_warehouse[$i];

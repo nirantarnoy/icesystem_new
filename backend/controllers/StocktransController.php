@@ -80,7 +80,7 @@ class StocktransController extends Controller
         if($wh_id != null){
              for($i=0;$i<=count($wh_id)-1;$i++){
                  $model = new \backend\models\Stocktrans();
-                 $model->journal_no = $model->getLastNo();
+                 $model->journal_no = $model->getLastNo($company_id,$branch_id);
                  $model->trans_date = date('Y-m-d H:i:s');
                  $model->product_id = $prodid[$i];
                  $model->qty = $qty[$i];
