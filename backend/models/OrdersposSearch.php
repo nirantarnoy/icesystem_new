@@ -97,6 +97,13 @@ class OrdersposSearch extends Orders
 //            $query->andFilterWhere(['order_date' => date('Y-m-d', strtotime($sale_date))]);
 //        }
 
+        if(isset($_SESSION['user_company_id'])){
+            $query->andFilterWhere(['orders.company_id'=>$_SESSION['user_company_id']]);
+        }
+        if(isset($_SESSION['user_branch_id'])){
+            $query->andFilterWhere(['orders.branch_id'=>$_SESSION['user_branch_id']]);
+        }
+        $query->andFilterWhere(['sale_channel_id' => 1]);
         $query->andFilterWhere([
             '=', 'orders.created_by', $this->created_by
         ]);

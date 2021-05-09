@@ -13,13 +13,14 @@ use yii\web\UploadedFile;
 class PaymentreceiveController extends Controller
 {
     public $enableCsrfValidation = false;
+
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST','GET'],
+                    'delete' => ['POST', 'GET'],
                 ],
             ],
         ];
@@ -287,7 +288,7 @@ class PaymentreceiveController extends Controller
                 $i = 0;
                 foreach ($model as $value) {
                     $i += 1;
-                 //   $total_amount = $total_amount + ($value->remain_amount == null ? 0 : $value->remain_amount);
+                    //   $total_amount = $total_amount + ($value->remain_amount == null ? 0 : $value->remain_amount);
                     $html .= '<tr>';
                     $html .= '<td style="text-align: center">' . $i . '</td>';
                     $html .= '<td style="text-align: center">' . \backend\models\Orders::getNumber($value->order_id) . '</td>';
@@ -310,10 +311,17 @@ class PaymentreceiveController extends Controller
                     $html .= '</tr>';
 
                 }
-               // $html .= '<tr><td colspan="4" style="text-align: right">รวม</td><td style="text-align: right;font-weight: bold">' . number_format($total_amount, 2) . '</td><td style="text-align: right;font-weight: bold"><span class="line-pay-total">0</span></td></tr>';
+                // $html .= '<tr><td colspan="4" style="text-align: right">รวม</td><td style="text-align: right;font-weight: bold">' . number_format($total_amount, 2) . '</td><td style="text-align: right;font-weight: bold"><span class="line-pay-total">0</span></td></tr>';
             }
         }
 
         echo $html;
+    }
+
+    public function actionCustomerloan()
+    {
+        return $this->render('_customerloan', [
+            'model' => null,
+        ]);
     }
 }
