@@ -172,7 +172,7 @@ class MainconfigController extends Controller
                     return $this->redirect(['index']);
                 } else {
                     $session = Yii::$app->session;
-                    $session->setFlash('msg-error', 'พบข้อมผิดพลาด');
+                    $session->setFlash('msg-error', 'พบข้อมผิดพลาดนะ');
                     return $this->redirect(['index']);
                 }
                 // }
