@@ -401,4 +401,64 @@ class MainconfigController extends Controller
         return $id;
     }
 
+
+
+    public function actionProductgroupcopy(){
+        $model = \backend\models\Productgroup::find()->where(['company_id'=>1,'branch_id'=>1])->all();
+        foreach ($model as $value){
+            $modelnew = new \backend\models\Productgroup();
+            $modelnew->code = $value->code;
+            $modelnew->description = $value->description;
+            $modelnew->name = $value->name;
+            $modelnew->status = $value->status;
+            $modelnew->company_id = 1;
+            $modelnew->branch_id = 2;
+            $model->save(false);
+        }
+    }
+    public function actionProducttypecopy(){
+        $model = \backend\models\Producttype::find()->where(['company_id'=>1,'branch_id'=>1])->all();
+        foreach ($model as $value){
+            $modelnew = new \backend\models\Producttype();
+            $modelnew->code = $value->code;
+            $modelnew->description = $value->description;
+            $modelnew->name = $value->name;
+            $modelnew->status = $value->status;
+            $modelnew->company_id = 1;
+            $modelnew->branch_id = 2;
+            $model->save(false);
+        }
+    }
+    public function actionUnitcopy(){
+        $model = \backend\models\Unit::find()->where(['company_id'=>1,'branch_id'=>1])->all();
+        foreach ($model as $value){
+            $modelnew = new \backend\models\Unit();
+            $modelnew->code = $value->code;
+            $modelnew->description = $value->description;
+            $modelnew->name = $value->name;
+            $modelnew->status = $value->status;
+            $modelnew->company_id = 1;
+            $modelnew->branch_id = 2;
+            $model->save(false);
+        }
+    }
+    public function actionProductcopy(){
+        $model = \backend\models\Product::find()->where(['company_id'=>1,'branch_id'=>1])->all();
+        foreach ($model as $value){
+            $modelnew = new \backend\models\Product();
+            $modelnew->code = $value->code;
+            $modelnew->description = $value->description;
+            $modelnew->name = $value->name;
+            $modelnew->product_group_id = $value->product_group_id;
+            $modelnew->product_type_id = $value->product_type_id;
+            $modelnew->photo = $value->photo;
+            $modelnew->sale_price = $value->sale_price;
+            $modelnew->std_cost = $value->std_cost;
+            $modelnew->status = $value->status;
+            $modelnew->company_id = 1;
+            $modelnew->branch_id = 2;
+            $modelnew->save(false);
+        }
+    }
+
 }
