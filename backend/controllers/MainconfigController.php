@@ -16,6 +16,7 @@ use yii\web\UploadedFile;
 class MainconfigController extends Controller
 {
     public $enableCsrfValidation = false;
+
     public function actionIndex()
     {
         $model_file = new Uploadfile();
@@ -129,7 +130,7 @@ class MainconfigController extends Controller
                         continue;
                     }
 
-                    $model_dup = \backend\models\Customer::find()->where(['name' => trim($rowData[1]),'company_id'=>1,'branch_id'=>2])->one();
+                    $model_dup = \backend\models\Customer::find()->where(['name' => trim($rowData[1]), 'company_id' => 1, 'branch_id' => 2])->one();
                     if ($model_dup != null) {
                         continue;
                     }
@@ -160,7 +161,7 @@ class MainconfigController extends Controller
                     $modelx->company_id = 1;
                     $modelx->branch_id = 2;
                     if ($modelx->save(false)) {
-                        $sale_price_group = $this->checkPricegroup($rowData[5],$rowData[6],$type_id);
+                        $sale_price_group = $this->checkPricegroup($rowData[5], $rowData[6], $type_id);
                         $res += 1;
                     }
                 }
@@ -249,7 +250,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($name != '') {
-            $model = \backend\models\Deliveryroute::find()->where(['code' => $name,'company_id'=>1,'branch_id'=>2])->one();
+            $model = \backend\models\Deliveryroute::find()->where(['code' => $name, 'company_id' => 1, 'branch_id' => 2])->one();
             if ($model) {
                 $id = $model->id;
             } else {
@@ -272,7 +273,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($name != '') {
-            $model = \backend\models\Customergroup::find()->where(['name' => $name,'company_id'=>1,'branch_id'=>2])->one();
+            $model = \backend\models\Customergroup::find()->where(['name' => $name, 'company_id' => 1, 'branch_id' => 2])->one();
             if ($model) {
                 $id = $model->id;
             } else {
@@ -295,7 +296,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($name != '') {
-            $model = \backend\models\Customertype::find()->where(['code' => $name,'company_id'=>1,'branch_id'=>2])->one();
+            $model = \backend\models\Customertype::find()->where(['code' => $name, 'company_id' => 1, 'branch_id' => 2])->one();
             if ($model) {
                 $id = $model->id;
             } else {
@@ -318,7 +319,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($name != '') {
-            $model = \backend\models\Paymentmethod::find()->where(['code' => $name,'company_id'=>1,'branch_id'=>2])->one();
+            $model = \backend\models\Paymentmethod::find()->where(['code' => $name, 'company_id' => 1, 'branch_id' => 2])->one();
             if ($model) {
                 $id = $model->id;
             } else {
@@ -341,7 +342,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($name != '') {
-            $model = \backend\models\Paymentterm::find()->where(['code' => $name,'company_id'=>1,'branch_id'=>2])->one();
+            $model = \backend\models\Paymentterm::find()->where(['code' => $name, 'company_id' => 1, 'branch_id' => 2])->one();
             if ($model) {
                 $id = $model->id;
             } else {
@@ -360,22 +361,22 @@ class MainconfigController extends Controller
         return $id;
     }
 
-    public function checkPricegroup($code,$name,$type_id)
+    public function checkPricegroup($code, $name, $type_id)
     {
         $id = 0;
         if ($code != '') {
-            $model = \backend\models\Pricegroup::find()->where(['code' => $code,'company_id'=>1,'branch_id'=>2])->one();
+            $model = \backend\models\Pricegroup::find()->where(['code' => $code, 'company_id' => 1, 'branch_id' => 2])->one();
             if ($model) {
-                 $model_add_type = \common\models\PriceCustomerType::find()->where(['price_group_id'=>$model->id,'customer_type_id'=>$type_id])->one();
-                 if(!$model_add_type){
-                     $add_model = new \common\models\PriceCustomerType();
-                     $add_model->price_group_id = $model->id;
-                     $add_model->customer_type_id = $type_id;
-                     $add_model->status = 1;
-                     $add_model->company_id = 1;
-                     $add_model->branch_id = 2;
-                     $add_model->save();
-                 }
+                $model_add_type = \common\models\PriceCustomerType::find()->where(['price_group_id' => $model->id, 'customer_type_id' => $type_id])->one();
+                if (!$model_add_type) {
+                    $add_model = new \common\models\PriceCustomerType();
+                    $add_model->price_group_id = $model->id;
+                    $add_model->customer_type_id = $type_id;
+                    $add_model->status = 1;
+                    $add_model->company_id = 1;
+                    $add_model->branch_id = 2;
+                    $add_model->save();
+                }
             } else {
                 $model_new = new \backend\models\Pricegroup();
                 $model_new->code = $code;
@@ -385,8 +386,8 @@ class MainconfigController extends Controller
                 $model_new->company_id = 1;
                 $model_new->branch_id = 2;
                 if ($model_new->save()) {
-                    $model_add_type = \common\models\PriceCustomerType::find()->where(['price_group_id'=>$model_new->id,'customer_type_id'=>$type_id,'company_id'=>1,'branch_id'=>2])->one();
-                    if(!$model_add_type){
+                    $model_add_type = \common\models\PriceCustomerType::find()->where(['price_group_id' => $model_new->id, 'customer_type_id' => $type_id, 'company_id' => 1, 'branch_id' => 2])->one();
+                    if (!$model_add_type) {
                         $add_model = new \common\models\PriceCustomerType();
                         $add_model->price_group_id = $model_new->id;
                         $add_model->customer_type_id = $type_id;
@@ -402,10 +403,10 @@ class MainconfigController extends Controller
     }
 
 
-
-    public function actionProductgroupcopy(){
-        $model = \backend\models\Productgroup::find()->where(['company_id'=>1,'branch_id'=>1])->all();
-        foreach ($model as $value){
+    public function actionProductgroupcopy()
+    {
+        $model = \backend\models\Productgroup::find()->where(['company_id' => 1, 'branch_id' => 1])->all();
+        foreach ($model as $value) {
             $modelnew = new \backend\models\Productgroup();
             $modelnew->code = $value->code;
             $modelnew->description = $value->description;
@@ -416,9 +417,11 @@ class MainconfigController extends Controller
             $modelnew->save(false);
         }
     }
-    public function actionProducttypecopy(){
-        $model = \backend\models\Producttype::find()->where(['company_id'=>1,'branch_id'=>1])->all();
-        foreach ($model as $value){
+
+    public function actionProducttypecopy()
+    {
+        $model = \backend\models\Producttype::find()->where(['company_id' => 1, 'branch_id' => 1])->all();
+        foreach ($model as $value) {
             $modelnew = new \backend\models\Producttype();
             $modelnew->code = $value->code;
             $modelnew->description = $value->description;
@@ -429,9 +432,11 @@ class MainconfigController extends Controller
             $modelnew->save(false);
         }
     }
-    public function actionCartypecopy(){
-        $model = \backend\models\Cartype::find()->where(['company_id'=>1,'branch_id'=>1])->all();
-        foreach ($model as $value){
+
+    public function actionCartypecopy()
+    {
+        $model = \backend\models\Cartype::find()->where(['company_id' => 1, 'branch_id' => 1])->all();
+        foreach ($model as $value) {
             $modelnew = new \backend\models\Cartype();
             $modelnew->code = $value->code;
             $modelnew->description = $value->description;
@@ -442,9 +447,11 @@ class MainconfigController extends Controller
             $modelnew->save(false);
         }
     }
-    public function actionUnitcopy(){
-        $model = \backend\models\Unit::find()->where(['company_id'=>1,'branch_id'=>1])->all();
-        foreach ($model as $value){
+
+    public function actionUnitcopy()
+    {
+        $model = \backend\models\Unit::find()->where(['company_id' => 1, 'branch_id' => 1])->all();
+        foreach ($model as $value) {
             $modelnew = new \backend\models\Unit();
             $modelnew->code = $value->code;
             $modelnew->description = $value->description;
@@ -455,9 +462,11 @@ class MainconfigController extends Controller
             $modelnew->save(false);
         }
     }
-    public function actionProductcopy(){
-        $model = \backend\models\Product::find()->where(['company_id'=>1,'branch_id'=>1])->all();
-        foreach ($model as $value){
+
+    public function actionProductcopy()
+    {
+        $model = \backend\models\Product::find()->where(['company_id' => 1, 'branch_id' => 1])->all();
+        foreach ($model as $value) {
             $modelnew = new \backend\models\Product();
             $modelnew->code = $value->code;
             $modelnew->description = $value->description;
@@ -477,6 +486,28 @@ class MainconfigController extends Controller
             $modelnew->item_pos_seq = $value->item_pos_seq;
             $modelnew->unit_id = $value->unit_id;
             $modelnew->save(false);
+        }
+    }
+
+    public function actionSeqcopy()
+    {
+        $model = \backend\models\Sequence::find()->where(['company_id' => 1, 'branch_id' => 1])->all();
+        foreach ($model as $value) {
+            $model_new = new \backend\models\Sequence();
+            $model_new->plant_id = $value->plant_id;
+            $model_new->module_id = $value->module_id;
+            $model_new->prefix = $value->prefix;
+            $model_new->symbol = $value->symbol;
+            $model_new->use_year = $value->use_year;
+            $model_new->use_month = $value->use_month;
+            $model_new->use_day = $value->use_day;
+            $model_new->minimum = $value->minimum;
+            $model_new->maximum = $value->maximum;
+            $model_new->currentnum = $value->currentnum;
+            $model_new->status = $value->status;
+            $model_new->company_id = 1;
+            $model_new->branch_id = 2;
+            $model_new->save();
         }
     }
 
