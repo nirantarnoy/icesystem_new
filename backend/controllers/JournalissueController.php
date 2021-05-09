@@ -83,7 +83,9 @@ class JournalissueController extends Controller
             $model->trans_date = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
             $model->reason_id = 1;
-            if ($model->save()) {
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
+            if ($model->save(false)) {
                 if ($prod_id != null) {
                     for ($i = 0; $i <= count($prod_id) - 1; $i++) {
                         if ($prod_id[$i] == '') continue;
