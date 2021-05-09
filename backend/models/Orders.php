@@ -7,6 +7,8 @@ use yii\db\ActiveRecord;
 
 date_default_timezone_set('Asia/Bangkok');
 
+
+
 class Orders extends \common\models\Orders
 {
     /**
@@ -68,10 +70,10 @@ class Orders extends \common\models\Orders
         ];
     }
 
-    public static function getLastNo($date)
+    public static function getLastNo($date, $company_id, $branch_id)
     {
         //   $model = Orders::find()->MAX('order_no');
-        $model = Orders::find()->where(['date(order_date)' => date('Y-m-d', strtotime($date))])->MAX('order_no');
+        $model = Orders::find()->where(['date(order_date)' => date('Y-m-d', strtotime($date))])->andFilterWhere(['company_id'=>$company_id])->MAX('order_no');
 
 //        $model_seq = \backend\models\Sequence::find()->where(['module_id'=>4])->one();
 //        //$pre = \backend\models\Sequence::find()->where(['module_id'=>15])->one();
