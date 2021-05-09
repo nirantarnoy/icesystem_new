@@ -18,7 +18,6 @@ if (isset($_SESSION['user_company_id'])) {
 if (isset($_SESSION['user_branch_id'])) {
     $branch_id = $_SESSION['user_branch_id'];
 }
-?>
 
 $this->registerCss('
 //   #table-sale-list {
