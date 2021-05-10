@@ -81,17 +81,17 @@ class CardailyController extends Controller
             $searchModel->route_id = $save_emp_route;
             $dataProvider->query->andFilterWhere(['delivery_route_id' => $save_emp_route]);
         }
-        if ($save_emp_date != null) {
-//            $x_date = explode('-', $save_emp_date);
-//            $f_date = date('Y-m-d');
-//            if (count($x_date) > 1) {
-//                $f_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
-//            }
-            $trans_date = date('Y-m-d', strtotime($save_emp_date));
-            //echo $trans_date;return;
-            $searchModel->trans_date = $trans_date;
-            $dataProvider->query->andFilterWhere(['date(car_daily.trans_date)' => $trans_date])->all();
-        }
+//        if ($save_emp_date != null) {
+////            $x_date = explode('-', $save_emp_date);
+////            $f_date = date('Y-m-d');
+////            if (count($x_date) > 1) {
+////                $f_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
+////            }
+//            $trans_date = date('Y-m-d', strtotime($save_emp_date));
+//            //echo $trans_date;return;
+//            $searchModel->trans_date = $trans_date;
+//            $dataProvider->query->andFilterWhere(['date(car_daily.trans_date)' => $trans_date])->all();
+//        }
 
 
 
