@@ -49,7 +49,7 @@ $model_new = $model_car;
             $xx_id = 0;
             $xi = 0;
             foreach ($model as $value2) {
-                $xx_id = $value2->id;
+
                 if ($value2->car_id == $value->id) {
                     $status_color = 'bg-success';
                     if($xi == 0){
@@ -57,6 +57,7 @@ $model_new = $model_car;
                         if($x_name != ''){
                             $emp_daily_name = $x_name;
                         }
+                        $xx_id = $value2->id;
                     }else{
                         $x_name = \backend\models\Employee::findName2($value2->employee_id);
                         if($x_name != ''){
