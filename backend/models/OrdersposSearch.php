@@ -103,7 +103,7 @@ class OrdersposSearch extends Orders
         if(isset($_SESSION['user_branch_id'])){
             $query->andFilterWhere(['orders.branch_id'=>$_SESSION['user_branch_id']]);
         }
-        $query->andFilterWhere(['sale_channel_id' => 1]);
+        $query->andFilterWhere(['sale_channel_id' => 2]);
         $query->andFilterWhere([
             '=', 'orders.created_by', $this->created_by
         ]);
