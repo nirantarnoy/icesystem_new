@@ -8,7 +8,6 @@ use yii\db\ActiveRecord;
 date_default_timezone_set('Asia/Bangkok');
 
 
-
 class Orders extends \common\models\Orders
 {
     /**
@@ -32,33 +31,33 @@ class Orders extends \common\models\Orders
                 ],
                 'value' => time(),
             ],
-            'timestampcby'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_INSERT=>'created_by',
+            'timestampcby' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'created_by',
                 ],
-                'value'=> Yii::$app->user->id,
+                'value' => Yii::$app->user->id,
             ],
-            'timestamuby'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_UPDATE=>'updated_by',
+            'timestamuby' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_by',
                 ],
-                'value'=> Yii::$app->user->id,
+                'value' => Yii::$app->user->id,
             ],
-            'timestampcompany'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_INSERT=>'company_id',
+            'timestampcompany' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'company_id',
                 ],
-                'value'=> isset($_SESSION['user_company_id'])? $_SESSION['user_company_id']:1,
+                'value' => isset($_SESSION['user_company_id']) ? $_SESSION['user_company_id'] : 1,
             ],
-            'timestampbranch'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_INSERT=>'branch_id',
+            'timestampbranch' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'branch_id',
                 ],
-                'value'=> isset($_SESSION['user_branch_id'])? $_SESSION['user_branch_id']:1,
+                'value' => isset($_SESSION['user_branch_id']) ? $_SESSION['user_branch_id'] : 1,
             ],
             'timestampupdate' => [
                 'class' => \yii\behaviors\AttributeBehavior::className(),
@@ -73,7 +72,7 @@ class Orders extends \common\models\Orders
     public static function getLastNo($date, $company_id, $branch_id)
     {
         //   $model = Orders::find()->MAX('order_no');
-        $model = Orders::find()->where(['date(order_date)' => date('Y-m-d', strtotime($date))])->andFilterWhere(['company_id'=>$company_id,'branch_id'=>$branch_id])->MAX('order_no');
+        $model = Orders::find()->where(['date(order_date)' => date('Y-m-d', strtotime($date))])->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])->MAX('order_no');
 
 //        $model_seq = \backend\models\Sequence::find()->where(['module_id'=>4])->one();
 //        //$pre = \backend\models\Sequence::find()->where(['module_id'=>15])->one();
@@ -223,7 +222,6 @@ class Orders extends \common\models\Orders
                         $total = $total + ($value->qty * $value->price);
                     }
                 }
-
             }
 
         }

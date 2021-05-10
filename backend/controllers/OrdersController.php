@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\models\Cardaily;
 use backend\models\Employee;
 use backend\models\Orderline;
+
 //use backend\models\WarehouseSearch;
 use backend\models\Pricegroup;
 use common\models\PriceCustomerType;
@@ -87,7 +88,7 @@ class OrdersController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             set_time_limit(0);
             $price_group_list_arr = null;
-           // $line_customer_id = \Yii::$app->request->post('line_customer_id');
+            // $line_customer_id = \Yii::$app->request->post('line_customer_id');
             $line_price = \Yii::$app->request->post('line_qty_cal');
             $price_group_list = \Yii::$app->request->post('price_group_list');
             $price_group_list_arr = explode(',', $price_group_list);
@@ -129,7 +130,7 @@ class OrdersController extends Controller
                         $customer_line_bill = \Yii::$app->request->post('line_bill_no' . $price_group_list_arr[$x]);
                         if (count($customer_id) > 0) {
                             // echo "has data= ".count($customer_id);return;
-                            $product_list = \backend\models\Product::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
+                            $product_list = \backend\models\Product::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
                             for ($i = 0; $i <= count($customer_id) - 1; $i++) {
                                 $cust_id = $customer_id[$i];
                                 $x_id = -1;
@@ -309,7 +310,7 @@ class OrdersController extends Controller
                         $customer_id = \Yii::$app->request->post('line_customer_id' . $price_group_list_arr[$x]);
                         $customer_line_bill = \Yii::$app->request->post('line_bill_no' . $price_group_list_arr[$x]);
                         if (count($customer_id) > 0) {
-                            $product_list = \backend\models\Product::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
+                            $product_list = \backend\models\Product::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
                             for ($i = 0; $i <= count($customer_id) - 1; $i++) {
                                 $cust_id = $customer_id[$i];
                                 $x_id = -1;
@@ -580,7 +581,7 @@ class OrdersController extends Controller
                         $html .= '<td style="text-align: center">' . $i . '</td>';
 //                        $html .= '<td>' . \backend\models\Customer::findCode($val->id) . '<input type="hidden" class="line-customer-id" name="line_customer_id' . $price_group_id . '[]" value="' . $val->id . '"></td>';
                         $html .= '<td>' . \backend\models\Customer::findName($val->id) . '<input type="hidden" class="line-customer-id" name="line_customer_id' . $price_group_id . '[]" value="' . $val->id . '"></td>';
-                  //      $html .= '<td>' . \backend\models\Customer::findName($val->id) . '</td>';
+                        //      $html .= '<td>' . \backend\models\Customer::findName($val->id) . '</td>';
                         $html .= '<td><input type="text" style="background-color: #258faf;color: white" class="form-control" name="line_bill_no' . $price_group_id . '[]" value=""></td>';
                         $html .= $this->getProducttextfield2($price_group_id);
                         $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right"></td>';
@@ -711,7 +712,7 @@ class OrdersController extends Controller
                 $html .= '<tr>';
                 $html .= '<td style="text-align: center"><input type="checkbox" class="selected-all-item"></td>';
                 $html .= '<td style="text-align: center">' . $i . '</td>';
-               // $html .= '<td>' . \backend\models\Customer::findCode($value->id) . '<input type="hidden" class="line-customer-id" name="line_customer_id[]" value="' . $value->id . '"></td>';
+                // $html .= '<td>' . \backend\models\Customer::findCode($value->id) . '<input type="hidden" class="line-customer-id" name="line_customer_id[]" value="' . $value->id . '"></td>';
                 $html .= '<td>' . \backend\models\Customer::findName($value->id) . '<input type="hidden" class="line-customer-id" name="line_customer_id[]" value="' . $value->id . '"></td>';
                 //$html .= '<td>' . \backend\models\Customer::findName($value->id) . '</td>';
                 $html .= $this->getProducttextfield($id);
@@ -1118,9 +1119,9 @@ class OrdersController extends Controller
         $html = '';
         $model = null;
         if ($txt != '') {
-            $model = Employee::find()->where(['OR', ['LIKE', 'code', $txt], ['LIKE', 'fname', $txt], ['LIKE', 'lname', $txt]])->andFilterWhere(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
+            $model = Employee::find()->where(['OR', ['LIKE', 'code', $txt], ['LIKE', 'fname', $txt], ['LIKE', 'lname', $txt]])->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
         } else {
-            $model = Employee::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
+            $model = Employee::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
         }
         foreach ($model as $value) {
             $html .= '<tr>';
@@ -1161,7 +1162,7 @@ class OrdersController extends Controller
             }
             $t_date = date('Y-m-d', strtotime($t_date));
 
-            $model = Cardaily::find()->where(['car_id' => $id, 'trans_date' => $t_date])->andFilterWhere(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
+            $model = Cardaily::find()->where(['car_id' => $id, 'trans_date' => $t_date])->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
             $i = 0;
             if ($model) {
                 foreach ($model as $value) {
@@ -1169,13 +1170,13 @@ class OrdersController extends Controller
                     $selected = '';
                     if ($value->is_driver == 1) {
                         $selected = 'selected';
-                    }else{
+                    } else {
                         $selected = '';
                     }
                     $selected2 = '';
                     if ($value->is_driver == 0) {
                         $selected2 = 'selected';
-                    }else{
+                    } else {
                         $selected2 = '';
                     }
                     $emp_code = Employee::findCode($value->employee_id);
@@ -1271,6 +1272,15 @@ class OrdersController extends Controller
 
     public function actionFindPaymentList()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+
         $order_id = \Yii::$app->request->post('id');
         $price_group_id = \Yii::$app->request->post('price_group_id');
         $customer_paylist_id = \Yii::$app->request->post('order_id');
@@ -1307,7 +1317,7 @@ class OrdersController extends Controller
                                 <td>
                                     <select name="line_payment_id[]" class="form-control" id="" onchange="getCondition($(this))" required>
                                         <option value="">--วิธีชำระเงิน--</option>
-                                        ' . $this->showpayoption($value->customer_id) . '
+                                        ' . $this->showpayoption($value->customer_id, $company_id, $branch_id) . '
                                     </select>
                                 </td>
                                 <td>
@@ -1343,11 +1353,11 @@ class OrdersController extends Controller
         return $name;
     }
 
-    public function showpayoption($customer_id)
+    public function showpayoption($customer_id, $company_id, $branch_id)
     {
         $model_cus = \backend\models\Customer::findPayMethod($customer_id);
         $html = '';
-        $model = \backend\models\Paymentmethod::find()->all();
+        $model = \backend\models\Paymentmethod::find()->where(['company_id'=>$company_id, 'branch_id'=>$branch_id])->all();
         if ($model) {
             foreach ($model as $value) {
                 $selected = '';
@@ -1434,6 +1444,16 @@ class OrdersController extends Controller
 
     public function actionAddpayment()
     {
+
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+
         $order_id = \Yii::$app->request->post('payment_order_id');
         $customer_id = \Yii::$app->request->post('line_pay_customer_id');
         $pay_method = \Yii::$app->request->post('line_payment_id');
@@ -1461,6 +1481,8 @@ class OrdersController extends Controller
             $model->trans_date = date('Y-m-d H:i:s', strtotime($order_pay_date));
             $model->order_id = $order_id;
             $model->status = 0;
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
             if ($model->save(false)) {
                 if (count($customer_id) > 0) {
                     for ($i = 0; $i <= count($customer_id) - 1; $i++) {
@@ -1482,7 +1504,6 @@ class OrdersController extends Controller
                         if ($model_line->save(false)) {
                             $res += 1;
                         }
-
                     }
                 }
             } else {
@@ -1746,7 +1767,7 @@ class OrdersController extends Controller
                     if ($model_check_has_issue) continue;
                     $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issuelist[$i]])->all();
                     foreach ($model_issue_line as $val2) {
-                        if($val2->qty <= 0 || $val2->qty != null)continue;
+                        if ($val2->qty <= 0 || $val2->qty != null) continue;
                         $model_order_stock = new \common\models\OrderStock();
                         $model_order_stock->issue_id = $issuelist[$i];
                         $model_order_stock->product_id = $val2->product_id;
@@ -1760,15 +1781,17 @@ class OrdersController extends Controller
                                 $model_check_has_issue->status = 2;
                                 $model_check_has_issue->save(false);
                             }
-                            $this->updateStock($val2->product_id,$val2->qty,6,'');
+                            $this->updateStock($val2->product_id, $val2->qty, 6, '');
                         }
                     }
                 }
             }
         }
     }
-    public function updateStock($product_id,$qty,$wh_id,$journal_no){
-        if($product_id!= null && $qty > 0){
+
+    public function updateStock($product_id, $qty, $wh_id, $journal_no)
+    {
+        if ($product_id != null && $qty > 0) {
             $model_trans = new \backend\models\Stocktrans();
             $model_trans->journal_no = $journal_no;
             $model_trans->trans_date = date('Y-m-d H:i:s');
@@ -1777,9 +1800,9 @@ class OrdersController extends Controller
             $model_trans->warehouse_id = 6;
             $model_trans->stock_type = 2; // 1 in 2 out
             $model_trans->activity_type_id = 6; // 6 issue car
-            if($model_trans->save(false)){
-                $model = \backend\models\Stocksum::find()->where(['warehouse_id'=>6,'product_id'=>$product_id])->one();
-                if($model){
+            if ($model_trans->save(false)) {
+                $model = \backend\models\Stocksum::find()->where(['warehouse_id' => 6, 'product_id' => $product_id])->one();
+                if ($model) {
                     $model->qty = $model->qty - (int)$qty;
                     $model->save(false);
                 }

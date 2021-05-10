@@ -65,6 +65,16 @@ class PaymentreceiveController extends Controller
      */
     public function actionCreate()
     {
+
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+
         $model = new Paymentreceive();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -85,6 +95,8 @@ class PaymentreceiveController extends Controller
             $model->trans_date = date('Y-m-d H:i:s', strtotime($t_date));
             $model->journal_no = $model->getLastNo(date('Y-m-d'));
             $model->status = 1;
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
             if ($model->save()) {
                 if ($line_order != null) {
                     if (count($line_order) > 0) {
