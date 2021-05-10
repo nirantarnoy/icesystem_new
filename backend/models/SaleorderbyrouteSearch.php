@@ -75,6 +75,13 @@ class SaleorderbyrouteSearch extends QuerySaleorderByRoute
             //'!=','route_code','NULL'
         ]);
 
+        if(isset($_SESSION['user_company_id'])){
+            $query->andFilterWhere(['company_id'=>$_SESSION['user_company_id']]);
+        }
+        if(isset($_SESSION['user_branch_id'])){
+            $query->andFilterWhere(['branch_id'=>$_SESSION['user_branch_id']]);
+        }
+
         if($this->order_date != ''){
             $date_data = explode(' - ',$this->order_date);
             $fdate = null;
