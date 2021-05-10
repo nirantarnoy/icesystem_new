@@ -1210,6 +1210,12 @@ class OrdersController extends Controller
                                        <td>
                                            <input type="text" class="form-control line-car-emp-name" name="line_car_emp_name[]" value="" readonly>
                                        </td>
+                                         <td>
+                                        <select name="line_car_driver[]" class="form-control line-car-driver" id="">
+                                            <option value="1">YES</option>
+                                            <option value="0">NO</option>
+                                        </select>
+                                    </td>
                                        <td>
                                            <input type="hidden" class="line-car-emp-id" value="" name="line_car_emp_id[]">
                                            <input type="hidden" class="line-car-daily-id" value="" name="line_car_daily_id[]">
@@ -1357,7 +1363,7 @@ class OrdersController extends Controller
     {
         $model_cus = \backend\models\Customer::findPayMethod($customer_id);
         $html = '';
-        $model = \backend\models\Paymentmethod::find()->where(['company_id'=>$company_id, 'branch_id'=>$branch_id])->all();
+        $model = \backend\models\Paymentmethod::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
         if ($model) {
             foreach ($model as $value) {
                 $selected = '';
