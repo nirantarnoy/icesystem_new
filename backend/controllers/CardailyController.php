@@ -70,6 +70,13 @@ class CardailyController extends Controller
         $searchModel = new CardailySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        if(isset($_SESSION['user_company_id'])){
+            $dataProvider->query->andFilterWhere(['car_daily.company_id'=>$company_id]);
+        }
+        if(isset($_SESSION['user_branch_id'])){
+            $dataProvider->query->andFilterWhere(['car_daily.branch_id'=>$brach_id]);
+        }
+
         if ($save_emp_route != null) {
             $searchModel->route_id = $save_emp_route;
             $dataProvider->query->andFilterWhere(['delivery_route_id' => $save_emp_route]);
@@ -85,6 +92,9 @@ class CardailyController extends Controller
             $searchModel->trans_date = $trans_date;
             $dataProvider->query->andFilterWhere(['date(car_daily.trans_date)' => $trans_date])->all();
         }
+
+
+
         //echo $dataProvider->
 
         //  echo $route_type_id;return;
