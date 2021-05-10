@@ -1477,7 +1477,7 @@ class OrdersController extends Controller
         $res = 0;
         if ($order_id > 0 && $customer_id != null) {
             $model = new \backend\models\Paymenttrans();
-            $model->trans_no = $model->getLastNo();
+            $model->trans_no = $model->getLastNo($company_id, $branch_id);
             $model->trans_date = date('Y-m-d H:i:s', strtotime($order_pay_date));
             $model->order_id = $order_id;
             $model->status = 0;

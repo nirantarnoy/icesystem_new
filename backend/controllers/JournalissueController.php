@@ -128,7 +128,7 @@ class JournalissueController extends Controller
             $model_trans->qty = $qty;
             $model_trans->warehouse_id = $wh_id;
             $model_trans->stock_type = 2; // 1 in 2 out
-            $model_trans->activity_type_id = 2; // 1 prod rec 2 issue car
+            $model_trans->activity_type_id = 6; // 6 issue cars
             $model_trans->company_id = $company_id;
             $model_trans->branch_id = $branch_id;
             if ($model_trans->save(false)) {
