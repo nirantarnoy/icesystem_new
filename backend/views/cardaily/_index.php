@@ -46,8 +46,10 @@ $model_new = $model_car;
             // if (\backend\models\Streamer::getStatus($value->NAME)) $status_color = 'Open';
             //    print_r($model);
             $emp_daily_name = '';
+            $xx_id = 0;
             $xi = 0;
             foreach ($model as $value2) {
+                $xx_id = $value2->id;
                 if ($value2->car_id == $value->id) {
                     $status_color = 'bg-success';
                     if($xi == 0){
@@ -84,7 +86,7 @@ $model_new = $model_car;
                         <!--                       <img src="../web/uploads/images/streamer/streamer.jpg" width="50%" alt="">-->
                     </div>
                     <div style="text-align: center">
-                        <p style="color: #fddfdf"><?=$emp_daily_name?></p>
+                        <p style="color: #fddfdf"><?=$emp_daily_name?> and id= <?=$xx_id?></p>
                     </div>
 
                     <a href="#" data-id="<?= $value->id ?>" data-var="<?= $value->emp_qty ?>"
