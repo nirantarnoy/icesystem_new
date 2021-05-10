@@ -72,12 +72,12 @@ class CardailySearch extends Cardaily
 //            'updated_by' => $this->updated_by,
    //     ]);
 
-        if(isset($_SESSION['user_company_id'])){
-            $query->andFilterWhere(['car_daily.company_id'=>$_SESSION['user_company_id']]);
-        }
-        if(isset($_SESSION['user_branch_id'])){
-            $query->andFilterWhere(['car_daily.branch_id'=>$_SESSION['user_branch_id']]);
-        }
+//        if(isset($_SESSION['user_company_id'])){
+//            $query->andFilterWhere(['car_daily.company_id'=>$_SESSION['user_company_id']]);
+//        }
+//        if(isset($_SESSION['user_branch_id'])){
+//            $query->andFilterWhere(['car_daily.branch_id'=>$_SESSION['user_branch_id']]);
+//        }
 
         if($this->route_id != null){
             $query->andFilterWhere(['sale_group.delivery_route_id'=>$this->route_id]);
