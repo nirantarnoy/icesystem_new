@@ -68,6 +68,15 @@ class PosController extends Controller
 
     public function actionGetcustomerprice()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+
         $data = [];
         $data_cus_price = [];
         $data_basic_price = [];
@@ -80,7 +89,7 @@ class PosController extends Controller
                 }
             }
         }
-        $model_basic_price = \backend\models\Product::find()->all();
+        $model_basic_price = \backend\models\Product::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
         if ($model_basic_price) {
             foreach ($model_basic_price as $value2) {
                 array_push($data_basic_price, ['product_id' => $value2->id, 'sale_price' => $value2->sale_price]);
@@ -92,8 +101,17 @@ class PosController extends Controller
 
     public function actionGetoriginprice()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+
         $data = [];
-        $model_basic_price = \backend\models\Product::find()->where(['is_pos_item' => 1])->all();
+        $model_basic_price = \backend\models\Product::find()->where(['is_pos_item' => 1, 'company_id' => $company_id, 'branch_id' => $branch_id])->all();
         if ($model_basic_price) {
             foreach ($model_basic_price as $value) {
                 array_push($data, ['product_id' => $value->id, 'sale_price' => $value->sale_price]);
@@ -167,6 +185,8 @@ class PosController extends Controller
             $model_order->payment_status = 0;
             $model_order->order_total_amt = $pay_total_amount == null ? 0 : $pay_total_amount;
             $model_order->status = 1;
+            $model_order->company_id = $company_id;
+            $model_order->branch_id = $branch_id;
             if ($model_order->save(false)) {
                 if (count($product_list) > 0) {
                     for ($i = 0; $i <= count($product_list) - 1; $i++) {
@@ -213,6 +233,8 @@ class PosController extends Controller
                     $model->trans_date = date('Y-m-d H:i:s');
                     $model->order_id = $model_order->id;
                     $model->status = 0;
+                    $model->company_id = $company_id;
+                    $model->branch_id = $branch_id;
                     if ($model->save()) {
                         if ($customer_id > 0) {
                             //$pay_method_name = \backend\models\Paymentmethod::findName($pay_method[$i]);
@@ -240,6 +262,8 @@ class PosController extends Controller
                     $model->trans_date = date('Y-m-d H:i:s');
                     $model->order_id = $model_order->id;
                     $model->status = 0;
+                    $model->company_id = $company_id;
+                    $model->branch_id = $branch_id;
                     if ($model->save()) {
                         if ($customer_id > 0) {
                             //$pay_method_name = \backend\models\Paymentmethod::findName($pay_method[$i]);
