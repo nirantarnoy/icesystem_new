@@ -225,7 +225,7 @@ class CardailyController extends Controller
        //  print_r($car_id);return;
         if ($car_id) {
             if ($emp_id != null) {
-                 count($emp_id);return;
+                // count($emp_id);return;
                 for ($i = 0; $i <= count($emp_id) - 1; $i++) {
                     if ($emp_id[$i] == '') $emp_id[$i] = 0;
                     if (!$this->checkOld($emp_id[$i], $car_id, $t_date)) {
