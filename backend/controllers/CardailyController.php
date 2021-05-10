@@ -92,8 +92,7 @@ class CardailyController extends Controller
 //            $searchModel->trans_date = $trans_date;
 //            $dataProvider->query->andFilterWhere(['date(car_daily.trans_date)' => $trans_date])->all();
 //        }
-
-
+        $dataProvider->query->limit(100);
 
         //echo $dataProvider->
 
