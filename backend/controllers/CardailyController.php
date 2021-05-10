@@ -206,7 +206,7 @@ class CardailyController extends Controller
         $emp_id = \Yii::$app->request->post('line_car_emp_id');
         $isdriver = \Yii::$app->request->post('line_car_driver');
 
-        print_r(\Yii::$app->request->post());return;
+      //  print_r(\Yii::$app->request->post());return;
 
         if ($route_id == null || $route_id == '') {
             $route_id = 0;
