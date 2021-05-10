@@ -73,10 +73,10 @@ class CardailySearch extends Cardaily
         ]);
 
         if(isset($_SESSION['user_company_id'])){
-            $query->andFilterWhere(['car.company_id'=>$_SESSION['user_company_id']]);
+            $query->andFilterWhere(['car_daily.company_id'=>$_SESSION['user_company_id']]);
         }
         if(isset($_SESSION['user_branch_id'])){
-            $query->andFilterWhere(['car.branch_id'=>$_SESSION['user_branch_id']]);
+            $query->andFilterWhere(['car_daily.branch_id'=>$_SESSION['user_branch_id']]);
         }
 
         if($this->route_id != null){
