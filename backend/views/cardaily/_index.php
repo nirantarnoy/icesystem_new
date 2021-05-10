@@ -13,7 +13,7 @@ $model_new = $model_car;
 
 //}
 //$emp_data = \common\models\USRPWOPERSON::find()->where(['WCID' => 'PTVB'])->all();
-//echo count($model);return;
+echo count($model);return;
 //print_r($model);return;
 ?>
 <br/>
