@@ -221,7 +221,7 @@ class CardailyController extends Controller
             }
             $t_date = date('Y-m-d', strtotime($x_date2));
         }
-        // print_r($emp_id);return;
+         print_r($car_id);return;
         if ($car_id) {
             if ($emp_id != null) {
                  count($emp_id);return;
