@@ -46,25 +46,24 @@ $model_new = $model_car;
             // if (\backend\models\Streamer::getStatus($value->NAME)) $status_color = 'Open';
             //    print_r($model);
             $emp_daily_name = '';
-            $xx_id = 0;
+            //$xx_id = 0;
             $xi = 0;
             foreach ($model as $value2) {
-
                 if ($value2->car_id == $value->id) {
                     $status_color = 'bg-success';
-                    if($xi == 0){
+                    if ($xi == 0) {
                         $x_name = \backend\models\Employee::findName2($value2->employee_id);
-                        if($x_name != ''){
+                        if ($x_name != '') {
                             $emp_daily_name = $x_name;
                         }
-                        $xx_id = $value2->id;
-                    }else{
+                        //$xx_id = $value2->id;
+                    } else {
                         $x_name = \backend\models\Employee::findName2($value2->employee_id);
-                        $xx_id = $value2->id;
-                        if($x_name != ''){
-                            if($emp_daily_name !=''){
-                                $emp_daily_name = $emp_daily_name.','. $x_name;
-                            }else{
+                        //$xx_id = $value2->id;
+                        if ($x_name != '') {
+                            if ($emp_daily_name != '') {
+                                $emp_daily_name = $emp_daily_name . ',' . $x_name;
+                            } else {
                                 $emp_daily_name = $x_name;
                             }
 
@@ -72,7 +71,7 @@ $model_new = $model_car;
 
                     }
                 }
-                $xi +=1;
+                $xi += 1;
             }
             //  return;
             ?>
@@ -88,7 +87,7 @@ $model_new = $model_car;
                         <!--                       <img src="../web/uploads/images/streamer/streamer.jpg" width="50%" alt="">-->
                     </div>
                     <div style="text-align: center">
-                        <p style="color: #fddfdf"><?=$emp_daily_name?> and id= <?=$xx_id?></p>
+                        <p style="color: #fddfdf"><?= $emp_daily_name ?></p>
                     </div>
 
                     <a href="#" data-id="<?= $value->id ?>" data-var="<?= $value->emp_qty ?>"
@@ -175,11 +174,12 @@ $model_new = $model_car;
                         <div class="col-lg-3"></div>
                         <div class="col-lg-3" style="text-align: center">
                             <div class="label">เลขไมล์</div>
-                            <input type="text" style="text-align: center" class="form-control meter-last" value="0" readonly>
+                            <input type="text" style="text-align: center" class="form-control meter-last" value="0"
+                                   readonly>
                         </div>
                         <div class="col-lg-3">
                             <div class="label" style="text-align: center">เลขไมล์วันนี้</div>
-                            <input type="text"  style="text-align: center"  class="form-control meter-today" value="0">
+                            <input type="text" style="text-align: center" class="form-control meter-today" value="0">
                         </div>
                         <div class="col-lg-3"></div>
                     </div>
