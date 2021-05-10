@@ -34,7 +34,7 @@ class PaymentTrans extends \yii\db\ActiveRecord
     {
         return [
             [['trans_date'], 'safe'],
-            [['order_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['order_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','company_id','branch_id'], 'integer'],
             [['trans_no'], 'string', 'max' => 255],
         ];
     }
