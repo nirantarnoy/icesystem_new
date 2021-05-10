@@ -71,6 +71,14 @@ class CarController extends Controller
      */
     public function actionCreate()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
         $model = new Car();
         if ($model->load(Yii::$app->request->post())) {
             $emp_list = $model->emp_id;
@@ -81,6 +89,8 @@ class CarController extends Controller
                 $photo->saveAs(Yii::getAlias('@backend') . '/web/uploads/images/car/' . $photo_name);
                 $model->photo = $photo_name;
             }
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
             if ($model->save()) {
                 if (count($emp_list) > 0) {
                     \common\models\CarEmp::deleteAll(['car_id' => $model->id]);
@@ -93,6 +103,8 @@ class CarController extends Controller
                             $model_x->car_id = $model->id;
                             $model_x->emp_id = $emp_list[$i];
                             $model_x->status = 1;
+                            $model_x->company_id = $company_id;
+                            $model_x->branch_id = $branch_id;
                             $model_x->save();
                         }
                     }

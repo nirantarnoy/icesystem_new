@@ -28,7 +28,7 @@ class CarEmp extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['car_id', 'emp_id', 'status'], 'integer'],
+            [['car_id', 'emp_id', 'status', 'company_id', 'branch_id'], 'integer'],
         ];
     }
 

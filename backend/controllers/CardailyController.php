@@ -255,6 +255,17 @@ class CardailyController extends Controller
 
     public function actionCopydailytrans()
     {
+
+
+        $company_id = 1;
+        $brach_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $brach_id = $_SESSION['user_branch_id'];
+        }
+
         $f_date = \Yii::$app->request->post('from_date');
         $t_date = \Yii::$app->request->post('to_date');
         $res = 0;
@@ -274,10 +285,10 @@ class CardailyController extends Controller
             }
 
             //  $model = \backend\models\Cardaily::find()->where(['AND', ['>=', 'date(trans_date)', $from_date], ['<=', 'date(trans_date)', $to_date]])->all();
-            $model = \backend\models\Cardaily::find()->where(['date(trans_date)' => $from_date])->all();
+            $model = \backend\models\Cardaily::find()->where(['date(trans_date)' => $from_date, 'company_id' => $company_id, 'branch_id' => $brach_id])->all();
             if ($model) {
                 //foreach ($model as $value) {
-                \backend\models\Cardaily::deleteAll(['date(trans_date)' => $to_date]);
+                \backend\models\Cardaily::deleteAll(['date(trans_date)' => $to_date, 'company_id' => $company_id, 'branch_id' => $brach_id]);
                 foreach ($model as $line_value) {
                     if ($this->check_dup($line_value->employee_id, $line_value->car_id, date('Y-m-d', strtotime($to_date)))) {
                         continue;
@@ -315,6 +326,15 @@ class CardailyController extends Controller
 
     public function actionCopyfromoriginal()
     {
+        $company_id = 1;
+        $brach_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $brach_id = $_SESSION['user_branch_id'];
+        }
+
         $t_date = \Yii::$app->request->post('to_date');
         $res = 0;
 
@@ -328,10 +348,10 @@ class CardailyController extends Controller
                 $to_date = $b[2] . '/' . $b[1] . '/' . $b[0];
             }
 
-            $model = \common\models\CarEmp::find()->all();
+            $model = \common\models\CarEmp::find()->where(['company_id' => $company_id, 'branch_id' => $brach_id])->all();
             if ($model) {
                 //foreach ($model as $value) {
-                \backend\models\Cardaily::deleteAll(['date(trans_date)' => $to_date]);
+                \backend\models\Cardaily::deleteAll(['date(trans_date)' => $to_date, 'company_id' => $company_id, 'branch_id' => $brach_id]);
                 foreach ($model as $line_value) {
                     $model_assign_line = new \backend\models\Cardaily();
                     $model_assign_line->car_id = $line_value->car_id;
