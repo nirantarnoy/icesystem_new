@@ -51,7 +51,7 @@ class CardailyController extends Controller
             // print_r(\Yii::$app->request->get());return;
             //  echo "has data";return;
             $save_emp_date = date('Y-m-d', strtotime(\Yii::$app->request->queryParams[1]['trans_date']));
-             //echo $save_emp_date;return;
+            //echo $save_emp_date;return;
         }
         if (!empty(\Yii::$app->request->queryParams[1]['route_id'])) {
             $save_emp_route = \Yii::$app->request->get('route_id');
@@ -70,11 +70,11 @@ class CardailyController extends Controller
         $searchModel = new CardailySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if(isset($_SESSION['user_company_id'])){
-            $dataProvider->query->andFilterWhere(['car_daily.company_id'=>$company_id]);
+        if (isset($_SESSION['user_company_id'])) {
+            $dataProvider->query->andFilterWhere(['car_daily.company_id' => $company_id]);
         }
-        if(isset($_SESSION['user_branch_id'])){
-            $dataProvider->query->andFilterWhere(['car_daily.branch_id'=>$brach_id]);
+        if (isset($_SESSION['user_branch_id'])) {
+            $dataProvider->query->andFilterWhere(['car_daily.branch_id' => $brach_id]);
         }
 
         if ($save_emp_route != null) {
@@ -92,7 +92,7 @@ class CardailyController extends Controller
 //            $searchModel->trans_date = $trans_date;
 //            $dataProvider->query->andFilterWhere(['date(car_daily.trans_date)' => $trans_date])->all();
 //        }
-        $dataProvider->query->limit(100);
+        $dataProvider->pagination->pageSize = 50;
 
         //echo $dataProvider->
 
