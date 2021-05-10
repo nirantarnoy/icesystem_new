@@ -229,7 +229,7 @@ class CardailyController extends Controller
             if ($emp_id != null) {
                 // count($emp_id);return;
                 for ($i = 0; $i <= count($emp_id) - 1; $i++) {
-                    if ($emp_id[$i] == '') $emp_id[$i] = 0;
+                    if ($emp_id[$i] == '') continue; // $emp_id[$i] = 0;
                     if ($this->checkOld($emp_id[$i], $car_id, $t_date)) {
                        // echo "has no ";return;
                         $model = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date, 'employee_id' => $emp_id[$i], 'car_id' => $car_id])->one();
