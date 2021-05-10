@@ -14,7 +14,7 @@ $model_new = $model_car;
 //}
 //$emp_data = \common\models\USRPWOPERSON::find()->where(['WCID' => 'PTVB'])->all();
 
-print_r($model);return;
+//print_r($model);return;
 ?>
 <br/>
 <div class="row">
@@ -60,6 +60,7 @@ print_r($model);return;
                         $xx_id = $value2->id;
                     }else{
                         $x_name = \backend\models\Employee::findName2($value2->employee_id);
+                        $xx_id = $value2->id;
                         if($x_name != ''){
                             if($emp_daily_name !=''){
                                 $emp_daily_name = $emp_daily_name.','. $x_name;
