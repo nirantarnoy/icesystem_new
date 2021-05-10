@@ -59,7 +59,7 @@ class CardailySearch extends Cardaily
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
+    //    $query->andFilterWhere([
 //            'id' => $this->id,
 //            'car_id' => $this->car_id,
 //            'employee_id' => $this->employee_id,
@@ -70,7 +70,7 @@ class CardailySearch extends Cardaily
 //            'updated_at' => $this->updated_at,
 //            'created_by' => $this->created_by,
 //            'updated_by' => $this->updated_by,
-        ]);
+   //     ]);
 
         if(isset($_SESSION['user_company_id'])){
             $query->andFilterWhere(['car_daily.company_id'=>$_SESSION['user_company_id']]);

@@ -51,7 +51,7 @@ class CardailyController extends Controller
             // print_r(\Yii::$app->request->get());return;
             //  echo "has data";return;
             $save_emp_date = date('Y-m-d', strtotime(\Yii::$app->request->queryParams[1]['trans_date']));
-            // echo $save_emp_date;return;
+             echo $save_emp_date;return;
         }
         if (!empty(\Yii::$app->request->queryParams[1]['route_id'])) {
             $save_emp_route = \Yii::$app->request->get('route_id');
