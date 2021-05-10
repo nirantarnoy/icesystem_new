@@ -206,9 +206,9 @@ class CardailyController extends Controller
         $emp_id = \Yii::$app->request->post('line_car_emp_id');
         $isdriver = \Yii::$app->request->post('line_car_driver');
 
-        print_r(\Yii::$app->request->post());
-        echo count($emp_id);
-        return;
+//        print_r(\Yii::$app->request->post());
+//        echo count($emp_id);
+//        return;
 
         if ($route_id == null || $route_id == '') {
             $route_id = 0;
@@ -230,7 +230,15 @@ class CardailyController extends Controller
                 // count($emp_id);return;
                 for ($i = 0; $i <= count($emp_id) - 1; $i++) {
                     if ($emp_id[$i] == '') $emp_id[$i] = 0;
-                    if (!$this->checkOld($emp_id[$i], $car_id, $t_date)) {
+                    if ($this->checkOld($emp_id[$i], $car_id, $t_date)) {
+                        echo "has no ";return;
+                        $model = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date, 'employee_id' => $emp_id[$i], 'car_id' => $car_id])->one();
+                        if ($model) {
+                            $model->is_driver = $isdriver[$i] == 1 ? 1 : 0;
+                            $model->save(false);
+                        }
+
+                    } else {
                         echo "has ";return;
                         $model = new \backend\models\Cardaily();
                         $model->car_id = $car_id;
@@ -241,13 +249,6 @@ class CardailyController extends Controller
                         $model->company_id = \Yii::$app->user->identity->company_id;
                         $model->branch_id = \Yii::$app->user->identity->branch_id;
                         $model->save(false);
-                    } else {
-                        echo "has no ";return;
-                        $model = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date, 'employee_id' => $emp_id[$i], 'car_id' => $car_id])->one();
-                        if ($model) {
-                            $model->is_driver = $isdriver[$i] == 1 ? 1 : 0;
-                            $model->save(false);
-                        }
                     }
 
                 }
