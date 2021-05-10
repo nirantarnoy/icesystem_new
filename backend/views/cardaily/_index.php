@@ -14,7 +14,7 @@ $model_new = $model_car;
 //}
 //$emp_data = \common\models\USRPWOPERSON::find()->where(['WCID' => 'PTVB'])->all();
 
-//print_r($model);return;
+print_r($model);return;
 ?>
 <br/>
 <div class="row">
