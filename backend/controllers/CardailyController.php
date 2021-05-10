@@ -206,6 +206,7 @@ class CardailyController extends Controller
         $emp_id = \Yii::$app->request->post('line_car_emp_id');
         $isdriver = \Yii::$app->request->post('line_car_driver');
 
+        print_r(\Yii::$app->request->post());return;
 
         if ($route_id == null || $route_id == '') {
             $route_id = 0;
@@ -221,7 +222,7 @@ class CardailyController extends Controller
             }
             $t_date = date('Y-m-d', strtotime($x_date2));
         }
-         print_r($car_id);return;
+       //  print_r($car_id);return;
         if ($car_id) {
             if ($emp_id != null) {
                  count($emp_id);return;
