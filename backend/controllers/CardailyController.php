@@ -231,6 +231,7 @@ class CardailyController extends Controller
                 for ($i = 0; $i <= count($emp_id) - 1; $i++) {
                     if ($emp_id[$i] == '') $emp_id[$i] = 0;
                     if (!$this->checkOld($emp_id[$i], $car_id, $t_date)) {
+                        echo "has ";return;
                         $model = new \backend\models\Cardaily();
                         $model->car_id = $car_id;
                         $model->employee_id = $emp_id[$i];
@@ -241,6 +242,7 @@ class CardailyController extends Controller
                         $model->branch_id = \Yii::$app->user->identity->branch_id;
                         $model->save(false);
                     } else {
+                        echo "has no ";return;
                         $model = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date, 'employee_id' => $emp_id[$i], 'car_id' => $car_id])->one();
                         if ($model) {
                             $model->is_driver = $isdriver[$i] == 1 ? 1 : 0;
