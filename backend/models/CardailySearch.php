@@ -42,7 +42,7 @@ class CardailySearch extends Cardaily
      */
     public function search($params)
     {
-        $query = Cardaily::find()->select(['car_daily.ids', 'car_daily.car_id', 'car_daily.employee_id', 'sale_group.delivery_route_id', 'car.plate_number', 'car_daily.trans_date'])->innerJoin('car', 'car.id=car_daily.car_id')
+        $query = Cardaily::find()->select(['car_daily.id', 'car_daily.car_id', 'car_daily.employee_id', 'sale_group.delivery_route_id', 'car.plate_number', 'car_daily.trans_date'])->innerJoin('car', 'car.id=car_daily.car_id')
             ->innerJoin('sale_group', 'car.sale_group_id = sale_group.id');
 
         // add conditions that should always apply here
