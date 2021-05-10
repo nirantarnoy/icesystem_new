@@ -68,6 +68,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        if(\Yii::$app->user->identity->id == null){
+            return $this->redirect(['site/login']);
+        }
       //  echo \Yii::$app->user->identity->email;return;
 //        $company_id = 1;
 //        $branch_id = 1;
