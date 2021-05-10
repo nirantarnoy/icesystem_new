@@ -224,7 +224,7 @@ class CardailyController extends Controller
         // print_r($emp_id);return;
         if ($car_id) {
             if ($emp_id != null) {
-                // count($emp_id);return;
+                 count($emp_id);return;
                 for ($i = 0; $i <= count($emp_id) - 1; $i++) {
                     if ($emp_id[$i] == '') $emp_id[$i] = 0;
                     if (!$this->checkOld($emp_id[$i], $car_id, $t_date)) {
@@ -234,6 +234,8 @@ class CardailyController extends Controller
                         $model->trans_date = $t_date;
                         $model->is_driver = $isdriver[$i] == 1 ? 1 : 0;
                         $model->status = 1;
+                        $model->company_id = \Yii::$app->user->identity->company_id;
+                        $model->branch_id = \Yii::$app->user->identity->branch_id;
                         $model->save(false);
                     } else {
                         $model = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date, 'employee_id' => $emp_id[$i], 'car_id' => $car_id])->one();
@@ -310,6 +312,8 @@ class CardailyController extends Controller
                     $model_assign_line->employee_id = $line_value->employee_id;
                     $model_assign_line->is_driver = $line_value->is_driver;
                     $model_assign_line->status = 1;
+                    $model_assign_line->company_id = $company_id;
+                    $model_assign_line->branch_id = $brach_id;
                     $model_assign_line->trans_date = date('Y-m-d', strtotime($to_date));
                     if ($model_assign_line->save(false)) {
                         $res += 1;
@@ -366,6 +370,8 @@ class CardailyController extends Controller
                     $model_assign_line->car_id = $line_value->car_id;
                     $model_assign_line->employee_id = $line_value->emp_id;
                     $model_assign_line->status = 1;
+                    $model_assign_line->company_id = $company_id;
+                    $model_assign_line->branch_id = $brach_id;
                     $model_assign_line->trans_date = date('Y-m-d', strtotime($to_date));
                     if ($model_assign_line->save(false)) {
                         $res += 1;
