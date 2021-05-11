@@ -65,25 +65,25 @@ class Customer extends \common\models\Customer
         ];
     }
 
-    public function findCode($id)
+    public static function findCode($id)
     {
         $model = Customer::find()->where(['id' => $id])->one();
         return $model != null ? $model->code : '';
     }
 
-    public function findName($id)
+    public static function findName($id)
     {
         $model = Customer::find()->where(['id' => $id])->one();
         return $model != null ? $model->name : '';
     }
 
-    public function findPayMethod($id)
+    public static function findPayMethod($id)
     {
         $model = Customer::find()->where(['id' => $id])->one();
         return $model != null ? $model->payment_method_id : 0;
     }
 
-    public function findPayTerm($id)
+    public static function findPayTerm($id)
     {
         $model = Customer::find()->where(['id' => $id])->one();
         return $model != null ? $model->payment_term_id : 0;

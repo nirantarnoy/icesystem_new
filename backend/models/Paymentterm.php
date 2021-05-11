@@ -65,7 +65,7 @@ class Paymentterm extends \common\models\PaymentTerm
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';
 //    }
-    public function findName($id){
+    public static function findName($id){
         $model = Paymentterm::find()->where(['id'=>$id])->one();
         return $model!= null?$model->name:'';
     }

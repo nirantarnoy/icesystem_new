@@ -65,11 +65,11 @@ class Deliveryroute extends \common\models\DeliveryRoute
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';
 //    }
-    public function findName($id){
+    public static function findName($id){
         $model = Deliveryroute::find()->where(['id'=>$id])->one();
         return $model != null?$model->name:'';
     }
-    public function countCust($id){
+    public static function countCust($id){
         $model = \backend\models\Customer::find()->where(['delivery_route_id'=>$id])->count();
         return $model != null?$model:0;
     }

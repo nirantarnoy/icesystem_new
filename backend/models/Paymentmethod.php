@@ -68,13 +68,13 @@ class Paymentmethod extends \common\models\PaymentMethod
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';
 //    }
-    public function findName($id)
+    public static function findName($id)
     {
         $model = Paymentmethod::find()->where(['id' => $id])->one();
         return $model != null ? $model->name : '';
     }
 
-    public function findPaytype($id)
+    public static function findPaytype($id)
     {
         $model = Paymentmethod::find()->where(['id' => $id])->one();
         return $model != null ? $model->pay_type : 0;

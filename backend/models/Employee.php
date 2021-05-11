@@ -65,15 +65,15 @@ class Employee extends \common\models\Employee
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';
 //    }
-    public function findCode($id){
+    public static function findCode($id){
         $model = Employee::find()->where(['id'=>$id])->one();
         return $model !=null?$model->code:'';
     }
-    public function findFullName($id){
+    public static function findFullName($id){
         $model = Employee::find()->where(['id'=>$id])->one();
         return $model !=null?$model->fname. ' '.$model->lname:'';
     }
-    public function findName2($id){
+    public static function findName2($id){
         $model = Employee::find()->where(['id'=>$id])->one();
         return $model !=null?$model->fname:'';
     }

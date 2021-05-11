@@ -65,7 +65,7 @@ class Salecomcon extends \common\models\SaleComSummary
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';
 //    }
-    public function findCode($id){
+    public static function findCode($id){
         $model = Salecomcon::find()->where(['id'=>$id])->one();
         return $model!= null?$model->code:'';
     }

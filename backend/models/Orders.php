@@ -228,13 +228,13 @@ class Orders extends \common\models\Orders
         return $total;
     }
 
-    public function getNumber($id)
+    public static function getNumber($id)
     {
         $model = Orders::find()->where(['id' => $id])->one();
         return $model != null ? $model->order_no : '';
     }
 
-    public function getOrderdate($id)
+    public static function getOrderdate($id)
     {
         $model = Orders::find()->where(['id' => $id])->one();
         return $model != null ? $model->order_date : null;

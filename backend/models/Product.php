@@ -61,19 +61,19 @@ class Product extends \common\models\Product
         ];
     }
 
-    public function findCode($id){
+    public static function findCode($id){
         $model = Product::find()->where(['id'=>$id])->one();
         return $model != null?$model->code:'';
     }
-    public function findName($id){
+    public static function findName($id){
         $model = Product::find()->where(['id'=>$id])->one();
         return $model !=null?$model->name:'';
     }
-    public function findPhoto($id){
+    public static function findPhoto($id){
         $model = Product::find()->where(['id'=>$id])->one();
         return $model !=null?$model->photo:'';
     }
-    public function findInfo($id){
+    public static function findInfo($id){
         $model = Product::find()->where(['id'=>$id])->one();
         return $model !=null?$model : null;
     }
