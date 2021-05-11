@@ -229,7 +229,7 @@ class PosController extends Controller
 
 
                     $model = new \backend\models\Paymenttrans();
-                    $model->trans_no = $model->getLastNo();
+                    $model->trans_no = $model->getLastNo($company_id, $branch_id);
                     $model->trans_date = date('Y-m-d H:i:s');
                     $model->order_id = $model_order->id;
                     $model->status = 0;
@@ -258,7 +258,7 @@ class PosController extends Controller
                     $this->updateorderpayment($model_order->id, $pay_total_amount, $pay_amount);
                 } else {
                     $model = new \backend\models\Paymenttrans();
-                    $model->trans_no = $model->getLastNo();
+                    $model->trans_no = $model->getLastNo($company_id, $branch_id);
                     $model->trans_date = date('Y-m-d H:i:s');
                     $model->order_id = $model_order->id;
                     $model->status = 0;

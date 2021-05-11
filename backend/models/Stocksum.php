@@ -54,7 +54,7 @@ class Stocksum extends \common\models\StockSum
         ];
     }
 
-    public function findStock($product_id, $warehouse_id){
+    public static function findStock($product_id, $warehouse_id){
         $model = Stocksum::find()->where(['product_id'=>$product_id,'warehouse_id'=>$warehouse_id])->one();
         return $model != null?$model->qty:0;
     }

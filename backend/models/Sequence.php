@@ -46,7 +46,7 @@ class Sequence extends \common\models\Sequence
 		        ],
 		    ];
 		 }
-       public function autogen(){
+       public static function autogen(){
            $x = \backend\helpers\RunnoTitle::asArrayObject();
            $res = 0;
            for ($i=0;$i<=count($x)-1;$i++){
