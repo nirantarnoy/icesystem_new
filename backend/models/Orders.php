@@ -151,7 +151,7 @@ class Orders extends \common\models\Orders
         }
     }
 
-    public function findOrderemp($id)
+    public static function findOrderemp($id)
     {
         $html = '';
         if ($id) {
@@ -182,7 +182,7 @@ class Orders extends \common\models\Orders
         return $html;
     }
 
-    public function findordercash($order_id)
+    public static function findordercash($order_id)
     {
         $total = 0;
         $model = \backend\models\Orderline::find()->where(['order_id' => $order_id])->all();
@@ -205,7 +205,7 @@ class Orders extends \common\models\Orders
         return $total;
     }
 
-    public function findordercredit($order_id)
+    public static function findordercredit($order_id)
     {
         $total = 0;
         $model = \backend\models\Orderline::find()->where(['order_id' => $order_id])->all();
