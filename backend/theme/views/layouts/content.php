@@ -4,14 +4,13 @@ $branch_id = 1;
 
 if (empty(\Yii::$app->user->identity->company_id)) {
     //return $this->redirect(['site/logout']);
-
-
     return \Yii::$app->runAction('site/logout');
 }
 if (\Yii::$app->user->identity->company_id != null) {
     $company_id = \Yii::$app->user->identity->company_id;
 } else {
     //  return $this->redirect(['site/logout']);
+    return \Yii::$app->runAction('site/logout');
 }
 if (\Yii::$app->user->identity->branch_id != null) {
     $branch_id = \Yii::$app->user->identity->branch_id;
