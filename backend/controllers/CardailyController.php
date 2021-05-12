@@ -104,7 +104,7 @@ class CardailyController extends Controller
         //echo $dataProvider->
 
         //  echo $route_type_id;return;
-        $query = \common\models\QueryCarRoute::find()->where(['company_id' => $company_id, 'branch_id' => $brach_id]);
+        $query = \common\models\QueryCarRoute::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id]);
         if ($route_type_id != null) {
             $query = $query->andFilterWhere(['delivery_route_id' => $route_type_id]);
         }
