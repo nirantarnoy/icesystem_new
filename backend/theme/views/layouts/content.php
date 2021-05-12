@@ -2,6 +2,9 @@
 $company_id = 1;
 $branch_id = 1;
 
+if(empty(\Yii::$app->user->identity->company_id)){
+    return $this->redirect(['site/logout']);
+}
 if (\Yii::$app->user->identity->company_id != null) {
     $company_id = \Yii::$app->user->identity->company_id;
 }else{
