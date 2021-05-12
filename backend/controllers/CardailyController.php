@@ -40,6 +40,8 @@ class CardailyController extends Controller
 
         if (\Yii::$app->user->identity->company_id != null) {
             $company_id = \Yii::$app->user->identity->company_id;
+        }else{
+            return $this->redirect(['site/logout']);
         }
         if (\Yii::$app->user->identity->branch_id != null) {
             $branch_id = \Yii::$app->user->identity->branch_id;
