@@ -1,6 +1,15 @@
 <?php
-/* @var $content string */
+$company_id = 1;
+$branch_id = 1;
 
+if (\Yii::$app->user->identity->company_id != null) {
+    $company_id = \Yii::$app->user->identity->company_id;
+}else{
+    return $this->redirect(['site/logout']);
+}
+if (\Yii::$app->user->identity->branch_id != null) {
+    $branch_id = \Yii::$app->user->identity->branch_id;
+}
 use yii\bootstrap4\Breadcrumbs;
 use yii\web\Session;
 ?>
