@@ -36,13 +36,20 @@ class CardailyController extends Controller
         // print_r(Yii::$app->request->queryParams);return;
 
         $company_id = 1;
-        $brach_id = 1;
-        if (isset($_SESSION['user_company_id'])) {
-            $company_id = $_SESSION['user_company_id'];
+        $branch_id = 1;
+
+        if (\Yii::$app->user->identity->company_id != null) {
+            $company_id = \Yii::$app->user->identity->company_id;
         }
-        if (isset($_SESSION['user_branch_id'])) {
-            $brach_id = $_SESSION['user_branch_id'];
+        if (\Yii::$app->user->identity->branch_id != null) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
         }
+//        if (isset($_SESSION['user_company_id'])) {
+//            $company_id = $_SESSION['user_company_id'];
+//        }
+//        if (isset($_SESSION['user_branch_id'])) {
+//            $branch_id = $_SESSION['user_branch_id'];
+//        }
 
         $save_emp_date = null;
         $save_emp_route = null;
@@ -74,7 +81,7 @@ class CardailyController extends Controller
             $dataProvider->query->andFilterWhere(['car_daily.company_id' => $company_id]);
         }
         if (isset($_SESSION['user_branch_id'])) {
-            $dataProvider->query->andFilterWhere(['car_daily.branch_id' => $brach_id]);
+            $dataProvider->query->andFilterWhere(['car_daily.branch_id' => $branch_id]);
         }
 
         if ($save_emp_route != null) {
@@ -224,19 +231,19 @@ class CardailyController extends Controller
             }
             $t_date = date('Y-m-d', strtotime($x_date2));
         }
-       //  print_r($car_id);return;
+        //  print_r($car_id);return;
         if ($car_id) {
             if ($emp_id != null) {
                 // count($emp_id);return;
                 for ($i = 0; $i <= count($emp_id) - 1; $i++) {
                     if ($emp_id[$i] == '') continue; // $emp_id[$i] = 0;
                     if ($this->checkOld($emp_id[$i], $car_id, $t_date)) {
-                       // echo "has no ";return;
+                        // echo "has no ";return;
                         $model = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date, 'employee_id' => $emp_id[$i], 'car_id' => $car_id])->one();
                         if ($model) {
                             $model->is_driver = $isdriver[$i] == 1 ? 1 : 0;
                             $model->save(false);
-                        }else{
+                        } else {
                             $model = new \backend\models\Cardaily();
                             $model->car_id = $car_id;
                             $model->employee_id = $emp_id[$i];
@@ -249,7 +256,7 @@ class CardailyController extends Controller
                         }
 
                     } else {
-                       // echo "has ";return;
+                        // echo "has ";return;
                         $model = new \backend\models\Cardaily();
                         $model->car_id = $car_id;
                         $model->employee_id = $emp_id[$i];
