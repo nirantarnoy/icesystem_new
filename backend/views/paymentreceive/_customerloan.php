@@ -119,7 +119,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                         'pluginOptions' => ['allowClear' => true],
                     ],
                     'filterInputOptions' => ['placeholder' => '--เลือกลูกค้า--'],
-                    
+
 //            'groupedRow' => true,                    // move grouped column to a single grouped row
 //            'groupOddCssClass' => 'kv-grouped-row',  // configure odd group cell css class
 //            'groupEvenCssClass' => 'kv-grouped-row', // configure even group cell css class
@@ -174,7 +174,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     'hAlign' => 'right',
                     'format' => ['decimal', 2],
                     'pageSummary' => true,
-                    'pageSummaryFunc' => GridView::F_AVG
+                    'pageSummaryFunc' => GridView::F_SUM
                 ],
                 [
                     'attribute' => 'payment_amount',
