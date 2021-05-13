@@ -174,6 +174,8 @@ class OrderController extends Controller
                         if ($model_issue) {
                             $model_issue->status = 2;
                             $model_issue->order_ref_id = $model->id;
+                            $model_issue->company_id = $company_id;
+                            $model_issue->branch_id = $branch_id;
                             $model_issue->save();
                         }
                     }
