@@ -481,17 +481,19 @@ class OrderController extends Controller
 
         $data = [];
         if ($id) {
-            $model_data = \backend\models\Orderline::find(['id'=>$id])->one();
-            if($model_data){
-                $model_return_issue = \backend\models\Journalissueline::find()->where(['product_id'=>$model_data->product_id,'issue_id' => $model_data->issue_ref_id])->one();
+            $model_data = \backend\models\Orderline::find(['id' => $id])->one();
+            if ($model_data) {
+                $model_return_issue = \backend\models\Journalissueline::find()->where(['product_id' => $model_data->product_id, 'issue_id' => $model_data->issue_ref_id])->one();
                 if ($model_return_issue) {
-                    $model_return_issue->qty = $model_return_issue->qty + $model_data->qty;
-                    $model_return_issue->save(false);
+                    $model_return_issue->avl_qty = $model_return_issue->avl_qty + $model_data->qty;
+                    if ($model_return_issue->save(false)) {
+                        if (\common\models\OrderLine::deleteAll(['id' => $id])) {
+                            $status = true;
+                        }
+                    }
                 }
 
-                if (\common\models\OrderLine::deleteAll(['id' => $id])) {
-                    $status = true;
-                }
+
             }
 
         }
