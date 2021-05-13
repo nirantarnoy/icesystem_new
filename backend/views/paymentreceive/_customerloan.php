@@ -186,9 +186,6 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 ],
                 [
                     'attribute' => 'order_no',
-                    'value' => function ($data) {
-                        return $data->qty == null ? 0 : $data->qty;
-                    },
                     'headerOptions' => ['style' => 'text-align: center'],
                     'contentOptions' => ['style' => 'text-align: center'],
                     // 'pageSummary' => 'Page Summary',
