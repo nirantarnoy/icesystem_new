@@ -67,11 +67,11 @@ class ProductgroupSearch extends Productgroup
             'updated_by' => $this->updated_by,
         ]);
 
-        if(isset($_SESSION['user_company_id'])){
-            $query->andFilterWhere(['company_id'=>$_SESSION['user_company_id']]);
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $query->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
         }
-        if(isset($_SESSION['user_branch_id'])){
-            $query->andFilterWhere(['branch_id'=>$_SESSION['user_branch_id']]);
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $query->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
         }
 
        if($this->globalSearch != ''){

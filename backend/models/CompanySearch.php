@@ -66,6 +66,8 @@ class CompanySearch extends Company
             'status' => $this->status,
         ]);
 
+
+
         if($this->globalSearch != ''){
             $query->orFilterWhere(['like', 'code', $this->globalSearch])
                 ->orFilterWhere(['like', 'name', $this->globalSearch])
