@@ -98,10 +98,10 @@ class OrdersposSearch extends Orders
 //        }
 
         if (!empty(\Yii::$app->user->identity->company_id)) {
-            $query->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
+            $query->andFilterWhere(['orders.company_id' => \Yii::$app->user->identity->company_id]);
         }
         if (!empty(\Yii::$app->user->identity->branch_id)) {
-            $query->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
+            $query->andFilterWhere(['orders.branch_id' => \Yii::$app->user->identity->branch_id]);
         }
 
         $query->andFilterWhere(['sale_channel_id' => 2]);
