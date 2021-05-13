@@ -73,7 +73,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
                     'value' => function ($data) {
-                        return number_format(\backend\models\Orders::findordercredit($data->id));
+                       // return number_format(\backend\models\Orders::findordercredit($data->id));
                         if($data->payment_method_id == 2){
                             return number_format(\backend\models\Orders::getlinesum($data->id));
                         }else{
