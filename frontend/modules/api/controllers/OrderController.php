@@ -115,6 +115,7 @@ class OrderController extends Controller
                         $model_line->line_total = ($qty * $price);
                         $model_line->price_group_id = $price_group_id;
                         $model_line->sale_payment_method_id = $payment_type_id;
+                        $model_line->issue_ref_id = $issue_id;
                         $model_line->status = 1;
                         if ($model_line->save(false)) {
                             $order_total_all += $model_line->line_total;
@@ -158,6 +159,7 @@ class OrderController extends Controller
                     $model_line->price_group_id = $price_group_id;
                     $model_line->status = 1;
                     $model_line->sale_payment_method_id = $payment_type_id;
+                    $model_line->issue_ref_id = $issue_id;
                     if ($model_line->save(false)) {
                         $order_total_all += $model_line->line_total;
                         $status = true;
@@ -470,28 +472,28 @@ class OrderController extends Controller
     public function actionDeleteorderline()
     {
         $status = false;
-        $product_id = null;
-        $issue_id = null;
         $id = null;
-        $qty = 0;
+
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $id = $req_data['id'];
-        $product_id = $req_data['product_id'];
-        $issue_id = $req_data['issue_id'];
-        $qty = $req_data['qty'];
 
         $data = [];
-        if ($id && $product_id && $issue_id) {
-            if (\common\models\OrderLine::deleteAll(['id' => $id])) {
-                $model_return_issue = \backend\models\Journalissueline::find()->where(['product_id' => $product_id, 'issue_id' => $issue_id])->one();
+        if ($id) {
+            $model_data = \backend\models\Orderline::find(['id'=>$id])->one();
+            if($model_data){
+                $model_return_issue = \backend\models\Journalissueline::find()->where(['product_id'=>$model_data->product_id,'issue_id' => $model_data->issue_ref_id])->one();
                 if ($model_return_issue) {
-                    $model_return_issue->qty = $model_return_issue->qty + $qty;
+                    $model_return_issue->qty = $model_return_issue->qty + $model_data->qty;
                     $model_return_issue->save(false);
                 }
-                $status = true;
+
+                if (\common\models\OrderLine::deleteAll(['id' => $id])) {
+                    $status = true;
+                }
             }
+
         }
 
         return ['status' => $status, 'data' => $data];
