@@ -118,6 +118,11 @@ class OrderController extends Controller
                         $model_line->issue_ref_id = $issue_id;
                         $model_line->status = 1;
                         if ($model_line->save(false)) {
+
+                            if ($payment_type_id == 2) {
+                                $this->addpayment($has_order_id, $customer_id, $qty, $company_id, $branch_id);
+                            }
+
                             $order_total_all += $model_line->line_total;
                             $status = true;
 
@@ -161,6 +166,11 @@ class OrderController extends Controller
                     $model_line->sale_payment_method_id = $payment_type_id;
                     $model_line->issue_ref_id = $issue_id;
                     if ($model_line->save(false)) {
+
+                        if ($payment_type_id == 2) {
+                            $this->addpayment($model->id, $customer_id, $qty, $company_id, $branch_id);
+                        }
+                        
                         $order_total_all += $model_line->line_total;
                         $status = true;
 
@@ -223,6 +233,41 @@ class OrderController extends Controller
             }
         }
         return $group_id;
+    }
+
+    public function addpayment($order_id, $customer_id, $amount, $company_id, $branch_id)
+    {
+        $model = new \backend\models\Paymenttrans();
+        $model->trans_no = $model->getLastNo($company_id, $branch_id);
+        $model->trans_date = date('Y-m-d H:i:s');
+        $model->order_id = $order_id;
+        $model->status = 0;
+        $model->company_id = $company_id;
+        $model->branch_id = $branch_id;
+        if ($model->save(false)) {
+            if (count($customer_id) > 0) {
+                for ($i = 0; $i <= count($customer_id) - 1; $i++) {
+                    if ($customer_id[$i] == '' || $customer_id[$i] == null) continue;
+                    //$pay_method_name = \backend\models\Paymentmethod::findName($pay_method[$i]);
+                    //  if ($pay_method_name == 'เงินสด' && ($pay_amount[$i] == null || $pay_amount[$i] == 0)) continue;
+                    //if ($pay_method_name == 'เงินสด' && ($pay_amount[$i] == null || $pay_amount[$i] == 0)) continue;
+                    $model_line = new \backend\models\Paymenttransline();
+                    $model_line->trans_id = $model->id;
+                    $model_line->customer_id = $customer_id[$i];
+                    $model_line->payment_method_id = 8;
+                    $model_line->payment_term_id = 0;
+                    $model_line->payment_date = date('Y-m-d H:i:s');
+                    $model_line->payment_amount = $amount;
+                    $model_line->total_amount = 0;
+                    $model_line->order_ref_id = $order_id;
+                    $model_line->status = 1;
+                    $model_line->doc = '';
+                    if ($model_line->save(false)) {
+                        $res += 1;
+                    }
+                }
+            }
+        }
     }
 
     public function actionList()
@@ -483,7 +528,7 @@ class OrderController extends Controller
         if ($id) {
             $model_data = \backend\models\Orderline::find()->where(['id' => $id])->one();
             if ($model_data) {
-                $model_return_issue = \backend\models\Journalissueline::find()->where(['product_id' => $model_data->product_id, 'issue_id' => $model_data->issue_ref_id])->andFilterWhere(['>','qty',0])->one();
+                $model_return_issue = \backend\models\Journalissueline::find()->where(['product_id' => $model_data->product_id, 'issue_id' => $model_data->issue_ref_id])->andFilterWhere(['>', 'qty', 0])->one();
                 if ($model_return_issue) {
                     $model_return_issue->avl_qty = (int)$model_return_issue->avl_qty + (int)$model_data->qty;
                     if ($model_return_issue->save(false)) {
