@@ -6,6 +6,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\Customer;
 use yii\web\Session;
+
 class CustomerSearch extends Customer
 {
     public $globalSearch;
@@ -13,9 +14,9 @@ class CustomerSearch extends Customer
     public function rules()
     {
         return [
-            [['id', 'customer_group_id','customer_type_id', 'delivery_route_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['id', 'customer_group_id', 'customer_type_id', 'delivery_route_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['code', 'name', 'description', 'location_info', 'active_date', 'logo', 'shop_photo'], 'safe'],
-            [['globalSearch'],'string']
+            [['globalSearch'], 'string']
         ];
     }
 
@@ -69,14 +70,14 @@ class CustomerSearch extends Customer
             'updated_by' => $this->updated_by,
         ]);
 
-        if(!empty(\Yii::$app->user->identity->company_id)){
-            $query->andFilterWhere(['company_id'=>\Yii::$app->user->identity->company_id]);
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $query->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
         }
-        if(!empty(\Yii::$app->user->identity->branch_id)){
-            $query->andFilterWhere(['company_id'=>\Yii::$app->user->identity->branch_id]);
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $query->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
         }
 
-        if($this->globalSearch != ''){
+        if ($this->globalSearch != '') {
             $query->orFilterWhere(['like', 'code', $this->globalSearch])
                 ->orFilterWhere(['like', 'name', $this->globalSearch])
                 ->orFilterWhere(['like', 'description', $this->globalSearch])
