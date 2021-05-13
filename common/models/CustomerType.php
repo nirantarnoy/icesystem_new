@@ -33,7 +33,7 @@ class CustomerType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['code'],'unique'],
+         //   [['code'],'unique'],
             [['status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['code', 'name', 'description'], 'string', 'max' => 255],
         ];
