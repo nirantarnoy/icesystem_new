@@ -57,11 +57,11 @@ class PricegroupController extends Controller
     {
         $company_id = 1;
         $branch_id = 1;
-        if (isset($_SESSION['user_company_id'])) {
-            $company_id = $_SESSION['user_company_id'];
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
         }
-        if (isset($_SESSION['user_branch_id'])) {
-            $branch_id = $_SESSION['user_branch_id'];
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
         }
 
         $model = new Pricegroup();
@@ -208,11 +208,11 @@ class PricegroupController extends Controller
     {
         $company_id = 1;
         $branch_id = 1;
-        if (isset($_SESSION['user_company_id'])) {
-            $company_id = $_SESSION['user_company_id'];
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
         }
-        if (isset($_SESSION['user_branch_id'])) {
-            $branch_id = $_SESSION['user_branch_id'];
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
         }
 
         $txt = \Yii::$app->request->post('txt_search');
@@ -247,11 +247,11 @@ class PricegroupController extends Controller
     {
         $company_id = 1;
         $branch_id = 1;
-        if (isset($_SESSION['user_company_id'])) {
-            $company_id = $_SESSION['user_company_id'];
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
         }
-        if (isset($_SESSION['user_branch_id'])) {
-            $branch_id = $_SESSION['user_branch_id'];
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
         }
 
         $company = \Yii::$app->request->post('company');
@@ -314,11 +314,11 @@ class PricegroupController extends Controller
     {
         $company_id = 1;
         $branch_id = 1;
-        if (isset($_SESSION['user_company_id'])) {
-            $company_id = $_SESSION['user_company_id'];
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
         }
-        if (isset($_SESSION['user_branch_id'])) {
-            $branch_id = $_SESSION['user_branch_id'];
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
         }
 
         $txt = \Yii::$app->request->post('txt_search');
