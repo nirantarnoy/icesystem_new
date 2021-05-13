@@ -131,7 +131,7 @@ class OrderController extends Controller
 //                    $model->save(false);
                 }
             } else {
-                $model = new \backend\models\Orders();
+                $model = new \backend\models\Ordermobile();
                 $model->order_no = $model->getLastNo($sale_date, $company_id, $branch_id);
                 // $model->order_date = date('Y-m-d H:i:s', strtotime($sale_date . ' ' . $sale_time));
                 $model->order_date = date('Y-m-d H:i:s');
@@ -176,7 +176,7 @@ class OrderController extends Controller
                             $model_issue->order_ref_id = $model->id;
                             $model_issue->company_id = $company_id;
                             $model_issue->branch_id = $branch_id;
-                            $model_issue->save();
+                            $model_issue->save(false);
                         }
                     }
                 }
