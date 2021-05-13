@@ -68,11 +68,11 @@ class PaymentreceiveController extends Controller
 
         $company_id = 1;
         $branch_id = 1;
-        if (isset($_SESSION['user_company_id'])) {
-            $company_id = $_SESSION['user_company_id'];
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
         }
-        if (isset($_SESSION['user_branch_id'])) {
-            $branch_id = $_SESSION['user_branch_id'];
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
         }
 
         $model = new Paymentreceive();
@@ -332,8 +332,20 @@ class PaymentreceiveController extends Controller
 
     public function actionCustomerloan()
     {
-        return $this->render('_customerloan', [
-            'model' => null,
+        $searchModel = new \backend\models\SaleorderCustomerLoanSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        //   $dataProvider->query->andFilterWhere(['>','qty',0])->andFilterWhere(['customer_id'=>2247]);
+        $dataProvider->setSort([
+            'defaultOrder'=>['route_code'=>SORT_ASC,'order_date'=>SORT_ASC,'customer_id'=>SORT_ASC]
         ]);
+
+        return $this->render('_customerloan', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+//        return $this->render('_customerloan', [
+//            'model' => null,
+//        ]);
     }
+
 }
