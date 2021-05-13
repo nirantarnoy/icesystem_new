@@ -191,6 +191,7 @@ class PosController extends Controller
             $model_order->status = 1;
             $model_order->company_id = $company_id;
             $model_order->branch_id = $branch_id;
+            $model_order->payment_method = $payment_type;
             if ($model_order->save(false)) {
                 if (count($product_list) > 0) {
                     for ($i = 0; $i <= count($product_list) - 1; $i++) {
