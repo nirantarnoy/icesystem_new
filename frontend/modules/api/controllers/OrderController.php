@@ -120,7 +120,7 @@ class OrderController extends Controller
                         if ($model_line->save(false)) {
 
                             if ($payment_type_id == 2) {
-                                $this->addpayment($has_order_id, $customer_id, $qty, $company_id, $branch_id);
+                                $this->addpayment($has_order_id, $customer_id, ($qty * $price), $company_id, $branch_id);
                             }
 
                             $order_total_all += $model_line->line_total;
@@ -168,9 +168,9 @@ class OrderController extends Controller
                     if ($model_line->save(false)) {
 
                         if ($payment_type_id == 2) {
-                            $this->addpayment($model->id, $customer_id, $qty, $company_id, $branch_id);
+                            $this->addpayment($model->id, $customer_id, ($qty * $price), $company_id, $branch_id);
                         }
-                        
+
                         $order_total_all += $model_line->line_total;
                         $status = true;
 
@@ -245,27 +245,23 @@ class OrderController extends Controller
         $model->company_id = $company_id;
         $model->branch_id = $branch_id;
         if ($model->save(false)) {
-            if (count($customer_id) > 0) {
-                for ($i = 0; $i <= count($customer_id) - 1; $i++) {
-                    if ($customer_id[$i] == '' || $customer_id[$i] == null) continue;
-                    //$pay_method_name = \backend\models\Paymentmethod::findName($pay_method[$i]);
-                    //  if ($pay_method_name == 'เงินสด' && ($pay_amount[$i] == null || $pay_amount[$i] == 0)) continue;
-                    //if ($pay_method_name == 'เงินสด' && ($pay_amount[$i] == null || $pay_amount[$i] == 0)) continue;
-                    $model_line = new \backend\models\Paymenttransline();
-                    $model_line->trans_id = $model->id;
-                    $model_line->customer_id = $customer_id[$i];
-                    $model_line->payment_method_id = 8;
-                    $model_line->payment_term_id = 0;
-                    $model_line->payment_date = date('Y-m-d H:i:s');
-                    $model_line->payment_amount = $amount;
-                    $model_line->total_amount = 0;
-                    $model_line->order_ref_id = $order_id;
-                    $model_line->status = 1;
-                    $model_line->doc = '';
-                    if ($model_line->save(false)) {
-                        $res += 1;
-                    }
+            if ($customer_id != null) {
+
+                $model_line = new \backend\models\Paymenttransline();
+                $model_line->trans_id = $model->id;
+                $model_line->customer_id = $customer_id;
+                $model_line->payment_method_id = 8;
+                $model_line->payment_term_id = 0;
+                $model_line->payment_date = date('Y-m-d H:i:s');
+                $model_line->payment_amount = $amount;
+                $model_line->total_amount = 0;
+                $model_line->order_ref_id = $order_id;
+                $model_line->status = 1;
+                $model_line->doc = '';
+                if ($model_line->save(false)) {
+
                 }
+
             }
         }
     }
