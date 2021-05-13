@@ -114,6 +114,7 @@ class OrderController extends Controller
                         $model_line->price = $price;
                         $model_line->line_total = ($qty * $price);
                         $model_line->price_group_id = $price_group_id;
+                        $model_line->sale_payment_method_id = $payment_type_id;
                         $model_line->status = 1;
                         if ($model_line->save(false)) {
                             $order_total_all += $model_line->line_total;
@@ -265,6 +266,7 @@ class OrderController extends Controller
                         'note' => '',
                         'payment_method' => $value->payment_method_name,
                         'payment_method_id' => $value->pay_type,
+                        'sale_payment_method_id' => $value->sale_payment_method_id,
                         'total_amount' => $value->line_total == null ? 0 : $value->line_total,
                         'total_qty' => $value->line_qty == null ? 0 : $value->line_qty,
                     ]);
