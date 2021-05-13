@@ -127,7 +127,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 [
                     'attribute' => 'customer_type_id',
                     'label' => 'ประเภทลูกค้า',
-                    'width' => '10%',
+                   // 'width' => '10%',
                     'value' => function ($model, $key, $index, $widget) {
                         return \backend\models\Customertype::findName($model->customer_type_id);
                     },
@@ -154,6 +154,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
 //        ],
                 [
                     'attribute' => 'order_date',
+                    'width' => '10%',
                     'value' => function ($model, $key, $index, $widget) {
                         return date('d/m/Y', strtotime($model->order_date));
                     },
