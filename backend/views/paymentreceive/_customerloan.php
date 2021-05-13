@@ -192,6 +192,9 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     'label' => 'ค้างชำระ',
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
+                    'value' => function ($model, $key, $index, $widget) {
+                        return ($model->line_total - $model->payment_amount);
+                    },
                     'width' => '150px',
                     'hAlign' => 'right',
                     'format' => ['decimal', 0],
