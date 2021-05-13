@@ -481,7 +481,7 @@ class OrderController extends Controller
 
         $data = [];
         if ($id) {
-            $model_data = \backend\models\Orderline::find(['id' => $id])->one();
+            $model_data = \backend\models\Orderline::find()->where(['id' => $id])->one();
             if ($model_data) {
                 $model_return_issue = \backend\models\Journalissueline::find()->where(['product_id' => $model_data->product_id, 'issue_id' => $model_data->issue_ref_id])->andFilterWhere(['>','qty',0])->one();
                 if ($model_return_issue) {
