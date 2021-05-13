@@ -288,9 +288,15 @@ class PricegroupController extends Controller
 
     public function getStock($prod_id)
     {
+        $default_wh = 6;
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+           if(\Yii::$app->user->identity->branch_id == 2){
+               $default_wh = 5;
+           }
+        }
         $qty = 0;
         if ($prod_id != null) {
-            $model = \backend\models\Stocksum::find()->where(['product_id' => $prod_id, 'warehouse_id' => 6])->one();
+            $model = \backend\models\Stocksum::find()->where(['product_id' => $prod_id, 'warehouse_id' => $default_wh])->one();
             if ($model) {
                 $qty = $model->qty;
             }
