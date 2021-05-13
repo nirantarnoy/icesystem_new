@@ -48,7 +48,7 @@ class Product extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['code'],'unique'],
+          //  [['code'],'unique'],
             [['product_type_id', 'product_group_id', 'unit_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['std_cost', 'sale_price', 'nw', 'gw', 'min_stock', 'max_stock'], 'number'],
             [['code', 'name', 'description', 'photo'], 'string', 'max' => 255],
