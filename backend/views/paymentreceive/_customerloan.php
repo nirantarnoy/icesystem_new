@@ -111,7 +111,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     'label' => 'ลูกค้า',
                     'width' => '10%',
                     'value' => function ($model, $key, $index, $widget) {
-                        return 'สายส่ง ' . $model->cus_name;
+                        return $model->cus_name;
                     },
                     'filterType' => GridView::FILTER_SELECT2,
                     'filter' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->orderBy('name')->asArray()->all(), 'id', 'name'),
@@ -186,6 +186,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 ],
                 [
                     'attribute' => 'order_no',
+                    'label' => 'เลขที่ขาย',
                     'headerOptions' => ['style' => 'text-align: center'],
                     'contentOptions' => ['style' => 'text-align: center'],
                     // 'pageSummary' => 'Page Summary',
