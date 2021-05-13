@@ -61,11 +61,18 @@ class IssuerefillController extends Controller
 
         $company_id = 1;
         $branch_id = 1;
-        if (isset($_SESSION['user_company_id'])) {
-            $company_id = $_SESSION['user_company_id'];
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
         }
-        if (isset($_SESSION['user_branch_id'])) {
-            $branch_id = $_SESSION['user_branch_id'];
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
+        $default_wh = 6;
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            if (\Yii::$app->user->identity->branch_id == 2) {
+                $default_wh = 5;
+            }
         }
 
         $model = new Journalissue();
@@ -100,7 +107,7 @@ class IssuerefillController extends Controller
                         $model_line->sale_price = $line_issue_price[$i];
                         $model_line->status = 1;
                         if ($model_line->save()) {
-                            $this->updateStock($prod_id[$i], $line_qty[$i], 1, $model->journal_no, $company_id, $branch_id);
+                            $this->updateStock($prod_id[$i], $line_qty[$i], $default_wh, $model->journal_no, $company_id, $branch_id);
                         }
                     }
                 }
