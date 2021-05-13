@@ -134,7 +134,7 @@ class OrderController extends Controller
                 $model = new \backend\models\Orders();
                 $model->order_no = $model->getLastNo($sale_date, $company_id, $branch_id);
                 // $model->order_date = date('Y-m-d H:i:s', strtotime($sale_date . ' ' . $sale_time));
-                $model->order_date = date('Y-m-d H:i:s');s
+                $model->order_date = date('Y-m-d H:i:s');
                 $model->customer_id = 0;
                 $model->order_channel_id = $route_id; // สายส่ง
                 $model->sale_channel_id = 1; //ช่องทาง
