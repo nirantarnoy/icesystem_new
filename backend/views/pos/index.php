@@ -1321,9 +1321,9 @@ function addcart2(e){
      //alert(prod_id);
     var qty = 0;
     var price =$(".fix-list-item-price-"+ids).val();
-    //var onhand =$(".fix-list-item-onhand-"+ids).val(); 
+    var onhand =$(".fix-list-item-onhand-"+ids).val(); 
     // e.closest("tr").find('.list-item-onhand').val();
-    var onhand = e.closest("tr").find('.list-item-onhand').val();
+    //var onhand = e.closest("tr").find('.list-item-onhand').val();
     var tr = $(".table-cart tbody tr:last");
      
     alert(onhand);
