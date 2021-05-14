@@ -1326,7 +1326,7 @@ function addcart2(e){
     var onhand = e.attr('data-val');
     var tr = $(".table-cart tbody tr:last");
      
-    alert(onhand);
+  //  alert(onhand);
   
     var check_old = check_dup(prod_id);
     if(check_old == 1){
