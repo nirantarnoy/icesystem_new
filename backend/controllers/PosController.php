@@ -151,11 +151,15 @@ class PosController extends Controller
     {
         $company_id = 1;
         $branch_id = 1;
+        $default_warehouse = 6;
         if (!empty(\Yii::$app->user->identity->company_id)) {
             $company_id = \Yii::$app->user->identity->company_id;
         }
         if (!empty(\Yii::$app->user->identity->branch_id)) {
             $branch_id = \Yii::$app->user->identity->branch_id;
+            if ($branch_id == 2) {
+                $default_warehouse = 5;
+            }
         }
 
 
@@ -210,12 +214,12 @@ class PosController extends Controller
                             $model_stock->trans_date = date('Y-m-d H:i:s');
                             $model_stock->product_id = $product_list[$i];
                             $model_stock->qty = $line_qty[$i];
-                            $model_stock->warehouse_id = 5; // default
+                            $model_stock->warehouse_id = $default_warehouse; // default
                             $model_stock->stock_type = 2;
                             $model_stock->activity_type_id = 5; // 1 prod rec 2 issue car
                             $model_stock->trans_ref_id = $model_order->id;
                             if ($model_stock->save()) {
-                                $this->updateSummary($product_list[$i], 5, $line_qty[$i]);
+                                $this->updateSummary($product_list[$i], $default_warehouse, $line_qty[$i]);
                             }
                         }
                     }
