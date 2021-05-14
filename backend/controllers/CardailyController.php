@@ -101,7 +101,7 @@ class CardailyController extends Controller
 //            $searchModel->trans_date = $trans_date;
 //            $dataProvider->query->andFilterWhere(['date(car_daily.trans_date)' => $trans_date])->all();
 //        }
-        $dataProvider->pagination->pageSize = 50;
+        $dataProvider->pagination->pageSize = 100;
 
         //echo $dataProvider->
 
