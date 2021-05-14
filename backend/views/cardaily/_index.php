@@ -62,7 +62,7 @@ $model_new = $model_car;
                         //$xx_id = $value2->id;
                         if ($x_name != '') {
                             if ($emp_daily_name != '') {
-                                $emp_daily_name = $emp_daily_name . ',' . $x_name;
+                                $emp_daily_name = $emp_daily_name . '<br />' . $x_name;
                             } else {
                                 $emp_daily_name = $x_name;
                             }
@@ -496,7 +496,7 @@ $js = <<<JS
               'url': "$url_to_check_has_emp" ,
               'data': {'emp_id': emp_id, 'trans_date': t_date},
               'success': function(data) {
-                  alert(data);
+                 // alert(data);
                    if(data >0){
                        res = true;
                    }else{
