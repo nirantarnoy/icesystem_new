@@ -40,7 +40,7 @@ class CardailyController extends Controller
 
         if (\Yii::$app->user->identity->company_id != null) {
             $company_id = \Yii::$app->user->identity->company_id;
-        }else{
+        } else {
             return $this->redirect(['site/logout']);
         }
         if (\Yii::$app->user->identity->branch_id != null) {
@@ -79,12 +79,12 @@ class CardailyController extends Controller
         $searchModel = new CardailySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if (isset($_SESSION['user_company_id'])) {
-            $dataProvider->query->andFilterWhere(['car_daily.company_id' => $company_id]);
-        }
-        if (isset($_SESSION['user_branch_id'])) {
-            $dataProvider->query->andFilterWhere(['car_daily.branch_id' => $branch_id]);
-        }
+        // if (isset($_SESSION['user_company_id'])) {
+        $dataProvider->query->andFilterWhere(['car_daily.company_id' => $company_id]);
+        //  }
+        // if (isset($_SESSION['user_branch_id'])) {
+        $dataProvider->query->andFilterWhere(['car_daily.branch_id' => $branch_id]);
+        // }
 
         if ($save_emp_route != null) {
             $searchModel->route_id = $save_emp_route;
