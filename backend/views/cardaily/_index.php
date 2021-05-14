@@ -77,7 +77,7 @@ $model_new = $model_car;
             ?>
             <div class="col-lg-2 col-3">
                 <!-- small box -->
-                <div href="#"  data-id="<?= $value->id ?>" data-var="<?= $value->emp_qty ?>"
+                <a href="#"  data-id="<?= $value->id ?>" data-var="<?= $value->emp_qty ?>"
                    onclick="showcarinfo($(this))"  class="small-box <?= $status_color ?>">
                     <div class="inner" style="text-align: right">
                         <h6><b><?= $value->name ?></b></h6>
