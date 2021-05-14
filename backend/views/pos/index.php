@@ -79,8 +79,8 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                     $s_name = '';
                     echo Select2::widget([
                         'name' => 'customer_id',
-                       // 'value' => 1,
-                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->andFilterWhere(['is_show_pos'=>1])->all(), 'id', function ($data) {
+                        // 'value' => 1,
+                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->andFilterWhere(['is_show_pos' => 1])->all(), 'id', function ($data) {
                             return $data->code . ' ' . $data->name;
                         }),
                         'options' => [
@@ -103,7 +103,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                     <div class="row">
                         <?php $i = 0; ?>
                         <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
-                        <?php $product_data = \backend\models\Product::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(); ?>
+                        <?php $product_data = \backend\models\Product::find()->where(['is_pos_item' => 1, 'company_id' => $company_id, 'branch_id' => $branch_id])->all(); ?>
                         <?php foreach ($product_data as $value): ?>
                             <?php
                             $i += 1;
