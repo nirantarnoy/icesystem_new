@@ -1140,6 +1140,16 @@ class OrdersController extends Controller
 
     public function actionCheckhasempdata()
     {
+        $company_id = 1;
+        $branch_id = 1;
+
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
         $emp_id = \Yii::$app->request->post('emp_id');
         $trans_date = \Yii::$app->request->post('trans_date');
         $res = 0;
@@ -1151,7 +1161,7 @@ class OrdersController extends Controller
             }
             $t_date = date('Y-m-d', strtotime($t_date));
 
-            $res = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date])->count();
+            $res = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date, 'company_id' => $company_id, 'branch_id' => $branch_id])->count();
 
         }
         echo $res;
