@@ -94,10 +94,11 @@ class AdjustmentController extends Controller
 
             $model->journal_no = $model->getLastNo($company_id, $branch_id);
             $model->trans_date = date('Y-m-d', strtotime($sale_date));
-            if($model->save()){
-                if($product != null){
-                    for($i=0;$i<=count($product)-1;$i++){
+            if ($model->save()) {
+                if ($product != null) {
+                    for ($i = 0; $i <= count($product) - 1; $i++) {
                         $model_line = new \backend\models\Stocktrans();
+                        $model_line->journal_no = $model->journal_no;
                         $model_line->journal_stock_id = $model->id;
                         $model_line->trans_date = date('Y-m-d H:i:s');
                         $model_line->product_id = $product[$i];
@@ -107,15 +108,15 @@ class AdjustmentController extends Controller
                         $model_line->activity_type_id = 11;
                         $model_line->company_id = $company_id;
                         $model_line->branch_id = $branch_id;
-                        if($model_line->save(false)){
-                            $model_stock = \backend\models\Stocksum::find()->where(['warehouse_id'=>$warehouse[$i],'product_id'=>$product[$i]])->one();
-                            if($model_stock){
-                                if($stock_type[$i] == 1){
+                        if ($model_line->save(false)) {
+                            $model_stock = \backend\models\Stocksum::find()->where(['warehouse_id' => $warehouse[$i], 'product_id' => $product[$i]])->one();
+                            if ($model_stock) {
+                                if ($stock_type[$i] == 1) {
                                     $model_stock->qty = $model_stock->qty + (int)$qty[$i];
-                                }else if($stock_type[$i] == 2){
+                                } else if ($stock_type[$i] == 2) {
                                     $model_stock->qty = $model_stock->qty - (int)$qty[$i];
                                 }
-                                    $model_stock->save(false);
+                                $model_stock->save(false);
                             }
                         }
                     }
@@ -158,7 +159,7 @@ class AdjustmentController extends Controller
      */
     public function actionDelete($id)
     {
-        if(\backend\models\Stocktrans::deleteAll(['journal_stock_id'=>$id])){
+        if (\backend\models\Stocktrans::deleteAll(['journal_stock_id' => $id])) {
             $this->findModel($id)->delete();
         }
 
