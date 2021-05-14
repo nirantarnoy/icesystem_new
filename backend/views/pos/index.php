@@ -11,12 +11,15 @@ $filename_do = "empty";
 
 $company_id = 1;
 $branch_id = 1;
-
+$default_warehouse = 6;
 if (!empty(\Yii::$app->user->identity->company_id)) {
     $company_id = \Yii::$app->user->identity->company_id;
 }
 if (!empty(\Yii::$app->user->identity->branch_id)) {
     $branch_id = \Yii::$app->user->identity->branch_id;
+    if ($branch_id == 2) {
+        $default_warehouse = 5;
+    }
 }
 
 //echo $company_id.'<br />';
@@ -81,7 +84,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                             return $data->code . ' ' . $data->name;
                         }),
                         'options' => [
-                            'placeholder' => '--เลือกลูกค้าd--',
+                            'placeholder' => '--เลือกลูกค้า--',
                             'onchange' => 'getproduct_price($(this))'
                         ],
                         'pluginOptions' => [
@@ -102,10 +105,9 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                         <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
                         <?php $product_data = \backend\models\Product::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(); ?>
                         <?php foreach ($product_data as $value): ?>
-
                             <?php
                             $i += 1;
-                            $product_onhand = \backend\models\Stocksum::findStock($value->id, 6);
+                            $product_onhand = \backend\models\Stocksum::findStock($value->id, $default_warehouse);
                             ?>
                             <div class="col-lg-3 product-items">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
@@ -164,7 +166,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                         <?php foreach ($product_data as $value): ?>
                             <?php
                             $i += 1;
-                            $product_onhand = \backend\models\Stocksum::findStock($value->id, 6);
+                            $product_onhand = \backend\models\Stocksum::findStock($value->id, $default_warehouse);
                             ?>
                             <div class="col-lg-3 product-items">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
