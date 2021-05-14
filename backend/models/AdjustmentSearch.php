@@ -56,13 +56,13 @@ class AdjustmentSearch extends Adjustment
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'trans_date' => $this->trans_date,
-            'status' => $this->status,
-            'created_at' => $this->created_at,
-            'created_by' => $this->created_by,
-        ]);
+//        $query->andFilterWhere([
+//            'id' => $this->id,
+//            'trans_date' => $this->trans_date,
+//            'status' => $this->status,
+//            'created_at' => $this->created_at,
+//            'created_by' => $this->created_by,
+//        ]);
 
         if (!empty(\Yii::$app->user->identity->company_id)) {
             $query->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
