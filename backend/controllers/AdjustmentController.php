@@ -94,6 +94,8 @@ class AdjustmentController extends Controller
 
             $model->journal_no = $model->getLastNo($company_id, $branch_id);
             $model->trans_date = date('Y-m-d', strtotime($sale_date));
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
             if ($model->save()) {
                 if ($product != null) {
                     for ($i = 0; $i <= count($product) - 1; $i++) {

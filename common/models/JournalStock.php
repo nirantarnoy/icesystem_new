@@ -32,7 +32,7 @@ class JournalStock extends \yii\db\ActiveRecord
     {
         return [
             [['trans_date'], 'safe'],
-            [['status', 'created_at', 'created_by'], 'integer'],
+            [['status', 'created_at', 'created_by','company_id','branch_id'], 'integer'],
             [['journal_no', 'description'], 'string', 'max' => 255],
         ];
     }
