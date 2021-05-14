@@ -255,7 +255,7 @@ class PosController extends Controller
                             $model_line->payment_method_id = $payment_type;
                             //   $model_line->payment_term_id = $pay_term[$i] == null ? 0 : $pay_term[$i];
                             $model_line->payment_date = date('Y-m-d H:i:s');
-                            $model_line->payment_amount = $pay_amount == null ? 0 : $pay_amount;
+                            $model_line->payment_amount = $payment_type == 2 ? 0 : $pay_amount;
                             $model_line->total_amount = $pay_total_amount;
                             $model_line->change_amount = $pay_change;
                             $model_line->order_ref_id = $model_order->id;
@@ -285,7 +285,7 @@ class PosController extends Controller
                             $model_line->payment_method_id = $payment_type;
                             //   $model_line->payment_term_id = $pay_term[$i] == null ? 0 : $pay_term[$i];
                             $model_line->payment_date = date('Y-m-d H:i:s');
-                            $model_line->payment_amount = $pay_amount;
+                            $model_line->payment_amount = $payment_type == 2 ? 0 : $pay_amount;
                             $model_line->total_amount = $pay_total_amount;
                             $model_line->change_amount = $pay_change;
                             $model_line->order_ref_id = $model_order->id;
