@@ -77,7 +77,8 @@ $model_new = $model_car;
             ?>
             <div class="col-lg-2 col-3">
                 <!-- small box -->
-                <div class="small-box <?= $status_color ?>">
+                <a href="#"  data-id="<?= $value->id ?>" data-var="<?= $value->emp_qty ?>"
+                   onclick="showcarinfo($(this))"  class="small-box <?= $status_color ?>">
                     <div class="inner" style="text-align: right">
                         <h6><b><?= $value->name ?></b></h6>
                         <p><?php echo $route_name ?></p>
@@ -89,11 +90,7 @@ $model_new = $model_car;
                     <div style="text-align: center">
                         <p style="color: #fddfdf"><?= $emp_daily_name ?></p>
                     </div>
-
-                    <a href="#" data-id="<?= $value->id ?>" data-var="<?= $value->emp_qty ?>"
-                       onclick="showcarinfo($(this))" class="small-box-footer"><i
-                                class="fas fa-users"></i> จัดการข้อมูล </a>
-                </div>
+                </a>
             </div>
         <?php endforeach; ?>
         <!--    </div>-->
