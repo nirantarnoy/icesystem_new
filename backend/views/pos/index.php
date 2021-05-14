@@ -1323,7 +1323,7 @@ function addcart2(e){
     var price =$(".fix-list-item-price-"+ids).val();
     //var onhand =$(".fix-list-item-onhand-"+ids).val(); 
     // e.closest("tr").find('.list-item-onhand').val();
-    var onhand = e.att('data-val');
+    var onhand = e.attr('data-val');
     var tr = $(".table-cart tbody tr:last");
      
     alert(onhand);
