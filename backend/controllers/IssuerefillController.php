@@ -139,6 +139,8 @@ class IssuerefillController extends Controller
             $model_trans->warehouse_id = $default_warehouse;
             $model_trans->stock_type = 2; // 1 in 2 out
             $model_trans->activity_type_id = 18; // 1 prod rec 2 issue car
+            $model_trans->company_id = $company_id;
+            $model_trans->branch_id = $branch_id;
             if ($model_trans->save(false)) {
                 $model = \backend\models\Stocksum::find()->where(['warehouse_id' => $default_warehouse, 'product_id' => $product_id])->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])->one();
                 if ($model) {
