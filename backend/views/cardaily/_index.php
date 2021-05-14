@@ -381,6 +381,7 @@ $model_new = $model_car;
 </div>
 <?php
 $url_to_find_item = \yii\helpers\Url::to(['orders/empdata'], true);
+$url_to_check_has_emp = \yii\helpers\Url::to(['orders/checkhasempdata'], true);
 $url_to_find_emp_item = \yii\helpers\Url::to(['orders/findempdata'], true);
 $url_to_delete_emp_item = \yii\helpers\Url::to(['orders/deletecaremp'], true);
 $js = <<<JS
@@ -455,6 +456,10 @@ $js = <<<JS
         var code = e.closest('tr').find('.line-find-emp-code').val();
         var name = e.closest('tr').find('.line-find-emp-name').val();
         if (id) {
+            if(checkhasempdaily(id)){
+                alert("คุณได้ทำการจัดรถให้พนักงานคนนี้ไปแล้ว");
+                return false;
+            }
             if (e.hasClass('btn-outline-success')) {
                 var obj = {};
                 obj['id'] = id;
@@ -479,6 +484,28 @@ $js = <<<JS
                 console.log(selecteditem);
             }
         }
+    }
+    function checkhasempdaily(emp_id){
+      var t_date = $("#car-trans-date").val();
+      var res = false;
+      if(emp_id){
+          $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_check_has_emp" ,
+              'data': {'emp_id': emp_id, 'trans_date': t_date},
+              'success': function(data) {
+                  alert(data);
+                   if(data >0){
+                       res = true;
+                   }else{
+                       res = false;
+                   }
+              }
+          });
+      }
+       return res;
     }
     function disableselectitem() {
         if (selecteditem.length > 0) {

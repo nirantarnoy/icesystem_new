@@ -1138,6 +1138,25 @@ class OrdersController extends Controller
         echo $html;
     }
 
+    public function actionCheckhasempdata()
+    {
+        $emp_id = \Yii::$app->request->post('emp_id');
+        $trans_date = \Yii::$app->request->post('trans_date');
+        $res = 0;
+        if ($emp_id != null && $trans_date != null) {
+            $x_date = explode('/', $trans_date);
+            $t_date = date('Y-m-d');
+            if (count($x_date) > 1) {
+                $t_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
+            }
+            $t_date = date('Y-m-d', strtotime($t_date));
+
+            $res = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date])->count();
+
+        }
+        echo $res;
+    }
+
     public function actionFindempdata()
     {
         $company_id = 1;
