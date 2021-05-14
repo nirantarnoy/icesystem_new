@@ -65,7 +65,7 @@ class Adjustment extends \common\models\JournalStock
 
     public static function getLastNo($company_id, $branch_id)
     {
-        $model = Stocktrans::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id,'activity_id'=>11])->MAX('journal_no');
+        $model = Stocktrans::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id,'activity_type_id'=>11])->MAX('journal_no');
         //   $model = Orders::find()->where(['date(order_date)' => date('Y-m-d', strtotime($date))])->MAX('order_no');
 
         $model_seq = \backend\models\Sequence::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->where(['module_id' => 11])->one();
