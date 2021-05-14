@@ -259,6 +259,7 @@ class PosController extends Controller
                             $model_line->total_amount = $pay_total_amount;
                             $model_line->change_amount = $pay_change;
                             $model_line->order_ref_id = $model_order->id;
+                            $model_line->payment_type_id = $payment_type;
                             $model_line->status = 1;
                             $model_line->doc = '';
                             if ($model_line->save(false)) {
@@ -288,6 +289,7 @@ class PosController extends Controller
                             $model_line->total_amount = $pay_total_amount;
                             $model_line->change_amount = $pay_change;
                             $model_line->order_ref_id = $model_order->id;
+                            $model_line->payment_type_id = $payment_type;
                             $model_line->status = 1;
                             $model_line->doc = '';
                             if ($model_line->save(false)) {

@@ -1536,6 +1536,7 @@ class OrdersController extends Controller
                         $model_line->payment_amount = $pay_amount[$i];
                         $model_line->total_amount = 0;
                         $model_line->order_ref_id = $order_id;
+                        $model_line->payment_type_id = $this->findPaytype($pay_method);
                         $model_line->status = 1;
                         $model_line->doc = '';
                         if ($model_line->save(false)) {
@@ -1553,6 +1554,17 @@ class OrdersController extends Controller
         }
         return $this->redirect(['orders/update', 'id' => $order_id]);
 
+    }
+
+    public function findPaytype($payment_id){
+        $res = 0;
+        if($payment_id){
+            $model = \backend\models\Paymentmethod::find()->where(['id'=>$payment_id])->one();
+            if($model){
+                $res = $model->pay_type;
+            }
+        }
+        return $res;
     }
 
     public function actionGetpaytrans()
