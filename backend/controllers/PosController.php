@@ -218,6 +218,8 @@ class PosController extends Controller
                             $model_stock->stock_type = 2;
                             $model_stock->activity_type_id = 5; // 1 prod rec 2 issue car
                             $model_stock->trans_ref_id = $model_order->id;
+                            $model_stock->company_id = $company_id;
+                            $model_stock->branch_id = $branch_id;
                             if ($model_stock->save()) {
                                 $this->updateSummary($product_list[$i], $default_warehouse, $line_qty[$i]);
                             }
