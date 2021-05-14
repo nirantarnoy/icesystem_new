@@ -88,7 +88,7 @@ $model_new = $model_car;
                         <!--                       <img src="../web/uploads/images/streamer/streamer.jpg" width="50%" alt="">-->
 <!--                    </div>-->
                     <div style="text-align: center">
-                        <p style="color: #f06e57"><?= $emp_daily_name ?></p>
+                        <p style="color: #fcd25a"><?= $emp_daily_name ?></p>
                     </div>
 
                     <div class="small-box-footer"></div>
