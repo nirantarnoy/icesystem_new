@@ -25,6 +25,7 @@ use kartik\select2\Select2;
                     'placeholder' => 'เลือกรถ',
                     'multiple' => true
                 ],
+                'theme' => \kartik\select2\Select2::THEME_KRAJEE,
                 'pluginOptions' => [
                         'allowClear'=> true,
                 ]
@@ -38,6 +39,7 @@ use kartik\select2\Select2;
                     'placeholder' => 'เลือกรถ',
                     'multiple' => true
                 ],
+                'theme' => \kartik\select2\Select2::THEME_KRAJEE,
                 'pluginOptions' => [
                     'allowClear'=> true,
                 ]
