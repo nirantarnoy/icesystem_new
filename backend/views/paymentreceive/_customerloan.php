@@ -67,7 +67,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     'label' => 'รถคันที่',
                     'width' => '10%',
                     'value' => function ($model, $key, $index, $widget) {
-                        return 'รถคันที่ ' . $model->car_code.' '.$model->car_name;
+                        return 'รถคันที่ ' .$model->car_name;
                     },
                     'filterType' => GridView::FILTER_SELECT2,
                     'filter' => ArrayHelper::map(\backend\models\Car::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->orderBy('name')->asArray()->all(), 'id', 'name'),
@@ -80,7 +80,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                         return [
                             'mergeColumns' => [[1, 4]], // columns to merge in summary
                             'content' => [             // content to show in each summary cell
-                                1 => 'ยอดรวมรถ (' . $model->car_code . ')',
+                                1 => 'ยอดรวมรถ (' . $model->car_name . ')',
                                 6 => GridView::F_SUM,
                                 8 => GridView::F_SUM,
 //                        7 => GridView::F_SUM,
