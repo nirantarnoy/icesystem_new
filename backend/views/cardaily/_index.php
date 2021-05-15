@@ -81,14 +81,14 @@ $model_new = $model_car;
                    onclick="showcarinfo($(this))"  class="small-box <?= $status_color ?>">
                     <div class="inner" style="text-align: right">
                         <h6><b><?= $value->name ?></b></h6>
-                        <p><?php echo $route_name->route_code ?></p>
+                        <p style="color: #fcd25a"><?php echo $route_name->route_code ?></p>
                     </div>
 <!--                    <div class="icon">-->
 <!--                        <i class="fas fa-truck"></i>-->
                         <!--                       <img src="../web/uploads/images/streamer/streamer.jpg" width="50%" alt="">-->
 <!--                    </div>-->
                     <div style="text-align: center">
-                        <p style="color: #fcd25a"><?= $emp_daily_name ?></p>
+                        <p style="color: #000b16"><?= $emp_daily_name ?></p>
                     </div>
 
                     <div class="small-box-footer"></div>
