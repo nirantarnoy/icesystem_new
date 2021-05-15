@@ -74,7 +74,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     'filterWidgetOptions' => [
                         'pluginOptions' => ['allowClear' => true],
                     ],
-                    'filterInputOptions' => ['placeholder' => '--เลือกสายส่ง--'],
+                    'filterInputOptions' => ['placeholder' => '--เลือกรถ--'],
                     'group' => true,  // enable grouping,
                     'groupHeader' => function ($model, $key, $index, $widget) { // Closure method
                         return [

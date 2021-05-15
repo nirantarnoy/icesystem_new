@@ -320,7 +320,7 @@ class PaymentreceiveController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         //   $dataProvider->query->andFilterWhere(['>','qty',0])->andFilterWhere(['customer_id'=>2247]);
         $dataProvider->setSort([
-            'defaultOrder'=>['route_code'=>SORT_ASC,'order_date'=>SORT_ASC,'customer_id'=>SORT_ASC]
+            'defaultOrder'=>['customer_id'=>SORT_ASC,'order_date'=>SORT_ASC]
         ]);
 
         return $this->render('_customerloan', [
