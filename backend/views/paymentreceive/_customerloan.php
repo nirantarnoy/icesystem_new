@@ -18,7 +18,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
 ?>
 
 <br/>
-<?php echo $this->render('_search', ['model' => $searchModel, 'company_id'=>$company_id,'branch_id'=>$branch_id]); ?>
+<?php echo $this->render('_customerloan_search', ['model' => $searchModel, 'company_id'=>$company_id,'branch_id'=>$branch_id]); ?>
 
 <div class="row">
     <div class="col-lg-12">
