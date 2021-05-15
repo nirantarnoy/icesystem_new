@@ -22,6 +22,7 @@ if ($model->f_date != null && $$model->t_date != null) {
     <div class="input-group">
         <!--         <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>-->
         <?= $form->field($model, 'globalSearch')->textInput(['placeholder' => 'ค้นหา', 'class' => 'form-control', 'aria-describedby' => 'basic-addon1'])->label(false) ?>
+       <?php $model->created_by = $model->created_by == null ? \Yii::$app->user->id: $model->created_by ?>
         <?= $form->field($model, 'created_by')->widget(\kartik\select2\Select2::className(), [
             'data' => \yii\helpers\ArrayHelper::map(\backend\models\User::find()->all(), 'id', function ($data) {
                 return $data->username;
