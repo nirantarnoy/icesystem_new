@@ -77,6 +77,8 @@ class SaleorderCustomerLoanSearch extends QuerySaleorderByCustomerLoanSum
             $query->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
         }
 
+        $query->andFilterWhere(['IN','car_ref_id',$this->car_ref_id]);
+
 
 
         return $dataProvider;

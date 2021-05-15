@@ -10,7 +10,7 @@ use kartik\select2\Select2;
 <div class="paymentreceive-search">
 
     <?php $form = ActiveForm::begin([
-        'action' => ['index'],
+        'action' => ['customerloan'],
         'method' => 'get',
         'options' => [
             'data-pjax' => 1
@@ -27,7 +27,7 @@ use kartik\select2\Select2;
                 'pluginOptions' => [
                         'multiple'=> true,
                 ]
-            ])->label() ?>
+            ])->label(false) ?>
         </div>
         <div class="col-lg-3"></div>
         <div class="col-lg-3"></div>
