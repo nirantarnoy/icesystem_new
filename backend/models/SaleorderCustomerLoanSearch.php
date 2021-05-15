@@ -65,7 +65,8 @@ class SaleorderCustomerLoanSearch extends QuerySaleorderByCustomerLoanSum
         $query->andFilterWhere([
             'customer_id' => $this->customer_id,
             'rt_id' => $this->rt_id,
-            'customer_type_id' => $this->customer_type_id
+            'customer_type_id' => $this->customer_type_id,
+            'car_ref_id' => $this->car_ref_id
             //'!=','route_code','NULL'
         ]);
 
