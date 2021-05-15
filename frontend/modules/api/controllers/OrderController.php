@@ -151,6 +151,7 @@ class OrderController extends Controller
                 $model->created_by = $user_id;
                 $model->company_id = $company_id;
                 $model->branch_id = $branch_id;
+                $model->sale_from_mobile = 1;
                 if ($model->save(false)) {
                     //   $price = $this->findCustomerprice($customer_id, $product_id, $route_id);
                     $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
