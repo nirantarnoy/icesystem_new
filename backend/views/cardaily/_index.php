@@ -38,7 +38,7 @@ $model_new = $model_car;
             $status_name = 'Close';
             $status_color = 'bg-white';
             $stream_status = 'Close';
-            $route_name = \common\models\QueryCarRoute::find()->where(['id'=>$value->id])->one();
+            $route_name = \common\models\QueryCarRoute::find()->where(['id' => $value->id])->one();
 
             $assign_id = 0;
             $stream_assign_date = '';
@@ -77,18 +77,18 @@ $model_new = $model_car;
             ?>
             <div class="col-lg-2 col-3">
                 <!-- small box -->
-                <a href="#"  data-id="<?= $value->id ?>" data-var="<?= $value->emp_qty ?>"
-                   onclick="showcarinfo($(this))"  class="small-box <?= $status_color ?>">
+                <a href="#" data-id="<?= $value->id ?>" data-var="<?= $value->emp_qty ?>"
+                   onclick="showcarinfo($(this))" class="small-box <?= $status_color ?>">
                     <div class="inner" style="text-align: right">
                         <h6><b><?= $value->name ?></b></h6>
                         <p style="color: #fcd25a"><?php echo $route_name->route_code ?></p>
                     </div>
-<!--                    <div class="icon">-->
-<!--                        <i class="fas fa-truck"></i>-->
-                        <!--                       <img src="../web/uploads/images/streamer/streamer.jpg" width="50%" alt="">-->
-<!--                    </div>-->
+                    <!--                    <div class="icon">-->
+                    <!--                        <i class="fas fa-truck"></i>-->
+                    <!--                       <img src="../web/uploads/images/streamer/streamer.jpg" width="50%" alt="">-->
+                    <!--                    </div>-->
                     <div style="text-align: center">
-                        <p style="color: #000b16"><?= $emp_daily_name ?></p>
+                        <p style="color: #000b16"><b><?= $emp_daily_name ?></b></p>
                     </div>
 
                     <div class="small-box-footer"></div>
