@@ -20,13 +20,14 @@ use yii\web\UploadedFile;
 class CustomerController extends Controller
 {
     public $enableCsrfValidation = false;
+
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST','GET'],
+                    'delete' => ['POST', 'GET'],
                 ],
             ],
         ];
@@ -62,11 +63,11 @@ class CustomerController extends Controller
     {
         $searchModel = new CustomersalehistorySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andFilterWhere(['customer_id'=>$id]);
+        $dataProvider->query->andFilterWhere(['customer_id' => $id]);
 
         $searchModel2 = new CustomersalepaySearch();
         $dataProvider2 = $searchModel2->search(Yii::$app->request->queryParams);
-        $dataProvider2->query->andFilterWhere(['customer_id'=>$id]);
+        $dataProvider2->query->andFilterWhere(['customer_id' => $id]);
 
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -84,6 +85,15 @@ class CustomerController extends Controller
      */
     public function actionCreate()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
         $model = new Customer();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -103,9 +113,11 @@ class CustomerController extends Controller
                 $model->shop_photo = $photo_name;
             }
 
-            $model->code = $model->getLastNo();
-            $model->sort_name = $model->sort_name == null?'':$model->sort_name;
-            if($model->save(false)){
+            $model->code = $model->getLastNo($company_id,$branch_id);
+            $model->sort_name = $model->sort_name == null ? '' : $model->sort_name;
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
+            if ($model->save(false)) {
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
                 return $this->redirect(['index']);
@@ -144,8 +156,8 @@ class CustomerController extends Controller
                 $photo->saveAs(Yii::getAlias('@backend') . '/web/uploads/images/customer/' . $photo_name);
                 $model->shop_photo = $photo_name;
             }
-            $model->sort_name = $model->sort_name == null?'':$model->sort_name;
-            if($model->save(false)){
+            $model->sort_name = $model->sort_name == null ? '' : $model->sort_name;
+            if ($model->save(false)) {
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
                 return $this->redirect(['index']);
@@ -187,6 +199,7 @@ class CustomerController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+
     public function actionDeletephoto()
     {
         $id = \Yii::$app->request->post('delete_id');
@@ -201,6 +214,7 @@ class CustomerController extends Controller
         }
         return $this->redirect(['customer/update', 'id' => $id]);
     }
+
     public function getPhotoName($id)
     {
         $photo_name = '';
