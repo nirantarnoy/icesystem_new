@@ -37,7 +37,7 @@ class QuerySaleorderByCustomerLoanSum extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['rt_id', 'customer_id', 'sale_channel_id', 'company_id', 'branch_id', 'customer_type_id'], 'integer'],
+            [['rt_id', 'customer_id', 'sale_channel_id', 'company_id', 'branch_id', 'customer_type_id','car_ref_id'], 'integer'],
             [['order_date'], 'safe'],
             [['line_total', 'payment_amount'], 'number'],
             [['route_code', 'car_name', 'cus_name', 'order_no'], 'string', 'max' => 255],

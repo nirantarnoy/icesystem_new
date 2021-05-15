@@ -63,7 +63,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
 //            'expandOneOnly' => true
 //        ],
                 [
-                    'attribute' => 'rt_id',
+                    'attribute' => 'car_ref_id',
                     'label' => 'รถคันที่',
                     'width' => '10%',
                     'value' => function ($model, $key, $index, $widget) {
@@ -162,6 +162,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 [
                     'attribute' => 'order_no',
                     'label' => 'เลขที่ขาย',
+                    'width' => '10%',
                     'headerOptions' => ['style' => 'text-align: center'],
                     'contentOptions' => ['style' => 'text-align: center'],
                     // 'pageSummary' => 'Page Summary',
