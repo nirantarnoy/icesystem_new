@@ -16,6 +16,8 @@ use \common\models\QuerySaleTransData;
 class SaleorderCustomerLoanSearch extends QuerySaleorderByCustomerLoanSum
 {
     public $globalSearch;
+    public $car_selected = [];
+    public $customer_selected = [];
 
     public function rules()
     {
@@ -24,7 +26,7 @@ class SaleorderCustomerLoanSearch extends QuerySaleorderByCustomerLoanSum
 //            [['code', 'name', 'note'], 'safe'],
 //            [['globalSearch'],'string']
             [['customer_id', 'rt_id', 'customer_type_id', 'company_id', 'branch_id', 'car_ref_id'], 'integer'],
-            // [['order_date'], 'safe']
+            [['car_selected', 'customer_selected'], 'safe']
         ];
     }
 
@@ -77,8 +79,8 @@ class SaleorderCustomerLoanSearch extends QuerySaleorderByCustomerLoanSum
             $query->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
         }
 
-        $query->andFilterWhere(['IN', 'car_ref_id', $this->car_ref_id])
-            ->andFilterWhere(['IN', 'customer_id', $this->customer_id]);
+        $query->andFilterWhere(['IN', 'car_ref_id', $this->car_selected])
+            ->andFilterWhere(['IN', 'customer_id', $this->customer_selected]);
 
 
         return $dataProvider;

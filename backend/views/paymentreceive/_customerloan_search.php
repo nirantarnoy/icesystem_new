@@ -19,7 +19,7 @@ use kartik\select2\Select2;
 
     <div class="row">
         <div class="col-lg-3">
-            <?= $form->field($model, 'car_ref_id')->widget(Select2::className(), [
+            <?= $form->field($model, 'car_selected')->widget(Select2::className(), [
                 'data' => ArrayHelper::map(\backend\models\Car::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'code'),
                 'options' => [
                     'placeholder' => 'เลือกรถ',
@@ -32,7 +32,7 @@ use kartik\select2\Select2;
         </div>
         <div class="col-lg-3"></div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'customer_id')->widget(Select2::className(), [
+            <?= $form->field($model, 'customer_selected')->widget(Select2::className(), [
                 'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'code'),
                 'options' => [
                     'placeholder' => 'เลือกรถ',
