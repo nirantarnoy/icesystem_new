@@ -4,13 +4,20 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 $dash_date = null;
-if ($model->f_date != null && $$model->t_date != null) {
-    $dash_date = date('d/m/Y', strtotime($$model->f_date)) . ' - ' . date('d/m/Y', strtotime($$model->t_date));
+$trigger_submit = 0;
+if ($model->order_date != null) {
+    $trigger_submit = 0;
+    //$dash_date = date('d/m/Y', strtotime($model->f_date)) . ' - ' . date('d/m/Y', strtotime($model->t_date));
+} else {
+    $model->order_date = date('d/m/Y') . '-' . date('d/m/Y');
+    $trigger_submit = 1;
 }
+
+//echo $dash_date;
 ?>
 
 <div class="position-search">
-
+    <input type="hidden" id="check-is-init" value="<?= $trigger_submit ?>">
     <?php $form = ActiveForm::begin([
         'action' => ['salehistory'],
         'method' => 'get',
@@ -22,7 +29,7 @@ if ($model->f_date != null && $$model->t_date != null) {
     <div class="input-group">
         <!--         <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>-->
         <?= $form->field($model, 'globalSearch')->textInput(['placeholder' => 'ค้นหา', 'class' => 'form-control', 'aria-describedby' => 'basic-addon1'])->label(false) ?>
-       <?php $model->created_by = $model->created_by == null ? \Yii::$app->user->id: $model->created_by ?>
+        <?php $model->created_by = $model->created_by == null ? \Yii::$app->user->id : $model->created_by ?>
         <?= $form->field($model, 'created_by')->widget(\kartik\select2\Select2::className(), [
             'data' => \yii\helpers\ArrayHelper::map(\backend\models\User::find()->all(), 'id', function ($data) {
                 return $data->username;
@@ -44,6 +51,7 @@ if ($model->f_date != null && $$model->t_date != null) {
             ],
             'presetDropdown' => true,
             'options' => [
+                'id' => 'search-date',
                 'class' => 'form-control',
                 'onchange' => '$("#form-dashboard").submit();'
             ],
@@ -55,3 +63,14 @@ if ($model->f_date != null && $$model->t_date != null) {
     <?php ActiveForm::end(); ?>
 
 </div>
+<?php
+$js = <<<JS
+$(function(){
+   var x = $("#check-is-init").val();
+   if(x == 1){
+       $("#search-date").trigger('change');
+   }
+});
+JS;
+$this->registerJs($js, static::POS_END);
+?>
