@@ -20,10 +20,11 @@ use kartik\select2\Select2;
 
     <div class="input-group">
         <!--         <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>-->
-        <?= $form->field($model, 'car_ref_id')->widget(Select2::className(),[
-            'data' => ArrayHelper::map(\backend\models\Car::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(),'id', 'code'),
-            'options'=>[
-                'placeholder'=>'เลือกรถ'
+        <?= $form->field($model, 'car_ref_id')->widget(Select2::className(), [
+            'data' => ArrayHelper::map(\backend\models\Car::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'code'),
+            'options' => [
+                'placeholder' => 'เลือกรถ'
+            ]
         ])->label(false) ?>
     </div>
     <?php ActiveForm::end(); ?>
