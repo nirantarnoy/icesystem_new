@@ -55,6 +55,7 @@ class JournalissueController extends Controller
                 if ($model_line) {
                     $status = true;
                     foreach ($model_line as $value) {
+                        if ($value->qty == null || $value->qty <= 0) continue;
                         $product_image = \backend\models\Product::findPhoto($value->product_id);
                         array_push($data, [
                             'id' => $value->id,
@@ -70,7 +71,6 @@ class JournalissueController extends Controller
                         ]);
                     }
                 }
-
             }
         }
 
@@ -109,7 +109,7 @@ class JournalissueController extends Controller
                     'has_record' => 1,
                     'status' => $model->status,
                 ]);
-            }else{
+            } else {
                 array_push($data, [
                     'has_record' => 0,
                     'status' => 0,
