@@ -23,8 +23,8 @@ class SaleorderCustomerLoanSearch extends QuerySaleorderByCustomerLoanSum
 //            [['id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
 //            [['code', 'name', 'note'], 'safe'],
 //            [['globalSearch'],'string']
-            [['customer_id', 'rt_id','customer_type_id','company_id','branch_id','car_ref_id'], 'integer'],
-           // [['order_date'], 'safe']
+            [['customer_id', 'rt_id', 'customer_type_id', 'company_id', 'branch_id', 'car_ref_id'], 'integer'],
+            // [['order_date'], 'safe']
         ];
     }
 
@@ -77,8 +77,8 @@ class SaleorderCustomerLoanSearch extends QuerySaleorderByCustomerLoanSum
             $query->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
         }
 
-        $query->andFilterWhere(['IN','car_ref_id',$this->car_ref_id]);
-
+        $query->andFilterWhere(['IN', 'car_ref_id', $this->car_ref_id])
+            ->andFilterWhere(['IN', 'customer_id', $this->customer_id]);
 
 
         return $dataProvider;

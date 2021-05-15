@@ -30,7 +30,17 @@ use kartik\select2\Select2;
             ])->label(false) ?>
         </div>
         <div class="col-lg-3"></div>
-        <div class="col-lg-3"></div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'customer_id')->widget(Select2::className(), [
+                'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'code'),
+                'options' => [
+                    'placeholder' => 'เลือกลูกค้า'
+                ],
+                'pluginOptions' => [
+                    'multiple'=> true,
+                ]
+            ])->label(false) ?>
+        </div>
         <div class="col-lg-3">
             <input type="submit" class="btn btn-primary" value="ค้นหา">
         </div>
