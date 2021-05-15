@@ -25,7 +25,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
         <?php
         echo GridView::widget([
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
+        //    'filterModel' => $searchModel,
             'showPageSummary' => true,
             'pjax' => true,
             'striped' => true,

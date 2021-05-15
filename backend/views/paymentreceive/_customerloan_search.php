@@ -22,10 +22,11 @@ use kartik\select2\Select2;
             <?= $form->field($model, 'car_ref_id')->widget(Select2::className(), [
                 'data' => ArrayHelper::map(\backend\models\Car::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'code'),
                 'options' => [
-                    'placeholder' => 'เลือกรถ'
+                    'placeholder' => 'เลือกรถ',
+                    'multiple' => true
                 ],
                 'pluginOptions' => [
-                        'multiple'=> true,
+                        'allowClear'=> true,
                 ]
             ])->label(false) ?>
         </div>
@@ -34,10 +35,11 @@ use kartik\select2\Select2;
             <?= $form->field($model, 'customer_id')->widget(Select2::className(), [
                 'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'code'),
                 'options' => [
-                    'placeholder' => 'เลือกลูกค้า'
+                    'placeholder' => 'เลือกรถ',
+                    'multiple' => true
                 ],
                 'pluginOptions' => [
-                    'multiple'=> true,
+                    'allowClear'=> true,
                 ]
             ])->label(false) ?>
         </div>
