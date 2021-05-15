@@ -23,7 +23,7 @@ class SaleorderCustomerLoanSearch extends QuerySaleorderByCustomerLoanSum
 //            [['id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
 //            [['code', 'name', 'note'], 'safe'],
 //            [['globalSearch'],'string']
-            [['customer_id', 'rt_id','customer_type_id','company_id','branch_id'], 'integer'],
+            [['customer_id', 'rt_id','customer_type_id','company_id','branch_id','car_ref_id'], 'integer'],
            // [['order_date'], 'safe']
         ];
     }

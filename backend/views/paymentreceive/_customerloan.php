@@ -67,7 +67,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     'label' => 'รถคันที่',
                     'width' => '10%',
                     'value' => function ($model, $key, $index, $widget) {
-                        return 'รถคันที่ ' .$model->car_name;
+                        return $model->car_name;
                     },
                     'filterType' => GridView::FILTER_SELECT2,
                     'filter' => ArrayHelper::map(\backend\models\Car::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->orderBy('name')->asArray()->all(), 'id', 'name'),
