@@ -96,12 +96,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
-                    //return number_format(\backend\models\Orders::findordercredit($data->id));
-                    if ($data->payment_method_id == 2) {
-                        return number_format(\backend\models\Orders::getlinesum($data->id));
-                    } else {
-                        return 0;
-                    }
+                    return number_format(\backend\models\Orders::findordercredit($data->id));
+//                    if ($data->payment_method_id == 2) {
+//                        return number_format(\backend\models\Orders::getlinesum($data->id));
+//                    } else {
+//                        return 0;
+//                    }
                 }
             ],
             [
