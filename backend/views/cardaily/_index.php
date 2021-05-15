@@ -38,7 +38,7 @@ $model_new = $model_car;
             $status_name = 'Close';
             $status_color = 'bg-white';
             $stream_status = 'Close';
-            $route_name = '';
+            $route_name = \common\models\QueryCarRoute::find()->where(['id'=>$value->id])->one();
 
             $assign_id = 0;
             $stream_assign_date = '';
@@ -81,7 +81,7 @@ $model_new = $model_car;
                    onclick="showcarinfo($(this))"  class="small-box <?= $status_color ?>">
                     <div class="inner" style="text-align: right">
                         <h6><b><?= $value->name ?></b></h6>
-                        <p><?php echo $route_name ?></p>
+                        <p><?php echo $route_name->route_code ?></p>
                     </div>
 <!--                    <div class="icon">-->
 <!--                        <i class="fas fa-truck"></i>-->
