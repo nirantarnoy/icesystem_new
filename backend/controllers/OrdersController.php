@@ -1527,6 +1527,9 @@ class OrdersController extends Controller
                         //$pay_method_name = \backend\models\Paymentmethod::findName($pay_method[$i]);
                         //  if ($pay_method_name == 'เงินสด' && ($pay_amount[$i] == null || $pay_amount[$i] == 0)) continue;
                         //if ($pay_method_name == 'เงินสด' && ($pay_amount[$i] == null || $pay_amount[$i] == 0)) continue;
+
+                        $sale_pay_type = $this->findPaytype($pay_method);
+
                         $model_line = new \backend\models\Paymenttransline();
                         $model_line->trans_id = $model->id;
                         $model_line->customer_id = $customer_id[$i];
@@ -1536,7 +1539,8 @@ class OrdersController extends Controller
                         $model_line->payment_amount = $pay_amount[$i];
                         $model_line->total_amount = 0;
                         $model_line->order_ref_id = $order_id;
-                        $model_line->payment_type_id = $this->findPaytype($pay_method);
+                        $model_line->payment_type_id = $sale_pay_type;
+                        $model_line->sale_payment_method_id = $sale_pay_type;
                         $model_line->status = 1;
                         $model_line->doc = '';
                         if ($model_line->save(false)) {
