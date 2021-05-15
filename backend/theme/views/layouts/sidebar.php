@@ -297,6 +297,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="index.php?r=paymentrechistory/index" class="nav-link paymentrechistory">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>ประวัติชำระหนี้</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="index.php?r=closeorder" class="nav-link closeorder">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>จบการขาย</p>
