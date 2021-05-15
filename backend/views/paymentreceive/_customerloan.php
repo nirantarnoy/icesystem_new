@@ -124,22 +124,22 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
 //            'groupOddCssClass' => 'kv-grouped-row',  // configure odd group cell css class
 //            'groupEvenCssClass' => 'kv-grouped-row', // configure even group cell css class
                 ],
-                [
-                    'attribute' => 'customer_type_id',
-                    'label' => 'ประเภทลูกค้า',
-                   // 'width' => '10%',
-                    'value' => function ($model, $key, $index, $widget) {
-                        return \backend\models\Customertype::findName($model->customer_type_id);
-                    },
-                    'filterType' => GridView::FILTER_SELECT2,
-                    'filter' => ArrayHelper::map(\backend\models\Customertype::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->orderBy('name')->asArray()->all(), 'id', 'name'),
-                    'filterWidgetOptions' => [
-                        'pluginOptions' => ['allowClear' => true],
-                    ],
-                    'filterInputOptions' => ['placeholder' => '--เลือกประเภทลูกค้า--'],
-                    'group' => true,  // enable grouping
-                    'subGroupOf' => 2 // supplier column index is the parent group
-                ],
+//                [
+//                    'attribute' => 'customer_type_id',
+//                    'label' => 'ประเภทลูกค้า',
+//                   // 'width' => '10%',
+//                    'value' => function ($model, $key, $index, $widget) {
+//                        return \backend\models\Customertype::findName($model->customer_type_id);
+//                    },
+//                    'filterType' => GridView::FILTER_SELECT2,
+//                    'filter' => ArrayHelper::map(\backend\models\Customertype::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->orderBy('name')->asArray()->all(), 'id', 'name'),
+//                    'filterWidgetOptions' => [
+//                        'pluginOptions' => ['allowClear' => true],
+//                    ],
+//                    'filterInputOptions' => ['placeholder' => '--เลือกประเภทลูกค้า--'],
+//                    'group' => true,  // enable grouping
+//                    'subGroupOf' => 2 // supplier column index is the parent group
+//                ],
 //        [
 //            'class' => '\kartik\grid\ExpandRowColumn',
 //            'value' => function ($model, $key, $index, $column) {
