@@ -9,7 +9,7 @@ $fontData = $defaultFontConfig['fontdata'];
 $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp',
 //$mpdf = new \Mpdf\Mpdf([
     //'tempDir' => '/tmp',
-    'mode' => 'utf-8', 'format' => [80, 120],
+    'mode' => 'utf-8', 'format' => [78, 120],
     'fontdata' => $fontData + [
             'sarabun' => [ // ส่วนที่ต้องเป็น lower case ครับ
                 'R' => 'THSarabunNew.ttf',
@@ -23,8 +23,8 @@ $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp',
 //$mpdf->SetMargins(-10, 1, 1);
 //$mpdf->SetDisplayMode('fullpage');
 $mpdf->AddPageByArray([
-    'margin-left' => 1,
-    'margin-right' => 1,
+    'margin-left' => 2,
+    'margin-right' => 2,
     'margin-top' => 0,
     'margin-bottom' => 1,
 ]);
