@@ -730,7 +730,7 @@ class OrderController extends Controller
         if ($route_id != null && $order_date != null) {
          //   $model = \backend\models\Orders::find()->where(['order_channel_id' => $route_id, 'date(order_date)' => $f_date])->andFilterWhere(['<', 'status', 100])->one();
             $model = \backend\models\Orders::find()->where(['order_channel_id' => $route_id, 'date(order_date)' => $f_date])->one();
-            $data = ['route_id'=>$route_id,'data'=>$order_date];
+            $data = ['route_id'=>$route_id,'data'=>$f_date];
             if ($model) {
 //                $data = ['route_id'=>$route_id,'data'=>$order_date];
 //                $model_close = \common\models\QuerySaleFinished::find()->where()->all();
