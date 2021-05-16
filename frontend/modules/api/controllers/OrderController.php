@@ -67,6 +67,10 @@ class OrderController extends Controller
         }
 
         $data = [];
+        $is_free = 0;
+        if ($payment_type_id == 3) {
+            $is_free = 1;
+        }
         if ($customer_id && $route_id && $car_id) {
             //  $sale_date = date('Y/m/d');
             $sale_date = date('Y/m/d');
@@ -96,8 +100,9 @@ class OrderController extends Controller
                     $modelx = \common\models\OrderLine::find()->where(['product_id' => $product_id, 'order_id' => $has_order_id, 'customer_id' => $customer_id])->one();
                     if ($modelx) {
                         $modelx->qty = ($modelx->qty + $qty);
-                        $modelx->line_total = ($modelx->qty * $price);
+                        $modelx->line_total = $payment_type_id == 3 ? 0 : ($modelx->qty * $price);
                         $modelx->status = 1;
+                        $modelx->is_free = $is_free;
                         if ($modelx->save(false)) {
                             $status = true;
                             $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
@@ -112,16 +117,20 @@ class OrderController extends Controller
                         $model_line->customer_id = $customer_id;
                         $model_line->product_id = $product_id;
                         $model_line->qty = $qty;
-                        $model_line->price = $price;
-                        $model_line->line_total = ($qty * $price);
+                        $model_line->price = $payment_type_id == 3 ? 0 : $price;
+                        $model_line->line_total = $payment_type_id == 3 ? 0 : ($qty * $price);
                         $model_line->price_group_id = $price_group_id;
                         $model_line->sale_payment_method_id = $payment_type_id;
                         $model_line->issue_ref_id = $issue_id;
                         $model_line->status = 1;
+                        $model_line->is_free = $is_free;
                         if ($model_line->save(false)) {
 
                             //  if ($payment_type_id == 2) {
-                            $this->addpayment($has_order_id, $customer_id, ($qty * $price), $company_id, $branch_id, $payment_type_id);
+                            if ($payment_type_id != 3) {
+                                $this->addpayment($has_order_id, $customer_id, ($qty * $price), $company_id, $branch_id, $payment_type_id);
+                            }
+
                             //  }
 
                             $order_total_all += $model_line->line_total;
@@ -162,16 +171,20 @@ class OrderController extends Controller
                     $model_line->customer_id = $customer_id;
                     $model_line->product_id = $product_id;
                     $model_line->qty = $qty;
-                    $model_line->price = $price;
-                    $model_line->line_total = ($qty * $price);
+                    $model_line->price = $payment_type_id == 3 ? 0 : $price;
+                    $model_line->line_total = $payment_type_id == 3 ? 0 : ($qty * $price);
                     $model_line->price_group_id = $price_group_id;
                     $model_line->status = 1;
                     $model_line->sale_payment_method_id = $payment_type_id;
                     $model_line->issue_ref_id = $issue_id;
+                    $model_line->is_free = $is_free;
                     if ($model_line->save(false)) {
 
                         //   if ($payment_type_id == 2) {
-                        $this->addpayment($model->id, $customer_id, ($qty * $price), $company_id, $branch_id, $payment_type_id);
+
+                        if ($payment_type_id != 3) {
+                            $this->addpayment($model->id, $customer_id, ($qty * $price), $company_id, $branch_id, $payment_type_id);
+                        }
                         //  }
 
                         $order_total_all += $model_line->line_total;
@@ -625,7 +638,7 @@ class OrderController extends Controller
         echo $html;
     }
 
-    public function closeorder()
+    public function actionCloseorder()
     {
         $status = false;
         $route_id = null;
@@ -638,7 +651,7 @@ class OrderController extends Controller
 
         $data = [];
         if ($route_id != null && $order_date != null) {
-           //  $model = \backend\models\Order
+            //  $model = \backend\models\Order
         }
 
         return ['status' => $status, 'data' => $data];
