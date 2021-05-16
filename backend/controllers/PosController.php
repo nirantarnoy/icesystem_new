@@ -465,14 +465,14 @@ class PosController extends Controller
     public function actionPrint($id)
     {
         if ($id) {
-//            $model = \backend\models\Orders::find()->where(['id' => $id])->one();
-//            $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
-//            $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
-//            //   $content =  $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
-//            $session = \Yii::$app->session;
-//            $session->setFlash('msg-index', 'slip.pdf');
-//            $session->setFlash('after-print', true);
-//            $this->redirect(['pos/salehistory']);
+            $model = \backend\models\Orders::find()->where(['id' => $id])->one();
+            $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
+            $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
+            //   $content =  $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
+            $session = \Yii::$app->session;
+            $session->setFlash('msg-index', 'slip.pdf');
+            $session->setFlash('after-print', true);
+            $this->redirect(['pos/salehistory']);
         }
 
     }
@@ -666,7 +666,7 @@ class PosController extends Controller
                     $model_balance_out->balance_out = $line_balance_out[$i];
                     $model_balance_out->status = 1;
                     if ($model_balance_out->save()) {
-                        $model_update = \common\models\SaleBalanceOut::find()->where(['id' => $line_balance_in_id[$x]])->one();
+                        $model_update = \common\models\SaleBalanceOut::find()->where(['id' => $line_balance_in_id[$i]])->one();
                         if ($model_update) {
                             $model_update->status = 2;
                             $model_update->save();
