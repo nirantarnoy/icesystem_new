@@ -119,9 +119,9 @@ class OrderController extends Controller
                         $model_line->status = 1;
                         if ($model_line->save(false)) {
 
-                            if ($payment_type_id == 2) {
+                          //  if ($payment_type_id == 2) {
                                 $this->addpayment($has_order_id, $customer_id, ($qty * $price), $company_id, $branch_id);
-                            }
+                          //  }
 
                             $order_total_all += $model_line->line_total;
                             $status = true;
@@ -168,9 +168,9 @@ class OrderController extends Controller
                     $model_line->issue_ref_id = $issue_id;
                     if ($model_line->save(false)) {
 
-                        if ($payment_type_id == 2) {
+                     //   if ($payment_type_id == 2) {
                             $this->addpayment($model->id, $customer_id, ($qty * $price), $company_id, $branch_id);
-                        }
+                      //  }
 
                         $order_total_all += $model_line->line_total;
                         $status = true;
