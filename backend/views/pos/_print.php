@@ -178,7 +178,7 @@ $mpdf->AddPageByArray([
         <td style="font-size: 18px;">ส่วนลด</td>
         <td></td>
         <td></td>
-        <td style="font-size: 18px;text-align: right"><?= number_format($discount.2) ?></td>
+        <td style="font-size: 18px;text-align: right"><?= number_format($discount,2) ?></td>
     </tr>
     <tr>
         <td style="font-size: 18px;">จำนวนสุทธิ</td>
