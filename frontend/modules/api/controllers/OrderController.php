@@ -93,7 +93,7 @@ class OrderController extends Controller
             if ($has_order != null) {
                 $has_order_id = $has_order->id;
                 if ($has_order_id) {
-                    $this->registerissue($has_order_id, $issue_id);
+                    $this->registerissue($has_order_id, $issue_id, $company_id, $branch_id);
                     //$price = $this->findCustomerprice($customer_id, $product_id, $route_id);
 
                     $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
@@ -165,7 +165,7 @@ class OrderController extends Controller
                 $model->sale_from_mobile = 1;
                 if ($model->save(false)) {
                     array_push($data, ['order_id' => $model->id]);
-                    $this->registerissue($model->id, $issue_id);
+                    $this->registerissue($has_order_id, $issue_id, $company_id, $branch_id);
                     //   $price = $this->findCustomerprice($customer_id, $product_id, $route_id);
                     $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
                     $model_line = new \backend\models\Orderline();
@@ -640,21 +640,28 @@ class OrderController extends Controller
         echo $html;
     }
 
-    public function registerissue($order_id, $issue_id)
+    public function registerissue($order_id, $issue_id, $company_id, $branch_id)
     {
 
 //        $order_id = \Yii::$app->request->post('order_id');
 //        $issuelist = \Yii::$app->request->post('issue_list');
+        $default_wh = 6;
+        if ($company_id == 1 && $branch_id == 2) {
+            $default_wh = 5;
+        }
 
         if ($order_id != null && $issue_id != null) {
             //  $issue_data = explode(',', $issuelist);
 //            print_r($issuelist[0]);
 
-
             $model_check_has_issue = \common\models\OrderStock::find()->where(['order_id' => $order_id, 'issue_id' => $issue_id])->count();
             if ($model_check_has_issue > 0) {
 
             } else {
+//                $model_order= \backend\models\Orders::find()->where(['id'=>$order_id])->one();
+//                if($model_order){
+//                    $model_order->
+//                }
                 $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
                 foreach ($model_issue_line as $val2) {
                     if ($val2->qty <= 0 || $val2->qty != null) continue;
@@ -671,8 +678,29 @@ class OrderController extends Controller
                             $model_check_has_issue->status = 2;
                             $model_check_has_issue->save(false);
                         }
-                        $this->updateStock($val2->product_id, $val2->qty, 6, '');
+                        $this->updateStock($val2->product_id, $val2->qty, $default_wh, '');
                     }
+                }
+            }
+        }
+    }
+
+    public function updateStock($product_id, $qty, $wh_id, $journal_no)
+    {
+        if ($product_id != null && $qty > 0) {
+            $model_trans = new \backend\models\Stocktrans();
+            $model_trans->journal_no = $journal_no;
+            $model_trans->trans_date = date('Y-m-d H:i:s');
+            $model_trans->product_id = $product_id;
+            $model_trans->qty = $qty;
+            $model_trans->warehouse_id = $wh_id;
+            $model_trans->stock_type = 2; // 1 in 2 out
+            $model_trans->activity_type_id = 6; // 6 issue car
+            if ($model_trans->save(false)) {
+                $model = \backend\models\Stocksum::find()->where(['warehouse_id' => $wh_id, 'product_id' => $product_id])->one();
+                if ($model) {
+                    $model->qty = $model->qty - (int)$qty;
+                    $model->save(false);
                 }
             }
         }
