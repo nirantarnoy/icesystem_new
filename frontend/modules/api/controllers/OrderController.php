@@ -720,7 +720,7 @@ class OrderController extends Controller
         $xdate = explode('-', trim($order_date));
         $t_date = date('Y-m-d');
         if (count($xdate) > 1) {
-            $t_date = $xdate[2] . '-' . $xdate[1] . '-' . $xdate[0];
+            $t_date = $xdate[2] . '/' . $xdate[1] . '/' . $xdate[0];
         }
 
         $f_date = date('Y-m-d', strtotime($t_date));
