@@ -162,8 +162,8 @@ $mpdf->AddPageByArray([
         <tr>
             <td><?= \backend\models\Product::findName($value->product_id); ?></td>
             <td style="text-align: center"><?= $value->qty ?></td>
-            <td style="text-align: center"><?= number_format($value->price,1) ?></td>
-            <td style="text-align: right"><?= number_format($value->qty * $value->price, 1); ?></td>
+            <td style="text-align: center"><?= number_format($value->price,2) ?></td>
+            <td style="text-align: right"><?= number_format($value->qty * $value->price, 2); ?></td>
         </tr>
 
     <?php endforeach; ?>
@@ -172,25 +172,25 @@ $mpdf->AddPageByArray([
         <td style="font-size: 18px;border-top: 1px dotted gray">จำนวนรายการ</td>
         <td style="font-size: 18px;border-top: 1px dotted gray;text-align: center"><?= number_format($total_qty) ?></td>
         <td style="font-size: 18px;border-top: 1px dotted gray;text-align: center"></td>
-        <td style="font-size: 18px;border-top: 1px dotted gray;text-align: right"><?= number_format($total_amt, 1) ?></td>
+        <td style="font-size: 18px;border-top: 1px dotted gray;text-align: right"><?= number_format($total_amt, 2) ?></td>
     </tr>
     <tr>
         <td style="font-size: 18px;">ส่วนลด</td>
         <td></td>
         <td></td>
-        <td style="font-size: 18px;text-align: right"><?= number_format($discount) ?></td>
+        <td style="font-size: 18px;text-align: right"><?= number_format($discount.2) ?></td>
     </tr>
     <tr>
         <td style="font-size: 18px;">จำนวนสุทธิ</td>
         <td></td>
         <td></td>
-        <td style="font-size: 18px;text-align: right"> <?= number_format($total_amt - $discount,1) ?></td>
+        <td style="font-size: 18px;text-align: right"> <?= number_format($total_amt - $discount,2) ?></td>
     </tr>
     <tr>
         <td style="font-size: 18px;">ทอนเงิน</td>
         <td></td>
         <td></td>
-        <td style="font-size: 18px;text-align: right"> <?= number_format($change) ?></td>
+        <td style="font-size: 18px;text-align: right"> <?= number_format($change,2) ?></td>
     </tr>
     </tfoot>
 </table>
