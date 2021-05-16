@@ -715,13 +715,73 @@ class OrderController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $route_id = $req_data['route_id'];
-        $order_date = $req_data['route_id'];
+        $order_date = $req_data['order_date'];
+
+        $xdate = explode('-', trim($order_date));
+        $t_date = date('Y-m-d');
+        if (count($xdate) > 1) {
+            $t_date = $xdate[2] . '-' . $xdate[1] . '-' . $xdate[0];
+        }
+
+        $f_date = date('Y-m-d', strtotime($t_date));
 
         $data = [];
+        $res = 0;
         if ($route_id != null && $order_date != null) {
-            //  $model = \backend\models\Order
+            $model = \backend\models\Orders::find()->where(['order_channel_id' => $route_id, 'date(order_date)' => $f_date])->andFilterWhere(['<>', 'status', 100])->one();
+            if ($model) {
+                $model_close = \common\models\QuerySaleFinished::find()->where()->all();
+                if ($model_close) {
+                    foreach ($model_close as $value) {
+                        if ($value->qty <= 0 || $value->qty == null) continue;
+                        $model = new \backend\models\Stocktrans();
+                        $model->journal_no = '';
+                        $model->trans_date = date('Y-m-d H:i:s');
+                        $model->product_id = $value->product_id;
+                        $model->qty = $value->qty;
+                        $model->warehouse_id = 5;
+                        $model->stock_type = 1;
+                        $model->activity_type_id = 7; // 1 prod rec 2 issue car
+                        if ($model->save()) {
+                            $this->updateSummary($value->product_id, 5, $value->qty);
+                            $res += 1;
+                        }
+                    }
+                    if ($res) {
+                        $this->updateOrderStatus($model->id);
+                    }
+                }
+            }
         }
 
         return ['status' => $status, 'data' => $data];
+    }
+
+    public function updateSummary($product_id, $wh_id, $qty)
+    {
+        if ($wh_id != null && $product_id != null && $qty > 0) {
+            $model = \backend\models\Stocksum::find()->where(['warehouse_id' => $wh_id, 'product_id' => $product_id])->one();
+            if ($model) {
+                $model->qty = ($model->qty + (int)$qty);
+                $model->save(false);
+            } else {
+                $model_new = new \backend\models\Stocksum();
+                $model_new->warehouse_id = $wh_id;
+                $model_new->product_id = $product_id;
+                $model_new->qty = $qty;
+                $model_new->save(false);
+            }
+        }
+    }
+
+    public function updateOrderStatus($order_id)
+    {
+        if ($order_id) {
+            $model = \backend\models\Orders::find()->where(['id' => $order_id])->one();
+            if ($model) {
+                $model->status = 100;
+                $model->save();
+            }
+        }
     }
 }
