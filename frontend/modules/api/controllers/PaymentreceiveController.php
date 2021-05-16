@@ -17,7 +17,7 @@ class PaymentreceiveController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'list' => ['POST'],
-                    'addpay'=>['POST'],
+                    'addpay' => ['POST'],
                     'deletepay' => ['POST']
                 ],
             ],
@@ -35,7 +35,7 @@ class PaymentreceiveController extends Controller
         $status = false;
         if ($customer_id) {
             // $model = \common\models\JournalIssue::find()->one();
-            $model = \common\models\QuerySalePaySummary::find()->where(['customer_id' => $customer_id])->andfilterWhere(['>' ,'remain_amount', 0])->all();
+            $model = \common\models\QuerySalePaySummary::find()->where(['customer_id' => $customer_id])->andfilterWhere(['>', 'remain_amount', 0])->all();
             if ($model) {
                 $status = true;
                 foreach ($model as $value) {
@@ -56,6 +56,7 @@ class PaymentreceiveController extends Controller
 
         return ['status' => $status, 'data' => $data];
     }
+
     public function actionAddpay()
     {
         $order_id = 0;
@@ -84,7 +85,7 @@ class PaymentreceiveController extends Controller
         $data = [];
         $status = false;
         if ($customer_id && $order_id) {
-          //  $t_date = date('Y-m-d');
+            //  $t_date = date('Y-m-d');
 
             $xdate = explode('-', trim($pay_date));
             $t_date = date('Y-m-d');
@@ -93,33 +94,35 @@ class PaymentreceiveController extends Controller
             }
 
             $check_record = $this->checkHasRecord($customer_id, $t_date);
-            if($check_record != null){
+            if ($check_record != null) {
                 //if(count($check_record) > 0){
-                    $model_line = new \common\models\PaymentReceiveLine();
-                    $model_line->payment_receive_id = $check_record->id;
-                    $model_line->order_id = $order_id;
-                    $model_line->payment_amount = $pay_amount;
-                    $model_line->payment_channel_id = $payment_channel_id;
-                    $model_line->status = 1;
-                    if($model_line->save(false)){
-                        $status = true;
-                        $this->updatePaymenttransline($customer_id, $order_id, $pay_amount, $payment_channel_id);
-                    }
-               // }
-            }else{
+                $model_line = new \common\models\PaymentReceiveLine();
+                $model_line->payment_receive_id = $check_record->id;
+                $model_line->order_id = $order_id;
+                $model_line->payment_amount = $pay_amount;
+                $model_line->payment_channel_id = $payment_channel_id;
+                $model_line->status = 1;
+                if ($model_line->save(false)) {
+                    $status = true;
+                    $this->updatePaymenttransline($customer_id, $order_id, $pay_amount, $payment_channel_id);
+                }
+                // }
+            } else {
                 $model = new \backend\models\Paymentreceive();
                 $model->trans_date = date('Y-m-d', strtotime($t_date));//date('Y-m-d H:i:s');
                 $model->customer_id = $customer_id;
-                $model->journal_no = $model->getLastNo2(date('Y-m-d'), $company_id , $branch_id);
+                $model->journal_no = $model->getLastNo2(date('Y-m-d'), $company_id, $branch_id);
                 $model->status = 1;
-                if($model->save()){
+                $model->customer_id = $company_id;
+                $model->branch_id = $branch_id;
+                if ($model->save()) {
                     $model_line = new \common\models\PaymentReceiveLine();
                     $model_line->payment_receive_id = $model->id;
                     $model_line->order_id = $order_id;
                     $model_line->payment_amount = $pay_amount;
                     $model_line->payment_channel_id = $payment_channel_id;
                     $model_line->status = 1;
-                    if($model_line->save(false)){
+                    if ($model_line->save(false)) {
                         $status = true;
                         $this->updatePaymenttransline($customer_id, $order_id, $pay_amount, $payment_channel_id);
                     }
@@ -127,14 +130,17 @@ class PaymentreceiveController extends Controller
             }
 
         }
-       // array_push($data,['date'=>$t_date]);
+        // array_push($data,['date'=>$t_date]);
 
         return ['status' => $status, 'data' => $data];
     }
-    public function checkHasRecord($customer_id, $trans_date){
-        $model = \common\models\PaymentReceive::find()->where(['date(trans_date)'=>$trans_date,'customer_id'=>$customer_id])->one();
+
+    public function checkHasRecord($customer_id, $trans_date)
+    {
+        $model = \common\models\PaymentReceive::find()->where(['date(trans_date)' => $trans_date, 'customer_id' => $customer_id])->one();
         return $model;
     }
+
     public function updatePaymenttransline($customer_id, $order_id, $pay_amt, $pay_type)
     {
         if ($customer_id != null && $order_id != null && $pay_amt > 0) {
@@ -151,6 +157,7 @@ class PaymentreceiveController extends Controller
             }
         }
     }
+
     public function actionDeletepay()
     {
         $status = false;

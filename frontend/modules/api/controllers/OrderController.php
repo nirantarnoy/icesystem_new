@@ -24,7 +24,8 @@ class OrderController extends Controller
                     'deleteorder' => ['POST'],
                     'deleteorderline' => ['POST'],
                     'deleteordercustomer' => ['POST'],
-                    'customercredit' => ['POST']
+                    'customercredit' => ['POST'],
+                    'closeorder' => ['POST']
                 ],
             ],
         ];
@@ -153,6 +154,7 @@ class OrderController extends Controller
                 $model->branch_id = $branch_id;
                 $model->sale_from_mobile = 1;
                 if ($model->save(false)) {
+                    array_push($data, ['order_id' => $model->id]);
                     //   $price = $this->findCustomerprice($customer_id, $product_id, $route_id);
                     $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
                     $model_line = new \backend\models\Orderline();
@@ -621,5 +623,24 @@ class OrderController extends Controller
         }
 
         echo $html;
+    }
+
+    public function closeorder()
+    {
+        $status = false;
+        $route_id = null;
+        $order_date = null;
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        $route_id = $req_data['route_id'];
+        $order_date = $req_data['route_id'];
+
+        $data = [];
+        if ($route_id != null && $order_date != null) {
+           //  $model = \backend\models\Order
+        }
+
+        return ['status' => $status, 'data' => $data];
     }
 }
