@@ -717,20 +717,27 @@ class OrderController extends Controller
         $route_id = $req_data['route_id'];
         $order_date = $req_data['order_date'];
 
-        $xdate = explode('-', trim($order_date));
-        $t_date = date('Y-m-d');
-        if (count($xdate) > 1) {
-            $t_date = $xdate[2] . '/' . $xdate[1] . '/' . $xdate[0];
+        $trans_date = date('Y/m/d');
+        $t_date = null;
+        $exp_order_date = explode(' ', $order_date);
+        if ($exp_order_date != null) {
+            if (count($exp_order_date) > 1) {
+                $x_date = explode('-', $exp_order_date[0]);
+                if (count($x_date) > 1) {
+                    $t_date = $x_date[0] . "/" . $x_date[1] . "/" . $x_date[2];
+                }
+            }
         }
-
-        $f_date = date('Y-m-d', strtotime($t_date));
+        if ($t_date != null) {
+            $trans_date = $t_date;
+        }
 
         $data = [];
         $res = 0;
         if ($route_id != null && $order_date != null) {
          //   $model = \backend\models\Orders::find()->where(['order_channel_id' => $route_id, 'date(order_date)' => $f_date])->andFilterWhere(['<', 'status', 100])->one();
-            $model = \backend\models\Orders::find()->where(['order_channel_id' => $route_id, 'date(order_date)' => $f_date])->one();
-            $data = ['route_id'=>$route_id,'data'=>$f_date];
+            $model = \backend\models\Orders::find()->where(['order_channel_id' => $route_id, 'date(order_date)' => $trans_date])->one();
+            $data = ['route_id'=>$route_id,'data'=>$trans_date];
             if ($model) {
 //                $data = ['route_id'=>$route_id,'data'=>$order_date];
 //                $model_close = \common\models\QuerySaleFinished::find()->where()->all();
