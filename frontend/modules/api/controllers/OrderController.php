@@ -739,29 +739,29 @@ class OrderController extends Controller
             $model = \backend\models\Orders::find()->where(['order_channel_id' => $route_id, 'date(order_date)' => $trans_date])->one();
 
             if ($model) {
-                $data = ['route_id'=>$route_id,'data'=>$trans_date];
+//                $data = ['route_id'=>$route_id,'data'=>$trans_date];
 //                $data = ['route_id'=>$route_id,'data'=>$order_date];
-//                $model_close = \common\models\QuerySaleFinished::find()->where()->all();
-//                if ($model_close) {
-//                    foreach ($model_close as $value) {
-//                        if ($value->qty <= 0 || $value->qty == null) continue;
-//                        $model = new \backend\models\Stocktrans();
-//                        $model->journal_no = '';
-//                        $model->trans_date = date('Y-m-d H:i:s');
-//                        $model->product_id = $value->product_id;
-//                        $model->qty = $value->qty;
-//                        $model->warehouse_id = 5;
-//                        $model->stock_type = 1;
-//                        $model->activity_type_id = 7; // 1 prod rec 2 issue car
-//                        if ($model->save()) {
-//                            $this->updateSummary($value->product_id, 5, $value->qty);
-//                            $res += 1;
-//                        }
-//                    }
-//                    if ($res) {
-//                        $this->updateOrderStatus($model->id);
-//                    }
-//                }
+                $model_close = \common\models\QuerySaleFinished::find()->where()->all();
+                if ($model_close) {
+                    foreach ($model_close as $value) {
+                        if ($value->qty <= 0 || $value->qty == null) continue;
+                        $model = new \backend\models\Stocktrans();
+                        $model->journal_no = '';
+                        $model->trans_date = date('Y-m-d H:i:s');
+                        $model->product_id = $value->product_id;
+                        $model->qty = $value->qty;
+                        $model->warehouse_id = 5;
+                        $model->stock_type = 1;
+                        $model->activity_type_id = 7; // 1 prod rec 2 issue car
+                        if ($model->save()) {
+                            $this->updateSummary($value->product_id, 5, $value->qty);
+                            $res += 1;
+                        }
+                    }
+                    if ($res) {
+                        $this->updateOrderStatus($model->id);
+                    }
+                }
             }
         }
 
