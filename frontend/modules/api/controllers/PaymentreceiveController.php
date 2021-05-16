@@ -63,6 +63,8 @@ class PaymentreceiveController extends Controller
         $customer_id = 0;
         $pay_amount = 0;
         $pay_date = null;
+        $company_id = 1;
+        $branch_id = 1;
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
@@ -71,6 +73,8 @@ class PaymentreceiveController extends Controller
         $customer_id = $req_data['customer_id'];
         $pay_amount = $req_data['pay_amount'];
         $pay_date = $req_data['pay_date'];
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
 
         $xdate = explode('-', trim($pay_date));
         $t_date = date('Y-m-d');
@@ -106,7 +110,7 @@ class PaymentreceiveController extends Controller
                 $model = new \backend\models\Paymentreceive();
                 $model->trans_date = date('Y-m-d', strtotime($t_date));//date('Y-m-d H:i:s');
                 $model->customer_id = $customer_id;
-                $model->journal_no = $model->getLastNo(date('Y-m-d'));
+                $model->journal_no = $model->getLastNo2(date('Y-m-d'), $company_id , $branch_id);
                 $model->status = 1;
                 if($model->save()){
                     $model_line = new \common\models\PaymentReceiveLine();
