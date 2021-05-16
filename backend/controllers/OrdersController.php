@@ -1540,7 +1540,7 @@ class OrdersController extends Controller
                         $model_line->total_amount = 0;
                         $model_line->order_ref_id = $order_id;
                         $model_line->payment_type_id = $sale_pay_type;
-                        $model_line->sale_payment_method_id = $sale_pay_type;
+                      //  $model_line->sale_payment_method_id = $sale_pay_type;
                         $model_line->status = 1;
                         $model_line->doc = '';
                         if ($model_line->save(false)) {
