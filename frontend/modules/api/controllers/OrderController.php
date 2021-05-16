@@ -164,6 +164,7 @@ class OrderController extends Controller
                 $model->sale_from_mobile = 1;
                 if ($model->save(false)) {
                     array_push($data, ['order_id' => $model->id]);
+                    $this->registerissue($model->id, $issue_id);
                     //   $price = $this->findCustomerprice($customer_id, $product_id, $route_id);
                     $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
                     $model_line = new \backend\models\Orderline();
@@ -636,6 +637,44 @@ class OrderController extends Controller
         }
 
         echo $html;
+    }
+
+    public function registerissue($order_id, $issue_id)
+    {
+
+//        $order_id = \Yii::$app->request->post('order_id');
+//        $issuelist = \Yii::$app->request->post('issue_list');
+
+        if ($order_id != null && $issue_id != null) {
+            //  $issue_data = explode(',', $issuelist);
+//            print_r($issuelist[0]);
+
+
+            $model_check_has_issue = \common\models\OrderStock::find()->where(['order_id' => $order_id, 'issue_id' => $issue_id])->count();
+            if ($model_check_has_issue > 0) {
+
+            } else {
+                $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
+                foreach ($model_issue_line as $val2) {
+                    if ($val2->qty <= 0 || $val2->qty != null) continue;
+                    $model_order_stock = new \common\models\OrderStock();
+                    $model_order_stock->issue_id = $issue_id;
+                    $model_order_stock->product_id = $val2->product_id;
+                    $model_order_stock->qty = $val2->qty;
+                    $model_order_stock->used_qty = 0;
+                    $model_order_stock->avl_qty = $val2->qty;
+                    $model_order_stock->order_id = $order_id;
+                    if ($model_order_stock->save(false)) {
+                        $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issue_id])->one();
+                        if ($model_update_issue_status) {
+                            $model_check_has_issue->status = 2;
+                            $model_check_has_issue->save(false);
+                        }
+                        $this->updateStock($val2->product_id, $val2->qty, 6, '');
+                    }
+                }
+            }
+        }
     }
 
     public function actionCloseorder()
