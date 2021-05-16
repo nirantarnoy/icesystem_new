@@ -741,7 +741,7 @@ class OrderController extends Controller
             if ($model) {
 //                $data = ['route_id'=>$route_id,'data'=>$trans_date];
 //                $data = ['route_id'=>$route_id,'data'=>$order_date];
-                $model_close = \common\models\QuerySaleFinished::find()->where()->all();
+                $model_close = \common\models\QuerySaleFinished::find()->where(['id'=>$model->id])->all();
                 if ($model_close) {
                     foreach ($model_close as $value) {
                         if ($value->qty <= 0 || $value->qty == null) continue;
