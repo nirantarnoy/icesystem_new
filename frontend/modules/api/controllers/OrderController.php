@@ -119,9 +119,9 @@ class OrderController extends Controller
                         $model_line->status = 1;
                         if ($model_line->save(false)) {
 
-                          //  if ($payment_type_id == 2) {
-                                $this->addpayment($has_order_id, $customer_id, ($qty * $price), $company_id, $branch_id);
-                          //  }
+                            //  if ($payment_type_id == 2) {
+                            $this->addpayment($has_order_id, $customer_id, ($qty * $price), $company_id, $branch_id, $payment_type_id);
+                            //  }
 
                             $order_total_all += $model_line->line_total;
                             $status = true;
@@ -168,9 +168,9 @@ class OrderController extends Controller
                     $model_line->issue_ref_id = $issue_id;
                     if ($model_line->save(false)) {
 
-                     //   if ($payment_type_id == 2) {
-                            $this->addpayment($model->id, $customer_id, ($qty * $price), $company_id, $branch_id);
-                      //  }
+                        //   if ($payment_type_id == 2) {
+                        $this->addpayment($model->id, $customer_id, ($qty * $price), $company_id, $branch_id, $payment_type_id);
+                        //  }
 
                         $order_total_all += $model_line->line_total;
                         $status = true;
@@ -236,7 +236,7 @@ class OrderController extends Controller
         return $group_id;
     }
 
-    public function addpayment($order_id, $customer_id, $amount, $company_id, $branch_id)
+    public function addpayment($order_id, $customer_id, $amount, $company_id, $branch_id, $payment_type_id)
     {
         $model = new \backend\models\Paymenttrans();
         $model->trans_no = $model->getLastNo($company_id, $branch_id);
@@ -254,9 +254,10 @@ class OrderController extends Controller
                 $model_line->payment_method_id = 8;
                 $model_line->payment_term_id = 0;
                 $model_line->payment_date = date('Y-m-d H:i:s');
-                $model_line->payment_amount = $amount;
+                $model_line->payment_amount = $payment_type_id == 1 ? $amount : 0;
                 $model_line->total_amount = 0;
                 $model_line->order_ref_id = $order_id;
+                $model_line->payment_type_id = $payment_type_id;
                 $model_line->status = 1;
                 $model_line->doc = '';
                 if ($model_line->save(false)) {

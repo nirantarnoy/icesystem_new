@@ -26,6 +26,7 @@ class PaymentreceiveController extends Controller
 
     public function actionList()
     {
+        $customer_id = null;
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $customer_id = $req_data['customer_id'];
