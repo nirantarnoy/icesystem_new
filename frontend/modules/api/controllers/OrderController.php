@@ -93,6 +93,7 @@ class OrderController extends Controller
             if ($has_order != null) {
                 $has_order_id = $has_order->id;
                 if ($has_order_id) {
+                    $this->registerissue($has_order_id, $issue_id);
                     //$price = $this->findCustomerprice($customer_id, $product_id, $route_id);
 
                     $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
