@@ -9,7 +9,7 @@ $fontData = $defaultFontConfig['fontdata'];
 $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp',
 //$mpdf = new \Mpdf\Mpdf([
     //'tempDir' => '/tmp',
-    'mode' => 'utf-8', 'format' => [70, 120],
+    'mode' => 'utf-8', 'format' => [75, 120],
     'fontdata' => $fontData + [
             'sarabun' => [ // ส่วนที่ต้องเป็น lower case ครับ
                 'R' => 'THSarabunNew.ttf',
