@@ -201,7 +201,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                                                        class="list-item-onhand fix-list-item-onhand-<?= $i ?>"
                                                        value="<?= $product_onhand ?>">
                                                 <div class="btn-group" style="width: 100%">
-                                                    <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"
+                                                    <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>" data-val="<?=$value->id?>"
                                                          onclick="reducecart2($(this))"><i class="fa fa-minus"></i>
                                                     </div>
                                                     <div class="btn btn-outline-primary btn-sm" data-var="<?= $i ?>" data-val="<?=$product_onhand?>"
@@ -1378,7 +1378,7 @@ function addcart2(e){
 }
 function reducecart2(e){
     var ids = e.attr('data-var');
-    var prod_id = $("#sale-by-original").find(".list-item-id-"+ids).val();
+    var prod_id = e.attr('data-val');//$("#sale-by-original").find(".list-item-id-"+ids).val();
     var prod_code = $(".list-item-code-"+ids).val();
     var prod_name = $(".list-item-name-"+ids).val();
      alert(prod_id);
