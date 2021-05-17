@@ -110,8 +110,8 @@ class Customer extends \common\models\Customer
 //            $len = strlen($cnum);
 //            $clen = strlen($cnum + 1);
 //            $loop = $len - $clen;
-                $prefix = $pre . substr(date("Y"), 2, 2);
-                $cnum = substr((string)$model, 5, strlen($model));
+                $prefix = $pre ;// substr(date("Y"), 2, 2);
+                $cnum = substr((string)$model, 2, strlen($model));
                 $len = strlen($cnum);
                 $clen = strlen($cnum + 1);
                 $loop = $len - $clen;
@@ -121,8 +121,8 @@ class Customer extends \common\models\Customer
                 $prefix .= $cnum + 1;
                 return $prefix;
             } else {
-                $prefix = $pre . '-' . substr(date("Y"), 2, 2);
-                return $prefix . '00001';
+                $prefix = $pre ;// substr(date("Y"), 2, 2);
+                return $prefix . '0001';
             }
         }
         if($branch_id==1){
