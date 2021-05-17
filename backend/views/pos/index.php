@@ -204,7 +204,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                                                     <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>" data-val="<?=$value->id?>"
                                                          onclick="reducecart2($(this))"><i class="fa fa-minus"></i>
                                                     </div>
-                                                    <div class="btn btn-outline-primary btn-sm" data-var="<?= $i ?>" data-val="<?=$product_onhand?>"
+                                                    <div class="btn btn-outline-primary btn-sm" data-var="<?= $i ?>" data-val="<?=$product_onhand?>" data-vax="<?=$value->id?>"
                                                          onclick="addcart2($(this))">
                                                         <i class="fa fa-plus"></i></div>
                                                 </div>
@@ -1315,11 +1315,11 @@ function addcart(e){
 function addcart2(e){
     var ids = e.attr('data-var');
     
-    var prod_id = $(".fix-list-item-id-"+ids).val();
+    var prod_id = e.attr('data-vax');//$(".fix-list-item-id-"+ids).val();
     var prod_code = $(".fix-list-item-code-"+ids).val();
     var prod_name = $(".fix-list-item-name-"+ids).val();
      //alert(prod_id);
-    var qty = 0;
+    var qty = 1;
     var price =$(".fix-list-item-price-"+ids).val();
     //var onhand =$(".fix-list-item-onhand-"+ids).val(); 
     // e.closest("tr").find('.list-item-onhand').val();
@@ -1381,7 +1381,7 @@ function reducecart2(e){
     var prod_id = e.attr('data-val');//$("#sale-by-original").find(".list-item-id-"+ids).val();
     var prod_code = $(".list-item-code-"+ids).val();
     var prod_name = $(".list-item-name-"+ids).val();
-     alert(prod_id);
+     //alert(prod_id);
     var qty = -1;
     var price = $(".list-item-price-"+ids).val();
     var onhand = $(".list-item-onhand-"+ids).val();
