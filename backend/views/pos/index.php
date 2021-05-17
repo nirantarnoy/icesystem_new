@@ -1381,7 +1381,7 @@ function reducecart2(e){
     var prod_id = $("#sale-by-original").find(".list-item-id-"+ids).val();
     var prod_code = $(".list-item-code-"+ids).val();
     var prod_name = $(".list-item-name-"+ids).val();
-    // alert(prod_id);
+     alert(prod_id);
     var qty = -1;
     var price = $(".list-item-price-"+ids).val();
     var onhand = $(".list-item-onhand-"+ids).val();
