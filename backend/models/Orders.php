@@ -182,25 +182,29 @@ class Orders extends \common\models\Orders
         return $html;
     }
 
-    public static function findordercash($order_id)
+    public static function findordercash($order_id, $sale_type)
     {
         $total = 0;
-        $model = \backend\models\Orderline::find()->where(['order_id' => $order_id])->all();
-        if ($model) {
-            foreach ($model as $value) {
-                $cus_pay_method = \backend\models\Customer::findPayMethod($value->customer_id);
-                $paymethod_id = \backend\models\Paymentmethod::find()->where(['id' => $cus_pay_method])->one();
-                if ($paymethod_id) {
-                    if ($paymethod_id->pay_type == 1) {
-                        $total = $total + ($value->qty * $value->price);
+        if ($sale_type == 1) {
+            $total = \common\models\QueryApiOrderDailySummary::find()->where(['id' => $order_id, 'sale_payment_method_id' => 1])->sum('line_total');
+        } else {
+            $model = \backend\models\Orderline::find()->where(['order_id' => $order_id])->all();
+            if ($model) {
+                foreach ($model as $value) {
+                    $cus_pay_method = \backend\models\Customer::findPayMethod($value->customer_id);
+                    $paymethod_id = \backend\models\Paymentmethod::find()->where(['id' => $cus_pay_method])->one();
+                    if ($paymethod_id) {
+                        if ($paymethod_id->pay_type == 1) {
+                            $total = $total + ($value->qty * $value->price);
+                        }
                     }
-                }
 //                $paymethod_name = \backend\models\Paymentmethod::findName($cus_pay_method);
 //                if($paymethod_name == 'เงินสด'){
 //                    $total = $total + ($value->qty * $value->price);
 //                }
-            }
+                }
 
+            }
         }
         return $total;
     }
