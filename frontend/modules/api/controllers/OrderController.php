@@ -767,11 +767,15 @@ class OrderController extends Controller
                         if ($model->save()) {
                             $this->updateSummary($value->product_id, $default_wh, $value->avl_qty, $company_id, $branch_id);
                             $res += 1;
-                            $data = ['stock'=>'ok'];
+                            $data = ['stock' => 'ok', 'order_id' => $model->id];
                         }
                     }
-                    if ($res) {
-                        $this->updateOrderStatus($model->id);
+                    if ($res > 0) {
+                        $model_update = \backend\models\Orders::find()->where(['id' => $model->id])->one();
+                        if ($model_update) {
+                            $model_update->status = 100;
+                            $model_update->save(false);
+                        }
                     }
                 }
             }
@@ -799,14 +803,5 @@ class OrderController extends Controller
         }
     }
 
-    public function updateOrderStatus($order_id)
-    {
-        if ($order_id) {
-            $model = \backend\models\Orders::find()->where(['id' => $order_id])->one();
-            if ($model) {
-                $model->status = 100;
-                $model->save(false);
-            }
-        }
-    }
+
 }
