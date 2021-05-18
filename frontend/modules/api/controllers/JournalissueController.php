@@ -18,7 +18,7 @@ class JournalissueController extends Controller
                 'actions' => [
                     'list' => ['POST'],
                     'checkopen' => ['POST'],
-                    'userconfirm' => ['POST'],
+                    'issueconfirm' => ['POST'],
                 ],
             ],
         ];
