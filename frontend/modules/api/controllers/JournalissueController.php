@@ -18,6 +18,7 @@ class JournalissueController extends Controller
                 'actions' => [
                     'list' => ['POST'],
                     'checkopen' => ['POST'],
+                    'userconfirm' => ['POST'],
                 ],
             ],
         ];
@@ -82,7 +83,7 @@ class JournalissueController extends Controller
     {
         $issue_id = null;
         $user_id = null;
-        $status = false;
+        $status = 0;
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $issue_id = $req_data['issue_id'];
@@ -95,7 +96,7 @@ class JournalissueController extends Controller
                 $model->status = 2; //close
                 $model->user_confirm = $user_id;
                 if ($model->save()) {
-                    $status = true;
+                    $status = 1;
                 }
             }
         }
