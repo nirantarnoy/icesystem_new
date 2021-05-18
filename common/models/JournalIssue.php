@@ -34,9 +34,9 @@ class JournalIssue extends \yii\db\ActiveRecord
         return [
             [['delivery_route_id'], 'required'],
             [['trans_date'], 'safe'],
-            [['created_at', 'created_by', 'updated_at', 'updated_by', 'delivery_route_id', 'car_ref_id', 'order_ref_id','reason_id'], 'integer'],
+            [['created_at', 'created_by', 'updated_at', 'updated_by', 'delivery_route_id', 'car_ref_id', 'order_ref_id', 'reason_id'], 'integer'],
             [['journal_no'], 'string', 'max' => 255],
-            [['status',], 'safe']
+            [['status', 'user_confirm'], 'safe']
         ];
     }
 
