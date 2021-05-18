@@ -82,7 +82,7 @@ class ProductController extends Controller
             if ($t_date != null) {
                 $trans_date = $t_date;
             }
-            $model_issue = \common\models\JournalIssue::find()->where(['delivery_route_id' => $route_id, 'date(trans_date)' => $trans_date])->one();
+            $model_issue = \common\models\JournalIssue::find()->where(['delivery_route_id' => $route_id, 'date(trans_date)' => $trans_date])->andFilterWhere(['<=','status',2])->one();
             if ($model_issue) {
                 $model = \common\models\QuerySaleIssueProductPrice::find()->where(['cus_id' => $customer_id, 'delivery_route_id' => $route_id, 'issue_id' => $model_issue->id])->all();
                 // $model = \common\models\QueryCustomerPrice::find()->all();
