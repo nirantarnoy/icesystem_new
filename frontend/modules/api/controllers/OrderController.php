@@ -725,22 +725,7 @@ class OrderController extends Controller
         if ($company_id == 1 && $branch_id == 2) {
             $default_wh = 5;
         }
-
-        $trans_date = date('Y/m/d');
-        $t_date = null;
-        $exp_order_date = explode(' ', $order_date);
-        if ($exp_order_date != null) {
-            if (count($exp_order_date) > 1) {
-                $x_date = explode('-', $exp_order_date[0]);
-                if (count($x_date) > 1) {
-                    $t_date = $x_date[0] . "/" . $x_date[1] . "/" . $x_date[2];
-                }
-            }
-        }
-        if ($t_date != null) {
-            $trans_date = $t_date;
-        }
-
+        
         $data = [];
         $res = 0;
         if ($order_id != null && $company_id != null && $branch_id != null) {
