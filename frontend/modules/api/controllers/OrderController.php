@@ -767,6 +767,7 @@ class OrderController extends Controller
                         if ($model->save()) {
                             $this->updateSummary($value->product_id, $default_wh, $value->avl_qty, $company_id, $branch_id);
                             $res += 1;
+                            $data = ['stock'=>'ok'];
                         }
                     }
                     if ($res) {
