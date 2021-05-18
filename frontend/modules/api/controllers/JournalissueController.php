@@ -50,7 +50,7 @@ class JournalissueController extends Controller
                 $trans_date = $t_date;
             }
             // $model = \common\models\JournalIssue::find()->one();
-            $model = \common\models\JournalIssue::find()->where(['delivery_route_id' => $route_id, 'date(trans_date)' => $trans_date])->one();
+            $model = \common\models\JournalIssue::find()->where(['delivery_route_id' => $route_id, 'date(trans_date)' => $trans_date])->andFilterWhere(['<=','status',2])->one();
             if ($model) {
                 $model_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $model->id])->all();
                 if ($model_line) {

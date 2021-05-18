@@ -725,7 +725,7 @@ class OrderController extends Controller
         if ($company_id == 1 && $branch_id == 2) {
             $default_wh = 5;
         }
-        
+
         $data = [];
         $res = 0;
         if ($order_id != null && $company_id != null && $branch_id != null) {
@@ -755,6 +755,7 @@ class OrderController extends Controller
                     if ($model_update) {
                         $model_update->status = 100;
                         $model_update->save(false);
+                        $status = 1;
                     }
                 }
             }
