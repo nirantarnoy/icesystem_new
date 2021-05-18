@@ -68,12 +68,37 @@ class JournalissueController extends Controller
                             'avl_qty' => $value->avl_qty,
                             'price' => 0,
                             'product_image' => '',
+                            'status'=> $model->status
                         ]);
                     }
                 }
             }
         }
 
+        return ['status' => $status, 'data' => $data];
+    }
+
+    public function actionIssueconfirm()
+    {
+        $issue_id = null;
+        $user_id = null;
+        $status = false;
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        $issue_id = $req_data['issue_id'];
+        $user_id = $req_data['user_id'];
+
+        $data = [];
+        if ($issue_id != null && $user_id != null) {
+            $model = \backend\models\Journalissue::find()->where(['id' => $issue_id])->one();
+            if ($model) {
+                $model->status = 2; //close
+                $model->user_confirm = $user_id;
+                if ($model->save()) {
+                    $status = true;
+                }
+            }
+        }
         return ['status' => $status, 'data' => $data];
     }
 
