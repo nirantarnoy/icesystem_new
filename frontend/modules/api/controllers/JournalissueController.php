@@ -69,7 +69,7 @@ class JournalissueController extends Controller
                             'avl_qty' => $value->avl_qty,
                             'price' => 0,
                             'product_image' => '',
-                            'status'=> $model->status
+                            'status' => $model->status
                         ]);
                     }
                 }
@@ -83,24 +83,82 @@ class JournalissueController extends Controller
     {
         $issue_id = null;
         $user_id = null;
+        $company_id = 1;
+        $branch_id = 1;
         $status = 0;
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $issue_id = $req_data['issue_id'];
         $user_id = $req_data['user_id'];
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
+
+        $default_wh = 6;
+        if ($company_id == 1 && $branch_id == 2) {
+            $default_wh = 5;
+        }
 
         $data = [];
         if ($issue_id != null && $user_id != null) {
-            $model = \backend\models\Journalissue::find()->where(['id' => $issue_id])->one();
-            if ($model) {
-                $model->status = 2; //close
-                $model->user_confirm = $user_id;
-                if ($model->save()) {
-                    $status = 1;
+
+            $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
+            foreach ($model_issue_line as $val2) {
+                if ($val2->qty <= 0 || $val2->qty != null) continue;
+
+                $model_order_stock = new \common\models\OrderStock();
+                $model_order_stock->issue_id = $issue_id;
+                $model_order_stock->product_id = $val2->product_id;
+                $model_order_stock->qty = $val2->qty;
+                $model_order_stock->used_qty = 0;
+                $model_order_stock->avl_qty = $val2->qty;
+                $model_order_stock->order_id = 0;
+                $model_order_stock->company_id = $company_id;
+                $model_order_stock->branch_id = $branch_id;
+                if ($model_order_stock->save(false)) {
+                    $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issue_id])->one();
+                    if ($model_update_issue_status) {
+                        $model_update_issue_status->status = 2;
+                        if ($model_update_issue_status->save(false)) {
+                            $status = 1;
+                        }
+                    }
+                    $this->updateStock($val2->product_id, $val2->qty, $default_wh, '', $company_id, $branch_id);
+                }
+            }
+
+//            $model = \backend\models\Journalissue::find()->where(['id' => $issue_id])->one();
+//            if ($model) {
+//                $model->status = 2; //close
+//                $model->user_confirm = $user_id;
+//                if ($model->save()) {
+//                    $status = 1;
+//                }
+//            }
+        }
+        return ['status' => $status, 'data' => $data];
+    }
+
+    public function updateStock($product_id, $qty, $wh_id, $journal_no, $company_id, $branch_id)
+    {
+        if ($product_id != null && $qty > 0) {
+            $model_trans = new \backend\models\Stocktrans();
+            $model_trans->journal_no = $journal_no;
+            $model_trans->trans_date = date('Y-m-d H:i:s');
+            $model_trans->product_id = $product_id;
+            $model_trans->qty = $qty;
+            $model_trans->warehouse_id = $wh_id;
+            $model_trans->stock_type = 2; // 1 in 2 out
+            $model_trans->activity_type_id = 6; // 6 issue car
+            $model_trans->company_id = $company_id;
+            $model_trans->branch_id = $branch_id;
+            if ($model_trans->save(false)) {
+                $model = \backend\models\Stocksum::find()->where(['warehouse_id' => $wh_id, 'product_id' => $product_id])->one();
+                if ($model) {
+                    $model->qty = $model->qty - (int)$qty;
+                    $model->save(false);
                 }
             }
         }
-        return ['status' => $status, 'data' => $data];
     }
 
     public function actionCheckopen()

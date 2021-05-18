@@ -711,11 +711,20 @@ class OrderController extends Controller
         $status = 0;
         $route_id = null;
         $order_date = null;
+        $company_id = 1;
+        $branch_id = 1;
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $route_id = $req_data['route_id'];
         $order_date = $req_data['order_date'];
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
+
+        $default_wh = 6;
+        if ($company_id == 1 && $branch_id == 2) {
+            $default_wh = 5;
+        }
 
         $trans_date = date('Y/m/d');
         $t_date = null;
@@ -735,40 +744,42 @@ class OrderController extends Controller
         $data = [];
         $res = 0;
         if ($route_id != null && $order_date != null) {
-         //   $model = \backend\models\Orders::find()->where(['order_channel_id' => $route_id, 'date(order_date)' => $f_date])->andFilterWhere(['<', 'status', 100])->one();
+            //   $model = \backend\models\Orders::find()->where(['order_channel_id' => $route_id, 'date(order_date)' => $f_date])->andFilterWhere(['<', 'status', 100])->one();
             $model = \backend\models\Orders::find()->where(['order_channel_id' => $route_id, 'date(order_date)' => $trans_date])->one();
             //$data = ['route_id'=>$route_id,'data'=>$trans_date];
             if ($model) {
-               $data = ['route_id'=>$route_id,'data'=>$trans_date, 'order_id'=>$model->id];
+                // $data = ['route_id'=>$route_id,'data'=>$trans_date, 'order_id'=>$model->id];
 //                $data = ['route_id'=>$route_id,'data'=>$order_date];
-                $model_close = \common\models\QuerySaleFinished::find()->where(['id'=>$model->id])->all();
-//                if ($model_close) {
-//                    foreach ($model_close as $value) {
-//                        if ($value->qty <= 0 || $value->qty == null) continue;
-//                        $model = new \backend\models\Stocktrans();
-//                        $model->journal_no = '';
-//                        $model->trans_date = date('Y-m-d H:i:s');
-//                        $model->product_id = $value->product_id;
-//                        $model->qty = $value->qty;
-//                        $model->warehouse_id = 5;
-//                        $model->stock_type = 1;
-//                        $model->activity_type_id = 7; // 1 prod rec 2 issue car
-//                        if ($model->save()) {
-//                            $this->updateSummary($value->product_id, 5, $value->qty);
-//                            $res += 1;
-//                        }
-//                    }
-//                    if ($res) {
-//                        $this->updateOrderStatus($model->id);
-//                    }
-//                }
+                $model_close = \common\models\QuerySaleFinished::find()->where(['id' => $model->id])->all();
+                if ($model_close) {
+                    foreach ($model_close as $value) {
+                        if ($value->avl_qty <= 0 || $value->avl_qty == null) continue;
+                        $model = new \backend\models\Stocktrans();
+                        $model->journal_no = '';
+                        $model->trans_date = date('Y-m-d H:i:s');
+                        $model->product_id = $value->product_id;
+                        $model->qty = $value->avl_qty;
+                        $model->warehouse_id = $default_wh;
+                        $model->stock_type = 1;
+                        $model->activity_type_id = 7; // 1 prod rec 2 issue car
+                        $model->company_id = $company_id;
+                        $model->branch_id = $branch_id;
+                        if ($model->save()) {
+                            $this->updateSummary($value->product_id, $default_wh, $value->avl_qty, $company_id, $branch_id);
+                            $res += 1;
+                        }
+                    }
+                    if ($res) {
+                        $this->updateOrderStatus($model->id);
+                    }
+                }
             }
         }
 
         return ['status' => $status, 'data' => $data];
     }
 
-    public function updateSummary($product_id, $wh_id, $qty)
+    public function updateSummary($product_id, $wh_id, $qty, $company_id, $branch_id)
     {
         if ($wh_id != null && $product_id != null && $qty > 0) {
             $model = \backend\models\Stocksum::find()->where(['warehouse_id' => $wh_id, 'product_id' => $product_id])->one();
@@ -780,6 +791,8 @@ class OrderController extends Controller
                 $model_new->warehouse_id = $wh_id;
                 $model_new->product_id = $product_id;
                 $model_new->qty = $qty;
+                $model_new->company_id = $company_id;
+                $model_new->branch_id = $branch_id;
                 $model_new->save(false);
             }
         }
@@ -791,7 +804,7 @@ class OrderController extends Controller
             $model = \backend\models\Orders::find()->where(['id' => $order_id])->one();
             if ($model) {
                 $model->status = 100;
-                $model->save();
+                $model->save(false);
             }
         }
     }
