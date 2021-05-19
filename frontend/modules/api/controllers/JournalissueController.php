@@ -100,10 +100,11 @@ class JournalissueController extends Controller
 
         $data = [];
         if ($issue_id != null && $user_id != null) {
+            $data = ['issue_id'=> $issue_id,'user_id'=>$user_id];
             $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
             foreach ($model_issue_line as $val2) {
                 if ($val2->qty <= 0 || $val2->qty != null) continue;
-                $data = ['ok'];
+
                 $model_order_stock = new \common\models\OrderStock();
                 $model_order_stock->issue_id = $issue_id;
                 $model_order_stock->product_id = $val2->product_id;
