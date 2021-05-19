@@ -50,7 +50,7 @@ class JournalissueController extends Controller
                 $trans_date = $t_date;
             }
             // $model = \common\models\JournalIssue::find()->one();
-            $model = \common\models\JournalIssue::find()->where(['delivery_route_id' => $route_id, 'date(trans_date)' => $trans_date])->andFilterWhere(['<=','status',2])->one();
+            $model = \common\models\JournalIssue::find()->where(['delivery_route_id' => $route_id, 'date(trans_date)' => $trans_date])->andFilterWhere(['<=', 'status', 2])->one();
             if ($model) {
                 $model_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $model->id])->all();
                 if ($model_line) {
@@ -100,7 +100,7 @@ class JournalissueController extends Controller
 
         $data = [];
         if ($issue_id != null && $user_id != null) {
-
+              $data = ['ok'];
             $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
             foreach ($model_issue_line as $val2) {
                 if ($val2->qty <= 0 || $val2->qty != null) continue;
@@ -117,10 +117,13 @@ class JournalissueController extends Controller
                 if ($model_order_stock->save(false)) {
                     $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issue_id])->one();
                     if ($model_update_issue_status) {
-                        $model_update_issue_status->status = 2;
-                        if ($model_update_issue_status->save(false)) {
-                            $status = 1;
+                        if ($model_update_issue_status->status != 2) {
+                            $model_update_issue_status->status = 2;
+                            if ($model_update_issue_status->save(false)) {
+                                $status = 1;
+                            }
                         }
+
                     }
                     $this->updateStock($val2->product_id, $val2->qty, $default_wh, '', $company_id, $branch_id);
                 }
