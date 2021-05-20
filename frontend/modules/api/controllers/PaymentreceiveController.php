@@ -18,6 +18,7 @@ class PaymentreceiveController extends Controller
                 'actions' => [
                     'list' => ['POST'],
                     'addpay' => ['POST'],
+                    'addpay2' => ['POST'],
                     'deletepay' => ['POST']
                 ],
             ],
@@ -156,6 +157,83 @@ class PaymentreceiveController extends Controller
                 $model->save(false);
             }
         }
+    }
+
+
+    public function actionAddpay2()
+    {
+        $order_id = 0;
+        $payment_channel_id = 0;
+        $customer_id = 0;
+        $pay_amount = 0;
+        $pay_date = null;
+        $company_id = 1;
+        $branch_id = 1;
+        $data_list = null;
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        $payment_channel_id = $req_data['payment_channel_id'];
+        $pay_date = $req_data['pay_date'];
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
+        $data_list = $req_data['data'];
+
+        $xdate = explode('-', trim($pay_date));
+        $t_date = date('Y-m-d');
+        if (count($xdate) > 1) {
+            $t_date = $xdate[2] . '/' . $xdate[1] . '/' . $xdate[0];
+        }
+        $data = [];
+        $status = false;
+
+        if ($company_id != null && $branch_id != null && $pay_date != null && $data_list != null) {
+            if (count($data_list) > 0) {
+                for ($i = 0; $i <= count($data_list) - 1; $i++) {
+                    if ($data_list[$i]['order_id'] == null) continue;
+
+                    $check_record = $this->checkHasRecord($data_list[$i]['customer_id'], $t_date);
+                    if ($check_record != null) {
+                        //if(count($check_record) > 0){
+                        $model_line = new \common\models\PaymentReceiveLine();
+                        $model_line->payment_receive_id = $check_record->id;
+                        $model_line->order_id = $data_list[$i]['order_id'];
+                        $model_line->payment_amount = $data_list[$i]['pay_amount'];
+                        $model_line->payment_channel_id = $payment_channel_id;
+                        $model_line->status = 1;
+                        if ($model_line->save(false)) {
+                            $status = true;
+                            $this->updatePaymenttransline($data_list[$i]['customer_id'], $data_list[$i]['order_id'], $data_list[$i]['pay_amount'], $payment_channel_id);
+                            $data = ['pay successfully'];
+                        }
+                        // }
+                    } else {
+                        $model = new \backend\models\Paymentreceive();
+                        $model->trans_date = date('Y-m-d', strtotime($t_date));//date('Y-m-d H:i:s');
+                        $model->customer_id = $data_list[$i]['customer_id'];
+                        $model->journal_no = $model->getLastNo2(date('Y-m-d'), $company_id, $branch_id);
+                        $model->status = 1;
+                        $model->customer_id = $company_id;
+                        $model->branch_id = $branch_id;
+                        if ($model->save()) {
+                            $model_line = new \common\models\PaymentReceiveLine();
+                            $model_line->payment_receive_id = $model->id;
+                            $model_line->order_id = $data_list[$i]['order_id'];
+                            $model_line->payment_amount = $data_list[$i]['pay_amount'];
+                            $model_line->payment_channel_id = $payment_channel_id;
+                            $model_line->status = 1;
+                            if ($model_line->save(false)) {
+                                $status = true;
+                                $this->updatePaymenttransline($data_list[$i]['customer_id'], $data_list[$i]['order_id'], $data_list[$i]['pay_amount'], $payment_channel_id);
+                                $data = ['pay successfully'];
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+        return ['status' => $status, 'data' => $data];
     }
 
     public function actionDeletepay()
