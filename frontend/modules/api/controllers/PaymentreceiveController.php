@@ -192,25 +192,29 @@ class PaymentreceiveController extends Controller
                 for ($i = 0; $i <= count($data_list) - 1; $i++) {
                     if ($data_list[$i]['order_id'] == null) continue;
 
-                    $check_record = $this->checkHasRecord($data_list[$i]['customer_id'], $t_date);
+                    $customer_id = $data_list[$i]['customer_id'];
+                    $order_id = $data_list[$i]['order_id'];
+                    $pay_amount = $data_list[$i]['pay_amount'];
+
+                    $check_record = $this->checkHasRecord($customer_id, $t_date);
                     if ($check_record != null) {
                         //if(count($check_record) > 0){
                         $model_line = new \common\models\PaymentReceiveLine();
                         $model_line->payment_receive_id = $check_record->id;
-                        $model_line->order_id = $data_list[$i]['order_id'];
-                        $model_line->payment_amount = $data_list[$i]['pay_amount'];
+                        $model_line->order_id = $order_id;
+                        $model_line->payment_amount =$pay_amount;
                         $model_line->payment_channel_id = $payment_channel_id;
                         $model_line->status = 1;
                         if ($model_line->save(false)) {
                             $status = true;
-                            $this->updatePaymenttransline($data_list[$i]['customer_id'], $data_list[$i]['order_id'], $data_list[$i]['pay_amount'], $payment_channel_id);
+                            $this->updatePaymenttransline($customer_id, $order_id, $pay_amount, $payment_channel_id);
                             $data = ['pay successfully'];
                         }
                         // }
                     } else {
                         $model = new \backend\models\Paymentreceive();
                         $model->trans_date = date('Y-m-d', strtotime($t_date));//date('Y-m-d H:i:s');
-                        $model->customer_id = $data_list[$i]['customer_id'];
+                        $model->customer_id = $customer_id;
                         $model->journal_no = $model->getLastNo2(date('Y-m-d'), $company_id, $branch_id);
                         $model->status = 1;
                         $model->customer_id = $company_id;
@@ -218,13 +222,13 @@ class PaymentreceiveController extends Controller
                         if ($model->save()) {
                             $model_line = new \common\models\PaymentReceiveLine();
                             $model_line->payment_receive_id = $model->id;
-                            $model_line->order_id = $data_list[$i]['order_id'];
-                            $model_line->payment_amount = $data_list[$i]['pay_amount'];
+                            $model_line->order_id = $order_id;
+                            $model_line->payment_amount = $pay_amount;
                             $model_line->payment_channel_id = $payment_channel_id;
                             $model_line->status = 1;
                             if ($model_line->save(false)) {
                                 $status = true;
-                                $this->updatePaymenttransline($data_list[$i]['customer_id'], $data_list[$i]['order_id'], $data_list[$i]['pay_amount'], $payment_channel_id);
+                                $this->updatePaymenttransline($customer_id, $order_id, $pay_amount, $payment_channel_id);
                                 $data = ['pay successfully'];
                             }
                         }
