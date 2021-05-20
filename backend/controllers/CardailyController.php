@@ -215,6 +215,18 @@ class CardailyController extends Controller
         $emp_id = \Yii::$app->request->post('line_car_emp_id');
         $isdriver = \Yii::$app->request->post('line_car_driver');
 
+        $company_id = 1;
+        $branch_id = 1;
+
+        if (\Yii::$app->user->identity->company_id != null) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        } else {
+            return $this->redirect(['site/logout']);
+        }
+        if (\Yii::$app->user->identity->branch_id != null) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
 //        print_r(\Yii::$app->request->post());
 //        echo count($emp_id);
 //        return;
@@ -252,8 +264,8 @@ class CardailyController extends Controller
                             $model->trans_date = $t_date;
                             $model->is_driver = $isdriver[$i] == 1 ? 1 : 0;
                             $model->status = 1;
-                            $model->company_id = \Yii::$app->user->identity->company_id;
-                            $model->branch_id = \Yii::$app->user->identity->branch_id;
+                            $model->company_id = $company_id;
+                            $model->branch_id = $branch_id;
                             $model->save(false);
                         }
 
@@ -265,8 +277,8 @@ class CardailyController extends Controller
                         $model->trans_date = $t_date;
                         $model->is_driver = $isdriver[$i] == 1 ? 1 : 0;
                         $model->status = 1;
-                        $model->company_id = \Yii::$app->user->identity->company_id;
-                        $model->branch_id = \Yii::$app->user->identity->branch_id;
+                        $model->company_id =$company_id;
+                        $model->branch_id = $branch_id;
                         $model->save(false);
                     }
 
