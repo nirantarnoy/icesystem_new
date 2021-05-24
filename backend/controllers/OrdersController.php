@@ -112,12 +112,14 @@ class OrdersController extends Controller
             if (count($x_date) > 1) {
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
+            $emp_count = \backend\models\Cardaily::find()->where(['car_id'=>$model->car_ref_id,'data(trans_date)'=>date('Y-m-d',strtotime($sale_date))])->count('employee_id');
             $model->order_no = $model::getLastNo($sale_date, $company_id, $branch_id);
             $model->order_date = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
             $model->sale_channel_id = 1;
             $model->company_id = $company_id;
             $model->branch_id = $branch_id;
+            $model->emp_count = $emp_count;
             if ($model->save(false)) {
                 $this->updateEmpqty($model->id);
                 if ($price_group_list_arr != null) {
