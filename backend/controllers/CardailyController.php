@@ -277,12 +277,14 @@ class CardailyController extends Controller
                         $model->trans_date = $t_date;
                         $model->is_driver = $isdriver[$i] == 1 ? 1 : 0;
                         $model->status = 1;
-                        $model->company_id =$company_id;
+                        $model->company_id = $company_id;
                         $model->branch_id = $branch_id;
                         $model->save(false);
+
                     }
 
                 }
+                $this->updateOrderEmp($car_id, $t_date);
             }
         }
 
@@ -290,6 +292,23 @@ class CardailyController extends Controller
 //        $searchModel->trans_date = $t_date;
 //        $searchModel->route_id = $route_id;
         return $this->redirect(['index', ['route_id' => $route_id, 'trans_date' => $t_date]]);
+    }
+
+    public function updateOrderEmp($car_id, $tdate)
+    {
+        if ($car_id != null && $tdate != null) {
+
+            $model_x = \backend\models\Cardaily::find()->where(['car_id' => $car_id, 'data(trans_date)' => date('Y-m-d', strtotime($tdate))])->count('employee_id');
+            if ($model_x) {
+
+                $model = \backend\models\Orders::find()->where(['car_ref_id' => $car_id, 'data(order_date)' => date('Y-m-d', strtotime($tdate))])->one();
+                if ($model) {
+                    $model->emp_count = $model_x;
+                    $model->save(false);
+                }
+            }
+
+        }
     }
 
     public function checkOld($emp_id, $car_id, $t_date)
