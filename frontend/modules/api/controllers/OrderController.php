@@ -168,6 +168,7 @@ class OrderController extends Controller
                     $this->registerissue($model->id, $issue_id, $company_id, $branch_id);
                     //   $price = $this->findCustomerprice($customer_id, $product_id, $route_id);
                     $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
+
                     $model_line = new \backend\models\Orderline();
                     $model_line->order_id = $model->id;
                     $model_line->customer_id = $customer_id;
@@ -675,8 +676,8 @@ class OrderController extends Controller
                     if ($model_order_stock->save(false)) {
                         $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issue_id])->one();
                         if ($model_update_issue_status) {
-                            $model_check_has_issue->status = 2;
-                            $model_check_has_issue->save(false);
+                            $model_update_issue_status->status = 2;
+                            $model_update_issue_status->save(false);
                         }
                         $this->updateStock($val2->product_id, $val2->qty, $default_wh, '');
                     }
