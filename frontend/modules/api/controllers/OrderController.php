@@ -165,7 +165,7 @@ class OrderController extends Controller
                 $model->sale_from_mobile = 1;
                 if ($model->save(false)) {
                     array_push($data, ['order_id' => $model->id]);
-                    $this->registerissue($has_order_id, $issue_id, $company_id, $branch_id);
+                    $this->registerissue($model->id, $issue_id, $company_id, $branch_id);
                     //   $price = $this->findCustomerprice($customer_id, $product_id, $route_id);
                     $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
                     $model_line = new \backend\models\Orderline();
