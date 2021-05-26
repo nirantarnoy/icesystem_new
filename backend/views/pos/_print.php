@@ -199,7 +199,7 @@ $mpdf->AddPageByArray([
 </table>
 <table class="table-header">
     <tr>
-        <td style="font-size: 18px;">แคชเชียร์ .......................................................</td>
+        <td style="font-size: 18px;">แคชเชียร์ <?=$user_oper?></td>
     </tr>
 </table>
 <br/>

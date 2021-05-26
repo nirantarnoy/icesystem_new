@@ -467,7 +467,8 @@ class PosController extends Controller
         if ($id) {
             $model = \backend\models\Orders::find()->where(['id' => $id])->one();
             $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
-            $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
+            $user_oper = \backend\models\User::findName($model->created_by);
+            $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line,'user_oper'=>$user_oper]);
             //   $content =  $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
             $session = \Yii::$app->session;
             $session->setFlash('msg-index', 'slip.pdf');
