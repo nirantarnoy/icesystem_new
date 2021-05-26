@@ -117,7 +117,7 @@ class CustomerController extends Controller
             $model->sort_name = $model->sort_name == null ? '' : $model->sort_name;
             $model->company_id = $company_id;
             $model->branch_id = $branch_id;
-            $model->is_show_pos = $model->sort_name == null ? 0 : 1;
+            $model->is_show_pos = $model->sort_name == null || $model->sort_name == '' ? 1 : 0;
             if ($model->save(false)) {
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
@@ -158,7 +158,7 @@ class CustomerController extends Controller
                 $model->shop_photo = $photo_name;
             }
             $model->sort_name = $model->sort_name == null ? '' : $model->sort_name;
-            $model->is_show_pos = $model->sort_name == null || $model->sort_name == '' ? 0 : 1;
+            $model->is_show_pos = $model->sort_name == null || $model->sort_name == '' ? 1 : 0;
             if ($model->save(false)) {
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
