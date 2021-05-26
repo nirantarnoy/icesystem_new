@@ -148,7 +148,7 @@ class DeliveryrouteController extends Controller
                     $html .= '<tr>';
                     $html .= '<td>' . $value->code . '</td>';
                     $html .= '<td>' . $value->name . '</td>';
-                    $html .= '<td>' . $value->status == 0 ? "ไม่ใช้งาน" : "ใช้งาน" . '</td>';
+                    $html .= '<td>' . $value->status . '</td>';
                     $html .= '</tr>';
                 }
             }
