@@ -56,18 +56,18 @@ class CustomerSearch extends Customer
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+//            'id' => $this->id,
             'customer_group_id' => $this->customer_group_id,
             'customer_type_id' => $this->customer_type_id,
             'delivery_route_id' => $this->delivery_route_id,
-            'active_date' => $this->active_date,
-            'status' => $this->status,
-            'company_id' => $this->company_id,
-            'branch_id' => $this->branch_id,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
+//            'active_date' => $this->active_date,
+//            'status' => $this->status,
+//            'company_id' => $this->company_id,
+//            'branch_id' => $this->branch_id,
+//            'created_at' => $this->created_at,
+//            'updated_at' => $this->updated_at,
+//            'created_by' => $this->created_by,
+//            'updated_by' => $this->updated_by,
         ]);
 
         if (!empty(\Yii::$app->user->identity->company_id)) {
