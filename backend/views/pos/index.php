@@ -286,8 +286,8 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                             <th style="text-align: center;width: 5%">#</th>
                             <th style="width: 15%;text-align: center">รหัสสินค้า</th>
                             <th>ชื่อสินค้า</th>
-                            <th style="text-align: right;width: 15%">จำนวน</th>
-                            <th style="text-align: right">ราคา</th>
+                            <th style="text-align: right;width: 10%">จำนวน</th>
+                            <th style="text-align: right;width: 10%"">ราคา</th>
                             <th style="text-align: right">ราคารวม</th>
                             <th style="text-align: center">ลบ</th>
                         </tr>
