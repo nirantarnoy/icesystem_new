@@ -118,39 +118,39 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                                         <p class="card-text"
                                            style="font-size: 20px;text-align: center;font-weight: bold"><?= $value->code ?></p>
                                     </div>
-<!--                                    <div class="card-footer" style="width: 100%">-->
-<!--                                        <div class="row" style="width: 120%;text-align: center">-->
-<!--                                            <div class="col-lg-12">-->
-<!--                                                <div class="item-price"-->
-<!--                                                     style="color: red;font-weight: bold;">--><?//= $value->sale_price ?><!--</div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                        <div style="height: 10px;"></div>-->
-<!--                                        <div class="row">-->
-<!--                                            <div class="col-lg-12">-->
-<!--                                                <input type="hidden" class="list-item-product-id list-item-id---><?//= $i ?><!--"-->
-<!--                                                       value="--><?//= $value->id ?><!--">-->
-<!--                                                <input type="hidden" class="list-item-code---><?//= $i ?><!--"-->
-<!--                                                       value="--><?//= $value->code ?><!--">-->
-<!--                                                <input type="hidden" class="list-item-name---><?//= $i ?><!--"-->
-<!--                                                       value="--><?//= $value->name ?><!--">-->
-<!--                                                <input type="hidden" class="list-item-price list-item-price---><?//= $i ?><!--"-->
-<!--                                                       value="--><?//= $value->sale_price ?><!--">-->
-<!--                                                <input type="hidden"-->
-<!--                                                       class="list-item-onhand fix-list-item-onhand---><?//= $i ?><!--"-->
-<!--                                                       value="--><?//= $product_onhand ?><!--">-->
-<!--                                                <div class="btn-group" style="width: 100%">-->
-<!--                                                    <div class="btn btn-outline-secondary btn-sm" data-var="--><?//= $i ?><!--"-->
-<!--                                                         onclick="reducecartdivcustomer($(this))"><i-->
-<!--                                                                class="fa fa-minus"></i>-->
-<!--                                                    </div>-->
-<!--                                                    <div class="btn btn-outline-primary btn-sm" data-var="--><?//= $i ?><!--"-->
-<!--                                                         onclick="addcartdivcustomer($(this))">-->
-<!--                                                        <i class="fa fa-plus"></i></div>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
+                                    <div class="card-footer" style="width: 100%">
+                                        <div class="row" style="width: 120%;text-align: center">
+                                            <div class="col-lg-12">
+                                                <div class="item-price"
+                                                     style="color: red;font-weight: bold;"><?= $value->sale_price ?></div>
+                                            </div>
+                                        </div>
+                                        <div style="height: 10px;"></div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <input type="hidden" class="list-item-product-id list-item-id-<?= $i ?>"
+                                                       value="<?= $value->id ?>">
+                                                <input type="hidden" class="list-item-code-<?= $i ?>"
+                                                       value="<?= $value->code ?>">
+                                                <input type="hidden" class="list-item-name-<?= $i ?>"
+                                                       value="<?= $value->name ?>">
+                                                <input type="hidden" class="list-item-price list-item-price-<?= $i ?>"
+                                                       value="<?= $value->sale_price ?>">
+                                                <input type="hidden"
+                                                       class="list-item-onhand fix-list-item-onhand-<?= $i ?>"
+                                                       value="<?= $product_onhand ?>">
+                                                <div class="btn-group" style="width: 100%">
+                                                    <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"
+                                                         onclick="reducecartdivcustomer($(this))"><i
+                                                                class="fa fa-minus"></i>
+                                                    </div>
+                                                    <div class="btn btn-outline-primary btn-sm" data-var="<?= $i ?>"
+                                                         onclick="addcartdivcustomer($(this))">
+                                                        <i class="fa fa-plus"></i></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
