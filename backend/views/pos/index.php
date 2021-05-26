@@ -112,7 +112,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
 <!--                            <div class="col-lg-3 product-items">-->
                             <div class="product-items" style="margin: 5px;">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
-                                <div class="card" style="height: 200px;">
+                                <div class="card" style="height: 180px;">
                                     <!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
                                     <!--                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="">-->
                                     <div class="card-body">
@@ -171,7 +171,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                             ?>
                             <div class="product-itemsx" style="margin: 5px;">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
-                                <div class="card" style="height: 200px;">
+                                <div class="card" style="height: 180px;">
                                     <!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
                                     <!--                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="">-->
                                     <div class="card-body">
