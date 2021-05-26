@@ -55,7 +55,7 @@ class CustomerSearch extends Customer
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
+      //  $query->andFilterWhere([
 //            'id' => $this->id,
 //            'customer_group_id' => $this->customer_group_id,
 //            'customer_type_id' => $this->customer_type_id,
@@ -68,7 +68,7 @@ class CustomerSearch extends Customer
 //            'updated_at' => $this->updated_at,
 //            'created_by' => $this->created_by,
 //            'updated_by' => $this->updated_by,
-        ]);
+      //  ]);
 
         if (!empty(\Yii::$app->user->identity->company_id)) {
             $query->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
