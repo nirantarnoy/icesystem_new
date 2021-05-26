@@ -70,12 +70,6 @@ class CustomerSearch extends Customer
 //            'updated_by' => $this->updated_by,
       //  ]);
 
-        if (!empty(\Yii::$app->user->identity->company_id)) {
-            $query->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
-        }
-        if (!empty(\Yii::$app->user->identity->branch_id)) {
-            $query->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
-        }
 
         if ($this->customer_group_id != null) {
             $query->andFilterWhere(['customer_group_id' => $this->customer_group_id]);
@@ -90,10 +84,14 @@ class CustomerSearch extends Customer
         if ($this->globalSearch != '') {
             $query->orFilterWhere(['like', 'coded', $this->globalSearch])
                 ->orFilterWhere(['like', 'name', $this->globalSearch])
-                ->orFilterWhere(['like', 'description', $this->globalSearch])
-                ->orFilterWhere(['like', 'location_info', $this->globalSearch])
-                ->orFilterWhere(['like', 'logo', $this->globalSearch])
-                ->orFilterWhere(['like', 'shop_photo', $this->globalSearch]);
+                ->orFilterWhere(['like', 'description', $this->globalSearch]);
+        }
+
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $query->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $query->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
         }
 
         return $dataProvider;
