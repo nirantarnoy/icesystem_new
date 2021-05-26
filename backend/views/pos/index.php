@@ -111,7 +111,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                             ?>
                             <div class="col-lg-3 product-items">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
-                                <div class="card" style="height: 200px;">
+                                <div class="card" style="height: 200px;width: 200px;">
                                     <!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
                                     <!--                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="">-->
                                     <div class="card-body">
@@ -170,12 +170,12 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                             ?>
                             <div class="col-lg-3 product-items">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
-                                <div class="card" style="heightc: 200px;">
+                                <div class="card" style="height: 200px;width: 200px;">
                                     <!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
                                     <!--                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="">-->
                                     <div class="card-body">
                                         <p class="card-text"
-                                           style="font-size: 20px;text-align: center;font-weight: bold"><?= $value->code ?></p>
+                                           style="font-size: 20px;text-align: center;font-weight: bold"><?= $value->code?></p>
                                     </div>
                                     <div class="card-footer" style="width: 100%">
                                         <div class="row" style="width: 120%;text-align: center">
