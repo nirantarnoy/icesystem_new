@@ -110,7 +110,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                             $product_onhand = \backend\models\Stocksum::findStock($value->id, $default_warehouse);
                             ?>
 <!--                            <div class="col-lg-3 product-items">-->
-                            <div class="product-itemsx" style="margin: 5px;">
+                            <div class="product-items" style="margin: 5px;">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
                                 <div class="card" style="height: 200px;">
                                     <!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
@@ -170,7 +170,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                             $i += 1;
                             $product_onhand = \backend\models\Stocksum::findStock($value->id, $default_warehouse);
                             ?>
-                            <div class="product-items" style="margin: 5px;">
+                            <div class="product-itemsx" style="margin: 5px;">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
                                 <div class="card" style="height: 200px;">
                                     <!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
