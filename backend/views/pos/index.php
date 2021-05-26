@@ -109,7 +109,8 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                             $i += 1;
                             $product_onhand = \backend\models\Stocksum::findStock($value->id, $default_warehouse);
                             ?>
-                            <div class="col-lg-3 product-items">
+<!--                            <div class="col-lg-3 product-items">-->
+                            <div class="product-items" style="margin: 5px;">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
                                 <div class="card" style="height: 200px;">
                                     <!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
@@ -159,6 +160,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
             </div>
             <div id="sale-by-original">
                 <div class="col-lg-12" style="height: 800px;overflow-x: hidden">
+
                     <div class="row">
                         <?php $i = 0; ?>
                         <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
@@ -168,7 +170,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                             $i += 1;
                             $product_onhand = \backend\models\Stocksum::findStock($value->id, $default_warehouse);
                             ?>
-                            <div class="col-lg-3 product-items">
+                            <div class="product-items" style="margin: 5px;">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
                                 <div class="card" style="height: 200px;">
                                     <!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
