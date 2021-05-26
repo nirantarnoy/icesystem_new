@@ -160,7 +160,6 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
             </div>
             <div id="sale-by-original">
                 <div class="col-lg-12" style="height: 800px;overflow-x: hidden">
-
                     <div class="row">
                         <?php $i = 0; ?>
                         <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
