@@ -57,9 +57,9 @@ class CustomerSearch extends Customer
         // grid filtering conditions
         $query->andFilterWhere([
 //            'id' => $this->id,
-            'customer_group_id' => $this->customer_group_id,
-            'customer_type_id' => $this->customer_type_id,
-            'delivery_route_id' => $this->delivery_route_id,
+//            'customer_group_id' => $this->customer_group_id,
+//            'customer_type_id' => $this->customer_type_id,
+//            'delivery_route_id' => $this->delivery_route_id,
 //            'active_date' => $this->active_date,
 //            'status' => $this->status,
 //            'company_id' => $this->company_id,
@@ -75,6 +75,16 @@ class CustomerSearch extends Customer
         }
         if (!empty(\Yii::$app->user->identity->branch_id)) {
             $query->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
+        }
+
+        if ($this->customer_group_id != null) {
+            $query->andFilterWhere(['customer_group_id' => $this->customer_group_id]);
+        }
+        if ($this->customer_type_id != null) {
+            $query->andFilterWhere(['customer_type_id' => $this->customer_type_id]);
+        }
+        if ($this->delivery_route_id != null) {
+            $query->andFilterWhere(['delivery_route_id' => $this->delivery_route_id]);
         }
 
         if ($this->globalSearch != '') {
