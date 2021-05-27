@@ -103,7 +103,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                     <div class="row">
                         <?php $i = 0; ?>
                         <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
-                        <?php $product_data = \backend\models\Product::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->orderBy(['item_pos_seq'=>SORT_ASC])->all(); ?>
+                        <?php $product_data = \backend\models\Product::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id, 'status'=>1])->orderBy(['item_pos_seq'=>SORT_ASC])->all(); ?>
                         <?php foreach ($product_data as $value): ?>
                             <?php
                             $i += 1;
@@ -163,7 +163,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                     <div class="row">
                         <?php $i = 0; ?>
                         <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
-                        <?php $product_data = \backend\models\Product::find()->where(['is_pos_item' => 1, 'company_id' => $company_id, 'branch_id' => $branch_id])->orderBy(['item_pos_seq' => SORT_ASC])->all(); ?>
+                        <?php $product_data = \backend\models\Product::find()->where(['is_pos_item' => 1, 'company_id' => $company_id, 'branch_id' => $branch_id,'status'=>1])->orderBy(['item_pos_seq' => SORT_ASC])->all(); ?>
                         <?php foreach ($product_data as $value): ?>
                             <?php
                             $i += 1;
