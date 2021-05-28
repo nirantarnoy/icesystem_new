@@ -39,7 +39,7 @@ class Warehouse extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['code'],'unique'],
+          //  [['code'],'unique'],
             [['status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by','is_reprocess'], 'integer'],
             [['code', 'name', 'description', 'photo'], 'string', 'max' => 255],
             [['branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['branch_id' => 'id']],

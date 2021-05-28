@@ -13,22 +13,19 @@ use yii\web\UploadedFile;
 class PaymentreceiveController extends Controller
 {
     public $enableCsrfValidation = false;
+
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST','GET'],
+                    'delete' => ['POST', 'GET'],
                 ],
             ],
         ];
     }
 
-    /**
-     * Lists all Paymentreceive models.
-     * @return mixed
-     */
     public function actionIndex()
     {
         $pageSize = \Yii::$app->request->post("perpage");
@@ -43,13 +40,6 @@ class PaymentreceiveController extends Controller
             'perpage' => $pageSize,
         ]);
     }
-
-    /**
-     * Displays a single Paymentreceive model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionView($id)
     {
         return $this->render('view', [
@@ -57,13 +47,18 @@ class PaymentreceiveController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Paymentreceive model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
+
+        $company_id = 1;
+        $branch_id = 1;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
         $model = new Paymentreceive();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -84,6 +79,8 @@ class PaymentreceiveController extends Controller
             $model->trans_date = date('Y-m-d H:i:s', strtotime($t_date));
             $model->journal_no = $model->getLastNo(date('Y-m-d'));
             $model->status = 1;
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
             if ($model->save()) {
                 if ($line_order != null) {
                     if (count($line_order) > 0) {
@@ -287,7 +284,7 @@ class PaymentreceiveController extends Controller
                 $i = 0;
                 foreach ($model as $value) {
                     $i += 1;
-                 //   $total_amount = $total_amount + ($value->remain_amount == null ? 0 : $value->remain_amount);
+                    //   $total_amount = $total_amount + ($value->remain_amount == null ? 0 : $value->remain_amount);
                     $html .= '<tr>';
                     $html .= '<td style="text-align: center">' . $i . '</td>';
                     $html .= '<td style="text-align: center">' . \backend\models\Orders::getNumber($value->order_id) . '</td>';
@@ -310,10 +307,29 @@ class PaymentreceiveController extends Controller
                     $html .= '</tr>';
 
                 }
-               // $html .= '<tr><td colspan="4" style="text-align: right">รวม</td><td style="text-align: right;font-weight: bold">' . number_format($total_amount, 2) . '</td><td style="text-align: right;font-weight: bold"><span class="line-pay-total">0</span></td></tr>';
+                // $html .= '<tr><td colspan="4" style="text-align: right">รวม</td><td style="text-align: right;font-weight: bold">' . number_format($total_amount, 2) . '</td><td style="text-align: right;font-weight: bold"><span class="line-pay-total">0</span></td></tr>';
             }
         }
 
         echo $html;
     }
+
+    public function actionCustomerloan()
+    {
+        $searchModel = new \backend\models\SaleorderCustomerLoanSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        //   $dataProvider->query->andFilterWhere(['>','qty',0])->andFilterWhere(['customer_id'=>2247]);
+        $dataProvider->setSort([
+            'defaultOrder'=>['customer_id'=>SORT_ASC,'order_date'=>SORT_ASC]
+        ]);
+
+        return $this->render('_customerloan', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+//        return $this->render('_customerloan', [
+//            'model' => null,
+//        ]);
+    }
+
 }

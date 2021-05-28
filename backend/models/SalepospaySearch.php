@@ -17,7 +17,7 @@ class SalepospaySearch extends QuerySalePosPay
     public function rules()
     {
         return [
-            [['code', 'payment_date','payment_amount'], 'safe'],
+            [['code', 'payment_date', 'payment_amount'], 'safe'],
             [['globalSearch'], 'string']
         ];
     }
@@ -44,6 +44,13 @@ class SalepospaySearch extends QuerySalePosPay
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
+        }
+
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $query->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $query->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
         }
 
         // grid filtering conditions

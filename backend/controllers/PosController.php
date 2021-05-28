@@ -7,6 +7,7 @@ use backend\models\Orderline;
 use backend\models\Orders;
 use backend\models\OrdersposSearch;
 use backend\models\WarehouseSearch;
+use common\models\LoginLog;
 use Yii;
 use backend\models\Car;
 use backend\models\CarSearch;
@@ -38,7 +39,7 @@ class PosController extends Controller
                     [
                         'actions' => [
                             'logout', 'index', 'print', 'printindex', 'dailysum', 'getcustomerprice', 'getoriginprice', 'closesale',
-                            'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate', 'posttrans', 'saledailyend'
+                            'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate', 'posttrans', 'saledailyend','printdo'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -67,6 +68,17 @@ class PosController extends Controller
 
     public function actionGetcustomerprice()
     {
+        $company_id = 1;
+        $branch_id = 1;
+
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
+
         $data = [];
         $data_cus_price = [];
         $data_basic_price = [];
@@ -79,7 +91,7 @@ class PosController extends Controller
                 }
             }
         }
-        $model_basic_price = \backend\models\Product::find()->all();
+        $model_basic_price = \backend\models\Product::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
         if ($model_basic_price) {
             foreach ($model_basic_price as $value2) {
                 array_push($data_basic_price, ['product_id' => $value2->id, 'sale_price' => $value2->sale_price]);
@@ -91,8 +103,18 @@ class PosController extends Controller
 
     public function actionGetoriginprice()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
+
         $data = [];
-        $model_basic_price = \backend\models\Product::find()->where(['is_pos_item' => 1])->all();
+        $model_basic_price = \backend\models\Product::find()->where(['is_pos_item' => 1, 'company_id' => $company_id, 'branch_id' => $branch_id])->all();
         if ($model_basic_price) {
             foreach ($model_basic_price as $value) {
                 array_push($data, ['product_id' => $value->id, 'sale_price' => $value->sale_price]);
@@ -127,6 +149,19 @@ class PosController extends Controller
 
     public function actionClosesale()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        $default_warehouse = 6;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+            if ($branch_id == 2) {
+                $default_warehouse = 5;
+            }
+        }
+
         $pay_total_amount = \Yii::$app->request->post('sale_total_amount');
         $pay_amount = \Yii::$app->request->post('sale_pay_amount');
         $pay_change = \Yii::$app->request->post('sale_pay_change');
@@ -139,6 +174,7 @@ class PosController extends Controller
 
         $print_type_doc = \Yii::$app->request->post('print_type_doc');
 
+       // echo $print_type_doc;return;
         $pos_date = \Yii::$app->request->post('sale_pay_date');
 
         //echo $customer_id;return;
@@ -150,13 +186,16 @@ class PosController extends Controller
         }
         if ($customer_id) {
             $model_order = new \backend\models\Orders();
-            $model_order->order_no = $model_order->getLastNo($sale_date);
+            $model_order->order_no = $model_order->getLastNo($sale_date, $company_id, $branch_id);
             $model_order->order_date = date('Y-m-d H:i:s', strtotime($sale_date . ' ' . $sale_time));
             $model_order->customer_id = $customer_id;
             $model_order->sale_channel_id = 2; // pos
             $model_order->payment_status = 0;
             $model_order->order_total_amt = $pay_total_amount == null ? 0 : $pay_total_amount;
             $model_order->status = 1;
+            $model_order->company_id = $company_id;
+            $model_order->branch_id = $branch_id;
+            $model_order->payment_method_id = $payment_type;
             if ($model_order->save(false)) {
                 if (count($product_list) > 0) {
                     for ($i = 0; $i <= count($product_list) - 1; $i++) {
@@ -170,17 +209,19 @@ class PosController extends Controller
                         $model_order_line->line_total = ($line_price[$i] * $line_qty[$i]);
                         $model_order_line->status = 1;
                         if ($model_order_line->save(false)) {
-
                             $model_stock = new \backend\models\Stocktrans();
-                            $model_stock->journal_no = '';
+                            $model_stock->journal_no = $model_order->order_no;
                             $model_stock->trans_date = date('Y-m-d H:i:s');
                             $model_stock->product_id = $product_list[$i];
                             $model_stock->qty = $line_qty[$i];
-                            $model_stock->warehouse_id = 6;
+                            $model_stock->warehouse_id = $default_warehouse; // default
                             $model_stock->stock_type = 2;
                             $model_stock->activity_type_id = 5; // 1 prod rec 2 issue car
+                            $model_stock->trans_ref_id = $model_order->id;
+                            $model_stock->company_id = $company_id;
+                            $model_stock->branch_id = $branch_id;
                             if ($model_stock->save()) {
-                                $this->updateSummary($product_list[$i], 6, $line_qty[$i]);
+                                $this->updateSummary($product_list[$i], $default_warehouse, $line_qty[$i]);
                             }
                         }
                     }
@@ -199,10 +240,12 @@ class PosController extends Controller
 
 
                     $model = new \backend\models\Paymenttrans();
-                    $model->trans_no = $model->getLastNo();
+                    $model->trans_no = $model->getLastNo($company_id, $branch_id);
                     $model->trans_date = date('Y-m-d H:i:s');
                     $model->order_id = $model_order->id;
                     $model->status = 0;
+                    $model->company_id = $company_id;
+                    $model->branch_id = $branch_id;
                     if ($model->save()) {
                         if ($customer_id > 0) {
                             //$pay_method_name = \backend\models\Paymentmethod::findName($pay_method[$i]);
@@ -212,10 +255,11 @@ class PosController extends Controller
                             $model_line->payment_method_id = $payment_type;
                             //   $model_line->payment_term_id = $pay_term[$i] == null ? 0 : $pay_term[$i];
                             $model_line->payment_date = date('Y-m-d H:i:s');
-                            $model_line->payment_amount = $pay_amount == null ? 0 : $pay_amount;
+                            $model_line->payment_amount = $payment_type == 2 ? 0 : $pay_amount;
                             $model_line->total_amount = $pay_total_amount;
                             $model_line->change_amount = $pay_change;
                             $model_line->order_ref_id = $model_order->id;
+                            $model_line->payment_type_id = $payment_type;
                             $model_line->status = 1;
                             $model_line->doc = '';
                             if ($model_line->save(false)) {
@@ -226,10 +270,12 @@ class PosController extends Controller
                     $this->updateorderpayment($model_order->id, $pay_total_amount, $pay_amount);
                 } else {
                     $model = new \backend\models\Paymenttrans();
-                    $model->trans_no = $model->getLastNo();
+                    $model->trans_no = $model->getLastNo($company_id, $branch_id);
                     $model->trans_date = date('Y-m-d H:i:s');
                     $model->order_id = $model_order->id;
                     $model->status = 0;
+                    $model->company_id = $company_id;
+                    $model->branch_id = $branch_id;
                     if ($model->save()) {
                         if ($customer_id > 0) {
                             //$pay_method_name = \backend\models\Paymentmethod::findName($pay_method[$i]);
@@ -239,10 +285,11 @@ class PosController extends Controller
                             $model_line->payment_method_id = $payment_type;
                             //   $model_line->payment_term_id = $pay_term[$i] == null ? 0 : $pay_term[$i];
                             $model_line->payment_date = date('Y-m-d H:i:s');
-                            $model_line->payment_amount = $pay_amount;
+                            $model_line->payment_amount = $payment_type == 2 ? 0 : $pay_amount;
                             $model_line->total_amount = $pay_total_amount;
                             $model_line->change_amount = $pay_change;
                             $model_line->order_ref_id = $model_order->id;
+                            $model_line->payment_type_id = $payment_type;
                             $model_line->status = 1;
                             $model_line->doc = '';
                             if ($model_line->save(false)) {
@@ -262,27 +309,57 @@ class PosController extends Controller
                     if ($change_amt != null) {
                         $ch_amt = $change_amt->change_amount;
                     }
-                    $this->render('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt, $print_type_doc]);
                     if ($print_type_doc == 2) {
-                        if (file_exists('../web/uploads/slip/slip_index_do.pdf')) {
-                            unlink('../web/uploads/slip/slip_index_do.pdf');
-                        }
-                        $this->render('_printtoindex2', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt, $print_type_doc]);
+                        $session = \Yii::$app->session;
+                        $session->setFlash('msg-index', 'slip_index.pdf');
+                        $session->setFlash('msg-index-do', 'slip_index_do.pdf');
+                        $session->setFlash('after-save', true);
+                        $session->setFlash('msg-is-do', $print_type_doc);
+                        $session->setFlash('msg-do-order-id', $model_order->id);
+                        // echo "prin type is ".$print_type_doc;return;
                     }
-//
                     $session = \Yii::$app->session;
                     $session->setFlash('msg-index', 'slip_index.pdf');
                     $session->setFlash('msg-index-do', 'slip_index_do.pdf');
                     $session->setFlash('after-save', true);
-                    if ($print_type_doc == 2) {
-                        $session->setFlash('msg-is-do', $print_type_doc);
-                    }
+                    $session->setFlash('msg-is-do', $print_type_doc);
+
+                    $this->render('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt]);
+                    //   if ($print_type_doc == 2) {
+//                        if (file_exists('../web/uploads/slip_do/slip_index_do.pdf')) {
+//                            unlink('../web/uploads/slip_do/slip_index_do.pdf');
+//                        }
+                    //  $this->render('_printtoindex2', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt, $print_type_doc]);
+                    //  }
+
+
                 }
             }
         }
         $session = \Yii::$app->session;
         $session->setFlash('msg', 'บันทึกรายการเรียบร้อย');
         return $this->redirect(['pos/index']);
+    }
+
+    public function actionPrintdo()
+    {
+        $id = \Yii::$app->request->post('order_id');
+        if ($id) {
+            $model = \backend\models\Orders::find()->where(['id' => $id])->one();
+            $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
+            $change_amt = \backend\models\Paymenttransline::find()->where(['order_ref_id' => $id])->one();
+            $ch_amt = 0;
+            if ($change_amt != null) {
+                $ch_amt = $change_amt->change_amount;
+            }
+            $this->render('_printtoindex2', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt]);
+            $session = \Yii::$app->session;
+            $session->setFlash('msg-index-do', 'slip_index_do.pdf');
+            $session->setFlash('after-save', true);
+            $session->setFlash('msg-is-do', 2);
+
+        }
+
     }
 
     public function updateSummary($product_id, $wh_id, $qty)
@@ -418,14 +495,15 @@ class PosController extends Controller
     public function actionPrint($id)
     {
         if ($id) {
-//            $model = \backend\models\Orders::find()->where(['id' => $id])->one();
-//            $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
-//            $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
-//            //   $content =  $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
-//            $session = \Yii::$app->session;
-//            $session->setFlash('msg-index', 'slip.pdf');
-//            $session->setFlash('after-print', true);
-//            $this->redirect(['pos/salehistory']);
+            $model = \backend\models\Orders::find()->where(['id' => $id])->one();
+            $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
+            $user_oper = \backend\models\User::findName($model->created_by);
+            $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line, 'user_oper' => $user_oper]);
+            //   $content =  $this->renderPartial('_print', ['model' => $model, 'model_line' => $model_line]);
+            $session = \Yii::$app->session;
+            $session->setFlash('msg-index', 'slip.pdf');
+            $session->setFlash('after-print', true);
+            $this->redirect(['pos/salehistory']);
         }
 
     }
@@ -507,8 +585,14 @@ class PosController extends Controller
     {
         $user_id = \Yii::$app->user->id;
         $user_login_time = \backend\models\User::findLogintime($user_id);
-        $user_login_datetime = \backend\models\User::findLogindatetime($user_id);
+        $user_login_datetime = '';
         $t_date = date('Y-m-d H:i:s');
+        $model_c_login = LoginLog::find()->where(['user_id' => $user_id, 'status' => 1])->andFilterWhere(['date(login_date)' => date('Y-m-d')])->one();
+        if ($model_c_login != null) {
+            $user_login_datetime = date('Y-m-d H:i:s', strtotime($model_c_login->login_date));
+        } else {
+            $user_login_datetime = date('Y-m-d H:i:s');
+        }
 
 //        $x_date = explode('/', $pos_date);
 //        if (count($x_date) > 1) {
@@ -519,6 +603,7 @@ class PosController extends Controller
         $order_cash_qty = 0;
         $order_credit_qty = 0;
         $production_qty = 0;
+        $order_product_item = null;
 
 //        $model_order = \backend\models\Orders::find()->where(['date(order_date)'=>$t_date])->all();
 //        if($model_order){
@@ -534,11 +619,15 @@ class PosController extends Controller
 
         $order_qty = \common\models\QuerySalePosData::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->sum('qty');
         $order_amount = \common\models\QuerySalePosData::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->sum('line_total');
-        $order_cash_qty = \common\models\QuerySalePosData::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->sum('qty');
-        $order_credit_qty = \common\models\QuerySalePosData::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->sum('qty');
+//        $order_cash_qty = \common\models\QuerySalePosData::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->sum('qty');
+//        $order_credit_qty = \common\models\QuerySalePosData::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->sum('qty');
+        $order_cash_qty = \common\models\QuerySaleDataSummary::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['LIKE', 'name', 'สด'])->sum('qty');
+        $order_credit_qty = \common\models\QuerySaleDataSummary::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['NOT LIKE', 'name', 'สด'])->sum('qty');
 
-        $order_cash_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'payment_date', $user_login_datetime, $t_date])->sum('payment_amount');
-        $order_credit_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'payment_date', $user_login_datetime, $t_date])->sum('payment_amount');
+        $order_product_item = \common\models\QuerySaleDataSummary::find()->select('product_id')->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->groupBy('product_id')->all();
+
+        $order_cash_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'payment_date', $user_login_datetime, $t_date])->andFilterWhere(['LIKE', 'name', 'สด'])->sum('payment_amount');
+        $order_credit_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'payment_date', $user_login_datetime, $t_date])->andFilterWhere(['NOT LIKE', 'name', 'สด'])->sum('payment_amount');
         $production_qty = \backend\models\Stocktrans::find()->where(['activity_type_id' => 1])->andFilterWhere(['between', 'trans_date', $user_login_datetime, $t_date])->sum('qty');
         $issue_refill_qty = \backend\models\Stocktrans::find()->where(['activity_type_id' => 3])->andFilterWhere(['between', 'trans_date', $user_login_datetime, $t_date])->sum('qty');
 
@@ -557,52 +646,73 @@ class PosController extends Controller
             'order_cash_amount' => $order_cash_amount,
             'order_credit_amount' => $order_credit_amount,
             'production_qty' => $production_qty,
-            'issue_refill_qty' => $issue_refill_qty
+            'issue_refill_qty' => $issue_refill_qty,
+            'order_product_item' => $order_product_item
         ]);
     }
 
     public function actionSaledailyend()
     {
         $user_id = \Yii::$app->user->id;
-        $user_login_time = \backend\models\User::findLogintime($user_id);
-        $user_login_datetime = \backend\models\User::findLogindatetime($user_id);
-        $t_date = date('Y-m-d H:i:s');
+//        $user_login_time = \backend\models\User::findLogintime($user_id);
+//        $user_login_datetime = \backend\models\User::findLogindatetime($user_id);
+//        $t_date = date('Y-m-d H:i:s');
 
-        $total_qty = \Yii::$app->request->post('order_qty');
-        $total_amount = \Yii::$app->request->post('order_amount');
-        $total_cash_qty = \Yii::$app->request->post('order_cash_qty');
-        $total_credit_qty = \Yii::$app->request->post('order_credit_qty');
-        $total_cash_amount = \Yii::$app->request->post('order_cash_amount');
-        $total_credit_amount = \Yii::$app->request->post('order_credit_amount');
-        $total_production_qty = \Yii::$app->request->post('total_production_qty');
+        $line_prod_id = \Yii::$app->request->post('line_prod_id');
+        $line_balance_in_id = \Yii::$app->request->post('line_balance_in_id');
+        $line_balance_in = \Yii::$app->request->post('line_balance_in');
+        $line_balance_out = \Yii::$app->request->post('line_balance_out');
+        $line_production_qty = \Yii::$app->request->post('line_production_qty');
+        $line_cash_qty = \Yii::$app->request->post('line_cash_qty');
+        $line_credit_qty = \Yii::$app->request->post('line_credit_qty');
+        $line_cash_amount = \Yii::$app->request->post('line_cash_amount');
+        $line_credit_amount = \Yii::$app->request->post('line_credit_amount');
 
 
-        $order_cash_qty = \common\models\QuerySaleDataSummary::find()->select(['product_id', 'SUM(qty) as qty'])->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->groupBy('product_id')->all();
-        $order_cash_amount = \common\models\QuerySaleDataSummary::find()->select(['product_id', 'SUM(line_total) as line_total'])->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->groupBy('product_id')->all();
+        //     $order_cash_qty = \common\models\QuerySaleDataSummary::find()->select(['product_id', 'SUM(qty) as qty'])->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['LIKE','name','สด'])->groupBy('product_id')->all();
+        //      $order_cash_amount = \common\models\QuerySaleDataSummary::find()->select(['product_id', 'SUM(line_total) as line_total'])->where(['created_by' => $user_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->groupBy('product_id')->all();
 //        $order_credit_qty = \common\models\QuerySalePosData::find()->where(['created_by'=>$user_id])->andFilterWhere(['between','order_date',$user_login_datetime,$t_date])->sum('qty');
 //
 //
-//        if($user_id != null){
-//            $model = new \common\models\SaleDailySum();
-//            $model->emp_id = $user_id;
-//            $model->trans_date = date('Y-m-d H:i:s');
-//            $model->total_cash_qty = 0;
-//            $model->total_credit_qty = 0;
-//            $model->total_cash_price = 0;
-//            $model->total_credit_price = 0;
-//            $model->total_prod_qty = 0;
-//            $model->trans_shift = 0;
-//            $model->balance_in = 0;
-//            $model->status = 1; // close and cannot edit everything
-//            $model->save();
-//        }
+        if ($user_id != null && $line_prod_id != null) {
+            for ($i = 0; $i <= count($line_prod_id) - 1; $i++) {
+                $model = new \common\models\SaleDailySum();
+                $model->emp_id = $user_id;
+                $model->trans_date = date('Y-m-d H:i:s');
+                $model->product_id = $line_prod_id[$i];
+                $model->total_cash_qty = $line_cash_qty[$i];
+                $model->total_credit_qty = $line_credit_qty[$i];
+                $model->total_cash_price = $line_cash_amount[$i];
+                $model->total_credit_price = $line_credit_amount[$i];
+                $model->total_prod_qty = $line_production_qty[$i];
+                $model->trans_shift = 0;
+                $model->balance_in = $line_balance_in[$i];
+                $model->balance_out = $line_balance_out[$i];
+                $model->status = 1; // close and cannot edit everything
+                if ($model->save()) {
+                    $model_balance_out = new \common\models\SaleBalanceOut();
+                    $model_balance_out->user_id = $user_id;
+                    $model_balance_out->product_id = $line_prod_id[$i];
+                    $model_balance_out->trans_date = date('Y-m-d H:i:s');
+                    $model_balance_out->balance_out = $line_balance_out[$i];
+                    $model_balance_out->status = 1;
+                    if ($model_balance_out->save()) {
+                        $model_update = \common\models\SaleBalanceOut::find()->where(['id' => $line_balance_in_id[$i]])->one();
+                        if ($model_update) {
+                            $model_update->status = 2;
+                            $model_update->save();
+                        }
+                    }
+                }
+            }
+        }
 
-        foreach ($order_cash_qty as $value){
-            echo $value->product_id.' = '. $value->qty.'<br />';
-        }
-        foreach ($order_cash_amount as $value2){
-            echo $value2->product_id.' = '. $value2->line_total.'<br />';
-        }
+//        foreach ($order_cash_qty as $value){
+//            echo $value->product_id.' = '. $value->qty.'<br />';
+//        }
+//        foreach ($order_cash_amount as $value2){
+//            echo $value2->product_id.' = '. $value2->line_total.'<br />';
+//        }
 
     }
 

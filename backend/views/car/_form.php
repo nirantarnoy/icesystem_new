@@ -4,6 +4,15 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use softark\duallistbox\DualListbox;
 
+$company_id = 1;
+$branch_id = 1;
+if (isset($_SESSION['user_company_id'])) {
+    $company_id = $_SESSION['user_company_id'];
+}
+if (isset($_SESSION['user_branch_id'])) {
+    $branch_id = $_SESSION['user_branch_id'];
+}
+
 ?>
 
 <div class="car-form">
@@ -36,7 +45,7 @@ use softark\duallistbox\DualListbox;
         <div class="col-lg-1"></div>
         <div class="col-lg-5">
             <?= $form->field($model, 'car_type_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Cartype::find()->all(), 'id', 'name'),
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Cartype::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', 'name'),
                 'options' => [
                     'placeholder' => '--เลือกประเภทรถ--'
                 ],
@@ -47,7 +56,7 @@ use softark\duallistbox\DualListbox;
         </div>
         <div class="col-lg-5">
             <?= $form->field($model, 'sale_group_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Salegroup::find()->all(), 'id', 'name'),
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Salegroup::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', 'name'),
                 'options' => [
                     'placeholder' => '--เลือกกลุ่มการขาย--'
                 ],
@@ -63,7 +72,7 @@ use softark\duallistbox\DualListbox;
         <div class="col-lg-1"></div>
         <div class="col-lg-5">
             <?= $form->field($model, 'sale_com_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Salecom::find()->all(), 'id', 'name'),
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Salecom::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', 'name'),
                 'options' => [
                     'placeholder' => '--เลือกกลุ่มคอมมิชชั่น--'
                 ],
@@ -74,7 +83,7 @@ use softark\duallistbox\DualListbox;
         </div>
         <div class="col-lg-5">
             <?= $form->field($model, 'sale_com_extra')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Salecomcon::find()->all(), 'id', 'name'),
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Salecomcon::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', 'name'),
                 'options' => [
                     'placeholder' => '--เลือกกลุ่มเงื่อนไขพิเศษ--'
                 ],

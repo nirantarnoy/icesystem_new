@@ -7,6 +7,7 @@ use yii\web\Response;
 //require_once __DIR__ . '/vendor/autoload.php';
 //require_once 'vendor/autoload.php';
 // เพิ่ม Font ให้กับ mPDF
+
 $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
 $fontData = $defaultFontConfig['fontdata'];
 $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp',
@@ -34,6 +35,7 @@ $mpdf->AddPageByArray([
 
 //$customer_name = $trans_data[0]['customer_id']?getCustomername($connect, $trans_data[0]['customer_id']):$trans_data[0]['customer_name'];
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -121,7 +123,6 @@ $mpdf->AddPageByArray([
     <!--    <script type="text/javascript" src="js/ThaiBath-master/thaibath.js"></script>-->
 </head>
 <body>
-
 <table class="table-qrcode" style="width: 100%">
     <tr>
         <td style="width: 2%">
@@ -146,17 +147,14 @@ $mpdf->AddPageByArray([
                         <h2>ใบสั่งจ่าย</h2>
                     </td>
                 </tr>
-
             </table>
         </td>
     </tr>
 </table>
-
 <table class="table-header" width="100%">
     <tr>
-        <td style="font-size: 18px;text-align: left">
-            เลขที่ <span><?= $model->order_no; ?></span>
-        </td>
+        <td style="font-size: 18px;text-align: left">เลขที่ <span><?php echo $model->order_no; ?></span>
+</td>
         <td style="font-size: 18px;text-align: left">
             วันที่ <span><?= date('d/m/Y', strtotime($model->order_date)); ?></span>
         </td>
@@ -169,7 +167,6 @@ $mpdf->AddPageByArray([
             เวลา <span><?= date('H:i:s', strtotime($model->order_date)); ?></span>
         </td>
     </tr>
-
 </table>
 <table class="table-title">
     <tr>
@@ -196,7 +193,6 @@ $mpdf->AddPageByArray([
             <td style="text-align: center"><?= number_format($value->price) ?></td>
             <td style="text-align: right"><?= number_format($value->qty * $value->price, 2); ?></td>
         </tr>
-
     <?php endforeach; ?>
     <tfoot>
     <tr>
@@ -226,7 +222,7 @@ $mpdf->AddPageByArray([
     </tfoot>
 </table>
 <table class="table-header">
-
+<tr><td></td></tr>
 </table>
 <table class="table-header">
     <tr>
@@ -236,29 +232,14 @@ $mpdf->AddPageByArray([
     </tr>
 </table>
 <br/>
-
 <br/>
-<!--<script src="../web/plugins/jquery/jquery.min.js"></script>-->
-<!--<script>-->
-<!--    $(function(){-->
-<!--       alert('');-->
-<!--    });-->
-<!--   window.print();-->
-<!--</script>-->
-<?php
-//echo '<script src="../web/plugins/jquery/jquery.min.js"></script>';
-//echo '<script type="text/javascript">alert();</script>';
-?>
 </body>
 </html>
 <?php
-//include("pdf_footer.php");
-?>
-<?php
 
-if(file_exists('../web/uploads/slip/slip_index.pdf')){
-    unlink('../web/uploads/slip/slip_index.pdf');
-}
+    if(file_exists('../web/uploads/slip/slip_index.pdf')){
+        unlink('../web/uploads/slip/slip_index.pdf');
+    }
 
 $html = ob_get_contents(); // ทำการเก็บค่า HTML จากคำสั่ง ob_start()
 $mpdf->WriteHTML($html); // ทำการสร้าง PDF ไฟล์
@@ -266,15 +247,13 @@ $mpdf->WriteHTML($html); // ทำการสร้าง PDF ไฟล์
 ob_clean();
 //$mpdf->SetJS('this.print();');
 $mpdf->SetJS('this.print();');
-$mpdf->Output('../web/uploads/slip/slip_index.pdf', 'F');
+
+    $mpdf->Output('../web/uploads/slip/slip_index.pdf', 'F');
+
 ob_end_flush();
 
 //header("location: system_stock/report_pdf/Packing.pdf");
 
 ?>
-
 <!--ดาวโหลดรายงานในรูปแบบ PDF <a class="btn-export-pdf" href="MyPDF.pdf">คลิกที่นี้</a>-->
-
-
-
 

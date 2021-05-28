@@ -16,38 +16,45 @@ class Stocksum extends \common\models\StockSum
                 ],
                 'value'=> time(),
             ],
-//            'timestampudate'=>[
-//                'class'=> \yii\behaviors\AttributeBehavior::className(),
-//                'attributes'=>[
-//                    ActiveRecord::EVENT_BEFORE_INSERT=>'updated_at',
+//            'timestampcby' => [
+//                'class' => \yii\behaviors\AttributeBehavior::className(),
+//                'attributes' => [
+//                    ActiveRecord::EVENT_BEFORE_INSERT => 'created_by',
 //                ],
-//                'value'=> time(),
+//                'value' => Yii::$app->user->id,
 //            ],
-//            'timestampcby'=>[
-//                'class'=> \yii\behaviors\AttributeBehavior::className(),
-//                'attributes'=>[
-//                    ActiveRecord::EVENT_BEFORE_INSERT=>'created_by',
+//            'timestamuby' => [
+//                'class' => \yii\behaviors\AttributeBehavior::className(),
+//                'attributes' => [
+//                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_by',
 //                ],
-//                'value'=> Yii::$app->user->identity->id,
+//                'value' => Yii::$app->user->id,
 //            ],
-//            'timestamuby'=>[
-//                'class'=> \yii\behaviors\AttributeBehavior::className(),
-//                'attributes'=>[
-//                    ActiveRecord::EVENT_BEFORE_UPDATE=>'updated_by',
-//                ],
-//                'value'=> Yii::$app->user->identity->id,
-//            ],
-            'timestampupdate'=>[
-                'class'=> \yii\behaviors\AttributeBehavior::className(),
-                'attributes'=>[
-                    ActiveRecord::EVENT_BEFORE_UPDATE=>'updated_at',
+            'timestampcompany' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'company_id',
                 ],
-                'value'=> time(),
+                'value' => isset($_SESSION['user_company_id']) ? $_SESSION['user_company_id'] : 1,
+            ],
+            'timestampbranch' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'branch_id',
+                ],
+                'value' => isset($_SESSION['user_branch_id']) ? $_SESSION['user_branch_id'] : 1,
+            ],
+            'timestampupdate' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
+                ],
+                'value' => time(),
             ],
         ];
     }
 
-    public function findStock($product_id, $warehouse_id){
+    public static function findStock($product_id, $warehouse_id){
         $model = Stocksum::find()->where(['product_id'=>$product_id,'warehouse_id'=>$warehouse_id])->one();
         return $model != null?$model->qty:0;
     }

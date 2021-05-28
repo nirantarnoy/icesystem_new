@@ -13,6 +13,7 @@ use backend\models\Sequence;
 class SequenceSearch extends Sequence
 {
     public $globalSearch;
+
     /**
      * {@inheritdoc}
      */
@@ -21,7 +22,7 @@ class SequenceSearch extends Sequence
         return [
             [['id', 'plant_id', 'module_id', 'use_year', 'use_month', 'use_day', 'minimum', 'maximum', 'currentnum', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['prefix', 'symbol'], 'safe'],
-            [['globalSearch'],'string'],
+            [['globalSearch'], 'string'],
         ];
     }
 
@@ -77,8 +78,16 @@ class SequenceSearch extends Sequence
             'updated_by' => $this->updated_by,
         ]);
 
-        if($this->globalSearch != ''){
-            $query->orFilterWhere(['like','prefix',$this->globalSearch]);
+
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $query->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $query->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
+        }
+
+        if ($this->globalSearch != '') {
+            $query->orFilterWhere(['like', 'prefix', $this->globalSearch]);
         }
 
         return $dataProvider;

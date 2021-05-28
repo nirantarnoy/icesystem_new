@@ -8,6 +8,8 @@ use yii\bootstrap4\LinkPager;
 
 $this->title = Yii::t('app', 'ใบสั่งขาย');
 $this->params['breadcrumbs'][] = $this->title;
+
+
 ?>
 <div class="orders-index">
 
@@ -94,7 +96,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
-                    return number_format(\backend\models\Orders::findordercredit($data->id));
+                    return number_format(\backend\models\Orders::findordercredit($data->id, $data->sale_from_mobile));
+//                    if ($data->payment_method_id == 2) {
+//                        return number_format(\backend\models\Orders::getlinesum($data->id));
+//                    } else {
+//                        return 0;
+//                    }
                 }
             ],
             [
@@ -102,7 +109,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
-                    return number_format(\backend\models\Orders::findordercash($data->id));
+                    return number_format(\backend\models\Orders::findordercash($data->id, $data->sale_from_mobile));
+//                    if ($data->payment_method_id == 1) {
+//                        return number_format(\backend\models\Orders::getlinesum($data->id));
+//                    } else {
+//                        return 0;
+//                    }
                 }
             ],
 //            [

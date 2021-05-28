@@ -15,16 +15,15 @@ use yii\filters\VerbFilter;
  */
 class DeliveryrouteController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
+    public $enableCsrfValidation = false;
+
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete' => ['POST', 'GET'],
                 ],
             ],
         ];
@@ -72,7 +71,7 @@ class DeliveryrouteController extends Controller
         $model = new Deliveryroute();
 
         if ($model->load(Yii::$app->request->post())) {
-            if($model->save()){
+            if ($model->save()) {
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
                 return $this->redirect(['index']);
@@ -96,7 +95,7 @@ class DeliveryrouteController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
-            if($model->save()){
+            if ($model->save()) {
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
                 return $this->redirect(['index']);
@@ -138,18 +137,19 @@ class DeliveryrouteController extends Controller
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
 
-    public function actionGetcustomer(){
+    public function actionGetcustomer()
+    {
         $id = \Yii::$app->request->post('id');
         $html = '';
-        if($id){
-            $model = \backend\models\Customer::find()->where(['delivery_route_id'=>$id])->orderBy(['code'=>SORT_ASC])->all();
-            if($model){
-                foreach ($model as $value){
-                  $html.='<tr>';
-                    $html.='<td>'.$value->code.'</td>';
-                    $html.='<td>'.$value->name.'</td>';
-                    $html.='<td>'.$value->status.'</td>';
-                    $html.='</tr>';
+        if ($id) {
+            $model = \backend\models\Customer::find()->where(['delivery_route_id' => $id])->orderBy(['code' => SORT_ASC])->all();
+            if ($model) {
+                foreach ($model as $value) {
+                    $html .= '<tr>';
+                    $html .= '<td>' . $value->code . '</td>';
+                    $html .= '<td>' . $value->name . '</td>';
+                    $html .= '<td>' . $value->status . '</td>';
+                    $html .= '</tr>';
                 }
             }
         }

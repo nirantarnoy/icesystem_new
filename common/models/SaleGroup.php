@@ -32,7 +32,7 @@ class SaleGroup extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['status', 'created_at', 'created_by', 'updated_at', 'updated_by','company_id','branch_id'], 'integer'],
             [['code', 'name'], 'string', 'max' => 255],
             [['delivery_route_id'],'integer']
         ];

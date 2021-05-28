@@ -175,7 +175,11 @@ class DbrestoreController extends Controller
                 }
 
 
+            }else{
+                echo "cannot save file.";
             }
+        }else{
+            echo "empty file.";
         }
 
     }

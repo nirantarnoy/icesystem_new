@@ -45,7 +45,7 @@ class Customer extends \yii\db\ActiveRecord
     {
         return [
             [['code','name'],'unique'],
-            [['customer_group_id', 'delivery_route_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['customer_group_id', 'delivery_route_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by','is_show_pos'], 'integer'],
             [['active_date'], 'safe'],
             [['code', 'name', 'description', 'location_info', 'logo', 'shop_photo','address','address2','phone','branch_no','sort_name'], 'string', 'max' => 255],
             [['branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['branch_id' => 'id']],

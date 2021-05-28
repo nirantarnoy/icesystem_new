@@ -55,6 +55,15 @@ class PricegroupController extends Controller
 
     public function actionCreate()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
         $model = new Pricegroup();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -63,6 +72,8 @@ class PricegroupController extends Controller
 
             //print_r($prod_price);return;
             $model->status = 1;
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
             if ($model->save()) {
 //                if (count($prod_id)) {
 //                    for ($i = 0; $i <= count($prod_id) - 1; $i++) {
@@ -102,13 +113,15 @@ class PricegroupController extends Controller
             $customer_type_id = \Yii::$app->request->post('line_type_id');
             $removelist2 = \Yii::$app->request->post('removelist2');
 
-           // print_r($removelist2);return;
+            // print_r($removelist2);return;
 
             if ($model->save()) {
                 if (count($prod_id) > 0) {
                     for ($i = 0; $i <= count($prod_id) - 1; $i++) {
-                        if($prod_id[$i] == ''){continue;}
-                        $model_update = \common\models\PriceGroupLine::find()->where(['product_id' => $prod_id[$i],'price_group_id'=>$model->id])->one();
+                        if ($prod_id[$i] == '') {
+                            continue;
+                        }
+                        $model_update = \common\models\PriceGroupLine::find()->where(['product_id' => $prod_id[$i], 'price_group_id' => $model->id])->one();
                         if ($model_update) {
                             $model_update->sale_price = $prod_price[$i] == null ? 0 : $prod_price[$i];
                             $model_update->save(false);
@@ -125,8 +138,10 @@ class PricegroupController extends Controller
 
                 if (count($customer_type_id) > 0) {
                     for ($i = 0; $i <= count($customer_type_id) - 1; $i++) {
-                        if($customer_type_id[$i] == ''){continue;}
-                        $model_update = \common\models\PriceCustomerType::find()->where(['customer_type_id' => $customer_type_id[$i],'price_group_id'=>$model->id])->one();
+                        if ($customer_type_id[$i] == '') {
+                            continue;
+                        }
+                        $model_update = \common\models\PriceCustomerType::find()->where(['customer_type_id' => $customer_type_id[$i], 'price_group_id' => $model->id])->one();
                         if ($model_update) {
 
                         } else {
@@ -140,8 +155,8 @@ class PricegroupController extends Controller
                 }
 
                 if ($removelist != '') {
-                    $x=explode(',',$removelist);
-                    if(count($x) >0) {
+                    $x = explode(',', $removelist);
+                    if (count($x) > 0) {
                         for ($m = 0; $m <= count($x) - 1; $m++) {
                             \common\models\PriceGroupLine::deleteAll(['id' => $x[$m]]);
                         }
@@ -149,9 +164,9 @@ class PricegroupController extends Controller
 
                 }
                 if ($removelist2 != '') {
-                    $x=explode(',',$removelist2);
-                    if(count($x) >0){
-                        for($m=0;$m<=count($x)-1;$m++){
+                    $x = explode(',', $removelist2);
+                    if (count($x) > 0) {
+                        for ($m = 0; $m <= count($x) - 1; $m++) {
                             \common\models\PriceCustomerType::deleteAll(['id' => $x[$m]]);
                         }
                     }
@@ -191,13 +206,22 @@ class PricegroupController extends Controller
 
     public function actionProductdata()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
         $txt = \Yii::$app->request->post('txt_search');
         $html = '';
         $model = null;
-        if($txt !=''){
-            $model = \backend\models\Product::find()->where(['OR',['LIKE','code',$txt],['LIKE','name',$txt]])->all();
-        }else{
-            $model = \backend\models\Product::find()->all();
+        if ($txt != '') {
+            $model = \backend\models\Product::find()->where(['OR', ['LIKE', 'code', $txt], ['LIKE', 'name', $txt]])->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
+        } else {
+            $model = \backend\models\Product::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
         }
         foreach ($model as $value) {
             $prod_stock = $this->getStock($value->id);
@@ -218,8 +242,18 @@ class PricegroupController extends Controller
         }
         echo $html;
     }
+
     public function actionProductdata2()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
         $company = \Yii::$app->request->post('company');
         $branch = \Yii::$app->request->post('branch');
         $warehouse = \Yii::$app->request->post('warehouse');
@@ -229,10 +263,10 @@ class PricegroupController extends Controller
 //        if($company !=''){
 //            $model = \backend\models\Product::find()->where(['OR',['LIKE','code',$txt],['LIKE','name',$txt]])->all();
 //        }else{
-        $model = \backend\models\Product::find()->all();
-       // }
+        $model = \backend\models\Product::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
+        // }
         foreach ($model as $value) {
-            $prod_stock = $this->getStock2($company,$branch,$warehouse,$value->id);
+            $prod_stock = $this->getStock2($company, $branch, $warehouse, $value->id);
             //$prod_stock = 0;
             $html .= '<tr>';
             $html .= '<td style="text-align: center">
@@ -251,35 +285,55 @@ class PricegroupController extends Controller
         }
         echo $html;
     }
-    public function getStock($prod_id){
+
+    public function getStock($prod_id)
+    {
+        $default_wh = 6;
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+           if(\Yii::$app->user->identity->branch_id == 2){
+               $default_wh = 5;
+           }
+        }
         $qty = 0;
-        if($prod_id!=null){
-            $model= \backend\models\Stocksum::find()->where(['product_id'=>$prod_id,'warehouse_id'=>6])->one();
-            if($model){
+        if ($prod_id != null) {
+            $model = \backend\models\Stocksum::find()->where(['product_id' => $prod_id, 'warehouse_id' => $default_wh])->one();
+            if ($model) {
                 $qty = $model->qty;
             }
         }
         return $qty;
     }
-    public function getStock2($company,$branch,$warehouse,$product_id){
+
+    public function getStock2($company, $branch, $warehouse, $product_id)
+    {
         $qty = 0;
-        if($company!=null && $branch!=null && $warehouse!=null && $product_id != null){
-            $model= \backend\models\Stocksum::find()->where(['product_id'=>$product_id,'warehouse_id'=>$warehouse,'company_id'=>$company,'branch_id'=>$branch])->one();
-            if($model){
+        if ($company != null && $branch != null && $warehouse != null && $product_id != null) {
+            $model = \backend\models\Stocksum::find()->where(['product_id' => $product_id, 'warehouse_id' => $warehouse, 'company_id' => $company, 'branch_id' => $branch])->one();
+            if ($model) {
                 $qty = $model->qty;
             }
         }
         return $qty;
     }
+
     public function actionCustomertypedata()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
         $txt = \Yii::$app->request->post('txt_search');
         $html = '';
         $model = null;
-        if($txt !=''){
-            $model = \backend\models\Customertype::find()->where(['OR',['LIKE','code',$txt],['LIKE','name',$txt]])->all();
-        }else{
-            $model = \backend\models\Customertype::find()->all();
+        if ($txt != '') {
+            $model = \backend\models\Customertype::find()->where(['OR', ['LIKE', 'code', $txt], ['LIKE', 'name', $txt]])->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
+        } else {
+            $model = \backend\models\Customertype::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
         }
         foreach ($model as $value) {
             $html .= '<tr>';

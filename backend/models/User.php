@@ -47,21 +47,23 @@ class User extends \common\models\User
 //            ],
 //        ];
 //    }
-    public function findName($id){
+
+    public static function findName($id){
         $model = User::find()->where(['id'=>$id])->one();
         return $model!= null?$model->username:'';
     }
-    public function findGroup($id){
+    public static function findGroup($id){
         $model = User::find()->where(['id'=>$id])->one();
         return $model!= null?$model->group_id:0;
     }
 
-    public function findLogintime($id){
+    public static function findLogintime($id){
         $model = LoginLog::find()->where(['user_id'=>$id])->one();
         return $model!= null?date('H:i',strtotime($model->login_date)):'';
     }
-    public function findLogindatetime($id){
-        $model = LoginLog::find()->where(['user_id'=>$id])->one();
+    public static function findLogindatetime($id){
+        $c_date = date('Y-m-d');
+        $model = LoginLog::find()->where(['user_id'=>$id, 'status'=> 1])->one();
         return $model!= null?date('Y-m-d H:i:s',strtotime($model->login_date)):'';
     }
 }

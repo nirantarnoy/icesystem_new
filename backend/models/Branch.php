@@ -47,11 +47,11 @@ class Branch extends \common\models\Branch
         ];
     }
 
-    public function findCode($id){
+    public static function findCode($id){
         $model = Branch::find()->where(['id'=>$id])->one();
         return $model != null?$model->code:'';
     }
-    public function findName($id){
+    public static function findName($id){
         $model = Branch::find()->where(['id'=>$id])->one();
         return $model != null?$model->name:'';
     }

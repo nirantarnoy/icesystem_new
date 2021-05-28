@@ -3,6 +3,15 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+$company_id = 1;
+$branch_id = 1;
+if (isset($_SESSION['user_company_id'])) {
+    $company_id = $_SESSION['user_company_id'];
+}
+if (isset($_SESSION['user_branch_id'])) {
+    $branch_id = $_SESSION['user_branch_id'];
+}
+
 ?>
 
 <div class="salegroup-form">
@@ -19,7 +28,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
             <?= $form->field($model, 'delivery_route_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(), 'id', 'name'),
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', 'name'),
                 'options' => [
                     'placeholder' => '--เลือกสายส่ง--'
                 ]

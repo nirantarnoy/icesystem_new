@@ -34,8 +34,8 @@ class ProductController extends Controller
         $status = false;
 
         if ($customer_id) {
-            $model = \common\models\QueryCustomerPrice::find()->where(['cus_id'=>$customer_id])->all();
-           // $model = \common\models\QueryCustomerPrice::find()->all();
+            $model = \common\models\QueryCustomerPrice::find()->where(['cus_id' => $customer_id])->all();
+            // $model = \common\models\QueryCustomerPrice::find()->all();
             if ($model) {
                 $status = true;
                 foreach ($model as $value) {
@@ -43,7 +43,7 @@ class ProductController extends Controller
                     array_push($data, [
                         'id' => $value->product_id,
                         //'image' => 'http://192.168.1.120/icesystem/backend/web/uploads/images/products/' . $product_info->photo,
-                          'image' => 'http://119.59.100.74/icesystem/backend/web/uploads/images/products/'.$product_info->photo,
+                        'image' => 'http://119.59.100.74/icesystem/backend/web/uploads/images/products/' . $product_info->photo,
                         'code' => $product_info->code,
                         'name' => $product_info->name,
                         'sale_price' => $value->sale_price,
@@ -52,9 +52,9 @@ class ProductController extends Controller
             }
         }
 
-
         return ['status' => $status, 'data' => $data];
     }
+
     public function actionIssuelist()
     {
         $customer_id = 0;
@@ -82,21 +82,23 @@ class ProductController extends Controller
             if ($t_date != null) {
                 $trans_date = $t_date;
             }
-            $model_issue = \common\models\JournalIssue::find()->where(['delivery_route_id'=>$route_id,'date(trans_date)'=> $trans_date])->one();
-            if($model_issue){
-                $model = \common\models\QuerySaleIssueProductPrice::find()->where(['cus_id'=>$customer_id,'delivery_route_id'=>$route_id,'issue_id'=>$model_issue->id])->all();
+            $model_issue = \common\models\JournalIssue::find()->where(['delivery_route_id' => $route_id, 'date(trans_date)' => $trans_date])->andFilterWhere(['<=','status',2])->one();
+            if ($model_issue) {
+                $model = \common\models\QuerySaleIssueProductPrice::find()->where(['cus_id' => $customer_id, 'delivery_route_id' => $route_id, 'issue_id' => $model_issue->id])->all();
                 // $model = \common\models\QueryCustomerPrice::find()->all();
                 if ($model) {
                     $status = true;
                     foreach ($model as $value) {
+                        if ($value->qty == null || $value->qty <= 0) continue;
                         array_push($data, [
                             'id' => $value->product_id,
                             //'image' => 'http://192.168.1.120/icesystem/backend/web/uploads/images/products/' . $product_info->photo,
-                            'image' => 'http://119.59.100.74/icesystem/backend/web/uploads/images/products/'.$value->photo,
+                            'image' => 'http://119.59.100.74/icesystem/backend/web/uploads/images/products/' . $value->photo,
                             'code' => $value->code,
                             'name' => $value->name,
                             'sale_price' => $value->sale_price,
-                            'issue_id' =>$value->issue_id,
+                            'issue_id' => $value->issue_id,
+                            'onhand' => $value->avl_qty
                         ]);
                     }
                 }

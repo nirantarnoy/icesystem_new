@@ -26,20 +26,34 @@ class Salecom extends \common\models\SaleCom
                 ],
                 'value' => time(),
             ],
-//            'timestampcby'=>[
-//                'class'=> \yii\behaviors\AttributeBehavior::className(),
-//                'attributes'=>[
-//                    ActiveRecord::EVENT_BEFORE_INSERT=>'created_by',
+            'timestampcby' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'created_by',
+                ],
+                'value' => Yii::$app->user->id,
+            ],
+//            'timestamuby' => [
+//                'class' => \yii\behaviors\AttributeBehavior::className(),
+//                'attributes' => [
+//                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_by',
 //                ],
-//                'value'=> Yii::$app->user->identity->id,
+//                'value' => Yii::$app->user->id,
 //            ],
-//            'timestamuby'=>[
-//                'class'=> \yii\behaviors\AttributeBehavior::className(),
-//                'attributes'=>[
-//                    ActiveRecord::EVENT_BEFORE_UPDATE=>'updated_by',
-//                ],
-//                'value'=> Yii::$app->user->identity->id,
-//            ],
+            'timestampcompany' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'company_id',
+                ],
+                'value' => isset($_SESSION['user_company_id']) ? $_SESSION['user_company_id'] : 1,
+            ],
+            'timestampbranch' => [
+                'class' => \yii\behaviors\AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'branch_id',
+                ],
+                'value' => isset($_SESSION['user_branch_id']) ? $_SESSION['user_branch_id'] : 1,
+            ],
             'timestampupdate' => [
                 'class' => \yii\behaviors\AttributeBehavior::className(),
                 'attributes' => [
@@ -54,7 +68,7 @@ class Salecom extends \common\models\SaleCom
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';
 //    }
-    public function findCode($id)
+    public static function findCode($id)
     {
         $model = Salecom::find()->where(['id' => $id])->one();
         return $model != null ? $model->code : '';

@@ -22,7 +22,7 @@ class SaleCom extends \yii\db\ActiveRecord
         return [
             [['code'],'required'],
             [['code'],'unique'],
-            [['emp_qty', 'status', 'created_at', 'updated_at', 'created_by'], 'integer'],
+            [['emp_qty', 'status', 'created_at', 'updated_at', 'created_by','company_id','branch_id'], 'integer'],
             [['com_extra'], 'number'],
             [['code', 'name'], 'string', 'max' => 255],
         ];

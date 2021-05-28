@@ -7,6 +7,24 @@ use yii\web\Session;
 $filename = "empty";
 $is_print_do = "";
 $filename_do = "empty";
+$order_do = "empty";
+
+
+$company_id = 1;
+$branch_id = 1;
+$default_warehouse = 6;
+if (!empty(\Yii::$app->user->identity->company_id)) {
+    $company_id = \Yii::$app->user->identity->company_id;
+}
+if (!empty(\Yii::$app->user->identity->branch_id)) {
+    $branch_id = \Yii::$app->user->identity->branch_id;
+    if ($branch_id == 2) {
+        $default_warehouse = 5;
+    }
+}
+
+//echo $company_id.'<br />';
+//echo $branch_id;
 
 if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
     $f_name = \Yii::$app->session->getFlash('msg-index');
@@ -18,12 +36,16 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
 if (!empty(\Yii::$app->session->getFlash('msg-index-do')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
     $f_name = \Yii::$app->session->getFlash('msg-index-do');
     // echo $f_name;
-    if (file_exists('../web/uploads/slip/' . $f_name)) {
-        $filename_do = "../web/uploads/slip/" . $f_name;
+    if (file_exists('../web/uploads/slip_do/' . $f_name)) {
+        $filename_do = "../web/uploads/slip_do/" . $f_name;
     }
 }
 if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
     $is_print_do = \Yii::$app->session->getFlash('msg-is-do');
+}
+if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
+    $order_do = \Yii::$app->session->getFlash('msg-do-order-id');
+    //echo $order_do;
 }
 
 
@@ -62,8 +84,8 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                     $s_name = '';
                     echo Select2::widget([
                         'name' => 'customer_id',
-                        'value' => 1,
-                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['sort_name' => $s_name])->all(), 'id', function ($data) {
+                        // 'value' => 1,
+                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->andFilterWhere(['is_show_pos' => 1])->all(), 'id', function ($data) {
                             return $data->code . ' ' . $data->name;
                         }),
                         'options' => [
@@ -86,16 +108,16 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                     <div class="row">
                         <?php $i = 0; ?>
                         <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
-                        <?php $product_data = \backend\models\Product::find()->all(); ?>
+                        <?php $product_data = \backend\models\Product::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id, 'status'=>1])->orderBy(['item_pos_seq'=>SORT_ASC])->all(); ?>
                         <?php foreach ($product_data as $value): ?>
-
                             <?php
                             $i += 1;
-                            $product_onhand = \backend\models\Stocksum::findStock($value->id, 6);
+                            $product_onhand = \backend\models\Stocksum::findStock($value->id, $default_warehouse);
                             ?>
-                            <div class="col-lg-3 product-items">
+<!--                            <div class="col-lg-3 product-items">-->
+                            <div class="product-items" style="margin: 5px;">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
-                                <div class="card" style="heightc: 200px;">
+                                <div class="card" style="height: 180px;">
                                     <!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
                                     <!--                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="">-->
                                     <div class="card-body">
@@ -146,20 +168,20 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                     <div class="row">
                         <?php $i = 0; ?>
                         <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
-                        <?php $product_data = \backend\models\Product::find()->where(['is_pos_item' => 1])->orderBy(['item_pos_seq' => SORT_ASC])->all(); ?>
+                        <?php $product_data = \backend\models\Product::find()->where(['is_pos_item' => 1, 'company_id' => $company_id, 'branch_id' => $branch_id,'status'=>1])->orderBy(['item_pos_seq' => SORT_ASC])->all(); ?>
                         <?php foreach ($product_data as $value): ?>
                             <?php
                             $i += 1;
-                            $product_onhand = \backend\models\Stocksum::findStock($value->id, 6);
+                            $product_onhand = \backend\models\Stocksum::findStock($value->id, $default_warehouse);
                             ?>
-                            <div class="col-lg-3 product-items">
+                            <div class="product-itemsx" style="margin: 5px;">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
-                                <div class="card" style="heightc: 200px;">
+                                <div class="card" style="height: 180px;">
                                     <!--                                <img class="card-img-top" src="../web/uploads/images/products/nologo.png" alt="">-->
                                     <!--                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="">-->
                                     <div class="card-body">
                                         <p class="card-text"
-                                           style="font-size: 20px;text-align: center;font-weight: bold"><?= $value->code ?></p>
+                                           style="font-size: 20px;text-align: center;font-weight: bold"><?= $value->code?></p>
                                     </div>
                                     <div class="card-footer" style="width: 100%">
                                         <div class="row" style="width: 120%;text-align: center">
@@ -185,10 +207,10 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                                                        class="list-item-onhand fix-list-item-onhand-<?= $i ?>"
                                                        value="<?= $product_onhand ?>">
                                                 <div class="btn-group" style="width: 100%">
-                                                    <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"
+                                                    <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>" data-val="<?=$value->id?>"
                                                          onclick="reducecart2($(this))"><i class="fa fa-minus"></i>
                                                     </div>
-                                                    <div class="btn btn-outline-primary btn-sm" data-var="<?= $i ?>"
+                                                    <div class="btn btn-outline-primary btn-sm" data-var="<?= $i ?>" data-val="<?=$product_onhand?>" data-vax="<?=$value->id?>"
                                                          onclick="addcart2($(this))">
                                                         <i class="fa fa-plus"></i></div>
                                                 </div>
@@ -269,9 +291,9 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                             <th style="text-align: center;width: 5%">#</th>
                             <th style="width: 15%;text-align: center">รหัสสินค้า</th>
                             <th>ชื่อสินค้า</th>
-                            <th style="text-align: right;width: 15%">จำนวน</th>
-                            <th style="text-align: right">ราคา</th>
-                            <th style="text-align: right">ราคารวม</th>
+                            <th style="text-align: right;width: 10%">จำนวน</th>
+                            <th style="text-align: right;width: 10%"">ราคา</th>
+                            <th style="text-align: right;width: 15%">ราคารวม</th>
                             <th style="text-align: center">ลบ</th>
                         </tr>
                         </thead>
@@ -714,7 +736,8 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
                 <div class="row">
                     <div class="col-lg-12">
                         <input type="number" class="form-control edit-amount" min="1"
-                               style="font-size: 50px;height: 60px;text-align: center" value="0" onchange="checkonhand($(this))">
+                               style="font-size: 50px;height: 60px;text-align: center" value="0"
+                               onchange="checkonhand($(this))">
                     </div>
                 </div>
                 <br>
@@ -823,6 +846,10 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
     <iframe id="iFramePdfDo" src="<?= $filename_do ?>" style="display:none;"></iframe>
 </div>
 
+<form id="form-print-do" action="<?=\yii\helpers\Url::to(['pos/printdo'],true);?>" method="post">
+    <input type="hidden" class="order-do" name="order_id" value="<?=$order_do?>">
+</form>
+
 <?php //endif;?>
 
 <?php
@@ -832,14 +859,22 @@ $url_to_get_price = \yii\helpers\Url::to(['pos/getcustomerprice'], true);
 
 $js = <<<JS
  $(function(){
+       var order_do = $(".order-do").val();
+       if(order_do != "empty"){
+           alert();
+           $("form#form-print-do").submit();
+           $(".slip-print-do").val("slip_index_do.pdf");
+           myPrint2();
+       }
         var xx = $(".slip-print").val();
        var xx2 = $(".slip-print-do").val();
         //alert(xx);
         if(xx !="empty"){
-          // myPrint();
+           myPrint();
         }
         if(xx2 !="empty"){
-          // myPrint2();
+          //  alert();
+           myPrint2();
         }
      setInterval(function (){
           var dt = new Date();
@@ -1298,15 +1333,18 @@ function addcart(e){
 function addcart2(e){
     var ids = e.attr('data-var');
     
-    var prod_id = $(".fix-list-item-id-"+ids).val();
+    var prod_id = e.attr('data-vax');//$(".fix-list-item-id-"+ids).val();
     var prod_code = $(".fix-list-item-code-"+ids).val();
     var prod_name = $(".fix-list-item-name-"+ids).val();
      //alert(prod_id);
-    var qty = 0;
+    var qty = 1;
     var price =$(".fix-list-item-price-"+ids).val();
-    var onhand =$(".fix-list-item-onhand-"+ids).val();
+    //var onhand =$(".fix-list-item-onhand-"+ids).val(); 
+    // e.closest("tr").find('.list-item-onhand').val();
+    var onhand = e.attr('data-val');
     var tr = $(".table-cart tbody tr:last");
      
+  //  alert(onhand);
   
     var check_old = check_dup(prod_id);
     if(check_old == 1){
@@ -1358,10 +1396,10 @@ function addcart2(e){
 }
 function reducecart2(e){
     var ids = e.attr('data-var');
-    var prod_id = $(".list-item-id-"+ids).val();
+    var prod_id = e.attr('data-val');//$("#sale-by-original").find(".list-item-id-"+ids).val();
     var prod_code = $(".list-item-code-"+ids).val();
     var prod_name = $(".list-item-name-"+ids).val();
-    // alert(prod_id);
+     //alert(prod_id);
     var qty = -1;
     var price = $(".list-item-price-"+ids).val();
     var onhand = $(".list-item-onhand-"+ids).val();

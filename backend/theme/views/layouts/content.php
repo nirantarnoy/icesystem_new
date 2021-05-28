@@ -1,8 +1,24 @@
 <?php
-/* @var $content string */
+$company_id = 1;
+$branch_id = 1;
+
+if (empty(\Yii::$app->user->identity->company_id)) {
+    //return $this->redirect(['site/logout']);
+    return \Yii::$app->runAction('site/logout');
+}
+if (\Yii::$app->user->identity->company_id != null) {
+    $company_id = \Yii::$app->user->identity->company_id;
+} else {
+    //  return $this->redirect(['site/logout']);
+    return \Yii::$app->runAction('site/logout');
+}
+if (\Yii::$app->user->identity->branch_id != null) {
+    $branch_id = \Yii::$app->user->identity->branch_id;
+}
 
 use yii\bootstrap4\Breadcrumbs;
 use yii\web\Session;
+
 ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -10,7 +26,7 @@ use yii\web\Session;
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h2><?=$this->title;?></h2>
+                    <h2><?= $this->title; ?></h2>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <?php
@@ -26,7 +42,7 @@ use yii\web\Session;
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-        <!-- Main content -->
+    <!-- Main content -->
     <div class="content" style="padding: 15px;background-color: white">
         <div id="btn-show-alert"></div>
         <?php $session = \Yii::$app->session;
@@ -37,7 +53,7 @@ use yii\web\Session;
             <input type="hidden" class="alert-msg-error" value="<?= $session->getFlash('msg-error'); ?>">
         <?php endif; ?>
         <form action="" id="form-delete" method="post"></form>
-            <?= $content ?><!-- /.container-fluid -->
+        <?= $content ?><!-- /.container-fluid -->
     </div>
     <!-- /.content -->
 </div>

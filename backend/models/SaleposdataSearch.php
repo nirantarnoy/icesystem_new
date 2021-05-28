@@ -16,7 +16,7 @@ class SaleposdataSearch extends QuerySalePosData
     public function rules()
     {
         return [
-            [['code', 'name','line_total'], 'safe'],
+            [['code', 'name', 'line_total'], 'safe'],
             [['globalSearch'], 'string']
         ];
     }
@@ -44,6 +44,20 @@ class SaleposdataSearch extends QuerySalePosData
             // $query->where('0=1');
             return $dataProvider;
         }
+
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $query->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $query->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
+        }
+
+//        if (isset($_SESSION['user_company_id'])) {
+//            $query->andFilterWhere(['company_id' => $_SESSION['user_company_id']]);
+//        }
+//        if (isset($_SESSION['user_branch_id'])) {
+//            $query->andFilterWhere(['branch_id' => $_SESSION['user_branch_id']]);
+//        }
 
         // grid filtering conditions
 //        $query->andFilterWhere([

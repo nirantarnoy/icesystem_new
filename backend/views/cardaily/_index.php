@@ -13,7 +13,7 @@ $model_new = $model_car;
 
 //}
 //$emp_data = \common\models\USRPWOPERSON::find()->where(['WCID' => 'PTVB'])->all();
-
+//echo count($model);return;
 //print_r($model);return;
 ?>
 <br/>
@@ -38,7 +38,7 @@ $model_new = $model_car;
             $status_name = 'Close';
             $status_color = 'bg-white';
             $stream_status = 'Close';
-            $route_name = '';
+            $route_name = \common\models\QueryCarRoute::find()->where(['id' => $value->id])->one();
 
             $assign_id = 0;
             $stream_assign_date = '';
@@ -46,21 +46,24 @@ $model_new = $model_car;
             // if (\backend\models\Streamer::getStatus($value->NAME)) $status_color = 'Open';
             //    print_r($model);
             $emp_daily_name = '';
+            //$xx_id = 0;
             $xi = 0;
             foreach ($model as $value2) {
                 if ($value2->car_id == $value->id) {
                     $status_color = 'bg-success';
-                    if($xi == 0){
+                    if ($xi == 0) {
                         $x_name = \backend\models\Employee::findName2($value2->employee_id);
-                        if($x_name != ''){
+                        if ($x_name != '') {
                             $emp_daily_name = $x_name;
                         }
-                    }else{
+                        //$xx_id = $value2->id;
+                    } else {
                         $x_name = \backend\models\Employee::findName2($value2->employee_id);
-                        if($x_name != ''){
-                            if($emp_daily_name !=''){
-                                $emp_daily_name = $emp_daily_name.','. $x_name;
-                            }else{
+                        //$xx_id = $value2->id;
+                        if ($x_name != '') {
+                            if ($emp_daily_name != '') {
+                                $emp_daily_name = $emp_daily_name . '<br />' . $x_name;
+                            } else {
                                 $emp_daily_name = $x_name;
                             }
 
@@ -68,29 +71,28 @@ $model_new = $model_car;
 
                     }
                 }
-                $xi +=1;
+                $xi += 1;
             }
             //  return;
             ?>
             <div class="col-lg-2 col-3">
                 <!-- small box -->
-                <div class="small-box <?= $status_color ?>">
+                <a href="#" data-id="<?= $value->id ?>" data-var="<?= $value->emp_qty ?>"
+                   onclick="showcarinfo($(this))" class="small-box <?= $status_color ?>">
                     <div class="inner" style="text-align: right">
                         <h6><b><?= $value->name ?></b></h6>
-                        <p><?php echo $route_name ?></p>
+                        <p style="color: #fcd25a"><?php echo $route_name->route_code ?></p>
                     </div>
-                    <div class="icon">
-                        <i class="fas fa-truck"></i>
-                        <!--                       <img src="../web/uploads/images/streamer/streamer.jpg" width="50%" alt="">-->
-                    </div>
+                    <!--                    <div class="icon">-->
+                    <!--                        <i class="fas fa-truck"></i>-->
+                    <!--                       <img src="../web/uploads/images/streamer/streamer.jpg" width="50%" alt="">-->
+                    <!--                    </div>-->
                     <div style="text-align: center">
-                        <p style="color: #fddfdf"><?=$emp_daily_name?></p>
+                        <p style="color: #000b16"><b><?= $emp_daily_name ?></b></p>
                     </div>
 
-                    <a href="#" data-id="<?= $value->id ?>" data-var="<?= $value->emp_qty ?>"
-                       onclick="showcarinfo($(this))" class="small-box-footer"><i
-                                class="fas fa-users"></i> จัดการข้อมูล </a>
-                </div>
+                    <div class="small-box-footer"></div>
+                </a>
             </div>
         <?php endforeach; ?>
         <!--    </div>-->
@@ -171,11 +173,12 @@ $model_new = $model_car;
                         <div class="col-lg-3"></div>
                         <div class="col-lg-3" style="text-align: center">
                             <div class="label">เลขไมล์</div>
-                            <input type="text" style="text-align: center" class="form-control meter-last" value="0" readonly>
+                            <input type="text" style="text-align: center" class="form-control meter-last" value="0"
+                                   readonly>
                         </div>
                         <div class="col-lg-3">
                             <div class="label" style="text-align: center">เลขไมล์วันนี้</div>
-                            <input type="text"  style="text-align: center"  class="form-control meter-today" value="0">
+                            <input type="text" style="text-align: center" class="form-control meter-today" value="0">
                         </div>
                         <div class="col-lg-3"></div>
                     </div>
@@ -377,6 +380,7 @@ $model_new = $model_car;
 </div>
 <?php
 $url_to_find_item = \yii\helpers\Url::to(['orders/empdata'], true);
+$url_to_check_has_emp = \yii\helpers\Url::to(['orders/checkhasempdata'], true);
 $url_to_find_emp_item = \yii\helpers\Url::to(['orders/findempdata'], true);
 $url_to_delete_emp_item = \yii\helpers\Url::to(['orders/deletecaremp'], true);
 $js = <<<JS
@@ -451,6 +455,10 @@ $js = <<<JS
         var code = e.closest('tr').find('.line-find-emp-code').val();
         var name = e.closest('tr').find('.line-find-emp-name').val();
         if (id) {
+            if(checkhasempdaily(id)){
+                alert("คุณได้ทำการจัดรถให้พนักงานคนนี้ไปแล้ว");
+                return false;
+            }
             if (e.hasClass('btn-outline-success')) {
                 var obj = {};
                 obj['id'] = id;
@@ -475,6 +483,28 @@ $js = <<<JS
                 console.log(selecteditem);
             }
         }
+    }
+    function checkhasempdaily(emp_id){
+      var t_date = $("#car-trans-date").val();
+      var res = false;
+      if(emp_id){
+          $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_check_has_emp" ,
+              'data': {'emp_id': emp_id, 'trans_date': t_date},
+              'success': function(data) {
+                 // alert(data);
+                   if(data >0){
+                       res = true;
+                   }else{
+                       res = false;
+                   }
+              }
+          });
+      }
+       return res;
     }
     function disableselectitem() {
         if (selecteditem.length > 0) {

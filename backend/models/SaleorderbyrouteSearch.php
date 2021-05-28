@@ -75,6 +75,13 @@ class SaleorderbyrouteSearch extends QuerySaleorderByRoute
             //'!=','route_code','NULL'
         ]);
 
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $query->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $query->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
+        }
+
         if($this->order_date != ''){
             $date_data = explode(' - ',$this->order_date);
             $fdate = null;

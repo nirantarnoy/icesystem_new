@@ -47,7 +47,7 @@ class Company extends \common\models\Company
         ];
     }
 
-    public function findName($id){
+    public static function findName($id){
         $model = Company::find()->where(['id'=>$id])->one();
         return $model!=null?$model->name:'';
     }

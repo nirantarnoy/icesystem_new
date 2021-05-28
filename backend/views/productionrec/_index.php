@@ -1,12 +1,28 @@
 <?php
 $this->title = 'บันทึกสินค้าเข้าคลัง';
-$prod_data = \backend\models\Product::find()->all();
+
+
+
+$company_id = 1;
+$branch_id = 1;
+if (isset($_SESSION['user_company_id'])) {
+    $company_id = $_SESSION['user_company_id'];
+}
+if (isset($_SESSION['user_branch_id'])) {
+    $branch_id = $_SESSION['user_branch_id'];
+}
+$default_warehouse = 6;
+if($company_id==1 && $branch_id==2){
+    $default_warehouse = 5;
+}
+
+$prod_data = \backend\models\Product::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
 $wh_date = null;
 
 if($_SESSION['user_group_id'] ==1){
-    $wh_date = \backend\models\Warehouse::find()->all();
+    $wh_date = \backend\models\Warehouse::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
 }else{
-    $wh_date = \backend\models\Warehouse::find()->where(['id'=>6])->all();
+    $wh_date = \backend\models\Warehouse::find()->where(['id'=> $default_warehouse, 'company_id'=>$company_id,'branch_id'=>$branch_id])->all();
 }
 
 ?>
@@ -248,7 +264,7 @@ function clearall(){
 function addcart(e){
     var ids = e.attr('data-id');
     var name = e.attr('data-var');
-   // alert(ids);
+    //alert(ids);
      var prod_id = ids;
      var prod_name = name;
     //  //alert(prod_id);

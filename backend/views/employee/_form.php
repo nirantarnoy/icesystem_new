@@ -2,10 +2,14 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
-/* @var $this yii\web\View */
-/* @var $model backend\models\Employee */
-/* @var $form yii\widgets\ActiveForm */
+$company_id = 1;
+$branch_id = 1;
+if(isset($_SESSION['user_company_id'])){
+    $company_id = $_SESSION['user_company_id'];
+}
+if(isset($_SESSION['user_branch_id'])){
+    $branch_id = $_SESSION['user_branch_id'];
+}
 ?>
 
 <div class="employee-form">
@@ -34,7 +38,7 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="col-lg-4">
             <?= $form->field($model, 'position')->Widget(\kartik\select2\Select2::className(),[
-                'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Position::find()->all(),'id','name'),
+                'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Position::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(),'id','name'),
                 'options'=>[
                     'placeholder'=>'--เลือกตำแหน่ง--'
                 ]

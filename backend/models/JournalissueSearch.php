@@ -66,6 +66,13 @@ class JournalissueSearch extends Journalissue
             'updated_by' => $this->updated_by,
         ]);
 
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $query->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $query->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
+        }
+
         $query->andFilterWhere(['like', 'journal_no', $this->globalSearch]);
 
         return $dataProvider;

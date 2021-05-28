@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 
 date_default_timezone_set('Asia/Bangkok');
 
+
 class Orders extends \common\models\Orders
 {
     /**
@@ -44,6 +45,20 @@ class Orders extends \common\models\Orders
                 ],
                 'value' => Yii::$app->user->id,
             ],
+//            'timestampcompany' => [
+//                'class' => \yii\behaviors\AttributeBehavior::className(),
+//                'attributes' => [
+//                    ActiveRecord::EVENT_BEFORE_INSERT => 'company_id',
+//                ],
+//                'value' => isset($_SESSION['user_company_id']) ? $_SESSION['user_company_id'] : 1,
+//            ],
+//            'timestampbranch' => [
+//                'class' => \yii\behaviors\AttributeBehavior::className(),
+//                'attributes' => [
+//                    ActiveRecord::EVENT_BEFORE_INSERT => 'branch_id',
+//                ],
+//                'value' => isset($_SESSION['user_branch_id']) ? $_SESSION['user_branch_id'] : 1,
+//            ],
             'timestampupdate' => [
                 'class' => \yii\behaviors\AttributeBehavior::className(),
                 'attributes' => [
@@ -54,10 +69,10 @@ class Orders extends \common\models\Orders
         ];
     }
 
-    public static function getLastNo($date)
+    public static function getLastNo($date, $company_id, $branch_id)
     {
         //   $model = Orders::find()->MAX('order_no');
-        $model = Orders::find()->where(['date(order_date)' => date('Y-m-d', strtotime($date))])->MAX('order_no');
+        $model = Orders::find()->where(['date(order_date)' => date('Y-m-d', strtotime($date))])->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])->MAX('order_no');
 
 //        $model_seq = \backend\models\Sequence::find()->where(['module_id'=>4])->one();
 //        //$pre = \backend\models\Sequence::find()->where(['module_id'=>15])->one();
@@ -136,7 +151,7 @@ class Orders extends \common\models\Orders
         }
     }
 
-    public function findOrderemp($id)
+    public static function findOrderemp($id)
     {
         $html = '';
         if ($id) {
@@ -167,60 +182,89 @@ class Orders extends \common\models\Orders
         return $html;
     }
 
-    public function findordercash($order_id)
+    public static function findordercash($order_id, $sale_type)
     {
         $total = 0;
-        $model = \backend\models\Orderline::find()->where(['order_id' => $order_id])->all();
-        if ($model) {
-            foreach ($model as $value) {
-                $cus_pay_method = \backend\models\Customer::findPayMethod($value->customer_id);
-                $paymethod_id = \backend\models\Paymentmethod::find()->where(['id' => $cus_pay_method])->one();
-                if ($paymethod_id) {
-                    if ($paymethod_id->pay_type == 1) {
-                        $total = $total + ($value->qty * $value->price);
+        if ($sale_type == 1) {
+            $total = \common\models\QueryApiOrderDailySummary::find()->where(['id' => $order_id, 'sale_payment_method_id' => 1])->sum('line_total');
+        } else {
+            $model = \backend\models\Orderline::find()->where(['order_id' => $order_id])->all();
+            if ($model) {
+                foreach ($model as $value) {
+                    $cus_pay_method = \backend\models\Customer::findPayMethod($value->customer_id);
+                    $paymethod_id = \backend\models\Paymentmethod::find()->where(['id' => $cus_pay_method])->one();
+                    if ($paymethod_id) {
+                        if ($paymethod_id->pay_type == 1) {
+                            $total = $total + ($value->qty * $value->price);
+                        }
                     }
-                }
 //                $paymethod_name = \backend\models\Paymentmethod::findName($cus_pay_method);
 //                if($paymethod_name == 'เงินสด'){
 //                    $total = $total + ($value->qty * $value->price);
 //                }
-            }
+                }
 
+            }
         }
         return $total;
     }
 
-    public function findordercredit($order_id)
+    public static function getlinesum($order_id)
     {
         $total = 0;
         $model = \backend\models\Orderline::find()->where(['order_id' => $order_id])->all();
         if ($model) {
             foreach ($model as $value) {
-                $cus_pay_method = \backend\models\Customer::findPayMethod($value->customer_id);
-//                $paymethod_name = \backend\models\Paymentmethod::findName($cus_pay_method);
-//                if($paymethod_name == 'เงินเชื่อ' || $paymethod_name == 'เครดิต'){
-//                    $total = $total + ($value->qty * $value->price);
+                $total = $total + ($value->qty * $value->price);
+//                $cus_pay_method = \backend\models\Customer::findPayMethod($value->customer_id);
+//                $paymethod_id = \backend\models\Paymentmethod::find()->where(['id' => $cus_pay_method])->one();
+//                if ($paymethod_id) {
+//                    if ($paymethod_id->pay_type == 2) {
+//                        $total = $total + ($value->qty * $value->price);
+//                    }
 //                }
-                $paymethod_id = \backend\models\Paymentmethod::find()->where(['id' => $cus_pay_method])->one();
-                if ($paymethod_id) {
-                    if ($paymethod_id->pay_type == 2) {
-                        $total = $total + ($value->qty * $value->price);
-                    }
-                }
-
             }
 
         }
         return $total;
     }
 
-    public function getNumber($id)
+//
+    public static function findordercredit($order_id, $sale_type)
+    {
+        $total = 0;
+        if ($sale_type == 1) {
+            $total = \common\models\QueryApiOrderDailySummary::find()->where(['id' => $order_id, 'sale_payment_method_id' => 2])->sum('line_total');
+        } else {
+            $model = \backend\models\Orderline::find()->where(['order_id' => $order_id])->all();
+            if ($model) {
+                foreach ($model as $value) {
+                    $cus_pay_method = \backend\models\Customer::findPayMethod($value->customer_id);
+                    $paymethod_id = \backend\models\Paymentmethod::find()->where(['id' => $cus_pay_method])->one();
+                    if ($paymethod_id) {
+                        if ($paymethod_id->pay_type == 2) {
+                            $total = $total + ($value->qty * $value->price);
+                        }
+                    }
+                }
+
+            }
+        }
+
+//        $model = \common\models\QuerySaleCustomerPaySummary::find()->where(['order_ref_id'=>$order_id])->sum('payment_amount');
+//        if($model){
+//            $total = $model;
+//        }
+        return $total;
+    }
+
+    public static function getNumber($id)
     {
         $model = Orders::find()->where(['id' => $id])->one();
         return $model != null ? $model->order_no : '';
     }
 
-    public function getOrderdate($id)
+    public static function getOrderdate($id)
     {
         $model = Orders::find()->where(['id' => $id])->one();
         return $model != null ? $model->order_date : null;

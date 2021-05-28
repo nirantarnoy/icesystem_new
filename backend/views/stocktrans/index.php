@@ -72,7 +72,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: left'],
                 'contentOptions' => ['style' => 'text-align: left'],
                 'value' => function ($data) {
-                    return \backend\helpers\ActivityType::getTypeById($data->activity_type_id);
+                   // return \backend\helpers\ActivityType::getTypeById($data->activity_type_id);
+                    return \backend\helpers\RunnoTitle::getTypeById($data->activity_type_id);
                 }
             ],
             //'location_id',

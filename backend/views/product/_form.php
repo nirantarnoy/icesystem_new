@@ -4,14 +4,24 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
 
-$unit_data = \backend\models\Unit::find()->all();
-$prod_group_data = \backend\models\Productgroup::find()->all();
-$prod_type_data = \backend\models\Producttype::find()->all();
+$company_id = 1;
+$brach_id = 1;
+if(isset($_SESSION['user_company_id'])){
+    $company_id = $_SESSION['user_company_id'];
+}
+if(isset($_SESSION['user_branch_id'])){
+    $brach_id = $_SESSION['user_branch_id'];
+}
+
+$unit_data = \backend\models\Unit::find()->where(['company_id'=>$company_id,'branch_id'=>$brach_id])->all();
+$prod_group_data = \backend\models\Productgroup::find()->where(['company_id'=>$company_id,'branch_id'=>$brach_id])->all();
+$prod_type_data = \backend\models\Producttype::find()->where(['company_id'=>$company_id,'branch_id'=>$brach_id])->all();
 $prod_status = \backend\helpers\ProductStatus::asArrayObject();
 //print_r($prod_status);
 
 $sale_status_data = [['id' => 1, 'name' => 'ขาย'], ['id' => 2, 'name' => 'ไม่ขาย']];
 $stock_type_data = [['id' => 1, 'name' => 'ตัดสต๊อก'], ['id' => 2, 'name' => 'ไม่ตัดสต๊อก']];
+
 ?>
 
 <div class="product-form">

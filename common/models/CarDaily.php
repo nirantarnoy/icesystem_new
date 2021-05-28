@@ -34,7 +34,7 @@ class CarDaily extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['car_id', 'employee_id', 'is_driver', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['car_id', 'employee_id', 'is_driver', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by','company_id','branch_id'], 'integer'],
             [['trans_date'], 'safe'],
         ];
     }

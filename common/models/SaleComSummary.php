@@ -23,7 +23,7 @@ class SaleComSummary extends \yii\db\ActiveRecord
             [['code'],'required'],
             [['code'],'unique'],
             [['sale_price', 'com_extra'], 'number'],
-            [['status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['status', 'created_at', 'updated_at', 'created_by', 'updated_by','company_id','branch_id'], 'integer'],
             [['code', 'name'], 'string', 'max' => 255],
         ];
     }

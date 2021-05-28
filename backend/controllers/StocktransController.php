@@ -63,21 +63,35 @@ class StocktransController extends Controller
      */
     public function actionCreate()
     {
+        $company_id = 1;
+        $branch_id = 1;
+
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
         $trans_date = \Yii::$app->request->post('prodrecdate');
         $wh_id = \Yii::$app->request->post('line_warehouse_id');
         $prodid = \Yii::$app->request->post('line_item_id');
         $qty = \Yii::$app->request->post('line_qty');
 
+       // print_r($prodid);return;
+
         if($wh_id != null){
              for($i=0;$i<=count($wh_id)-1;$i++){
                  $model = new \backend\models\Stocktrans();
-                 $model->journal_no = $model->getLastNo();
+                 $model->journal_no = $model->getLastNo($company_id,$branch_id);
                  $model->trans_date = date('Y-m-d H:i:s');
                  $model->product_id = $prodid[$i];
                  $model->qty = $qty[$i];
                  $model->warehouse_id = $wh_id[$i];
                  $model->stock_type = 1;
-                 $model->activity_type_id = 1; // 1 prod rec 2 issue car
+                 $model->activity_type_id = 15; // 15 prod rec
+                 $model->company_id = $company_id;
+                 $model->branch_id = $branch_id;
                  if($model->save()){
                     $this->updateSummary($prodid[$i],$wh_id[$i],$qty[$i]);
                  }

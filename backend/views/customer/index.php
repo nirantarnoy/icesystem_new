@@ -9,6 +9,7 @@ use yii\helpers\ArrayHelper;
 
 $this->title = Yii::t('app', 'ลูกค้า');
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="customer-index">
     <?php Pjax::begin(); ?>

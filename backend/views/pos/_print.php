@@ -9,7 +9,7 @@ $fontData = $defaultFontConfig['fontdata'];
 $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp',
 //$mpdf = new \Mpdf\Mpdf([
     //'tempDir' => '/tmp',
-    'mode' => 'utf-8', 'format' => [80, 120],
+    'mode' => 'utf-8', 'format' => [75, 120],
     'fontdata' => $fontData + [
             'sarabun' => [ // ส่วนที่ต้องเป็น lower case ครับ
                 'R' => 'THSarabunNew.ttf',
@@ -23,8 +23,8 @@ $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp',
 //$mpdf->SetMargins(-10, 1, 1);
 //$mpdf->SetDisplayMode('fullpage');
 $mpdf->AddPageByArray([
-    'margin-left' => 2,
-    'margin-right' => 3,
+    'margin-left' => 5,
+    'margin-right' => 2,
     'margin-top' => 0,
     'margin-bottom' => 1,
 ]);
@@ -162,8 +162,8 @@ $mpdf->AddPageByArray([
         <tr>
             <td><?= \backend\models\Product::findName($value->product_id); ?></td>
             <td style="text-align: center"><?= $value->qty ?></td>
-            <td style="text-align: center"><?= number_format($value->price) ?></td>
-            <td style="text-align: right"><?= number_format($value->qty * $value->price); ?></td>
+            <td style="text-align: center"><?= number_format($value->price,2) ?></td>
+            <td style="text-align: right"><?= number_format($value->qty * $value->price, 2); ?></td>
         </tr>
 
     <?php endforeach; ?>
@@ -178,19 +178,19 @@ $mpdf->AddPageByArray([
         <td style="font-size: 18px;">ส่วนลด</td>
         <td></td>
         <td></td>
-        <td style="font-size: 18px;text-align: right"><?= number_format($discount) ?></td>
+        <td style="font-size: 18px;text-align: right"><?= number_format($discount,2) ?></td>
     </tr>
     <tr>
         <td style="font-size: 18px;">จำนวนสุทธิ</td>
         <td></td>
         <td></td>
-        <td style="font-size: 18px;text-align: right"> <?= number_format($total_amt - $discount) ?></td>
+        <td style="font-size: 18px;text-align: right"> <?= number_format($total_amt - $discount,2) ?></td>
     </tr>
     <tr>
         <td style="font-size: 18px;">ทอนเงิน</td>
         <td></td>
         <td></td>
-        <td style="font-size: 18px;text-align: right"> <?= number_format($change) ?></td>
+        <td style="font-size: 18px;text-align: right"> <?= number_format($change,2) ?></td>
     </tr>
     </tfoot>
 </table>
@@ -199,7 +199,7 @@ $mpdf->AddPageByArray([
 </table>
 <table class="table-header">
     <tr>
-        <td style="font-size: 18px;">แคชเชียร์ .......................................................</td>
+        <td style="font-size: 18px;">แคชเชียร์ <?=$user_oper?></td>
     </tr>
 </table>
 <br/>

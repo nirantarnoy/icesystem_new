@@ -31,7 +31,7 @@ class OrderStock extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_id', 'issue_id', 'product_id', 'qty', 'used_qty', 'avl_qty'], 'integer'],
+            [['order_id', 'issue_id', 'product_id', 'qty', 'used_qty', 'avl_qty','company_id','branch_id'], 'integer'],
         ];
     }
 

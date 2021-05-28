@@ -97,6 +97,14 @@ class OrdersposSearch extends Orders
 //            $query->andFilterWhere(['order_date' => date('Y-m-d', strtotime($sale_date))]);
 //        }
 
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $query->andFilterWhere(['orders.company_id' => \Yii::$app->user->identity->company_id]);
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $query->andFilterWhere(['orders.branch_id' => \Yii::$app->user->identity->branch_id]);
+        }
+
+        $query->andFilterWhere(['sale_channel_id' => 2]);
         $query->andFilterWhere([
             '=', 'orders.created_by', $this->created_by
         ]);

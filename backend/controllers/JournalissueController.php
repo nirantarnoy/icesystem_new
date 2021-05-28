@@ -15,14 +15,15 @@ use yii\filters\VerbFilter;
  */
 class JournalissueController extends Controller
 {
-   public $enableCsrfValidation = false;
+    public $enableCsrfValidation = false;
+
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST','GET'],
+                    'delete' => ['POST', 'GET'],
                 ],
             ],
         ];
@@ -56,6 +57,21 @@ class JournalissueController extends Controller
 
     public function actionCreate()
     {
+
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+
+        $default_warehouse = 6 ;
+        if($company_id == 1 && $branch_id ==2){
+            $default_warehouse = 5;
+        }
+
         $model = new Journalissue();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -68,11 +84,13 @@ class JournalissueController extends Controller
             if (count($x_date) > 1) {
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
-            $model->journal_no = $model->getLastNo($sale_date);
+            $model->journal_no = $model->getLastNo($sale_date, $company_id, $branch_id);
             $model->trans_date = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
             $model->reason_id = 1;
-            if ($model->save()) {
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
+            if ($model->save(false)) {
                 if ($prod_id != null) {
                     for ($i = 0; $i <= count($prod_id) - 1; $i++) {
                         if ($prod_id[$i] == '') continue;
@@ -83,8 +101,8 @@ class JournalissueController extends Controller
                         $model_line->avl_qty = $line_qty[$i];
                         $model_line->sale_price = $line_issue_price[$i];
                         $model_line->status = 1;
-                        if($model_line->save()){
-                            $this->updateStock($prod_id[$i],$line_qty[$i],6,$model->journal_no);
+                        if ($model_line->save()) {
+                            $this->updateStock($prod_id[$i], $line_qty[$i], $default_warehouse, $model->journal_no, $company_id, $branch_id);
                         }
                     }
                 }
@@ -100,19 +118,22 @@ class JournalissueController extends Controller
         ]);
     }
 
-    public function updateStock($product_id,$qty,$wh_id,$journal_no){
-        if($product_id!= null && $qty > 0){
+    public function updateStock($product_id, $qty, $wh_id, $journal_no,$company_id, $branch_id)
+    {
+        if ($product_id != null && $qty > 0) {
             $model_trans = new \backend\models\Stocktrans();
             $model_trans->journal_no = $journal_no;
             $model_trans->trans_date = date('Y-m-d H:i:s');
             $model_trans->product_id = $product_id;
             $model_trans->qty = $qty;
-            $model_trans->warehouse_id = 6;
+            $model_trans->warehouse_id = $wh_id;
             $model_trans->stock_type = 2; // 1 in 2 out
-            $model_trans->activity_type_id = 2; // 1 prod rec 2 issue car
-            if($model_trans->save(false)){
-                $model = \backend\models\Stocksum::find()->where(['warehouse_id'=>6,'product_id'=>$product_id])->one();
-                if($model){
+            $model_trans->activity_type_id = 6; // 6 issue cars
+            $model_trans->company_id = $company_id;
+            $model_trans->branch_id = $branch_id;
+            if ($model_trans->save(false)) {
+                $model = \backend\models\Stocksum::find()->where(['warehouse_id' => $wh_id, 'product_id' => $product_id])->one();
+                if ($model) {
                     $model->qty = $model->qty - (int)$qty;
                     $model->save(false);
                 }
@@ -241,11 +262,25 @@ class JournalissueController extends Controller
 
         return $html;
     }
-    public function getStock($prod_id){
+
+    public function getStock($prod_id)
+    {
+        $company_id = 1;
+        $branch_id = 1;
+        if (isset($_SESSION['user_company_id'])) {
+            $company_id = $_SESSION['user_company_id'];
+        }
+        if (isset($_SESSION['user_branch_id'])) {
+            $branch_id = $_SESSION['user_branch_id'];
+        }
+        $default_warehouse = 6;
+        if ($company_id == 1 && $branch_id == 2) {
+            $default_warehouse = 5;
+        }
         $qty = 0;
-        if($prod_id!=null){
-            $model= \backend\models\Stocksum::find()->where(['product_id'=>$prod_id,'warehouse_id'=>6])->one();
-            if($model){
+        if ($prod_id != null) {
+            $model = \backend\models\Stocksum::find()->where(['product_id' => $prod_id, 'warehouse_id' => $default_warehouse])->one();
+            if ($model) {
                 $qty = $model->qty;
             }
         }

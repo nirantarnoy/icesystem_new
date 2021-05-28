@@ -63,7 +63,8 @@ return [
         ],
 //        [
 //            'session' =>[
-//                'timeout' => 86400,
+//              //  'timeout' => 86400,
+//                'timeout' => 60*60*24*14,
 //            ]
 //        ],
         'user' => [
@@ -74,6 +75,7 @@ return [
         'session' => [
             // this is the name of the session cookie used for login on the backend
             'name' => 'advanced-backend',
+            'timeout' => 60*60*24*14,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

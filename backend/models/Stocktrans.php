@@ -63,9 +63,9 @@ class Stocktrans extends \common\models\StockTrans
 //        return count($model)>0?$model->id:0;
 //    }
 
-    public static function getLastNo()
+    public static function getLastNo($company_id,$branch_id)
     {
-        $model = Stocktrans::find()->MAX('journal_no');
+        $model = Stocktrans::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->MAX('journal_no');
         //   $model = Orders::find()->where(['date(order_date)' => date('Y-m-d', strtotime($date))])->MAX('order_no');
 
         $model_seq = \backend\models\Sequence::find()->where(['module_id' => 15])->one();

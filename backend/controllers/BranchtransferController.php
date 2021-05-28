@@ -67,6 +67,16 @@ class BranchtransferController extends Controller
      */
     public function actionCreate()
     {
+
+        $company_id = 1;
+        $branch_id = 1;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
         $model = new Branchtransfer();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -85,7 +95,9 @@ class BranchtransferController extends Controller
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
             $model->trans_date = date('Y-m-d', strtotime($sale_date));
-            $model->journal_no = $model->getLastNo();
+            $model->journal_no = $model->getLastNo($company_id, $branch_id);
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
             if ($model->save()) {
                 if ($product != null && $from_company != null && $to_company != null && $to_branch != null && $to_warehouse != null) {
                     for ($i = 0; $i <= count($product) - 1; $i++) {
@@ -104,12 +116,12 @@ class BranchtransferController extends Controller
                         if ($model_line->save()) {
                             // update from
                             $model_stock_trans = new \backend\models\Stocktrans();
-                            $model_stock_trans->journal_no = $model->getLastNo();
+                            $model_stock_trans->journal_no = $model->getLastNo($company_id, $branch_id);
                             $model_stock_trans->trans_date = date('Y-m-d H:i:s');
                             $model_stock_trans->product_id = $product[$i];
                             $model_stock_trans->warehouse_id = $from_warehouse[$i];
                             $model_stock_trans->stock_type = 2;
-                            $model_stock_trans->activity_type_id = 7;
+                            $model_stock_trans->activity_type_id = 19;
                             $model_stock_trans->trans_ref_id = $model->id;
                             $model_stock_trans->qty = $line_qty[$i];
                             if($model_stock_trans->save()){
@@ -122,12 +134,12 @@ class BranchtransferController extends Controller
 
                             // update to
                             $model_stock_trans2 = new \backend\models\Stocktrans();
-                            $model_stock_trans2->journal_no = $model->getLastNo();
+                            $model_stock_trans2->journal_no = $model->getLastNo($company_id, $branch_id);
                             $model_stock_trans2->trans_date = date('Y-m-d H:i:s');
                             $model_stock_trans2->product_id = $product[$i];
                             $model_stock_trans2->warehouse_id = $to_warehouse[$i];
                             $model_stock_trans2->stock_type = 1;
-                            $model_stock_trans2->activity_type_id = 7;
+                            $model_stock_trans2->activity_type_id = 19;
                             $model_stock_trans2->trans_ref_id = $model->id;
                             $model_stock_trans2->qty = $line_qty[$i];
                             if($model_stock_trans2->save()){
@@ -177,13 +189,6 @@ class BranchtransferController extends Controller
         ]);
     }
 
-    /**
-     * Deletes an existing Branchtransfer model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionDelete($id)
     {
 
