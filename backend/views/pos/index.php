@@ -7,6 +7,7 @@ use yii\web\Session;
 $filename = "empty";
 $is_print_do = "";
 $filename_do = "empty";
+$order_do = "empty";
 
 
 $company_id = 1;
@@ -35,12 +36,16 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
 if (!empty(\Yii::$app->session->getFlash('msg-index-do')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
     $f_name = \Yii::$app->session->getFlash('msg-index-do');
     // echo $f_name;
-    if (file_exists('../web/uploads/slip/' . $f_name)) {
-        $filename_do = "../web/uploads/slip/" . $f_name;
+    if (file_exists('../web/uploads/slip_do/' . $f_name)) {
+        $filename_do = "../web/uploads/slip_do/" . $f_name;
     }
 }
 if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
     $is_print_do = \Yii::$app->session->getFlash('msg-is-do');
+}
+if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
+    $order_do = \Yii::$app->session->getFlash('msg-do-order-id');
+    //echo $order_do;
 }
 
 
@@ -841,6 +846,10 @@ if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->ses
     <iframe id="iFramePdfDo" src="<?= $filename_do ?>" style="display:none;"></iframe>
 </div>
 
+<form id="form-print-do" action="<?=\yii\helpers\Url::to(['pos/printdo'],true);?>" method="post">
+    <input type="hidden" class="order-do" name="order_id" value="<?=$order_do?>">
+</form>
+
 <?php //endif;?>
 
 <?php
@@ -850,6 +859,13 @@ $url_to_get_price = \yii\helpers\Url::to(['pos/getcustomerprice'], true);
 
 $js = <<<JS
  $(function(){
+       var order_do = $(".order-do").val();
+       if(order_do != "empty"){
+           alert();
+           $("form#form-print-do").submit();
+           $(".slip-print-do").val("slip_index_do.pdf");
+           myPrint2();
+       }
         var xx = $(".slip-print").val();
        var xx2 = $(".slip-print-do").val();
         //alert(xx);
@@ -857,6 +873,7 @@ $js = <<<JS
            myPrint();
         }
         if(xx2 !="empty"){
+          //  alert();
            myPrint2();
         }
      setInterval(function (){

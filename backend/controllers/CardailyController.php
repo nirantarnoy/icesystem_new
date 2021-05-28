@@ -298,10 +298,10 @@ class CardailyController extends Controller
     {
         if ($car_id != null && $tdate != null) {
 
-            $model_x = \backend\models\Cardaily::find()->where(['car_id' => $car_id, 'data(trans_date)' => date('Y-m-d', strtotime($tdate))])->count('employee_id');
+            $model_x = \backend\models\Cardaily::find()->where(['car_id' => $car_id, 'date(trans_date)' => date('Y-m-d', strtotime($tdate))])->count('employee_id');
             if ($model_x) {
 
-                $model = \backend\models\Orders::find()->where(['car_ref_id' => $car_id, 'data(order_date)' => date('Y-m-d', strtotime($tdate))])->one();
+                $model = \backend\models\Orders::find()->where(['car_ref_id' => $car_id, 'date(order_date)' => date('Y-m-d', strtotime($tdate))])->one();
                 if ($model) {
                     $model->emp_count = $model_x;
                     $model->save(false);
