@@ -225,9 +225,9 @@ $mpdf->AddPageByArray([
 //include("pdf_footer.php");
 ?>
 <?php
-//if(file_exists('../web/uploads/slip_do/slip_index_do.pdf')){
-//    unlink('../web/uploads/slip_do/slip_index_do.pdf');
-//}
+if(file_exists('../web/uploads/slip_do/slip_index_do.pdf')){
+    unlink('../web/uploads/slip_do/slip_index_do.pdf');
+}
 
 $html = ob_get_contents(); // ทำการเก็บค่า HTML จากคำสั่ง ob_start()
 $mpdf->WriteHTML($html); // ทำการสร้าง PDF ไฟล์
