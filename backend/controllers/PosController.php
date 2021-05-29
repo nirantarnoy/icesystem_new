@@ -39,7 +39,7 @@ class PosController extends Controller
                     [
                         'actions' => [
                             'logout', 'index', 'print', 'printindex', 'dailysum', 'getcustomerprice', 'getoriginprice', 'closesale',
-                            'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate', 'posttrans', 'saledailyend','printdo'
+                            'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate', 'posttrans', 'saledailyend', 'printdo'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -174,7 +174,7 @@ class PosController extends Controller
 
         $print_type_doc = \Yii::$app->request->post('print_type_doc');
 
-       // echo $print_type_doc;return;
+        // echo $print_type_doc;return;
         $pos_date = \Yii::$app->request->post('sale_pay_date');
 
         //echo $customer_id;return;
@@ -309,28 +309,34 @@ class PosController extends Controller
                     if ($change_amt != null) {
                         $ch_amt = $change_amt->change_amount;
                     }
-                    if ($print_type_doc == 2) {
-                        $session = \Yii::$app->session;
-                        $session->setFlash('msg-index', 'slip_index.pdf');
-                        $session->setFlash('msg-index-do', 'slip_index_do.pdf');
-                        $session->setFlash('after-save', true);
-                        $session->setFlash('msg-is-do', $print_type_doc);
-                        $session->setFlash('msg-do-order-id', $model_order->id);
-                        // echo "prin type is ".$print_type_doc;return;
-                    }
+//                    if ($print_type_doc == 2) {
+//                        $session = \Yii::$app->session;
+//                        $session->setFlash('msg-index', 'slip_index.pdf');
+//                        $session->setFlash('msg-index-do', 'slip_index_do.pdf');
+//                        $session->setFlash('after-save', true);
+//                        $session->setFlash('msg-is-do', $print_type_doc);
+//                        $session->setFlash('msg-do-order-id', $model_order->id);
+//                        // echo "prin type is ".$print_type_doc;return;
+//                    }
                     $session = \Yii::$app->session;
                     $session->setFlash('msg-index', 'slip_index.pdf');
-                    $session->setFlash('msg-index-do', 'slip_index_do.pdf');
                     $session->setFlash('after-save', true);
                     $session->setFlash('msg-is-do', $print_type_doc);
 
-                    $this->render('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt]);
-                    //   if ($print_type_doc == 2) {
-//                        if (file_exists('../web/uploads/slip_do/slip_index_do.pdf')) {
-//                            unlink('../web/uploads/slip_do/slip_index_do.pdf');
-//                        }
-                    //  $this->render('_printtoindex2', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt, $print_type_doc]);
-                    //  }
+                    $this->renderPartial('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt]);
+                    if ($print_type_doc == 2) {
+                        $session->setFlash('msg-index-do', 'slip_index_do.pdf');
+                        if (file_exists('../web/uploads/slip_do/slip_index_do.pdf')) {
+                            unlink('../web/uploads/slip_do/slip_index_do.pdf');
+                          //  sleep(4);
+                            $this->createDo($model_order->id);
+                        }else{
+                            $this->createDo($model_order->id);
+                        }
+                     // $this->render('_printtoindex2', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt, $print_type_doc]);
+                    }else{
+
+                    }
 
 
                 }
@@ -340,25 +346,40 @@ class PosController extends Controller
         $session->setFlash('msg', 'บันทึกรายการเรียบร้อย');
         return $this->redirect(['pos/index']);
     }
-
-    public function actionPrintdo()
-    {
-        $id = \Yii::$app->request->post('order_id');
-        if ($id) {
-            $model = \backend\models\Orders::find()->where(['id' => $id])->one();
-            $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
-            $change_amt = \backend\models\Paymenttransline::find()->where(['order_ref_id' => $id])->one();
+    public function createDo($order_id){
+        if ($order_id != null) {
+            $model = \backend\models\Orders::find()->where(['id' => $order_id])->one();
+            $model_line = \backend\models\Orderline::find()->where(['order_id' => $order_id])->all();
+            $change_amt = \backend\models\Paymenttransline::find()->where(['order_ref_id' => $order_id])->one();
             $ch_amt = 0;
             if ($change_amt != null) {
                 $ch_amt = $change_amt->change_amount;
             }
-            $this->render('_printtoindex2', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt]);
-            $session = \Yii::$app->session;
-            $session->setFlash('msg-index-do', 'slip_index_do.pdf');
-            $session->setFlash('after-save', true);
-            $session->setFlash('msg-is-do', 2);
 
+            $this->renderPartial('_printtoindex2', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt]);
         }
+    }
+    public function actionPrintdo()
+    {
+        $id = \Yii::$app->request->post('order_id');
+//        if ($id) {
+//             //echo $id; return;
+//            $model = \backend\models\Orders::find()->where(['id' => $id])->one();
+//            $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
+//            $change_amt = \backend\models\Paymenttransline::find()->where(['order_ref_id' => $id])->one();
+//            $ch_amt = 0;
+//            if ($change_amt != null) {
+//                $ch_amt = $change_amt->change_amount;
+//            }
+//            if (file_exists('../web/uploads/slip_do/slip_index_do.pdf')) {
+//                if(unlink('../web/uploads/slip_do/slip_index_do.pdf')){
+//                    $this->render('_printtoindex2', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt]);
+//                }
+//            }else{
+//                $this->render('_printtoindex2', ['model' => $model, 'model_line' => $model_line, 'change_amount' => $ch_amt]);
+//            }
+//            echo '../web/uploads/slip_do/slip_index_do.pdf';
+//        }
 
     }
 
