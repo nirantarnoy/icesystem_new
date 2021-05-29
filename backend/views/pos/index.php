@@ -1043,7 +1043,7 @@ $js = <<<JS
      });
      
      $(".btn-pay-credit-submit").click(function(){
-          $(".print-type-doc").val(1);
+          $(".print-type-doc").val(2);
          $("form#form-close-sale").submit();
      });
      
