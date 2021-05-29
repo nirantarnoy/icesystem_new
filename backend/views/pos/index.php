@@ -108,13 +108,13 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                     <div class="row">
                         <?php $i = 0; ?>
                         <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
-                        <?php $product_data = \backend\models\Product::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id, 'status'=>1])->orderBy(['item_pos_seq'=>SORT_ASC])->all(); ?>
+                        <?php $product_data = \backend\models\Product::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id, 'status' => 1])->orderBy(['item_pos_seq' => SORT_ASC])->all(); ?>
                         <?php foreach ($product_data as $value): ?>
                             <?php
                             $i += 1;
                             $product_onhand = \backend\models\Stocksum::findStock($value->id, $default_warehouse);
                             ?>
-<!--                            <div class="col-lg-3 product-items">-->
+                            <!--                            <div class="col-lg-3 product-items">-->
                             <div class="product-items" style="margin: 5px;">
                                 <!--                            <div class="card" style="heightc: 200px;" onclick="showadditemx($(this))">-->
                                 <div class="card" style="height: 180px;">
@@ -168,7 +168,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                     <div class="row">
                         <?php $i = 0; ?>
                         <?php //$product_data = \backend\models\Product::find()->where(['IN','code',$list])->all(); ?>
-                        <?php $product_data = \backend\models\Product::find()->where(['is_pos_item' => 1, 'company_id' => $company_id, 'branch_id' => $branch_id,'status'=>1])->orderBy(['item_pos_seq' => SORT_ASC])->all(); ?>
+                        <?php $product_data = \backend\models\Product::find()->where(['is_pos_item' => 1, 'company_id' => $company_id, 'branch_id' => $branch_id, 'status' => 1])->orderBy(['item_pos_seq' => SORT_ASC])->all(); ?>
                         <?php foreach ($product_data as $value): ?>
                             <?php
                             $i += 1;
@@ -181,7 +181,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                                     <!--                                <img class="card-img-top" src="../web/uploads/logo/Logo_head.jpg" alt="">-->
                                     <div class="card-body">
                                         <p class="card-text"
-                                           style="font-size: 20px;text-align: center;font-weight: bold"><?= $value->code?></p>
+                                           style="font-size: 20px;text-align: center;font-weight: bold"><?= $value->code ?></p>
                                     </div>
                                     <div class="card-footer" style="width: 100%">
                                         <div class="row" style="width: 120%;text-align: center">
@@ -207,10 +207,12 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                                                        class="list-item-onhand fix-list-item-onhand-<?= $i ?>"
                                                        value="<?= $product_onhand ?>">
                                                 <div class="btn-group" style="width: 100%">
-                                                    <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>" data-val="<?=$value->id?>"
+                                                    <div class="btn btn-outline-secondary btn-sm" data-var="<?= $i ?>"
+                                                         data-val="<?= $value->id ?>"
                                                          onclick="reducecart2($(this))"><i class="fa fa-minus"></i>
                                                     </div>
-                                                    <div class="btn btn-outline-primary btn-sm" data-var="<?= $i ?>" data-val="<?=$product_onhand?>" data-vax="<?=$value->id?>"
+                                                    <div class="btn btn-outline-primary btn-sm" data-var="<?= $i ?>"
+                                                         data-val="<?= $product_onhand ?>" data-vax="<?= $value->id ?>"
                                                          onclick="addcart2($(this))">
                                                         <i class="fa fa-plus"></i></div>
                                                 </div>
@@ -292,7 +294,8 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                             <th style="width: 15%;text-align: center">รหัสสินค้า</th>
                             <th>ชื่อสินค้า</th>
                             <th style="text-align: right;width: 10%">จำนวน</th>
-                            <th style="text-align: right;width: 10%"">ราคา</th>
+                            <th style="text-align: right;width: 10%"
+                            ">ราคา</th>
                             <th style="text-align: right;width: 15%">ราคารวม</th>
                             <th style="text-align: center">ลบ</th>
                         </tr>
@@ -846,8 +849,8 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
     <iframe id="iFramePdfDo" src="<?= $filename_do ?>" style="display:none;"></iframe>
 </div>
 
-<form id="form-print-do" action="<?=\yii\helpers\Url::to(['pos/printdo'],true);?>" method="post">
-    <input type="hidden" class="order-do" name="order_id" value="<?=$order_do?>">
+<form id="form-print-do" action="<?= \yii\helpers\Url::to(['pos/printdo'], true); ?>" method="post">
+    <input type="hidden" class="order-do" name="order_id" value="<?= $order_do ?>">
 </form>
 
 <?php //endif;?>
@@ -856,26 +859,51 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
 $url_to_get_origin_price = \yii\helpers\Url::to(['pos/getoriginprice'], true);
 $url_to_get_basic_price = \yii\helpers\Url::to(['pos/getbasicprice'], true);
 $url_to_get_price = \yii\helpers\Url::to(['pos/getcustomerprice'], true);
+$url_to_create_do = \yii\helpers\Url::to(['pos/printdo'], true);
 
 $js = <<<JS
  $(function(){
-       var order_do = $(".order-do").val();
-       if(order_do != "empty"){
-           alert();
-           $("form#form-print-do").submit();
-           $(".slip-print-do").val("slip_index_do.pdf");
-           myPrint2();
-       }
+       
         var xx = $(".slip-print").val();
-       var xx2 = $(".slip-print-do").val();
+        var xx2 = $(".slip-print-do").val();
         //alert(xx);
         if(xx !="empty"){
            myPrint();
+           
+//           var order_do = $(".order-do").val();
+//           if(order_do != "empty"){
+//             //  $("form#form-print-do").submit();
+//             var order_id = order_do;
+//              if(order_id != ''){
+//                 // alert(order_id);
+//                   $.ajax({
+//                       type: "post",
+//                       dataType: "html",
+//                       url: "$url_to_create_do",
+//                       async: false,
+//                       data: {'order_id': order_id},
+//                       success: function(data){
+//                           if(data != ''){
+//                                 // alert('created do');
+//                            $(".order-do").val("empty");
+//                            $(".has-print-do").attr('data-var',data);
+//                            $(".slip-print-do").val(data);
+//                            myPrint2();
+//                           }
+//                       }
+//                    }); 
+//              }
+//           }
+           
         }
         if(xx2 !="empty"){
           //  alert();
            myPrint2();
         }
+        
+       
+        
+        
      setInterval(function (){
           var dt = new Date();
           var time = dt.getHours() + ":" + dt.getMinutes();
@@ -1015,7 +1043,7 @@ $js = <<<JS
      });
      
      $(".btn-pay-credit-submit").click(function(){
-          $(".print-type-doc").val(1);
+          $(".print-type-doc").val(2);
          $("form#form-close-sale").submit();
      });
      
@@ -1613,6 +1641,7 @@ function myPrint(){
 }
 function myPrint2(){
     var has_print_do = $(".has-print-do").attr("data-var");
+   // alert(has_print_do);
     if(has_print_do != "" || has_print_do != null){
         var getMyFrame = document.getElementById('iFramePdfDo');
         getMyFrame.focus();

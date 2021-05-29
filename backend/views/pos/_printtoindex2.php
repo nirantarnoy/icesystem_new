@@ -200,7 +200,7 @@ $mpdf->AddPageByArray([
 </table>
 <table class="table-header">
     <tr>
-        <td style="font-size: 18px;">แคชเชียร์ .......................................................</td>
+        <td style="font-size: 18px;">แคชเชียร์ ........ <span style="position: absolute;"><?=\backend\models\User::findName(\Yii::$app->user->id)?></span> .........</td>
     </tr>
     <tr>
         <td style="font-size: 18px;">ผู้รับของ .......................................................</td>
@@ -225,10 +225,6 @@ $mpdf->AddPageByArray([
 //include("pdf_footer.php");
 ?>
 <?php
-//if(file_exists('../web/uploads/slip_do/slip_index_do.pdf')){
-//    unlink('../web/uploads/slip_do/slip_index_do.pdf');
-//}
-
 $html = ob_get_contents(); // ทำการเก็บค่า HTML จากคำสั่ง ob_start()
 $mpdf->WriteHTML($html); // ทำการสร้าง PDF ไฟล์
 //$mpdf->Output( 'Packing02.pdf','F'); // ให้ทำการบันทึกโค้ด HTML เป็น PDF โดยบันทึกเป็นไฟล์ชื่อ MyPDF.pdf
@@ -237,13 +233,5 @@ ob_clean();
 $mpdf->SetJS('this.print();');
 $mpdf->Output('../web/uploads/slip_do/slip_index_do.pdf', 'F');
 ob_end_flush();
-
 //header("location: system_stock/report_pdf/Packing.pdf");
-
 ?>
-
-<!--ดาวโหลดรายงานในรูปแบบ PDF <a class="btn-export-pdf" href="MyPDF.pdf">คลิกที่นี้</a>-->
-
-
-
-
