@@ -615,6 +615,8 @@ class PosController extends Controller
             $user_login_datetime = date('Y-m-d H:i:s');
         }
 
+        echo $user_login_datetime;return;
+
 //        $x_date = explode('/', $pos_date);
 //        if (count($x_date) > 1) {
 //            $t_date = $x_date[2] . '-' . $x_date[1] . '-' . $x_date[0];
