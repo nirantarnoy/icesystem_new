@@ -56,7 +56,7 @@ if ($model->order_date != null) {
                 'onchange' => '$("#form-dashboard").submit();'
             ],
         ])->label(false) ?>
-        <span style="margin-left: 10px;"> <button type="submit" class="btn btn-primary">ค้นหา</button></span>
+        <span style="margin-left: 10px;"> <button type="submit" class="btn btn-primary btn-find-data">ค้นหา</button></span>
 
     </div>
 

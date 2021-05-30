@@ -615,6 +615,9 @@ class PosController extends Controller
             $user_login_datetime = date('Y-m-d H:i:s');
         }
 
+//        echo $user_login_datetime;
+//        return;
+
 //        $x_date = explode('/', $pos_date);
 //        if (count($x_date) > 1) {
 //            $t_date = $x_date[2] . '-' . $x_date[1] . '-' . $x_date[0];
@@ -649,8 +652,8 @@ class PosController extends Controller
 
         $order_cash_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'payment_date', $user_login_datetime, $t_date])->andFilterWhere(['LIKE', 'name', 'สด'])->sum('payment_amount');
         $order_credit_amount = \common\models\QuerySalePosPayDaily::find()->where(['created_by' => $user_id])->andFilterWhere(['between', 'payment_date', $user_login_datetime, $t_date])->andFilterWhere(['NOT LIKE', 'name', 'สด'])->sum('payment_amount');
-        $production_qty = \backend\models\Stocktrans::find()->where(['activity_type_id' => 1])->andFilterWhere(['between', 'trans_date', $user_login_datetime, $t_date])->sum('qty');
-        $issue_refill_qty = \backend\models\Stocktrans::find()->where(['activity_type_id' => 3])->andFilterWhere(['between', 'trans_date', $user_login_datetime, $t_date])->sum('qty');
+        $production_qty = \backend\models\Stocktrans::find()->where(['activity_type_id' => 15])->andFilterWhere(['between', 'trans_date', $user_login_datetime, $t_date])->sum('qty');
+        $issue_refill_qty = \backend\models\Stocktrans::find()->where(['activity_type_id' => 18])->andFilterWhere(['between', 'trans_date', $user_login_datetime, $t_date])->sum('qty');
 
 //        echo $user_login_datetime.'<br />';
 //        echo $t_date.'<br />';

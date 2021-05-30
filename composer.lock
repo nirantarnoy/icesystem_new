@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
-            "version": "v3.1.0-rc",
+            "version": "v3.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ColorlibHQ/AdminLTE.git",
-                "reference": "17aea0e4ef1491a0ae6c3aaa14e81803244b59f2"
+                "reference": "c641d7f5716ed47e76f70ab16e05ae41420120b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ColorlibHQ/AdminLTE/zipball/17aea0e4ef1491a0ae6c3aaa14e81803244b59f2",
-                "reference": "17aea0e4ef1491a0ae6c3aaa14e81803244b59f2",
+                "url": "https://api.github.com/repos/ColorlibHQ/AdminLTE/zipball/c641d7f5716ed47e76f70ab16e05ae41420120b8",
+                "reference": "c641d7f5716ed47e76f70ab16e05ae41420120b8",
                 "shasum": ""
             },
             "type": "library",
@@ -45,9 +45,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ColorlibHQ/AdminLTE/issues",
-                "source": "https://github.com/ColorlibHQ/AdminLTE/tree/v3.1.0-rc"
+                "source": "https://github.com/ColorlibHQ/AdminLTE/tree/v3.1.0"
             },
-            "time": "2020-11-25T10:51:19+00:00"
+            "time": "2021-03-22T07:30:50+00:00"
         },
         {
             "name": "bower-asset/fastclick",
@@ -347,12 +347,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lipis/flag-icon-css.git",
-                "reference": "f50b2998947d2ed4b1ad9f725cf8dd4d0915eb29"
+                "reference": "4a239e34163da691fb01f23f9e39d8e6a78eadfc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lipis/flag-icon-css/zipball/f50b2998947d2ed4b1ad9f725cf8dd4d0915eb29",
-                "reference": "f50b2998947d2ed4b1ad9f725cf8dd4d0915eb29",
+                "url": "https://api.github.com/repos/lipis/flag-icon-css/zipball/4a239e34163da691fb01f23f9e39d8e6a78eadfc",
+                "reference": "4a239e34163da691fb01f23f9e39d8e6a78eadfc",
                 "shasum": ""
             },
             "default-branch": true,
@@ -382,7 +382,7 @@
                 "issues": "https://github.com/lipis/flag-icon-css/issues",
                 "source": "https://github.com/lipis/flag-icon-css/tree/master"
             },
-            "time": "2021-03-03T02:20:27+00:00"
+            "time": "2021-05-10T02:20:05+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -491,12 +491,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/istvan-ujjmeszaros/bootstrap-duallistbox.git",
-                "reference": "65b755df977c0b12db30ad1113e5defa7d456c9b"
+                "reference": "3d7896239dc1c91dfafe858e3e840fea4812b1e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/istvan-ujjmeszaros/bootstrap-duallistbox/zipball/65b755df977c0b12db30ad1113e5defa7d456c9b",
-                "reference": "65b755df977c0b12db30ad1113e5defa7d456c9b",
+                "url": "https://api.github.com/repos/istvan-ujjmeszaros/bootstrap-duallistbox/zipball/3d7896239dc1c91dfafe858e3e840fea4812b1e5",
+                "reference": "3d7896239dc1c91dfafe858e3e840fea4812b1e5",
                 "shasum": ""
             },
             "suggest": {
@@ -528,7 +528,7 @@
                 "issues": "https://github.com/istvan-ujjmeszaros/bootstrap-duallistbox/issues",
                 "source": "https://github.com/istvan-ujjmeszaros/bootstrap-duallistbox/tree/v4"
             },
-            "time": "2020-12-16T03:23:19+00:00"
+            "time": "2021-05-07T20:34:55+00:00"
         },
         {
             "name": "kartik-v/bootstrap-checkbox-x",
@@ -536,12 +536,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/bootstrap-checkbox-x.git",
-                "reference": "f1ce13718eaa1238c68b0e3e423b274b0a57a954"
+                "reference": "326460d8e36b13cef4d1cd05ee801b9e79bc2bf5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/bootstrap-checkbox-x/zipball/f1ce13718eaa1238c68b0e3e423b274b0a57a954",
-                "reference": "f1ce13718eaa1238c68b0e3e423b274b0a57a954",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-checkbox-x/zipball/326460d8e36b13cef4d1cd05ee801b9e79bc2bf5",
+                "reference": "326460d8e36b13cef4d1cd05ee801b9e79bc2bf5",
                 "shasum": ""
             },
             "default-branch": true,
@@ -580,9 +580,9 @@
             ],
             "support": {
                 "issues": "https://github.com/kartik-v/bootstrap-checkbox-x/issues",
-                "source": "https://github.com/kartik-v/bootstrap-checkbox-x/tree/master"
+                "source": "https://github.com/kartik-v/bootstrap-checkbox-x/tree/v1.5.6"
             },
-            "time": "2019-05-25T06:31:55+00:00"
+            "time": "2021-05-19T13:12:24+00:00"
         },
         {
             "name": "kartik-v/yii2-bootstrap4-dropdown",
@@ -886,12 +886,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-icons.git",
-                "reference": "cb95e3baa367019dcf681fb1cc7f429d4db9d401"
+                "reference": "8e4364de3b2f44e257c2e131ba0cf825a8077494"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-icons/zipball/cb95e3baa367019dcf681fb1cc7f429d4db9d401",
-                "reference": "cb95e3baa367019dcf681fb1cc7f429d4db9d401",
+                "url": "https://api.github.com/repos/kartik-v/yii2-icons/zipball/8e4364de3b2f44e257c2e131ba0cf825a8077494",
+                "reference": "8e4364de3b2f44e257c2e131ba0cf825a8077494",
                 "shasum": ""
             },
             "require": {
@@ -933,9 +933,9 @@
             ],
             "support": {
                 "issues": "https://github.com/kartik-v/yii2-icons/issues",
-                "source": "https://github.com/kartik-v/yii2-icons/tree/master"
+                "source": "https://github.com/kartik-v/yii2-icons/tree/v1.4.7"
             },
-            "time": "2021-01-22T04:58:27+00:00"
+            "time": "2021-04-08T09:12:30+00:00"
         },
         {
             "name": "kartik-v/yii2-krajee-base",
@@ -943,12 +943,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-krajee-base.git",
-                "reference": "8aa48bb2e7613db45b3c34f7a9346d7f43b1f4ec"
+                "reference": "9b6bc8335e8e561e3953826efefd57b1df7bdce0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/8aa48bb2e7613db45b3c34f7a9346d7f43b1f4ec",
-                "reference": "8aa48bb2e7613db45b3c34f7a9346d7f43b1f4ec",
+                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/9b6bc8335e8e561e3953826efefd57b1df7bdce0",
+                "reference": "9b6bc8335e8e561e3953826efefd57b1df7bdce0",
                 "shasum": ""
             },
             "suggest": {
@@ -990,9 +990,9 @@
             ],
             "support": {
                 "issues": "https://github.com/kartik-v/yii2-krajee-base/issues",
-                "source": "https://github.com/kartik-v/yii2-krajee-base/tree/master"
+                "source": "https://github.com/kartik-v/yii2-krajee-base/tree/v2.0.6"
             },
-            "time": "2019-05-25T07:25:02+00:00"
+            "time": "2021-04-08T18:07:22+00:00"
         },
         {
             "name": "kartik-v/yii2-mpdf",
@@ -1295,16 +1295,16 @@
         },
         {
             "name": "mpdf/mpdf",
-            "version": "v8.0.10",
+            "version": "v8.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mpdf/mpdf.git",
-                "reference": "1333a962cd2f7ae1a127b7534b7734b58179186f"
+                "reference": "af17afbbfa0b6ce76defc8da5d02a73d54f94c64"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/1333a962cd2f7ae1a127b7534b7734b58179186f",
-                "reference": "1333a962cd2f7ae1a127b7534b7734b58179186f",
+                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/af17afbbfa0b6ce76defc8da5d02a73d54f94c64",
+                "reference": "af17afbbfa0b6ce76defc8da5d02a73d54f94c64",
                 "shasum": ""
             },
             "require": {
@@ -1366,7 +1366,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2021-01-08T14:59:28+00:00"
+            "time": "2021-05-12T14:18:06+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -1431,16 +1431,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v2.0.19",
+            "version": "v2.0.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "446fc9faa5c2a9ddf65eb7121c0af7e857295241"
+                "reference": "0f1f60250fccffeaf5dda91eea1c018aed1adc2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/446fc9faa5c2a9ddf65eb7121c0af7e857295241",
-                "reference": "446fc9faa5c2a9ddf65eb7121c0af7e857295241",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/0f1f60250fccffeaf5dda91eea1c018aed1adc2a",
+                "reference": "0f1f60250fccffeaf5dda91eea1c018aed1adc2a",
                 "shasum": ""
             },
             "require": {
@@ -1481,7 +1481,7 @@
                 "issues": "https://github.com/paragonie/random_compat/issues",
                 "source": "https://github.com/paragonie/random_compat"
             },
-            "time": "2020-10-15T10:06:57+00:00"
+            "time": "2021-04-17T09:33:01+00:00"
         },
         {
             "name": "psr/log",
@@ -1489,12 +1489,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "a18c1e692e02b84abbafe4856c3cd7cc6903908c"
+                "reference": "d49695b909c3b7628b6289db5479a1c204601f11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/a18c1e692e02b84abbafe4856c3cd7cc6903908c",
-                "reference": "a18c1e692e02b84abbafe4856c3cd7cc6903908c",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/d49695b909c3b7628b6289db5479a1c204601f11",
+                "reference": "d49695b909c3b7628b6289db5479a1c204601f11",
                 "shasum": ""
             },
             "require": {
@@ -1530,9 +1530,9 @@
                 "psr-3"
             ],
             "support": {
-                "source": "https://github.com/php-fig/log/tree/master"
+                "source": "https://github.com/php-fig/log/tree/1.1.4"
             },
-            "time": "2021-03-02T15:02:34+00:00"
+            "time": "2021-05-03T11:20:27+00:00"
         },
         {
             "name": "select2/select2",
@@ -1540,12 +1540,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/select2/select2.git",
-                "reference": "3c4c4da4a8ff84c709b66f519424e09bd8db853d"
+                "reference": "0a30b0b3e67843c09b0bcc4d01e65b72d9b1279f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/select2/select2/zipball/3c4c4da4a8ff84c709b66f519424e09bd8db853d",
-                "reference": "3c4c4da4a8ff84c709b66f519424e09bd8db853d",
+                "url": "https://api.github.com/repos/select2/select2/zipball/0a30b0b3e67843c09b0bcc4d01e65b72d9b1279f",
+                "reference": "0a30b0b3e67843c09b0bcc4d01e65b72d9b1279f",
                 "shasum": ""
             },
             "default-branch": true,
@@ -1585,7 +1585,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-01-23T04:29:35+00:00"
+            "time": "2021-03-04T23:58:35+00:00"
         },
         {
             "name": "setasign/fpdi",
@@ -1827,12 +1827,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "c4a08932fad22d178ea0a50e0960018bd09a0557"
+                "reference": "33d494f0ef77adf35f44e647052f23f1f7e5bb2c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/c4a08932fad22d178ea0a50e0960018bd09a0557",
-                "reference": "c4a08932fad22d178ea0a50e0960018bd09a0557",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/33d494f0ef77adf35f44e647052f23f1f7e5bb2c",
+                "reference": "33d494f0ef77adf35f44e647052f23f1f7e5bb2c",
                 "shasum": ""
             },
             "require": {
@@ -1941,20 +1941,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-03-12T21:05:49+00:00"
+            "time": "2021-05-25T07:28:57+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap4",
-            "version": "2.0.9",
+            "version": "2.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-bootstrap4.git",
-                "reference": "a75555e4a888508416fadfd0a2b94881342cdd45"
+                "reference": "e6d0e58f43d3910129d554ac183aac17f65be639"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-bootstrap4/zipball/a75555e4a888508416fadfd0a2b94881342cdd45",
-                "reference": "a75555e4a888508416fadfd0a2b94881342cdd45",
+                "url": "https://api.github.com/repos/yiisoft/yii2-bootstrap4/zipball/e6d0e58f43d3910129d554ac183aac17f65be639",
+                "reference": "e6d0e58f43d3910129d554ac183aac17f65be639",
                 "shasum": ""
             },
             "require": {
@@ -2041,7 +2041,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-10T12:37:27+00:00"
+            "time": "2021-05-05T21:56:41+00:00"
         },
         {
             "name": "yiisoft/yii2-composer",
@@ -2343,12 +2343,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "318789252f839f1636609141e54ab8e4b72ac54f"
+                "reference": "1d9e1a24fcf9d1f99b64fe8442c90daf9b368c8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/318789252f839f1636609141e54ab8e4b72ac54f",
-                "reference": "318789252f839f1636609141e54ab8e4b72ac54f",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/1d9e1a24fcf9d1f99b64fe8442c90daf9b368c8d",
+                "reference": "1d9e1a24fcf9d1f99b64fe8442c90daf9b368c8d",
                 "shasum": ""
             },
             "require": {
@@ -2431,7 +2431,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-03-11T09:52:07+00:00"
+            "time": "2021-05-22T19:07:32+00:00"
         },
         {
             "name": "codeception/lib-asserts",
@@ -2489,16 +2489,16 @@
         },
         {
             "name": "codeception/lib-innerbrowser",
-            "version": "1.4.1",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/lib-innerbrowser.git",
-                "reference": "693e116f81ef98eae98c43ef785a726faf87394e"
+                "reference": "4b0d89b37fe454e060a610a85280a87ab4f534f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/lib-innerbrowser/zipball/693e116f81ef98eae98c43ef785a726faf87394e",
-                "reference": "693e116f81ef98eae98c43ef785a726faf87394e",
+                "url": "https://api.github.com/repos/Codeception/lib-innerbrowser/zipball/4b0d89b37fe454e060a610a85280a87ab4f534f1",
+                "reference": "4b0d89b37fe454e060a610a85280a87ab4f534f1",
                 "shasum": ""
             },
             "require": {
@@ -2543,9 +2543,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Codeception/lib-innerbrowser/issues",
-                "source": "https://github.com/Codeception/lib-innerbrowser/tree/1.4.1"
+                "source": "https://github.com/Codeception/lib-innerbrowser/tree/1.5.0"
             },
-            "time": "2021-03-02T08:01:54+00:00"
+            "time": "2021-04-23T06:18:29+00:00"
         },
         {
             "name": "codeception/module-asserts",
@@ -2658,16 +2658,16 @@
         },
         {
             "name": "codeception/module-yii2",
-            "version": "1.1.2",
+            "version": "1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/module-yii2.git",
-                "reference": "7e2eaeb414315271d545e17c330b3aaf08911927"
+                "reference": "09853feb15ad5e80e472c6881793a22f273a9921"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/module-yii2/zipball/7e2eaeb414315271d545e17c330b3aaf08911927",
-                "reference": "7e2eaeb414315271d545e17c330b3aaf08911927",
+                "url": "https://api.github.com/repos/Codeception/module-yii2/zipball/09853feb15ad5e80e472c6881793a22f273a9921",
+                "reference": "09853feb15ad5e80e472c6881793a22f273a9921",
                 "shasum": ""
             },
             "require": {
@@ -2704,9 +2704,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Codeception/module-yii2/issues",
-                "source": "https://github.com/Codeception/module-yii2/tree/1.1.2"
+                "source": "https://github.com/Codeception/module-yii2/tree/1.1.3"
             },
-            "time": "2020-12-21T15:21:56+00:00"
+            "time": "2021-05-24T20:05:32+00:00"
         },
         {
             "name": "codeception/phpunit-wrapper",
@@ -2955,12 +2955,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "d7fe0a0eabc266c3dcf2f20aa12121044ff196a4"
+                "reference": "dc960a912984efb74d0a90222870c72c87f10c91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/d7fe0a0eabc266c3dcf2f20aa12121044ff196a4",
-                "reference": "d7fe0a0eabc266c3dcf2f20aa12121044ff196a4",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/dc960a912984efb74d0a90222870c72c87f10c91",
+                "reference": "dc960a912984efb74d0a90222870c72c87f10c91",
                 "shasum": ""
             },
             "require": {
@@ -3022,7 +3022,7 @@
                 "issues": "https://github.com/guzzle/psr7/issues",
                 "source": "https://github.com/guzzle/psr7/tree/1.x"
             },
-            "time": "2021-03-09T14:42:40+00:00"
+            "time": "2021-04-26T09:17:50+00:00"
         },
         {
             "name": "opis/closure",
@@ -3030,12 +3030,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/opis/closure.git",
-                "reference": "06b4961aabf900c72a20b7000bfa10fd7ae3035e"
+                "reference": "06e2ebd25f2869e54a306dda991f7db58066f7f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opis/closure/zipball/06b4961aabf900c72a20b7000bfa10fd7ae3035e",
-                "reference": "06b4961aabf900c72a20b7000bfa10fd7ae3035e",
+                "url": "https://api.github.com/repos/opis/closure/zipball/06e2ebd25f2869e54a306dda991f7db58066f7f6",
+                "reference": "06e2ebd25f2869e54a306dda991f7db58066f7f6",
                 "shasum": ""
             },
             "require": {
@@ -3086,9 +3086,9 @@
             ],
             "support": {
                 "issues": "https://github.com/opis/closure/issues",
-                "source": "https://github.com/opis/closure/tree/master"
+                "source": "https://github.com/opis/closure/tree/3.6.2"
             },
-            "time": "2020-12-05T19:20:15+00:00"
+            "time": "2021-04-09T13:42:10+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -5213,16 +5213,16 @@
         },
         {
             "name": "yiisoft/yii2-debug",
-            "version": "2.1.16",
+            "version": "2.1.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-debug.git",
-                "reference": "0d8ce76b2dd036a5fc38b26434e1c672ad8975a9"
+                "reference": "21a259c27dacedf19ac1e00d4a7180e3043d7859"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/0d8ce76b2dd036a5fc38b26434e1c672ad8975a9",
-                "reference": "0d8ce76b2dd036a5fc38b26434e1c672ad8975a9",
+                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/21a259c27dacedf19ac1e00d4a7180e3043d7859",
+                "reference": "21a259c27dacedf19ac1e00d4a7180e3043d7859",
                 "shasum": ""
             },
             "require": {
@@ -5299,7 +5299,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-12-23T16:36:12+00:00"
+            "time": "2021-05-05T22:02:36+00:00"
         },
         {
             "name": "yiisoft/yii2-faker",

@@ -275,6 +275,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
 $url_to_find_item = \yii\helpers\Url::to(['pos/orderedit'], true);
 $js = <<<JS
  $(function(){
+      //$(".btn-find-data").trigger('click');
       var xx = $(".slip-print").val();
         //alert(xx);
         if(xx !="empty"){
