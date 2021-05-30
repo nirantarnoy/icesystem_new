@@ -69,7 +69,7 @@ class TransformController extends Controller
             $branch_id = \Yii::$app->user->identity->branch_id;
         }
 
-        $default_warehouse = 6;
+        $default_warehouse = 1;
         if ($company_id == 1 && $branch_id == 2) {
             $default_warehouse = 5;
         }
@@ -102,11 +102,16 @@ class TransformController extends Controller
                     $model_line->avl_qty = 0;
                     $model_line->sale_price = 0;
                     $model_line->status = 1;
-                    if ($model_line->save()) {
+                    if ($model_line->save(false)) {
+
 
                         $this->updateStock($from_prod, $from_qty, $default_warehouse, $model->journal_no, $company_id, $branch_id);
                         for ($i = 0; $i <= count($to_prod) - 1; $i++) {
                             if ($to_prod[$i] == '') continue;
+//                            echo $to_prod[$i];
+//                            echo $to_qty[$i];
+//                            echo $default_warehouse;
+//                            return;
                             $this->updateStockIn($to_prod[$i], $to_qty[$i], $default_warehouse, $model->journal_no, $company_id, $branch_id);
                         }
                     }
@@ -125,7 +130,9 @@ class TransformController extends Controller
 
     public function updateStock($product_id, $qty, $wh_id, $journal_no, $company_id, $branch_id)
     {
+     //   echo "OK";return;
         if ($product_id != null && $qty > 0) {
+
             $model_trans = new \backend\models\Stocktrans();
             $model_trans->journal_no = $journal_no;
             $model_trans->trans_date = date('Y-m-d H:i:s');
@@ -149,6 +156,7 @@ class TransformController extends Controller
     public function updateStockIn($product_id, $qty, $wh_id, $journal_no, $company_id, $branch_id)
     {
         if ($product_id != null && $qty > 0) {
+
             $model_trans = new \backend\models\Stocktrans();
             $model_trans->journal_no = $journal_no;
             $model_trans->trans_date = date('Y-m-d H:i:s');

@@ -65,7 +65,7 @@ function getStock($prod_id, $warehouse)
             </select>
         </div>
         <div class="col-lg-3">
-            <input type="number" class="form-control line-from-qty" name="line_from_qty[]" min="0">
+            <input type="number" class="form-control line-from-qty" name="line_from_qty" min="0">
         </div>
     </div>
     <br>
@@ -86,7 +86,7 @@ function getStock($prod_id, $warehouse)
                 <tr>
                     <td style="text-align: center;width: 5%">#</td>
                     <td>
-                        <select name="line_to_product[]" class="form-control line-from-product" id="">
+                        <select name="line_to_product[]" class="form-control line-to-product" id="">
                             <option value="-1">--เลือกสินค้า--</option>
                             <?php foreach ($prod_data as $val): ?>
                                 <option value="<?= $val->id ?>"><?= $val->code . ' ' . $val->name ?></option>
