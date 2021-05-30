@@ -94,17 +94,19 @@ class TransformController extends Controller
             if ($model->save(false)) {
                 // echo "no";return;
                 if ($from_prod != null) {
-                    for ($i = 0; $i <= count($from_prod) - 1; $i++) {
-                        if ($from_prod[$i] == '') continue;
-                        $model_line = new \backend\models\Journalissueline();
-                        $model_line->issue_id = $model->id;
-                        $model_line->product_id = $from_prod[$i];
-                        $model_line->qty = $from_qty[$i];
-                        $model_line->avl_qty = 0;
-                        $model_line->sale_price = 0;
-                        $model_line->status = 1;
-                        if ($model_line->save()) {
-                            $this->updateStock($from_prod[$i], $from_qty[$i], $default_warehouse, $model->journal_no, $company_id, $branch_id);
+
+                    $model_line = new \backend\models\Journalissueline();
+                    $model_line->issue_id = $model->id;
+                    $model_line->product_id = $from_prod;
+                    $model_line->qty = $from_qty;
+                    $model_line->avl_qty = 0;
+                    $model_line->sale_price = 0;
+                    $model_line->status = 1;
+                    if ($model_line->save()) {
+
+                        $this->updateStock($from_prod, $from_qty, $default_warehouse, $model->journal_no, $company_id, $branch_id);
+                        for ($i = 0; $i <= count($to_prod) - 1; $i++) {
+                            if ($to_prod[$i] == '') continue;
                             $this->updateStockIn($to_prod[$i], $to_qty[$i], $default_warehouse, $model->journal_no, $company_id, $branch_id);
                         }
                     }

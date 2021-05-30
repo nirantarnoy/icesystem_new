@@ -56,6 +56,18 @@ function getStock($prod_id, $warehouse)
             <?= $form->field($model, 'status')->textInput(['readonly' => 'readonly', 'value' => $model->isNewRecord ? 'Open' : \backend\helpers\IssueStatus::getTypeById($model->status)]) ?>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <select name="line_from_product" class="form-control line-from-product" id="">
+                <?php foreach ($prod_data as $val): ?>
+                    <option value="<?= $val->id ?>"><?= $val->code . ' ' . $val->name ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="col-lg-3">
+            <input type="number" class="form-control line-from-qty" name="line_from_qty[]" min="0">
+        </div>
+    </div>
     <br>
     <h5>รายละเอียด</h5>
     <!--    <hr>-->
@@ -65,8 +77,6 @@ function getStock($prod_id, $warehouse)
                 <thead>
                 <tr>
                     <th style="text-align: center;width: 5%">#</th>
-                    <th>จากสินค้า</th>
-                    <th style="text-align: right">จำนวน</th>
                     <th>เป็นสินค้า</th>
                     <th style="width: 15%;text-align: right">จำนวน</th>
                     <th style="width: 10%"></th>
@@ -75,16 +85,6 @@ function getStock($prod_id, $warehouse)
                 <tbody>
                 <tr>
                     <td style="text-align: center;width: 5%">#</td>
-                    <td>
-                        <select name="line_from_product[]" class="form-control line-from-product" id="">
-                            <?php foreach ($prod_data as $val): ?>
-                                <option value="<?= $val->id ?>"><?= $val->code . ' ' . $val->name ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </td>
-                    <td style="text-align: right">
-                        <input type="number" class="form-control line-from-qty" name="line_from_qty[]" min="0">
-                    </td>
                     <td>
                         <select name="line_to_product[]" class="form-control line-from-product" id="">
                             <option value="-1">--เลือกสินค้า--</option>
