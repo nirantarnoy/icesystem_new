@@ -262,6 +262,7 @@ function getStock($prod_id, $warehouse)
 <?php
 $url_to_find_item = \yii\helpers\Url::to(['pricegroup/productdata'], true);
 $url_to_get_price_group = \yii\helpers\Url::to(['journalissue/find-pricegroup'], true);
+$url_to_get_standard_qty = \yii\helpers\Url::to(['journalissue/standardcal'], true);
 $js = <<<JS
   var removelist = [];
   var selecteditem = [];
@@ -483,6 +484,7 @@ function showfind(e){
   function checkstock(e){
       var stock_qty = e.closest("tr").find(".line-avl-qty").val();
       var is_stock_on_car = e.closest("tr").find(".line-stock-on-car").val();
+      var product_id = e.closest("tr").find(".line-product-id").val();
       var issue_qty =e.val();
       if(is_stock_on_car != 1){
             if(parseFloat(issue_qty) > parseFloat(stock_qty)){
@@ -491,7 +493,24 @@ function showfind(e){
           e.closest("tr").find(".line-qty").val(stock_qty);
       }
       }
+      standardcal(product_id);
   }  
+  
+  function standardcal(product_id){
+      if(product_id){
+          $.ajax({
+                  'type':'post',
+                  'dataType': 'html',
+                  'async': false,
+                  'url': "$url_to_get_standard_qty",
+                  'data': {'product_id': product_id},
+                  'success': function(data) {
+                      alert(data);
+                    
+                  }
+             });
+      }
+  }
 function route_change(e) {
          //alert(e.val());
          //$(".text-car-emp").html("");

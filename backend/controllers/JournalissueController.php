@@ -274,6 +274,27 @@ class JournalissueController extends Controller
         }
         return $res;
     }
+    public function actionStandardcal(){
+        $product_id = \Yii::$app->request->post('product_id');
+        $qty = \Yii::$app->request->post('qty');
+        $res = 0;
+        if($product_id && $qty){
+            $model = \backend\models\Product::find()->where(['id'=>$product_id])->one();
+            if($model){
+                if($model->code == "K"){
+                    $std = \common\models\ProductKukStd::find()->one();
+                    $item = ($qty / $std->level4_qty);
+                    $items = ($item / $std->level2_qty);
+                    $res = $items;
+
+
+                }else if($model->code == "M"){
+
+                }
+            }
+        }
+        echo $res;
+    }
     public function getStock($prod_id)
     {
         $company_id = 1;

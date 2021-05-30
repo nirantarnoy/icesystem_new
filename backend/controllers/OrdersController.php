@@ -112,7 +112,7 @@ class OrdersController extends Controller
             if (count($x_date) > 1) {
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
-            $emp_count = \backend\models\Cardaily::find()->where(['car_id'=>$model->car_ref_id])->andFilterWhere(['date(trans_date)'=>date('Y-m-d',strtotime($sale_date))])->count('employee_id');
+            $emp_count = \backend\models\Cardaily::find()->where(['car_id' => $model->car_ref_id])->andFilterWhere(['date(trans_date)' => date('Y-m-d', strtotime($sale_date))])->count('employee_id');
             $model->order_no = $model::getLastNo($sale_date, $company_id, $branch_id);
             $model->order_date = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
@@ -1542,7 +1542,7 @@ class OrdersController extends Controller
                         $model_line->total_amount = 0;
                         $model_line->order_ref_id = $order_id;
                         $model_line->payment_type_id = $sale_pay_type;
-                      //  $model_line->sale_payment_method_id = $sale_pay_type;
+                        //  $model_line->sale_payment_method_id = $sale_pay_type;
                         $model_line->status = 1;
                         $model_line->doc = '';
                         if ($model_line->save(false)) {
@@ -1562,11 +1562,12 @@ class OrdersController extends Controller
 
     }
 
-    public function findPaytype($payment_id){
+    public function findPaytype($payment_id)
+    {
         $res = 0;
-        if($payment_id){
-            $model = \backend\models\Paymentmethod::find()->where(['id'=>$payment_id])->one();
-            if($model){
+        if ($payment_id) {
+            $model = \backend\models\Paymentmethod::find()->where(['id' => $payment_id])->one();
+            if ($model) {
                 $res = $model->pay_type;
             }
         }
