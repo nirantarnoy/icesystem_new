@@ -493,17 +493,17 @@ function showfind(e){
           e.closest("tr").find(".line-qty").val(stock_qty);
       }
       }
-      standardcal(product_id);
+      standardcal(product_id, issue_qty);
   }  
   
-  function standardcal(product_id){
+  function standardcal(product_id, qty){
       if(product_id){
           $.ajax({
                   'type':'post',
                   'dataType': 'html',
                   'async': false,
                   'url': "$url_to_get_standard_qty",
-                  'data': {'product_id': product_id},
+                  'data': {'product_id': product_id,'qty': qty},
                   'success': function(data) {
                       alert(data);
                     
