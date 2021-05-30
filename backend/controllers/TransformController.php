@@ -117,7 +117,7 @@ class TransformController extends Controller
                             $model_trans->branch_id = $branch_id;
                             if ($model_trans->save(false)) {
 
-                                $model_sum = \backend\models\Stocksum::find()->where(['warehouse_ids' => $default_warehouse, 'product_id' => $from_prod])->one();
+                                $model_sum = \backend\models\Stocksum::find()->where(['warehouse_id' => $default_warehouse, 'product_id' => $from_prod])->one();
                                 if ($model_sum) {
 
                                     $model_sum->qty = (int)$model_sum->qty - (int)$from_qty;
@@ -127,15 +127,15 @@ class TransformController extends Controller
                         }else{
                             echo "no";return;
                         }
-                        //$this->updateStock($from_prod, $from_qty, $default_warehouse, $model->journal_no, $company_id, $branch_id);
-//                        for ($i = 0; $i <= count($to_prod) - 1; $i++) {
-//                            if ($to_prod[$i] == '') continue;
-////                            echo $to_prod[$i];
-////                            echo $to_qty[$i];
-////                            echo $default_warehouse;
-////                            return;
-//                            $this->updateStockIn($to_prod[$i], $to_qty[$i], $default_warehouse, $model->journal_no, $company_id, $branch_id);
-//                        }
+                        $this->updateStock($from_prod, $from_qty, $default_warehouse, $model->journal_no, $company_id, $branch_id);
+                        for ($i = 0; $i <= count($to_prod) - 1; $i++) {
+                            if ($to_prod[$i] == '') continue;
+//                            echo $to_prod[$i];
+//                            echo $to_qty[$i];
+//                            echo $default_warehouse;
+//                            return;
+                            $this->updateStockIn($to_prod[$i], $to_qty[$i], $default_warehouse, $model->journal_no, $company_id, $branch_id);
+                        }
                     }
                 }
 

@@ -18,7 +18,7 @@ if ($company_id == 1 && $branch_id == 2) {
     $default_warehouse = 5;
 }
 
-$prod_data = \backend\models\Product::find()->where(['status' => 1])->all();
+$prod_data = \backend\models\Product::find()->where(['status' => 1])->andFilterWhere(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
 function getStock($prod_id, $warehouse)
 {
     $qty = 0;
