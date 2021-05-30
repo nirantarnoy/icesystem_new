@@ -264,7 +264,7 @@ class JournalissueController extends Controller
 
         return $html;
     }
-    public function checkstockoncar($product_id){
+    public function checkoncar($product_id){
         $res = 0;
         if($product_id){
             $model = \backend\models\Product::find()->where(['id'=>$product_id])->one();
