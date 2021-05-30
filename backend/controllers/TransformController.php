@@ -117,7 +117,7 @@ class TransformController extends Controller
                             $model_trans->branch_id = $branch_id;
                             if ($model_trans->save(false)) {
 
-                                $model_sum = \backend\models\Stocksum::find()->where(['warehouse_id' => $default_warehouse, 'product_id' => $from_prod])->one();
+                                $model_sum = \backend\models\Stocksum::find()->where(['warehouse_ids' => $default_warehouse, 'product_id' => $from_prod])->one();
                                 if ($model_sum) {
 
                                     $model_sum->qty = (int)$model_sum->qty - (int)$from_qty;
