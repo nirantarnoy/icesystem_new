@@ -403,12 +403,17 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-chart-line"></i>
                         <p>
-                            วางแผนผลิต
+                            การผลิต
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-
+                        <li class="nav-item">
+                            <a href="index.php?r=reprocess/index" class="nav-link reprocess">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>Re process</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="index.php?r=ordercollection/index" class="nav-link ordercollection">
                                 <i class="far fa-circlez nav-icon"></i>

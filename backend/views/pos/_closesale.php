@@ -282,7 +282,6 @@ function getOrderCreditQty($product_id, $user_id, $user_login_datetime, $t_date)
     if ($user_id != null) {
         $qty = \common\models\QuerySaleDataSummary::find()->where(['created_by' => $user_id, 'product_id' => $product_id])->andFilterWhere(['between', 'order_date', $user_login_datetime, $t_date])->andFilterWhere(['NOT LIKE', 'name', 'สด'])->sum('qty');
     }
-
     return $qty;
 }
 
