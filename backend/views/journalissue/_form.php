@@ -482,11 +482,14 @@ function showfind(e){
     
   function checkstock(e){
       var stock_qty = e.closest("tr").find(".line-avl-qty").val();
+      var is_stock_on_car = e.closest("tr").find(".line-stock-on-car").val();
       var issue_qty =e.val();
-      if(parseFloat(issue_qty) > parseFloat(stock_qty)){
+      if(is_stock_on_car != 1){
+            if(parseFloat(issue_qty) > parseFloat(stock_qty)){
          // alert(stock_qty);
           alert('จำนวนไม่พอสำหรับการเบิก');
           e.closest("tr").find(".line-qty").val(stock_qty);
+      }
       }
   }  
 function route_change(e) {

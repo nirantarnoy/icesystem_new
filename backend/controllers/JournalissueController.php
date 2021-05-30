@@ -233,6 +233,7 @@ class JournalissueController extends Controller
                 if ($model_prod_price) {
                     foreach ($model_prod_price as $value) {
                         $prod_stock = $this->getStock($value->product_id);
+                        $is_stock_on_car = $this->checkoncar($value->product_id);
                         $html .= '<tr>';
                         $html .= '<td>
                                 <input type="hidden" class="line-prod-id" name="line_prod_id[]"
@@ -245,6 +246,7 @@ class JournalissueController extends Controller
                         $html .= '
                                 <td>
                                 <input type="hidden" class="line-avl-qty" name="line_avl_qty[]" value="' . $prod_stock . '">
+                                <input type="hidden" class="line-stock-on-car" name="line_stock_on_car[]" value="' . $is_stock_on_car . '">
                                 <input type="hidden" class="line-issue-sale-price" name="line_issue_line_price[]" value="' . $value->sale_price . '">
                                 <input type="number" class="line-qty form-control" name="line_qty[]" value="0" min="0" onchange="checkstock($(this))">
                                 </td>
@@ -262,7 +264,16 @@ class JournalissueController extends Controller
 
         return $html;
     }
-
+    public function checkstockoncar($product_id){
+        $res = 0;
+        if($product_id){
+            $model = \backend\models\Product::find()->where(['id'=>$product_id])->one();
+            if($model){
+                $res = $model->stock_on_car;
+            }
+        }
+        return $res;
+    }
     public function getStock($prod_id)
     {
         $company_id = 1;

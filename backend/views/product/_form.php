@@ -152,7 +152,9 @@ $stock_type_data = [['id' => 1, 'name' => 'ตัดสต๊อก'], ['id' => 
         <div class="col-lg-4">
             <?= $form->field($model, 'nw')->textInput()->label('น้ำหนักสินค้า') ?>
         </div>
-        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <?php echo $form->field($model, 'stock_on_car')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label() ?>
+        </div>
     </div>
     <hr style="border-top: 1px dashed black">
     <div class="row">

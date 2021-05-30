@@ -138,6 +138,15 @@
                             <?php endif; ?>
                         <?php endif; ?>
                         <li class="nav-item">
+                            <a href="index.php?r=transform" class="nav-link transform">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>
+                                    เบิกแปรสภาพ
+                                    <!--                                <span class="right badge badge-danger">New</span>-->
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="index.php?r=stocktrans" class="nav-link stocktrans">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>
