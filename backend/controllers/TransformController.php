@@ -69,7 +69,7 @@ class TransformController extends Controller
             $branch_id = \Yii::$app->user->identity->branch_id;
         }
 
-        $default_warehouse = 1;
+        $default_warehouse = 6;
         if ($company_id == 1 && $branch_id == 2) {
             $default_warehouse = 5;
         }
