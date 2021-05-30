@@ -104,15 +104,38 @@ class TransformController extends Controller
                     $model_line->status = 1;
                     if ($model_line->save(false)) {
 
-                        $this->updateStock($from_prod, $from_qty, $default_warehouse, $model->journal_no, $company_id, $branch_id);
-                        for ($i = 0; $i <= count($to_prod) - 1; $i++) {
-                            if ($to_prod[$i] == '') continue;
-//                            echo $to_prod[$i];
-//                            echo $to_qty[$i];
-//                            echo $default_warehouse;
-//                            return;
-                            $this->updateStockIn($to_prod[$i], $to_qty[$i], $default_warehouse, $model->journal_no, $company_id, $branch_id);
+                        if ($from_prod != null && $from_qty > 0) {
+                            $model_trans = new \backend\models\Stocktrans();
+                            $model_trans->journal_no = $model->journal_no;
+                            $model_trans->trans_date = date('Y-m-d H:i:s');
+                            $model_trans->product_id = $from_prod;
+                            $model_trans->qty = $from_qty;
+                            $model_trans->warehouse_id = $default_warehouse;
+                            $model_trans->stock_type = 2; // 1 in 2 out
+                            $model_trans->activity_type_id = 20; // 6 issue cars
+                            $model_trans->company_id = $company_id;
+                            $model_trans->branch_id = $branch_id;
+                            if ($model_trans->save(false)) {
+
+                                $model_sum = \backend\models\Stocksum::find()->where(['warehouse_id' => $default_warehouse, 'product_id' => $from_prod])->one();
+                                if ($model_sum) {
+
+                                    $model_sum->qty = (int)$model_sum->qty - (int)$from_qty;
+                                    $model_sum->save(false);
+                                }
+                            }
+                        }else{
+                            echo "no";return;
                         }
+                        //$this->updateStock($from_prod, $from_qty, $default_warehouse, $model->journal_no, $company_id, $branch_id);
+//                        for ($i = 0; $i <= count($to_prod) - 1; $i++) {
+//                            if ($to_prod[$i] == '') continue;
+////                            echo $to_prod[$i];
+////                            echo $to_qty[$i];
+////                            echo $default_warehouse;
+////                            return;
+//                            $this->updateStockIn($to_prod[$i], $to_qty[$i], $default_warehouse, $model->journal_no, $company_id, $branch_id);
+//                        }
                     }
                 }
 
@@ -168,7 +191,7 @@ class TransformController extends Controller
             if ($model_trans->save(false)) {
                 $model_sum = \backend\models\Stocksum::find()->where(['warehouse_id' => $wh_id, 'product_id' => $product_id])->one();
                 if ($model_sum) {
-                    $model_sum->qty = $model_sum->qty + (int)$qty;
+                    $model_sum->qty = (int)$model_sum->qty + (int)$qty;
                     $model_sum->save(false);
                 }
             }
