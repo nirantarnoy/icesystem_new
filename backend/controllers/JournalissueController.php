@@ -286,8 +286,6 @@ class JournalissueController extends Controller
                     $item = ($qty / $std->level4_qty);
                     $items = ($item / $std->level2_qty);
                     $res = $items;
-
-
                 }else if($model->code == "M"){
 
                 }

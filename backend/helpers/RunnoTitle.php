@@ -40,38 +40,45 @@ class RunnoTitle
         16 => 'ใบจ่ายเงิน',
         17 => 'ตรวจสอบคุณภาพ',
         18 => 'เบิกเติม',
-        19 => 'โอนระหว่างสาขา'
+        19 => 'โอนระหว่างสาขา',
+        20 => 'เบิกแปรสภาพ',
+        21 => 'รับเข้าแปรสภาพ'
     ];
 
     private static $dataobj = [
-        ['id'=>1,'name' => 'ขอซื้อ','prefix'=>'PR'],
-        ['id'=>2,'name' => 'สั่งซื้อ','prefix'=>'PO'],
-        ['id'=>3,'name' => 'เสนอราคา','prefix'=>'QUO'],
-        ['id'=>4,'name' => 'ขาย','prefix'=>'SO'],
-        ['id'=>5,'name' => 'ย้าย','prefix'=>'TF'],
-        ['id'=>6,'name' => 'เบิกขึ้นรถ','prefix'=>'IS'],
-        ['id'=>7,'name' => 'คืนขายหน่วยรถ','prefix'=>'RT'],
-        ['id'=>8,'name' => 'คืนขาย','prefix'=>'SRT'],
-        ['id'=>9,'name' => 'คืนซื้อ','prefix'=>'PRT'],
-        ['id'=>10,'name' => 'นับสต๊อก','prefix'=>'CT'],
-        ['id'=>11,'name' => 'ปรับสต๊อก','prefix'=>'AJ'],
-        ['id'=>12,'name' => 'ลูกค้า','prefix'=>'CU'],
-        ['id'=>13,'name' => 'ใบสั่งงาน','prefix'=>'WO'],
-        ['id'=>14,'name' => 'ใบรับวัตถุดิบ','prefix'=>'PDR'],
-        ['id'=>15,'name' => 'รับเข้าผลิต','prefix'=>'REP'],
-        ['id'=>16,'name' => 'ใบจ่ายเงิน','prefix'=>'INV'],
-        ['id'=>17,'name' => 'ตรวจสอบคุณภาพ','prefix'=>'QC'],
-        ['id'=>18,'name' => 'เบิกเติม','prefix'=>'IF'],
-        ['id'=>19,'name' => 'โอนระหว่างสาขา','prefix'=>'TB']
+        ['id' => 1, 'name' => 'ขอซื้อ', 'prefix' => 'PR'],
+        ['id' => 2, 'name' => 'สั่งซื้อ', 'prefix' => 'PO'],
+        ['id' => 3, 'name' => 'เสนอราคา', 'prefix' => 'QUO'],
+        ['id' => 4, 'name' => 'ขาย', 'prefix' => 'SO'],
+        ['id' => 5, 'name' => 'ย้าย', 'prefix' => 'TF'],
+        ['id' => 6, 'name' => 'เบิกขึ้นรถ', 'prefix' => 'IS'],
+        ['id' => 7, 'name' => 'คืนขายหน่วยรถ', 'prefix' => 'RT'],
+        ['id' => 8, 'name' => 'คืนขาย', 'prefix' => 'SRT'],
+        ['id' => 9, 'name' => 'คืนซื้อ', 'prefix' => 'PRT'],
+        ['id' => 10, 'name' => 'นับสต๊อก', 'prefix' => 'CT'],
+        ['id' => 11, 'name' => 'ปรับสต๊อก', 'prefix' => 'AJ'],
+        ['id' => 12, 'name' => 'ลูกค้า', 'prefix' => 'CU'],
+        ['id' => 13, 'name' => 'ใบสั่งงาน', 'prefix' => 'WO'],
+        ['id' => 14, 'name' => 'ใบรับวัตถุดิบ', 'prefix' => 'PDR'],
+        ['id' => 15, 'name' => 'รับเข้าผลิต', 'prefix' => 'REP'],
+        ['id' => 16, 'name' => 'ใบจ่ายเงิน', 'prefix' => 'INV'],
+        ['id' => 17, 'name' => 'ตรวจสอบคุณภาพ', 'prefix' => 'QC'],
+        ['id' => 18, 'name' => 'เบิกเติม', 'prefix' => 'IF'],
+        ['id' => 19, 'name' => 'โอนระหว่างสาขา', 'prefix' => 'TB'],
+        ['id' => 20, 'name' => 'เบิกแปรสภาพ', 'prefix' => 'IT'],
+        ['id' => 21, 'name' => 'รับเข้าแปรสภาพ', 'prefix' => 'RT']
     ];
+
     public static function asArray()
     {
         return self::$data;
     }
+
     public static function asArrayObject()
     {
         return self::$dataobj;
     }
+
     public static function getTypeById($idx)
     {
         if (isset(self::$data[$idx])) {
@@ -80,6 +87,7 @@ class RunnoTitle
 
         return 'Unknown Type';
     }
+
     public static function getTypeByName($idx)
     {
         if (isset(self::$data[$idx])) {
