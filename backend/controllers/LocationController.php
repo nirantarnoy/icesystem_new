@@ -68,12 +68,25 @@ class LocationController extends Controller
     public function actionCreate()
     {
         $model = new Location();
-
+        $company_id = 1;
+        $branch_id = 1;
+        $default_warehouse = 6;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+            if ($branch_id == 2) {
+                $default_warehouse = 5;
+            }
+        }
         if ($model->load(Yii::$app->request->post())) {
            // $status = \Yii::$app->request->post('status');
           // $warehouse_id = \Yii::$app->request->post('warehouse_id');
            // $model->status = $status;
           //  $model->warehouse_id = $warehouse_id;
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
             if($model->save()){
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');

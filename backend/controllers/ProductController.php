@@ -56,12 +56,6 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Product model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionView($id)
     {
         return $this->render('view', [
@@ -69,15 +63,21 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Product model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
         $model = new Product();
-
+        $company_id = 1;
+        $branch_id = 1;
+        $default_warehouse = 6;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+            if ($branch_id == 2) {
+                $default_warehouse = 5;
+            }
+        }
         if ($model->load(Yii::$app->request->post())) {
             //   $photo = UploadedFile::getInstanceByName('doc_file');
             $photo = UploadedFile::getInstance($model, 'photo');
@@ -101,7 +101,8 @@ class ProductController extends Controller
             $model->unit_id = $unit;
             $model->stock_type = $stock_type;
             $model->status = $status;
-
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
             if ($model->save()) {
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');

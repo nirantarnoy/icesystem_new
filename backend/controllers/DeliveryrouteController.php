@@ -71,6 +71,20 @@ class DeliveryrouteController extends Controller
         $model = new Deliveryroute();
 
         if ($model->load(Yii::$app->request->post())) {
+            $company_id = 1;
+            $branch_id = 1;
+            $default_warehouse = 6;
+            if (!empty(\Yii::$app->user->identity->company_id)) {
+                $company_id = \Yii::$app->user->identity->company_id;
+            }
+            if (!empty(\Yii::$app->user->identity->branch_id)) {
+                $branch_id = \Yii::$app->user->identity->branch_id;
+                if ($branch_id == 2) {
+                    $default_warehouse = 5;
+                }
+            }
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
             if ($model->save()) {
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');

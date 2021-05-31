@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\Journalissue;
 use backend\models\JournalissueSearch;
 use backend\models\Orderline;
 use backend\models\Orders;
@@ -11,6 +12,7 @@ use common\models\LoginLog;
 use Yii;
 use backend\models\Car;
 use backend\models\CarSearch;
+use yii\base\BaseObject;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -39,7 +41,7 @@ class PosController extends Controller
                     [
                         'actions' => [
                             'logout', 'index', 'print', 'printindex', 'dailysum', 'getcustomerprice', 'getoriginprice', 'closesale',
-                            'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate', 'posttrans', 'saledailyend', 'printdo'
+                            'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate', 'posttrans', 'saledailyend', 'printdo','createissue'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -738,6 +740,66 @@ class PosController extends Controller
 //            echo $value2->product_id.' = '. $value2->line_total.'<br />';
 //        }
 
+    }
+
+    public function actionCreateissue(){
+        $company_id = 1;
+        $branch_id = 1;
+        $default_warehouse = 6;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+            if ($branch_id == 2) {
+                $default_warehouse = 5;
+            }
+        }
+
+        $model = new Journalissue();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $prod_id = \Yii::$app->request->post('line_prod_id');
+            $line_qty = \Yii::$app->request->post('line_qty');
+            $line_issue_price = \Yii::$app->request->post('line_issue_line_price');
+
+            $x_date = explode('/', $model->trans_date);
+            $sale_date = date('Y-m-d');
+            if (count($x_date) > 1) {
+                $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
+            }
+            $model->journal_no = $model->getLastNo($sale_date, $company_id, $branch_id);
+            $model->trans_date = date('Y-m-d', strtotime($sale_date));
+            $model->status = 1;
+            $model->reason_id = 1;
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
+            if ($model->save(false)) {
+                if ($prod_id != null) {
+                    for ($i = 0; $i <= count($prod_id) - 1; $i++) {
+                        if ($prod_id[$i] == '') continue;
+                        $model_line = new \backend\models\Journalissueline();
+                        $model_line->issue_id = $model->id;
+                        $model_line->product_id = $prod_id[$i];
+                        $model_line->qty = $line_qty[$i];
+                        $model_line->avl_qty = $line_qty[$i];
+                        $model_line->sale_price = $line_issue_price[$i];
+                        $model_line->status = 1;
+                        if ($model_line->save()) {
+                            $this->updateStock($prod_id[$i], $line_qty[$i], $default_warehouse, $model->journal_no, $company_id, $branch_id);
+                        }
+                    }
+                }
+                $session = \Yii::$app->session;
+                $session->setFlash('msg', 'บันทึกรายการเรียบร้อย');
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
+        }
+
+        return $this->renderAjax('_createissue', [
+            'model' => $model,
+        ]);
     }
 
 }

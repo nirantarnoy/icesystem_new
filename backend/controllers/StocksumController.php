@@ -65,7 +65,6 @@ class StocksumController extends Controller
     public function actionCreate()
     {
         $model = new Stocksum();
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }

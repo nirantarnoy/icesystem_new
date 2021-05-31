@@ -1,7 +1,9 @@
 <?php
 
 use kartik\select2\Select2;
+use yii\bootstrap4\Modal;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 use yii\web\Session;
 
 $filename = "empty";
@@ -241,6 +243,8 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
             <div class="row">
                 <div class="col-lg-6" style="text-align: left">
                     <div class="btn-group">
+                        <a id="modalButton" class="btn btn-primary"
+                           href="<?= Url::to(['pos/createissue', 'id' => 'xx']); ?>">รับคำสั่งซื้อ(รถ)</a>
                         <a href="index.php?r=pos/salehistory" class="btn btn-outline-info btn-history-cart"
                            style="display: noneผ">
                             ประวัติการขาย
@@ -853,6 +857,18 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
     <input type="hidden" class="order-do" name="order_id" value="<?= $order_do ?>">
 </form>
 
+<?php
+
+Modal::begin([
+    'title' => 'บันทึกรายการใบเบิกสินค้า',
+    'id' => 'modal-issue',
+    'size' => 'modal-xl',
+]);
+echo "<div id='modalContent'></div>";
+Modal::end();
+
+
+?>
 <?php //endif;?>
 
 <?php
@@ -863,7 +879,13 @@ $url_to_create_do = \yii\helpers\Url::to(['pos/printdo'], true);
 
 $js = <<<JS
  $(function(){
-       
+         $('#modalButton').click(function (){
+               
+            $.get($(this).attr('href'), function(data) {
+              $('#modal-issue').modal('show').find('#modalContent').html(data)
+           });
+           return false;
+        });
         var xx = $(".slip-print").val();
         var xx2 = $(".slip-print-do").val();
         //alert(xx);
