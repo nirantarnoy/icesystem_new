@@ -245,15 +245,14 @@ class CardailyController extends Controller
             }
             $t_date = date('Y-m-d', strtotime($x_date2));
         }
-        print_r($car_id);
-        echo count($emp_id);return;
+//        print_r($car_id);
+//        echo count($emp_id);return;
         if ($car_id) {
             if ($emp_id != null) {
-
                 for ($i = 0; $i <= count($emp_id) - 1; $i++) {
                     if ($emp_id[$i] == '') continue; // $emp_id[$i] = 0;
                     if ($this->checkOld($emp_id[$i], $car_id, $t_date)) {
-                        // echo "has no ";return;
+                         echo "has no ";return;
                         $model = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date, 'employee_id' => $emp_id[$i], 'car_id' => $car_id])->one();
                         if ($model) {
                             $model->is_driver = $isdriver[$i] == 1 ? 1 : 0;
@@ -271,7 +270,7 @@ class CardailyController extends Controller
                         }
 
                     } else {
-                        // echo "has ";return;
+                         echo "has ";return;
                         $model = new \backend\models\Cardaily();
                         $model->car_id = $car_id;
                         $model->employee_id = $emp_id[$i];
@@ -281,7 +280,6 @@ class CardailyController extends Controller
                         $model->company_id = $company_id;
                         $model->branch_id = $branch_id;
                         $model->save(false);
-
                     }
 
                 }
