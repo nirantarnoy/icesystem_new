@@ -227,9 +227,9 @@ class CardailyController extends Controller
             $branch_id = \Yii::$app->user->identity->branch_id;
         }
 
-//        print_r(\Yii::$app->request->post());
-//        echo count($emp_id);
-//        return;
+        print_r(\Yii::$app->request->post());
+        echo count($emp_id);
+        return;
 
         if ($route_id == null || $route_id == '') {
             $route_id = 0;
