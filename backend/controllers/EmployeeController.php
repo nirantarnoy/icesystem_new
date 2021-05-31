@@ -71,6 +71,15 @@ class EmployeeController extends Controller
      */
     public function actionCreate()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
         $model = new Employee();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -80,6 +89,8 @@ class EmployeeController extends Controller
                 $photo->saveAs(Yii::getAlias('@backend') . '/web/uploads/images/employee/' . $photo_name);
                 $model->photo = $photo_name;
             }
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
             if($model->save()){
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
