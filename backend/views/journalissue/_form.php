@@ -498,19 +498,19 @@ function showfind(e){
   }  
   
   function standardcal(product_id, qty){
-      if(product_id){
-          $.ajax({
-                  'type':'post',
-                  'dataType': 'html',
-                  'async': false,
-                  'url': "$url_to_get_standard_qty",
-                  'data': {'product_id': product_id,'qty': qty},
-                  'success': function(data) {
-                      alert(data);
-                    
-                  }
-             });
-      }
+//      if(product_id){
+//          $.ajax({
+//                  'type':'post',
+//                  'dataType': 'html',
+//                  'async': false,
+//                  'url': "$url_to_get_standard_qty",
+//                  'data': {'product_id': product_id,'qty': qty},
+//                  'success': function(data) {
+//                      alert(data);
+//                    
+//                  }
+//             });
+//      }
   }
 function route_change(e) {
          //alert(e.val());
