@@ -251,8 +251,8 @@ class CardailyController extends Controller
             if ($emp_id != null) {
                 for ($i = 0; $i <= count($emp_id) - 1; $i++) {
                     if ($emp_id[$i] == '') continue; // $emp_id[$i] = 0;
-                    if ($this->checkOld($emp_id[$i], $car_id, $t_date)) {
-                         echo "has no ";return;
+                    if ($this->checkOld($emp_id[$i], $car_id, $t_date,$company_id,$branch_id)) {
+                         //echo "has no ";return;
                         $model = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date, 'employee_id' => $emp_id[$i], 'car_id' => $car_id])->one();
                         if ($model) {
                             $model->is_driver = $isdriver[$i] == 1 ? 1 : 0;
@@ -270,7 +270,7 @@ class CardailyController extends Controller
                         }
 
                     } else {
-                         echo "has ";return;
+                        // echo "has ";return;
                         $model = new \backend\models\Cardaily();
                         $model->car_id = $car_id;
                         $model->employee_id = $emp_id[$i];
@@ -310,9 +310,9 @@ class CardailyController extends Controller
         }
     }
 
-    public function checkOld($emp_id, $car_id, $t_date)
+    public function checkOld($emp_id, $car_id, $t_date, $company_id,$branch_id)
     {
-        $model = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date])->count();
+        $model = \backend\models\Cardaily::find()->where(['employee_id' => $emp_id, 'date(trans_date)' => $t_date,'company_id'=>$company_id,'branch_id'=>$branch_id])->count();
 //        if ($model>0) {
 //            \backend\models\Cardaily::deleteAll(['car_id' => $car_id, 'employee_id' => $emp_id, 'date(trans_date)' => $t_date]);
 //        }
