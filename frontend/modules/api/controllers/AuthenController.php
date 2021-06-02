@@ -41,7 +41,7 @@ class AuthenController extends Controller
                 if ($model->validatePassword($password)) {
                     $model_info = \backend\models\Employee::find()->where(['id' => $model->employee_ref_id])->one();
                     if ($model_info) {
-                        $car_info = $this->getCar($model_info->id,$model->compnay_id,$model->branch_id);
+                        $car_info = $this->getCar($model_info->id,$model->company_id,$model->branch_id);
                         array_push($data, [
                                 'username' => $username,
                                 'user_id' => '' . $model->id,
