@@ -324,12 +324,12 @@ class CardailyController extends Controller
 
 
         $company_id = 1;
-        $brach_id = 1;
-        if (isset($_SESSION['user_company_id'])) {
-            $company_id = $_SESSION['user_company_id'];
+        $branch_id = 1;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
         }
-        if (isset($_SESSION['user_branch_id'])) {
-            $brach_id = $_SESSION['user_branch_id'];
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
         }
 
         $f_date = \Yii::$app->request->post('from_date');
@@ -351,10 +351,10 @@ class CardailyController extends Controller
             }
 
             //  $model = \backend\models\Cardaily::find()->where(['AND', ['>=', 'date(trans_date)', $from_date], ['<=', 'date(trans_date)', $to_date]])->all();
-            $model = \backend\models\Cardaily::find()->where(['date(trans_date)' => $from_date, 'company_id' => $company_id, 'branch_id' => $brach_id])->all();
+            $model = \backend\models\Cardaily::find()->where(['date(trans_date)' => $from_date, 'company_id' => $company_id, 'branch_id' => $branch_id])->all();
             if ($model) {
                 //foreach ($model as $value) {
-                \backend\models\Cardaily::deleteAll(['date(trans_date)' => $to_date, 'company_id' => $company_id, 'branch_id' => $brach_id]);
+                \backend\models\Cardaily::deleteAll(['date(trans_date)' => $to_date, 'company_id' => $company_id, 'branch_id' => $branch_id]);
                 foreach ($model as $line_value) {
                     if ($this->check_dup($line_value->employee_id, $line_value->car_id, date('Y-m-d', strtotime($to_date)))) {
                         continue;
@@ -368,7 +368,7 @@ class CardailyController extends Controller
                     $model_assign_line->is_driver = $line_value->is_driver;
                     $model_assign_line->status = 1;
                     $model_assign_line->company_id = $company_id;
-                    $model_assign_line->branch_id = $brach_id;
+                    $model_assign_line->branch_id = $branch_id;
                     $model_assign_line->trans_date = date('Y-m-d', strtotime($to_date));
                     if ($model_assign_line->save(false)) {
                         $res += 1;
@@ -395,12 +395,12 @@ class CardailyController extends Controller
     public function actionCopyfromoriginal()
     {
         $company_id = 1;
-        $brach_id = 1;
-        if (isset($_SESSION['user_company_id'])) {
-            $company_id = $_SESSION['user_company_id'];
+        $branch_id = 1;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
         }
-        if (isset($_SESSION['user_branch_id'])) {
-            $brach_id = $_SESSION['user_branch_id'];
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
         }
 
         $t_date = \Yii::$app->request->post('to_date');
@@ -416,17 +416,17 @@ class CardailyController extends Controller
                 $to_date = $b[2] . '/' . $b[1] . '/' . $b[0];
             }
 
-            $model = \common\models\CarEmp::find()->where(['company_id' => $company_id, 'branch_id' => $brach_id])->all();
+            $model = \common\models\CarEmp::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
             if ($model) {
                 //foreach ($model as $value) {
-                \backend\models\Cardaily::deleteAll(['date(trans_date)' => $to_date, 'company_id' => $company_id, 'branch_id' => $brach_id]);
+                \backend\models\Cardaily::deleteAll(['date(trans_date)' => $to_date, 'company_id' => $company_id, 'branch_id' => $branch_id]);
                 foreach ($model as $line_value) {
                     $model_assign_line = new \backend\models\Cardaily();
                     $model_assign_line->car_id = $line_value->car_id;
                     $model_assign_line->employee_id = $line_value->emp_id;
                     $model_assign_line->status = 1;
                     $model_assign_line->company_id = $company_id;
-                    $model_assign_line->branch_id = $brach_id;
+                    $model_assign_line->branch_id = $branch_id;
                     $model_assign_line->trans_date = date('Y-m-d', strtotime($to_date));
                     if ($model_assign_line->save(false)) {
                         $res += 1;
