@@ -41,7 +41,7 @@ class AuthenController extends Controller
                 if ($model->validatePassword($password)) {
                     $model_info = \backend\models\Employee::find()->where(['id' => $model->employee_ref_id])->one();
                     if ($model_info) {
-                        $car_info = $this->getCar($model_info->id);
+                        $car_info = $this->getCar($model_info->id,$model->compnay_id,$model->branch_id);
                         array_push($data, [
                                 'username' => $username,
                                 'user_id' => '' . $model->id,
@@ -67,10 +67,10 @@ class AuthenController extends Controller
         return ['status' => $status, 'data' => $data];
     }
 
-    public function getCar($emp_id){
+    public function getCar($emp_id,$company_id,$branch_id){
        $data = [];
        if($emp_id){
-           $model = \common\models\CarDaily::find()->where(['employee_id'=>$emp_id,'date(trans_date)'=>date('Y-m-d')])->one();
+           $model = \common\models\CarDaily::find()->where(['employee_id'=>$emp_id,'date(trans_date)'=>date('Y-m-d'),'company_id'=>$company_id,'branch_id'=>$branch_id])->one();
            if($model){
                array_push($data,[
                    'car_id'=> $model->car_id,

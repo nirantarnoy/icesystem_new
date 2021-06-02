@@ -82,6 +82,7 @@ function getStock($prod_id, $warehouse)
                 </tr>
                 </thead>
                 <tbody>
+              
                 <?php //foreach ($prod_data as $value): ?>
                 <?php if ($model->isNewRecord): ?>
                     <tr>
