@@ -142,7 +142,8 @@ class MainconfigController extends Controller
                     $payment_term = $this->checkPayterm($rowData[14]);
 
                     $modelx = new \backend\models\Customer();
-                    $modelx->code = $rowData[0];
+                   // $modelx->code = $rowData[0];
+                    $modelx->code = $modelx->getLastNo(1,2);
                     $modelx->name = $rowData[1];
                     $modelx->description = $rowData[11];
                     $modelx->contact_name = $rowData[9];
