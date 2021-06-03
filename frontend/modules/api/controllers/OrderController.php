@@ -210,7 +210,23 @@ class OrderController extends Controller
                             $model_issue->branch_id = $branch_id;
                             $model_issue->save(false);
                         }
+
+                        // add new
+                        $model_loop_issue = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
+                        foreach ($model_loop_issue as $val2) {
+                            $model_order_stock = new \common\models\OrderStock();
+                            $model_order_stock->issue_id = $val2->issue_id;
+                            $model_order_stock->product_id = $val2->product_id;
+                            $model_order_stock->qty = $val2->qty;
+                            $model_order_stock->used_qty = 0;
+                            $model_order_stock->avl_qty = $val2->qty;
+                            $model_order_stock->order_id = $model->id;
+                            $model_order_stock->save(false);
+                        }
+                        // end add new
+
                     }
+
                 }
             }
         }
