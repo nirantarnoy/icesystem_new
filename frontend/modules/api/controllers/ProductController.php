@@ -137,7 +137,7 @@ class ProductController extends Controller
                 $trans_date = $t_date;
             }
 
-                $model = \common\models\QuerySaleOrderStockProductPrice::find()->where(['cus_id' => $customer_id, 'delivery_route_id' => $route_id, 'date(trans_date)' => date('Y-m-d', strtotime($trans_date))])->all();
+                $model = \common\models\OrderStock::find()->select(['product_id','SUM(avl_qty) as avl_qty'])->where(['route_id' => $route_id, 'date(trans_date)' => date('Y-m-d', strtotime($trans_date))])->groupBy(['product_id'])->all();
                 // $model = \common\models\QueryCustomerPrice::find()->all();
                 if ($model) {
                     $status = true;
@@ -145,11 +145,11 @@ class ProductController extends Controller
                         if ($value->qty == null || $value->qty <= 0) continue;
                         array_push($data, [
                             'id' => $value->product_id,
-                            //'image' => 'http://192.168.1.120/icesystem/backend/web/uploads/images/products/' . $product_info->photo,
-                            'image' => 'http://119.59.100.74/icesystem/backend/web/uploads/images/products/' . $value->photo,
-                            'code' => $value->code,
-                            'name' => $value->name,
-                            'sale_price' => $value->sale_price,
+                            'image' => '',
+                            //'image' => 'http://119.59.100.74/icesystem/backend/web/uploads/images/products/' . $value->photo,
+                            'code' => \backend\models\Product::findCode($value->product_id),
+                            'name' => \backend\models\Product::findName($value->product_id),
+                            'sale_price' => $this->findCustomerprice($customer_id,$value->product_id),
                             'issue_id' => 0,
                             'onhand' => $value->avl_qty
                         ]);
@@ -160,5 +160,16 @@ class ProductController extends Controller
 
 
         return ['status' => $status, 'data' => $data];
+    }
+    public function findCustomerprice($customer_id,$product_id){
+        $price = 0;
+        if($customer_id && $product_id){
+            $model = \common\models\QueryCustomerPrice::find()->where(['cus_id'=>$customer_id,'product_id'=>$product_id])->one();
+            if($model){
+                $price = $model->sale_price;
+
+            }
+        }
+        return $price;
     }
 }
