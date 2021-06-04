@@ -106,9 +106,8 @@ class JournalissueController extends Controller
                 $trans_date = $t_date;
             }
             // $model = \common\models\JournalIssue::find()->one();
-            $model = \common\models\OrderStock::find()->select(['id','issue_ids','product_id','SUM(qty) as qty','SUM(avl_qty) as avl_qty'])->where(['route_id' => $route_id, 'date(trans_date)' => $trans_date])->groupBy(['product_id'])->all();
+            $model = \common\models\OrderStock::find()->select(['id','issue_id','product_id','SUM(qty) as qty','SUM(avl_qty) as avl_qty'])->where(['route_id' => $route_id, 'date(trans_date)' => $trans_date])->groupBy(['product_id'])->all();
             if ($model) {
-
                     $status = true;
                     foreach ($model as $value) {
                         if ($value->qty == null || $value->qty <= 0) continue;
