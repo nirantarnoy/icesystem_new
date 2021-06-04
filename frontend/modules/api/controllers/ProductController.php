@@ -137,7 +137,7 @@ class ProductController extends Controller
                 $trans_date = $t_date;
             }
 
-                $model = \common\models\QuerySaleOrderStockProductPrice::find()->where(['cus_id' => $customer_id, 'delivery_route_id' => $route_id, 'date(trans_date)' => date('Y-m-d')])->all();
+                $model = \common\models\QuerySaleOrderStockProductPrice::find()->where(['cus_id' => $customer_id, 'delivery_route_id' => $route_id, 'date(trans_date)' => date('Y-m-d', strtotime($trans_date))])->all();
                 // $model = \common\models\QueryCustomerPrice::find()->all();
                 if ($model) {
                     $status = true;
