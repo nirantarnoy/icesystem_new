@@ -190,15 +190,17 @@ class JournalissueController extends Controller
                 $trans_date = $t_date;
             }
             // $model = \common\models\JournalIssue::find()->one();
-            $model = \common\models\JournalIssue::find()->where(['delivery_route_id' => $route_id, 'date(trans_date)' => $trans_date,'status'=>1])->one();
+            $model = \common\models\JournalIssue::find()->where(['delivery_route_id' => $route_id, 'date(trans_date)' => $trans_date, 'status' => 1])->one();
             if ($model) {
                 array_push($data, [
                     'has_record' => 1,
+                    'issue_id' => $model->id,
                     'status' => $model->status,
                 ]);
             } else {
                 array_push($data, [
                     'has_record' => 0,
+                    'issue_id' => 0,
                     'status' => 0,
                 ]);
             }
