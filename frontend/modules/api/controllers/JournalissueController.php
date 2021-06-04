@@ -101,6 +101,7 @@ class JournalissueController extends Controller
         $data = [];
         if ($issue_id != null && $user_id != null) {
             //$data = ['issue_id'=> $issue_id,'user_id'=>$user_id];
+            $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issue_id])->one();
             $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
             foreach ($model_issue_line as $val2) {
                 if ($val2->qty <= 0 || $val2->qty == null) continue;
@@ -112,10 +113,12 @@ class JournalissueController extends Controller
                 $model_order_stock->used_qty = 0;
                 $model_order_stock->avl_qty = $val2->qty;
                 $model_order_stock->order_id = 0;
+                $model_order_stock->route_id = $model_update_issue_status->delivery_route_id;
+                $model_order_stock->trans_date = date('Y-m-d');
                 $model_order_stock->company_id = $company_id;
                 $model_order_stock->branch_id = $branch_id;
                 if ($model_order_stock->save(false)) {
-                    $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issue_id])->one();
+
                     if ($model_update_issue_status) {
                         if ($model_update_issue_status->status != 2) {
                             $model_update_issue_status->status = 2;
