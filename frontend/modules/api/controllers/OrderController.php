@@ -137,11 +137,19 @@ class OrderController extends Controller
                             $order_total_all += $model_line->line_total;
                             $status = true;
 
-                            $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
-                            if ($model_update_issue_line) {
-                                $model_update_issue_line->avl_qty = $model_update_issue_line->avl_qty - $qty;
-                                $model_update_issue_line->save(false);
+//                            $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
+//                            if ($model_update_issue_line) {
+//                                $model_update_issue_line->avl_qty = $model_update_issue_line->avl_qty - $qty;
+//                                $model_update_issue_line->save(false);
+//                            }
+
+                            $model_update_order_stock = \common\models\OrderStock::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
+                            if ($model_update_order_stock) {
+                                $model_update_order_stock->order_id = $has_order_id;
+                                $model_update_order_stock->avl_qty = $model_update_order_stock->avl_qty - $qty;
+                                $model_update_order_stock->save(false);
                             }
+
                         }
                     }
 
@@ -192,12 +200,19 @@ class OrderController extends Controller
 
                         $order_total_all += $model_line->line_total;
                         $status = true;
-
-                        $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
-                        if ($model_update_issue_line) {
-                            $model_update_issue_line->avl_qty = $model_update_issue_line->avl_qty - $qty;
-                            $model_update_issue_line->save(false);
+//
+//                        $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
+//                        if ($model_update_issue_line) {
+//                            $model_update_issue_line->avl_qty = $model_update_issue_line->avl_qty - $qty;
+//                            $model_update_issue_line->save(false);
+//                        }
+                        $model_update_order_stock = \common\models\OrderStock::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
+                        if ($model_update_order_stock) {
+                            $model_update_order_stock->order_id = $model->id;
+                            $model_update_order_stock->avl_qty = $model_update_order_stock->avl_qty - $qty;
+                            $model_update_order_stock->save(false);
                         }
+
                     }
                     $model->order_total_amt = $order_total_all;
                     $model->save(false);
@@ -240,10 +255,21 @@ class OrderController extends Controller
         $order_date = date('Y-m-d');
         $res = null;
         if ($route_id && $car_id) {
-            $model = \common\models\Orders::find()->where(['date(order_date)' => $order_date, 'order_channel_id' => $route_id, 'car_ref_id' => $car_id])->one();
+            $model = \common\models\Orders::find()->where(['date(order_date)' => $order_date, 'order_channel_id' => $route_id, 'car_ref_id' => $car_id,'status'=>1])->one();
             $res = $model;
         }
         return $res;
+    }
+
+    public function checkorderopen($route_id,$order_date){
+        if($route_id){
+            $model = \common\models\Orders::find()->where(['delivery_route_id'=>$route_id,'date(order_date)'=>$order_date,'status'=>1])->count();
+        }
+    }
+    public function checkissueorder($route_id,$order_date){
+        if($route_id){
+            $model = \common\models\OrderStock::find()->where(['route_id'=>$route_id,'date(trans_date)'=>$order_date])->count();
+        }
     }
 
     public function findCustomerprice($customer_id, $product_id, $route_id)

@@ -137,11 +137,13 @@ class JournalissueController extends Controller
     {
         $issue_id = null;
         $user_id = null;
+        $route_id = null;
         $company_id = 1;
         $branch_id = 1;
         $status = 0;
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
+        $route_id = $req_data['route_id'];
         $issue_id = $req_data['issue_id'];
         $user_id = $req_data['user_id'];
         $company_id = $req_data['company_id'];
@@ -177,6 +179,7 @@ class JournalissueController extends Controller
                         if ($model_update_issue_status->status != 2) {
                             $model_update_issue_status->status = 2;
                             if ($model_update_issue_status->save(false)) {
+
                                 $status = 1;
                             }
                         }
@@ -186,6 +189,13 @@ class JournalissueController extends Controller
                 }
             }
 
+            if($status == 1){
+                $model_update_order = \backend\models\Orders::find()->where()->one();
+                if($model_update_order){
+                    $model_order_stock->status = 99;
+                    $model_update_order->save();
+                }
+            }
 //            $model = \backend\models\Journalissue::find()->where(['id' => $issue_id])->one();
 //            if ($model) {
 //                $model->status = 2; //close
