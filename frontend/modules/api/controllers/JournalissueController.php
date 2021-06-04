@@ -143,7 +143,7 @@ class JournalissueController extends Controller
         $status = 0;
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
-        $route_id = $req_data['route_id'];
+        //$route_id = $req_data['route_id'];
         $issue_id = $req_data['issue_id'];
         $user_id = $req_data['user_id'];
         $company_id = $req_data['company_id'];
