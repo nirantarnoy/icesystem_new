@@ -81,24 +81,42 @@ class StocktransController extends Controller
        // print_r($prodid);return;
 
         if($wh_id != null){
-             for($i=0;$i<=count($wh_id)-1;$i++){
-                 $model = new \backend\models\Stocktrans();
-                 $model->journal_no = $model->getLastNo($company_id,$branch_id);
-                 $model->trans_date = date('Y-m-d H:i:s');
-                 $model->product_id = $prodid[$i];
-                 $model->qty = $qty[$i];
-                 $model->warehouse_id = $wh_id[$i];
-                 $model->stock_type = 1;
-                 $model->activity_type_id = 15; // 15 prod rec
-                 $model->company_id = $company_id;
-                 $model->branch_id = $branch_id;
-                 if($model->save()){
-                    $this->updateSummary($prodid[$i],$wh_id[$i],$qty[$i]);
-                 }
-             }
+            $model_journal = new \backend\models\Stockjournal();
+            $model_journal->journal_no = $model_journal->getLastNo($company_id,$branch_id);
+            $model_journal->trans_date = date('Y-m-d');
+            $model_journal->company_id = $company_id;
+            $model_journal->branch_id = $branch_id;
+            if($model_journal->save(false)){
+                for($i=0;$i<=count($wh_id)-1;$i++){
+                    $model = new \backend\models\Stocktrans();
+                    $model->journal_no = $model_journal->journal_no;
+                    $model->journal_id = $model_journal->id;
+                    $model->trans_date = date('Y-m-d H:i:s');
+                    $model->product_id = $prodid[$i];
+                    $model->qty = $qty[$i];
+                    $model->warehouse_id = $wh_id[$i];
+                    $model->stock_type = 1;
+                    $model->activity_type_id = 15; // 15 prod rec
+                    $model->company_id = $company_id;
+                    $model->branch_id = $branch_id;
+                    if($model->save()){
+                        $this->updateSummary($prodid[$i],$wh_id[$i],$qty[$i]);
+                    }
+                }
+            }
+            $model = \backend\models\Stockjournal::find()->where(['id' => $model_journal->id])->one();
+            $model_line = \backend\models\Stocktrans::find()->where(['journal_id' => $model_journal->id])->all();
+
+            $session = \Yii::$app->session;
+            $session->setFlash('msg-index', 'slip_prodrec_index.pdf');
+            $session->setFlash('after-save', true);
+
+            $this->renderPartial('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' => 0]);
+
         }
 
-        return $this->redirect(['stocktrans/index']);
+    //    return $this->redirect(['stocktrans/index']);
+        return $this->redirect(['productionrec/index']);
     }
 
     public function updateSummary($product_id, $wh_id, $qty){

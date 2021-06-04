@@ -1,7 +1,8 @@
 <?php
 $this->title = 'บันทึกสินค้าเข้าคลัง';
 
-
+$filename = "empty";
+$is_print_do = "";
 
 $company_id = 1;
 $branch_id = 1;
@@ -23,6 +24,14 @@ if($_SESSION['user_group_id'] ==1){
     $wh_date = \backend\models\Warehouse::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
 }else{
     $wh_date = \backend\models\Warehouse::find()->where(['id'=> $default_warehouse, 'company_id'=>$company_id,'branch_id'=>$branch_id])->all();
+}
+
+if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
+    $f_name = \Yii::$app->session->getFlash('msg-index');
+    // echo $f_name;
+    if (file_exists('../web/uploads/slip_prod/' . $f_name)) {
+        $filename = "../web/uploads/slip_prod/" . $f_name;
+    }
 }
 
 ?>
@@ -224,11 +233,22 @@ if($_SESSION['user_group_id'] ==1){
     </div>
 </div>
 
+<input type="hidden" class="slip-print" value="<?= $filename ?>">
+<iframe id="iFramePdf" src="<?= $filename ?>" style="display:none;"></iframe>
+
 <?php
 $js=<<<JS
 $(function(){
-    
+        var xx = $(".slip-print").val();
+        if(xx !="empty"){
+           myPrint();           
+        }
 });
+function myPrint(){
+        var getMyFrame = document.getElementById('iFramePdf');
+        getMyFrame.focus();
+        getMyFrame.contentWindow.print();
+}
 function removecartitem(e){
    // if(confirm('ต้องการลบข้อมูลนี้ใช่หรือไม่?')){
         
