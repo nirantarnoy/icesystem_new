@@ -123,7 +123,7 @@ class JournalissueController extends Controller
                             'avl_qty' => $value->avl_qty,
                             'price' => 0,
                             'product_image' => '',
-                            'status' => $model->status
+                            'status' => 1
                         ]);
                     }
 
