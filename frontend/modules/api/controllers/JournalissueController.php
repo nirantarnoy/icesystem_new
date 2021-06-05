@@ -276,7 +276,7 @@ class JournalissueController extends Controller
                 }
 
                 if ($status == 1) {
-                    $model_update_order = \backend\models\Orders::find()->where(['delivery_route_id' => $route_id, 'date(order_date)' => date('Y-m-d'), 'status' => 1])->one();
+                    $model_update_order = \backend\models\Orders::find()->where(['order_channel_id' => $route_id, 'date(order_date)' => date('Y-m-d'), 'status' => 1])->one();
                     if ($model_update_order) {
                         $model_update_order->status = 99;
                         $model_update_order->save(false);
