@@ -137,7 +137,7 @@ class ProductController extends Controller
                 $trans_date = $t_date;
             }
 
-                $model = \common\models\OrderStock::find()->select(['product_ids','SUM(avl_qty) as avl_qty'])->where(['route_id' => $route_id, 'date(trans_date)' => date('Y-m-d', strtotime($trans_date))])->groupBy(['product_id'])->all();
+                $model = \common\models\OrderStock::find()->select(['product_id','SUM(qty) as qty','SUM(avl_qty) as avl_qty'])->where(['route_id' => $route_id, 'date(trans_date)' => date('Y-m-d', strtotime($trans_date))])->groupBy(['product_id'])->all();
                 // $model = \common\models\QueryCustomerPrice::find()->all();
                 if ($model) {
                     $status = true;
