@@ -143,12 +143,30 @@ class OrderController extends Controller
 //                                $model_update_issue_line->save(false);
 //                            }
 
-                            $model_update_order_stock = \common\models\OrderStock::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
+                            // issue order stock
+                            $model_update_order_stock = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $product_id, 'date(trans_date)' => strtotime(date('Y-m-d'))])->andFilterWhere(['>', 'avl_qty', 0])->orderBy(['id'])->one();
                             if ($model_update_order_stock) {
-                                $model_update_order_stock->order_id = $has_order_id;
-                                $model_update_order_stock->avl_qty = $model_update_order_stock->avl_qty - $qty;
-                                $model_update_order_stock->save(false);
+                                if ($model_update_order_stock->avl_qty >= $qty) {
+                                    $model_update_order_stock->order_id = $has_order_id;
+                                    $model_update_order_stock->avl_qty = $model_update_order_stock->avl_qty - $qty;
+                                    $model_update_order_stock->save(false);
+                                } else {
+                                    $remain_qty = $qty - $model_update_order_stock->avl_qty;
+
+                                    $model_update_order_stock->order_id = $has_order_id;
+                                    $model_update_order_stock->avl_qty = 0;
+                                    if ($model_update_order_stock->save(false)) {
+
+                                        $model_update_order_stock2 = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $product_id, 'date(trans_date)' => strtotime(date('Y-m-d'))])->andFilterWhere(['>', 'avl_qty', 0])->orderBy(['id'])->one();
+                                        if ($model_update_order_stock2) {
+                                            $model_update_order_stock2->order_id = $has_order_id;
+                                            $model_update_order_stock2->avl_qty = $model_update_order_stock2->avl_qty - $remain_qty;
+                                            $model_update_order_stock2->save(false);
+                                        }
+                                    }
+                                }
                             }
+                            // end issue order stock
 
                         }
                     }
@@ -206,12 +224,30 @@ class OrderController extends Controller
 //                            $model_update_issue_line->avl_qty = $model_update_issue_line->avl_qty - $qty;
 //                            $model_update_issue_line->save(false);
 //                        }
-                        $model_update_order_stock = \common\models\OrderStock::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
+                        // issue order stock
+                        $model_update_order_stock = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $product_id, 'date(trans_date)' => strtotime(date('Y-m-d'))])->andFilterWhere(['>', 'avl_qty', 0])->orderBy(['id'])->one();
                         if ($model_update_order_stock) {
-                            $model_update_order_stock->order_id = $model->id;
-                            $model_update_order_stock->avl_qty = $model_update_order_stock->avl_qty - $qty;
-                            $model_update_order_stock->save(false);
+                            if ($model_update_order_stock->avl_qty >= $qty) {
+                                $model_update_order_stock->order_id = $model->id;
+                                $model_update_order_stock->avl_qty = $model_update_order_stock->avl_qty - $qty;
+                                $model_update_order_stock->save(false);
+                            } else {
+                                $remain_qty = $qty - $model_update_order_stock->avl_qty;
+
+                                $model_update_order_stock->order_id = $model->id;
+                                $model_update_order_stock->avl_qty = 0;
+                                if ($model_update_order_stock->save(false)) {
+
+                                    $model_update_order_stock2 = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $product_id, 'date(trans_date)' => strtotime(date('Y-m-d'))])->andFilterWhere(['>', 'avl_qty', 0])->orderBy(['id'])->one();
+                                    if ($model_update_order_stock2) {
+                                        $model_update_order_stock2->order_id = $model->id;
+                                        $model_update_order_stock2->avl_qty = $model_update_order_stock2->avl_qty - $remain_qty;
+                                        $model_update_order_stock2->save(false);
+                                    }
+                                }
+                            }
                         }
+                        // end issue order stock
 
                     }
                     $model->order_total_amt = $order_total_all;
@@ -254,7 +290,7 @@ class OrderController extends Controller
         $order_date = date('Y-m-d');
         $res = null;
         if ($route_id && $car_id) {
-            $model = \common\models\Orders::find()->where(['date(order_date)' => $order_date, 'order_channel_id' => $route_id, 'car_ref_id' => $car_id,'status'=>1])->one();
+            $model = \common\models\Orders::find()->where(['date(order_date)' => $order_date, 'order_channel_id' => $route_id, 'car_ref_id' => $car_id, 'status' => 1])->one();
             $res = $model;
         }
         return $res;
