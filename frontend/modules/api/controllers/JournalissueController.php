@@ -106,26 +106,26 @@ class JournalissueController extends Controller
                 $trans_date = $t_date;
             }
             // $model = \common\models\JournalIssue::find()->one();
-            $model = \common\models\OrderStock::find()->select(['id','issue_id','product_id','SUM(qty) as qty','SUM(avl_qty) as avl_qty'])->where(['route_id' => $route_id, 'date(trans_date)' => $trans_date])->groupBy(['product_id'])->all();
+            $model = \common\models\OrderStock::find()->select(['id', 'issue_id', 'product_id', 'SUM(qty) as qty', 'SUM(avl_qty) as avl_qty'])->where(['route_id' => $route_id, 'date(trans_date)' => $trans_date])->groupBy(['product_id'])->all();
             if ($model) {
-                    $status = true;
-                    foreach ($model as $value) {
-                        if ($value->qty == null || $value->qty <= 0) continue;
-                        $product_image = \backend\models\Product::findPhoto($value->product_id);
-                        array_push($data, [
-                            'id' => $value->id,
-                            'issue_id' => $value->issue_id,
-                            'issue_no' => \backend\models\Journalissue::findNum($value->issue_id),
-                            'product_id' => $value->product_id,
-                            'product_name' => \backend\models\Product::findName($value->product_id),
-                            'image' => 'http://119.59.100.74/icesystem/backend/web/uploads/images/products/' . $product_image,
-                            'issue_qty' => $value->qty,
-                            'avl_qty' => $value->avl_qty,
-                            'price' => 0,
-                            'product_image' => '',
-                            'status' => 2
-                        ]);
-                    }
+                $status = true;
+                foreach ($model as $value) {
+                    if ($value->qty == null || $value->qty <= 0) continue;
+                    $product_image = \backend\models\Product::findPhoto($value->product_id);
+                    array_push($data, [
+                        'id' => $value->id,
+                        'issue_id' => $value->issue_id,
+                        'issue_no' => \backend\models\Journalissue::findNum($value->issue_id),
+                        'product_id' => $value->product_id,
+                        'product_name' => \backend\models\Product::findName($value->product_id),
+                        'image' => 'http://119.59.100.74/icesystem/backend/web/uploads/images/products/' . $product_image,
+                        'issue_qty' => $value->qty,
+                        'avl_qty' => $value->avl_qty,
+                        'price' => 0,
+                        'product_image' => '',
+                        'status' => 2
+                    ]);
+                }
 
             }
         }
@@ -189,10 +189,10 @@ class JournalissueController extends Controller
                 }
             }
 
-            if($status == 1){
-                $model_update_order = \backend\models\Orders::find()->where()->one();
-                if($model_update_order){
-                    $model_order_stock->status = 99;
+            if ($status == 1) {
+                $model_update_order = \backend\models\Orders::find()->where(['delivery_route_id' => $route_id, 'date(order_date)' => strtotime(date('Y-m-d')),'status'=>1])->one();
+                if ($model_update_order) {
+                    $model_update_order->status = 99;
                     $model_update_order->save();
                 }
             }

@@ -241,7 +241,6 @@ class OrderController extends Controller
                         // end add new
 
                     }
-
                 }
             }
         }
@@ -261,16 +260,16 @@ class OrderController extends Controller
         return $res;
     }
 
-    public function checkorderopen($route_id,$order_date){
-        if($route_id){
-            $model = \common\models\Orders::find()->where(['delivery_route_id'=>$route_id,'date(order_date)'=>$order_date,'status'=>1])->count();
-        }
-    }
-    public function checkissueorder($route_id,$order_date){
-        if($route_id){
-            $model = \common\models\OrderStock::find()->where(['route_id'=>$route_id,'date(trans_date)'=>$order_date])->count();
-        }
-    }
+//    public function checkorderopen($route_id,$order_date){
+//        if($route_id){
+//            $model = \common\models\Orders::find()->where(['delivery_route_id'=>$route_id,'date(order_date)'=>$order_date,'status'=>1])->count();
+//        }
+//    }
+//    public function checkissueorder($route_id,$order_date){
+//        if($route_id){
+//            $model = \common\models\OrderStock::find()->where(['route_id'=>$route_id,'date(trans_date)'=>$order_date])->count();
+//        }
+//    }
 
     public function findCustomerprice($customer_id, $product_id, $route_id)
     {
