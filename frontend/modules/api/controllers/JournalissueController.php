@@ -191,7 +191,7 @@ class JournalissueController extends Controller
             }
 
             if ($status == 1) {
-                $model_update_order = \backend\models\Orders::find()->where(['delivery_route_id' => $route_id, 'date(order_date)' => strtotime(date('Y-m-d')),'status'=>1])->one();
+                $model_update_order = \backend\models\Orders::find()->where(['delivery_route_id' => $route_id, 'date(order_date)' => strtotime(date('Y-m-d')), 'status' => 1])->one();
                 if ($model_update_order) {
                     $model_update_order->status = 99;
                     $model_update_order->save();
@@ -207,6 +207,14 @@ class JournalissueController extends Controller
 //            }
         }
         return ['status' => $status, 'data' => $data];
+    }
+
+    public function checkhasOrderStock($route_id, $issue_id){
+        $res = 0;
+        if($route_id){
+            $res  = \common\models\OrderStock::find()->where(['issue_id'=>$issue_id,'route_id'=>$route_id])->count();
+        }
+        return $res;
     }
 
     public function actionIssueconfirm2()
@@ -233,45 +241,49 @@ class JournalissueController extends Controller
         $data = [];
         if ($issue_id != null && $user_id != null) {
             //$data = ['issue_id'=> $issue_id,'user_id'=>$user_id];
-            $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issue_id])->one();
-            $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
-            foreach ($model_issue_line as $val2) {
-                if ($val2->qty <= 0 || $val2->qty == null) continue;
+            $has_order_stock = $this->checkhasOrderStock($route_id,$issue_id);
+            if($has_order_stock == 0){
+                $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issue_id])->one();
+                $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
+                foreach ($model_issue_line as $val2) {
+                    if ($val2->qty <= 0 || $val2->qty == null) continue;
 
-                $model_order_stock = new \common\models\OrderStock();
-                $model_order_stock->issue_id = $issue_id;
-                $model_order_stock->product_id = $val2->product_id;
-                $model_order_stock->qty = $val2->qty;
-                $model_order_stock->used_qty = 0;
-                $model_order_stock->avl_qty = $val2->qty;
-                $model_order_stock->order_id = 0;
-                $model_order_stock->route_id = $model_update_issue_status->delivery_route_id;
-                $model_order_stock->trans_date = date('Y-m-d');
-                $model_order_stock->company_id = $company_id;
-                $model_order_stock->branch_id = $branch_id;
-                if ($model_order_stock->save(false)) {
+                    $model_order_stock = new \common\models\OrderStock();
+                    $model_order_stock->issue_id = $issue_id;
+                    $model_order_stock->product_id = $val2->product_id;
+                    $model_order_stock->qty = $val2->qty;
+                    $model_order_stock->used_qty = 0;
+                    $model_order_stock->avl_qty = $val2->qty;
+                    $model_order_stock->order_id = 0;
+                    $model_order_stock->route_id = $model_update_issue_status->delivery_route_id;
+                    $model_order_stock->trans_date = date('Y-m-d');
+                    $model_order_stock->company_id = $company_id;
+                    $model_order_stock->branch_id = $branch_id;
+                    if ($model_order_stock->save(false)) {
 
-                    if ($model_update_issue_status) {
-                        if ($model_update_issue_status->status != 2) {
-                            $model_update_issue_status->status = 2;
-                            if ($model_update_issue_status->save(false)) {
+                        if ($model_update_issue_status) {
+                            if ($model_update_issue_status->status != 2) {
+                                $model_update_issue_status->status = 2;
+                                if ($model_update_issue_status->save(false)) {
 
-                                $status = 1;
+                                    $status = 1;
+                                }
                             }
+
                         }
-
+                        $this->updateStock($val2->product_id, $val2->qty, $default_wh, '', $company_id, $branch_id);
                     }
-                    $this->updateStock($val2->product_id, $val2->qty, $default_wh, '', $company_id, $branch_id);
+                }
+
+                if ($status == 1) {
+                    $model_update_order = \backend\models\Orders::find()->where(['delivery_route_id' => $route_id, 'date(order_date)' => date('Y-m-d'), 'status' => 1])->one();
+                    if ($model_update_order) {
+                        $model_update_order->status = 99;
+                        $model_update_order->save(false);
+                    }
                 }
             }
 
-            if ($status == 1) {
-                $model_update_order = \backend\models\Orders::find()->where(['delivery_route_id' => $route_id, 'date(order_date)' => date('Y-m-d'),'status'=>1])->one();
-                if ($model_update_order) {
-                    $model_update_order->status = 99;
-                    $model_update_order->save(false);
-                }
-            }
 //            $model = \backend\models\Journalissue::find()->where(['id' => $issue_id])->one();
 //            if ($model) {
 //                $model->status = 2; //close
