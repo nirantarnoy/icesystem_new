@@ -20,6 +20,7 @@ class JournalissueController extends Controller
                     'list2' => ['POST'],
                     'checkopen' => ['POST'],
                     'issueconfirm' => ['POST'],
+                    'issueconfirm2' => ['POST'],
                 ],
             ],
         ];
@@ -194,6 +195,81 @@ class JournalissueController extends Controller
                 if ($model_update_order) {
                     $model_update_order->status = 99;
                     $model_update_order->save();
+                }
+            }
+//            $model = \backend\models\Journalissue::find()->where(['id' => $issue_id])->one();
+//            if ($model) {
+//                $model->status = 2; //close
+//                $model->user_confirm = $user_id;
+//                if ($model->save()) {
+//                    $status = 1;
+//                }
+//            }
+        }
+        return ['status' => $status, 'data' => $data];
+    }
+
+    public function actionIssueconfirm2()
+    {
+        $issue_id = null;
+        $user_id = null;
+        $route_id = null;
+        $company_id = 1;
+        $branch_id = 1;
+        $status = 0;
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        $route_id = $req_data['route_id'];
+        $issue_id = $req_data['issue_id'];
+        $user_id = $req_data['user_id'];
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
+
+        $default_wh = 6;
+        if ($company_id == 1 && $branch_id == 2) {
+            $default_wh = 5;
+        }
+
+        $data = [];
+        if ($issue_id != null && $user_id != null) {
+            //$data = ['issue_id'=> $issue_id,'user_id'=>$user_id];
+            $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issue_id])->one();
+            $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
+            foreach ($model_issue_line as $val2) {
+                if ($val2->qty <= 0 || $val2->qty == null) continue;
+
+                $model_order_stock = new \common\models\OrderStock();
+                $model_order_stock->issue_id = $issue_id;
+                $model_order_stock->product_id = $val2->product_id;
+                $model_order_stock->qty = $val2->qty;
+                $model_order_stock->used_qty = 0;
+                $model_order_stock->avl_qty = $val2->qty;
+                $model_order_stock->order_id = 0;
+                $model_order_stock->route_id = $model_update_issue_status->delivery_route_id;
+                $model_order_stock->trans_date = date('Y-m-d');
+                $model_order_stock->company_id = $company_id;
+                $model_order_stock->branch_id = $branch_id;
+                if ($model_order_stock->save(false)) {
+
+                    if ($model_update_issue_status) {
+                        if ($model_update_issue_status->status != 2) {
+                            $model_update_issue_status->status = 2;
+                            if ($model_update_issue_status->save(false)) {
+
+                                $status = 1;
+                            }
+                        }
+
+                    }
+                    $this->updateStock($val2->product_id, $val2->qty, $default_wh, '', $company_id, $branch_id);
+                }
+            }
+
+            if ($status == 1) {
+                $model_update_order = \backend\models\Orders::find()->where(['delivery_route_id' => $route_id, 'date(order_date)' => strtotime(date('Y-m-d')),'status'=>1])->one();
+                if ($model_update_order) {
+                    $model_update_order->status = 99;
+                    $model_update_order->save(false);
                 }
             }
 //            $model = \backend\models\Journalissue::find()->where(['id' => $issue_id])->one();
