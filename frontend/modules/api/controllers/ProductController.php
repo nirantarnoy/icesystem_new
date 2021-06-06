@@ -17,6 +17,7 @@ class ProductController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'list' => ['POST'],
+                    'itemcodelist' => ['POST'],
                     'issuelist' => ['POST'],
                     'issuelist2' => ['POST'],
                 ],
@@ -48,6 +49,37 @@ class ProductController extends Controller
                         'code' => $product_info->code,
                         'name' => $product_info->name,
                         'sale_price' => $value->sale_price,
+                    ]);
+                }
+            }
+        }
+
+        return ['status' => $status, 'data' => $data];
+    }
+
+    public function actionItemcodelist()
+    {
+        $code = 0;
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        $code = $req_data['item_code'];
+
+        $data = [];
+        $status = false;
+
+        if ($code) {
+            $model = \common\models\Product::find()->where(['code' => $code])->all();
+            // $model = \common\models\QueryCustomerPrice::find()->all();
+            if ($model) {
+                $status = true;
+                foreach ($model as $value) {
+                   // $product_info = \backend\models\Product::findInfo($value->product_id);
+                    array_push($data, [
+                        'id' => $value->id,
+                        //'image' => 'http://192.168.1.120/icesystem/backend/web/uploads/images/products/' . $product_info->photo,
+                        //'image' => 'http://119.59.100.74/icesystem/backend/web/uploads/images/products/' . $product_info->photo,
+                        'code' => $value->code,
+                        'name' => $value->name,
                     ]);
                 }
             }
