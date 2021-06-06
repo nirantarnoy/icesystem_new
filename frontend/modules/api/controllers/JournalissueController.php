@@ -322,63 +322,16 @@ class JournalissueController extends Controller
         }
 
         $data = [];
-        if ($issue_id != null && $user_id != null) {
+        if ($issue_id != null && $company_id != null && $branch_id != null) {
             //$data = ['issue_id'=> $issue_id,'user_id'=>$user_id];
-            $has_order_stock = $this->checkhasOrderStock($route_id, $issue_id);
-            if ($has_order_stock == 0) {
-                $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issue_id])->one();
-                $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
-                foreach ($model_issue_line as $val2) {
-                    if ($val2->qty <= 0 || $val2->qty == null) continue;
-
-                    if ($this->ismasterproduct($val2->product_id)) { // T1 T2 ตัดสตํอกอย่างเดียวไม่ขึ้นรถ
-                        $this->updateStock($val2->product_id, $val2->qty, $default_wh, $model_update_issue_status->journal_no, $company_id, $branch_id);
-                        continue;
-                    }
-
-                    $model_order_stock = new \common\models\OrderStock();
-                    $model_order_stock->issue_id = $issue_id;
-                    $model_order_stock->product_id = $val2->product_id;
-                    $model_order_stock->qty = $val2->qty;
-                    $model_order_stock->used_qty = 0;
-                    $model_order_stock->avl_qty = $val2->qty;
-                    $model_order_stock->order_id = 0;
-                    $model_order_stock->route_id = $model_update_issue_status->delivery_route_id;
-                    $model_order_stock->trans_date = date('Y-m-d');
-                    $model_order_stock->company_id = $company_id;
-                    $model_order_stock->branch_id = $branch_id;
-                    if ($model_order_stock->save(false)) {
-                        //  $this->updateStock($prod_id[$i], $line_qty[$i], $default_warehouse, $model->journal_no, $company_id, $branch_id);
-                        if ($model_update_issue_status) {
-                            if ($model_update_issue_status->status != 2) {
-                                $model_update_issue_status->status = 2;
-                                if ($model_update_issue_status->save(false)) {
-                                    $status = 1;
-                                }
-                            }
-                        }
-                        // $this->updateStock($val2->product_id, $val2->qty, $default_wh, '', $company_id, $branch_id);
-                        $this->updateStock($val2->product_id, $val2->qty, $default_wh, $model_update_issue_status->journal_no, $company_id, $branch_id);
-                    }
-                }
-
-                if ($status == 1) {
-                    $model_update_order = \backend\models\Orders::find()->where(['order_channel_id' => $route_id, 'date(order_date)' => date('Y-m-d'), 'status' => 1])->one();
-                    if ($model_update_order) {
-                        $model_update_order->status = 99;
-                        $model_update_order->save(false);
-                    }
+            $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issue_id, 'company_id' => $company_id, 'branch_id' => $branch_id])->one();
+            if ($model_update_issue_status) {
+                $model_update_issue_status->status = 200; // 200 cancel
+                if ($model_update_issue_status->save(false)) {
+                    $status = 1;
+                    array_push($data, ['message' => 'cancel success']);
                 }
             }
-
-//            $model = \backend\models\Journalissue::find()->where(['id' => $issue_id])->one();
-//            if ($model) {
-//                $model->status = 2; //close
-//                $model->user_confirm = $user_id;
-//                if ($model->save()) {
-//                    $status = 1;
-//                }
-//            }
         }
         return ['status' => $status, 'data' => $data];
     }
@@ -446,10 +399,10 @@ class JournalissueController extends Controller
             // $model = \common\models\JournalIssue::find()->one();
             $model = \common\models\JournalIssue::find()->where(['delivery_route_id' => $route_id, 'date(trans_date)' => $trans_date, 'status' => 1])->one();
             if ($model) {
-                $model_line = \common\models\JournalIssueLine::find()->where(['issue_id'=>$model->id])->all();
-                if($model_line){
-                    foreach ($model_line as $value){
-                        if($value->qty <= 0)continue;
+                $model_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $model->id])->all();
+                if ($model_line) {
+                    foreach ($model_line as $value) {
+                        if ($value->qty <= 0) continue;
                         array_push($data, [
                             'has_record' => 1,
                             'issue_id' => $model->id,
