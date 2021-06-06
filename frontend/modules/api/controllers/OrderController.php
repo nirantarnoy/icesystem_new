@@ -833,16 +833,16 @@ class OrderController extends Controller
                     if ($model_update) {
                         $model_update->status = 100;
                         if ($model_update->save(false)) {
-                            $model_issue = \common\models\OrderStock::find()->distinct('issue_id')->where(['order_id' => $order_id])->all();
-                            if ($model_issue) {
-                                foreach ($model_issue as $value) {
-                                    $model_update_issue = \common\models\JournalIssue::find()->where(['id' => $value->issue_id])->one();
-                                    if ($model_update_issue) {
-                                        $model_update_issue->status = 100;
-                                        $model_update_issue->save(false);
-                                    }
-                                }
-                            }
+//                            $model_issue = \common\models\OrderStock::find()->distinct('issue_id')->where(['order_id' => $order_id])->all();
+//                            if ($model_issue) {
+//                                foreach ($model_issue as $value) {
+//                                    $model_update_issue = \common\models\JournalIssue::find()->where(['id' => $value->issue_id])->one();
+//                                    if ($model_update_issue) {
+//                                        $model_update_issue->status = 100;
+//                                        $model_update_issue->save(false);
+//                                    }
+//                                }
+//                            }
                         }
                         $status = 1;
                     }
