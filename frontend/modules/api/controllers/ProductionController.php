@@ -78,6 +78,21 @@ class ProductionController extends Controller
 
         return ['status' => $status, 'data' => $data];
     }
+    public function updateSummary($product_id, $wh_id, $qty){
+        if($wh_id != null && $product_id != null && $qty > 0){
+            $model = \backend\models\Stocksum::find()->where(['warehouse_id'=>$wh_id,'product_id'=>$product_id])->one();
+            if($model){
+                $model->qty = ($model->qty + (int)$qty);
+                $model->save(false);
+            }else{
+                $model_new = new \backend\models\Stocksum();
+                $model_new->warehouse_id = $wh_id;
+                $model_new->product_id = $product_id;
+                $model_new->qty = $qty;
+                $model_new->save(false);
+            }
+        }
+    }
     public function actionWarehouselist()
     {
         $company_id = 0;
