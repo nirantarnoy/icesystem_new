@@ -61,9 +61,13 @@ class ProductController extends Controller
     public function actionItemcodelist()
     {
         $code = 0;
+        $company_id = 0;
+        $branch_id = 0;
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $code = $req_data['item_code'];
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
 
         $data = [];
         $status = false;

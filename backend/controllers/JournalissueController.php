@@ -169,7 +169,7 @@ class JournalissueController extends Controller
                         $model_chk = \backend\models\Journalissueline::find()->where(['issue_id' => $model->id, 'product_id' => $prod_id[$i]])->one();
                         if ($model_chk) {
                             $model_chk->qty = $line_qty[$i];
-                            $model_chk->save();
+                            $model_chk->save(false);
                         } else {
                             $model_line = new \backend\models\Journalissueline();
                             $model_line->issue_id = $model->id;
@@ -177,7 +177,7 @@ class JournalissueController extends Controller
                             $model_line->qty = $line_qty[$i];
                             $model_line->sale_price = $line_issue_price[$i];
                             $model_line->status = 1;
-                            $model_line->save();
+                            $model_line->save(false);
                         }
                     }
                 }
