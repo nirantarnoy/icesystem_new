@@ -55,7 +55,7 @@ class Product extends \yii\db\ActiveRecord
             [['branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['branch_id' => 'id']],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'id']],
             [['barcode'],'string'],
-            [['stock_type','sale_status','is_pos_item','item_pos_seq','stock_on_car'],'integer']
+            [['stock_type','sale_status','is_pos_item','item_pos_seq','stock_on_car','master_product'],'integer']
         ];
     }
 
@@ -85,6 +85,7 @@ class Product extends \yii\db\ActiveRecord
             'barcode' => Yii::t('app', 'บาร์โค้ด'),
             'is_pos_item' => 'ใช้กับลูกค้าเงินสด POS',
             'stock_on_car' => 'สต๊อกบนรถ',
+            'master_product' => 'สินค้า master',
             'item_pos_seq' => 'ลำดับแสดงรายการ',
             'sale_status' => Yii::t('app', 'สถานะขาย'),
             'stock_type' => Yii::t('app', 'ตัดสต๊อก'),

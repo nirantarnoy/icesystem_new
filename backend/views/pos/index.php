@@ -9,6 +9,7 @@ use yii\web\Session;
 $filename = "empty";
 $is_print_do = "";
 $filename_do = "empty";
+$filename_car_pos = "empty";
 $order_do = "empty";
 
 
@@ -40,6 +41,13 @@ if (!empty(\Yii::$app->session->getFlash('msg-index-do')) && !empty(\Yii::$app->
     // echo $f_name;
     if (file_exists('../web/uploads/slip_do/' . $f_name)) {
         $filename_do = "../web/uploads/slip_do/" . $f_name;
+    }
+}
+if (!empty(\Yii::$app->session->getFlash('msg-index-car-pos')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
+    $f_name = \Yii::$app->session->getFlash('msg-index-car-pos');
+    // echo $f_name;
+    if (file_exists('../web/uploads/slip_car_pos/' . $f_name)) {
+        $filename_car_pos = "../web/uploads/slip_car_pos/" . $f_name;
     }
 }
 if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
@@ -241,10 +249,12 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
             <input type="hidden" class="print-type-doc" name="print_type_doc" value="">
 
             <div class="row">
-                <div class="col-lg-6" style="text-align: left">
+                <div class="col-lg-8" style="text-align: left">
                     <div class="btn-group">
                         <a id="modalButton" class="btn btn-primary"
                            href="<?= Url::to(['pos/createissue', 'id' => 'xx']); ?>">รับคำสั่งซื้อ(รถ)</a>
+                        <a id="modalListissue" class="btn btn-success"
+                           href="<?= Url::to(['pos/listissue']); ?>">ยืนยันคำสั่งซื้อ(รถ)</a>
                         <a href="index.php?r=pos/salehistory" class="btn btn-outline-info btn-history-cart"
                            style="display: noneผ">
                             ประวัติการขาย
@@ -256,7 +266,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                     </div>
 
                 </div>
-                <div class="col-lg-6" style="text-align: right">
+                <div class="col-lg-4" style="text-align: right">
                     <div class="btn btn-outline-secondary btn-cancel-cart" style="display: none">
                         ยกเลิกการขาย
                     </div>
@@ -852,6 +862,10 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
     <input type="hidden" class="slip-print-do" value="<?= $filename_do ?>">
     <iframe id="iFramePdfDo" src="<?= $filename_do ?>" style="display:none;"></iframe>
 </div>
+<div class="has-print-car-pos" data-var="<?= $filename_car_pos ?>">
+    <input type="hidden" class="slip-print-car-pos" value="<?= $filename_car_pos ?>">
+    <iframe id="iFramePdfCarPos" src="<?= $filename_car_pos ?>" style="display:none;"></iframe>
+</div>
 
 <form id="form-print-do" action="<?= \yii\helpers\Url::to(['pos/printdo'], true); ?>" method="post">
     <input type="hidden" class="order-do" name="order_id" value="<?= $order_do ?>">
@@ -862,6 +876,14 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
 Modal::begin([
     'title' => 'บันทึกรายการใบเบิกสินค้า',
     'id' => 'modal-issue',
+    'size' => 'modal-xl',
+]);
+echo "<div id='modalContent'></div>";
+Modal::end();
+
+Modal::begin([
+    'title' => 'ยืนยันใบเบิกสินค้า',
+    'id' => 'modal-issue-list',
     'size' => 'modal-xl',
 ]);
 echo "<div id='modalContent'></div>";
@@ -879,15 +901,21 @@ $url_to_create_do = \yii\helpers\Url::to(['pos/printdo'], true);
 
 $js = <<<JS
  $(function(){
-         $('#modalButton').click(function (){
-               
+         $('#modalButton').click(function (){               
             $.get($(this).attr('href'), function(data) {
               $('#modal-issue').modal('show').find('#modalContent').html(data)
            });
            return false;
         });
+        $('#modalListissue').click(function (){               
+            $.get($(this).attr('href'), function(data) {
+              $('#modal-issue-list').modal('show').find('#modalContent').html(data)
+           });
+           return false;
+        });
         var xx = $(".slip-print").val();
         var xx2 = $(".slip-print-do").val();
+        var xx3 = $(".slip-print-car-pos").val();
         //alert(xx);
         if(xx !="empty"){
            myPrint();
@@ -921,6 +949,11 @@ $js = <<<JS
         if(xx2 !="empty"){
           //  alert();
            myPrint2();
+        }
+        
+         if(xx3 !="empty"){
+          //  alert();
+           myPrint3();
         }
         
        
@@ -1666,6 +1699,16 @@ function myPrint2(){
    // alert(has_print_do);
     if(has_print_do != "" || has_print_do != null){
         var getMyFrame = document.getElementById('iFramePdfDo');
+        getMyFrame.focus();
+        getMyFrame.contentWindow.print();
+    }
+    
+}
+function myPrint3(){
+    var has_print_car_pos = $(".has-print-car-pos").attr("data-var");
+   // alert(has_print_do);
+    if(has_print_car_pos != "" || has_print_car_pos != null){
+        var getMyFrame = document.getElementById('iFramePdfCarPos');
         getMyFrame.focus();
         getMyFrame.contentWindow.print();
     }

@@ -41,7 +41,7 @@ class PosController extends Controller
                     [
                         'actions' => [
                             'logout', 'index', 'print', 'printindex', 'dailysum', 'getcustomerprice', 'getoriginprice', 'closesale',
-                            'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate', 'posttrans', 'saledailyend', 'printdo','createissue'
+                            'salehistory', 'getbasicprice', 'delete', 'orderedit', 'posupdate', 'posttrans', 'saledailyend', 'printdo','createissue','updatestock','listissue','updateissue'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -786,13 +786,23 @@ class PosController extends Controller
                         $model_line->sale_price = $line_issue_price[$i];
                         $model_line->status = 1;
                         if ($model_line->save()) {
-                            $this->updateStock($prod_id[$i], $line_qty[$i], $default_warehouse, $model->journal_no, $company_id, $branch_id);
+                            //$this->updatestock($prod_id[$i], $line_qty[$i], $default_warehouse, $model->journal_no, $company_id, $branch_id);
                         }
                     }
                 }
+
+                if ($model->id != null) {
+                    $model_print = \backend\models\Journalissue::find()->where(['id' => $model->id])->one();
+                    $model_line = \backend\models\Journalissueline::find()->where(['issue_id' => $model->id])->all();
+
+                    $this->renderPartial('_printissue', ['model' => $model, 'model_line' => $model_line, 'change_amount' => 0]);
+                }
+
                 $session = \Yii::$app->session;
+                $session->setFlash('msg-index-car-pos', 'slip.pdf');
+                $session->setFlash('after-save', true);
                 $session->setFlash('msg', 'บันทึกรายการเรียบร้อย');
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['pos/index']);
             }
 
         }
@@ -800,6 +810,111 @@ class PosController extends Controller
         return $this->renderAjax('_createissue', [
             'model' => $model,
         ]);
+    }
+
+    public function updatestock($product_id, $qty, $wh_id, $journal_no,$company_id, $branch_id)
+    {
+        if ($product_id != null && $qty > 0) {
+            $model_trans = new \backend\models\Stocktrans();
+            $model_trans->journal_no = $journal_no;
+            $model_trans->trans_date = date('Y-m-d H:i:s');
+            $model_trans->product_id = $product_id;
+            $model_trans->qty = $qty;
+            $model_trans->warehouse_id = $wh_id;
+            $model_trans->stock_type = 2; // 1 in 2 out
+            $model_trans->activity_type_id = 6; // 6 issue cars
+            $model_trans->company_id = $company_id;
+            $model_trans->branch_id = $branch_id;
+            if ($model_trans->save(false)) {
+                $model = \backend\models\Stocksum::find()->where(['warehouse_id' => $wh_id, 'product_id' => $product_id])->one();
+                if ($model) {
+                    $model->qty = $model->qty - (int)$qty;
+                    $model->save(false);
+                }
+            }
+        }
+    }
+
+    public function actionListissue(){
+        $pageSize = \Yii::$app->request->post("perpage");
+        $searchModel = new JournalissueSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
+        $dataProvider->query->andFilterWhere(['status'=>1]);
+        $dataProvider->pagination->pageSize = $pageSize;
+
+        return $this->renderAjax('_issuelist', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'perpage' => $pageSize,
+        ]);
+    }
+    public function actionUpdateissue($id){
+        $model = $this->findIssueModel($id);
+        $model_line = \backend\models\Journalissueline::find()->where(['issue_id' => $id])->all();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $prod_id = \Yii::$app->request->post('line_prod_id');
+            $line_qty = \Yii::$app->request->post('line_qty');
+            $line_issue_price = \Yii::$app->request->post('line_issue_line_price');
+
+            $removelist = \Yii::$app->request->post('removelist');
+
+            $x_date = explode('/', $model->trans_date);
+            $sale_date = date('Y-m-d');
+            if (count($x_date) > 1) {
+                $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
+            }
+
+            $model->trans_date = date('Y-m-d', strtotime($sale_date));
+            $model->status = 1;
+            if ($model->save()) {
+                if ($prod_id != null) {
+                    for ($i = 0; $i <= count($prod_id) - 1; $i++) {
+                        if ($prod_id[$i] == '') continue;
+
+                        $model_chk = \backend\models\Journalissueline::find()->where(['issue_id' => $model->id, 'product_id' => $prod_id[$i]])->one();
+                        if ($model_chk) {
+                            $model_chk->qty = $line_qty[$i];
+                            $model_chk->save();
+                        } else {
+                            $model_line = new \backend\models\Journalissueline();
+                            $model_line->issue_id = $model->id;
+                            $model_line->product_id = $prod_id[$i];
+                            $model_line->qty = $line_qty[$i];
+                            $model_line->sale_price = $line_issue_price[$i];
+                            $model_line->status = 1;
+                            $model_line->save();
+                        }
+                    }
+                }
+
+                if ($removelist != '') {
+                    $x = explode(',', $removelist);
+                    if (count($x) > 0) {
+                        for ($m = 0; $m <= count($x) - 1; $m++) {
+                            \common\models\Journalissueline::deleteAll(['id' => $x[$m]]);
+                        }
+                    }
+                }
+                $session = \Yii::$app->session;
+                $session->setFlash('msg', 'บันทึกรายการเรียบร้อย');
+                return $this->redirect(['pos/index']);
+            }
+        }
+
+        return $this->render('_createissue', [
+            'model' => $model,
+            'model_line' => $model_line
+        ]);
+    }
+    protected function findIssueModel($id)
+    {
+        if (($model = Journalissue::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
 
 }

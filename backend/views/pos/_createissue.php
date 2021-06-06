@@ -142,7 +142,8 @@ function getStock($prod_id, $warehouse)
                                            value="<?= $prod_stock ?>" min="0" disabled>
                                 </td>
                                 <td style="text-align: right">
-                                    <?= number_format($value2->qty); ?>
+                                    <input type="number" class="line-qty form-control" name="line_qty[]"
+                                           value="<?= $value2->qty ?>" min="0">
                                 </td>
                                 <td style="text-align: center">
                                     <?php if ($model->status == 1): ?>

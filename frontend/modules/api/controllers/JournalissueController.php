@@ -209,10 +209,11 @@ class JournalissueController extends Controller
         return ['status' => $status, 'data' => $data];
     }
 
-    public function checkhasOrderStock($route_id, $issue_id){
+    public function checkhasOrderStock($route_id, $issue_id)
+    {
         $res = 0;
-        if($route_id){
-            $res  = \common\models\OrderStock::find()->where(['issue_id'=>$issue_id,'route_id'=>$route_id])->count();
+        if ($route_id) {
+            $res = \common\models\OrderStock::find()->where(['issue_id' => $issue_id, 'route_id' => $route_id])->count();
         }
         return $res;
     }
@@ -241,12 +242,17 @@ class JournalissueController extends Controller
         $data = [];
         if ($issue_id != null && $user_id != null) {
             //$data = ['issue_id'=> $issue_id,'user_id'=>$user_id];
-            $has_order_stock = $this->checkhasOrderStock($route_id,$issue_id);
-            if($has_order_stock == 0){
+            $has_order_stock = $this->checkhasOrderStock($route_id, $issue_id);
+            if ($has_order_stock == 0) {
                 $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issue_id])->one();
                 $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
                 foreach ($model_issue_line as $val2) {
                     if ($val2->qty <= 0 || $val2->qty == null) continue;
+
+                    if ($this->ismasterproduct($val2->product_id)) { // T1 T2 ตัดสตํอกอย่างเดียวไม่ขึ้นรถ
+                        $this->updateStock($val2->product_id, $val2->qty, $default_wh, $model_update_issue_status->journal_no, $company_id, $branch_id);
+                        continue;
+                    }
 
                     $model_order_stock = new \common\models\OrderStock();
                     $model_order_stock->issue_id = $issue_id;
@@ -260,18 +266,17 @@ class JournalissueController extends Controller
                     $model_order_stock->company_id = $company_id;
                     $model_order_stock->branch_id = $branch_id;
                     if ($model_order_stock->save(false)) {
-
+                        //  $this->updateStock($prod_id[$i], $line_qty[$i], $default_warehouse, $model->journal_no, $company_id, $branch_id);
                         if ($model_update_issue_status) {
                             if ($model_update_issue_status->status != 2) {
                                 $model_update_issue_status->status = 2;
                                 if ($model_update_issue_status->save(false)) {
-
                                     $status = 1;
                                 }
                             }
-
                         }
-                        $this->updateStock($val2->product_id, $val2->qty, $default_wh, '', $company_id, $branch_id);
+                        // $this->updateStock($val2->product_id, $val2->qty, $default_wh, '', $company_id, $branch_id);
+                        $this->updateStock($val2->product_id, $val2->qty, $default_wh, $model_update_issue_status->journal_no, $company_id, $branch_id);
                     }
                 }
 
@@ -317,6 +322,18 @@ class JournalissueController extends Controller
                 }
             }
         }
+    }
+
+    public function ismasterproduct($product_id)
+    {
+        $res = 0;
+        if ($product_id) {
+            $model = \backend\models\Product::find()->where(['id' => $product_id])->one();
+            if ($model) {
+                $res = $model->master_product == null ? 0 : $model->master_product;
+            }
+        }
+        return $res;
     }
 
     public function actionCheckopen()
