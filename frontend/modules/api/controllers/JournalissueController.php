@@ -367,6 +367,7 @@ class JournalissueController extends Controller
                 $model_line = \common\models\JournalIssueLine::find()->where(['issue_id'=>$model->id])->all();
                 if($model_line){
                     foreach ($model_line as $value){
+                        if($value->qty <= 0)continue;
                         array_push($data, [
                             'has_record' => 1,
                             'issue_id' => $model->id,
