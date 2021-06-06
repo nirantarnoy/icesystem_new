@@ -248,10 +248,10 @@ class JournalissueController extends Controller
                 foreach ($model_issue_line as $val2) {
                     if ($val2->qty <= 0 || $val2->qty == null) continue;
 
-                    if ($this->ismasterproduct($val2->product_id)) { // T1 T2 ตัดสตํอกอย่างเดียวไม่ขึ้นรถ
-                        $this->updateStock($val2->product_id, $val2->qty, $default_wh, $model_update_issue_status->journal_no, $company_id, $branch_id);
-                        continue;
-                    }
+//                    if ($this->ismasterproduct($val2->product_id)) { // T1 T2 ตัดสตํอกอย่างเดียวไม่ขึ้นรถ
+//                        $this->updateStock($val2->product_id, $val2->qty, $default_wh, $model_update_issue_status->journal_no, $company_id, $branch_id);
+//                        continue;
+//                    }
 
                     $model_order_stock = new \common\models\OrderStock();
                     $model_order_stock->issue_id = $issue_id;
