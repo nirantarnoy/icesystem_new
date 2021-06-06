@@ -363,7 +363,7 @@ class JournalissueController extends Controller
     {
         $res = 0;
         if ($product_id) {
-            $model = \backend\models\Product::find()->where(['id' => $product_id])->one();
+            $model = \backend\models\Product::find()->where(['id' => $product_id,'master_product'=>1])->one();
             if ($model) {
                 $res = $model->master_product == null ? 0 : $model->master_product;
             }
