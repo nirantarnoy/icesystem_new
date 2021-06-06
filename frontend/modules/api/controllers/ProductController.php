@@ -73,7 +73,7 @@ class ProductController extends Controller
         $status = false;
 
         if ($code) {
-            $model = \common\models\Product::find()->where(['code' => $code])->all();
+            $model = \common\models\Product::find()->where(['code' => $code,'company_id'=>$company_id,'branch_id'=>$branch_id])->all();
             // $model = \common\models\QueryCustomerPrice::find()->all();
             if ($model) {
                 $status = true;
