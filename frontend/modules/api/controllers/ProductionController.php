@@ -25,16 +25,55 @@ class ProductionController extends Controller
 
     public function actionAddprodrec()
     {
+        $company_id = 0;
+        $branch_id = 0;
         $product_id = 0;
+        $warehouse_id = 0;
+        $user_id = 0;
+        $qty = 0;
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
         $product_id = $req_data['product_id'];
+        $warehouse_id = $req_data['warehouse_id'];
+        $qty = $req_data['qty'];
+        $user_id = $req_data['user_id'];
 
         $data = [];
         $status = false;
 
-        if ($product_id) {
+        if ($product_id && $warehouse_id && $qty) {
+            $model_journal = new \backend\models\Stockjournal();
+            $model_journal->journal_no = $model_journal->getLastNo($company_id,$branch_id);
+            $model_journal->trans_date = date('Y-m-d');
+            $model_journal->company_id = $company_id;
+            $model_journal->branch_id = $branch_id;
+            if($model_journal->save(false)){
+                    $model = new \backend\models\Stocktrans();
+                    $model->journal_no = $model_journal->journal_no;
+                    $model->journal_id = $model_journal->id;
+                    $model->trans_date = date('Y-m-d H:i:s');
+                    $model->product_id = $product_id;
+                    $model->qty = $qty;
+                    $model->warehouse_id = $warehouse_id;
+                    $model->stock_type = 1;
+                    $model->activity_type_id = 15; // 15 prod rec
+                    $model->company_id = $company_id;
+                    $model->branch_id = $branch_id;
+                    if($model->save()){
+                        $status = 1;
+                        $this->updateSummary($product_id,$warehouse_id,$qty);
+                    }
+            }
+            $model = \backend\models\Stockjournal::find()->where(['id' => $model_journal->id])->one();
+            $model_line = \backend\models\Stocktrans::find()->where(['journal_id' => $model_journal->id])->all();
 
+            $session = \Yii::$app->session;
+            $session->setFlash('msg-index', 'slip_prodrec_index.pdf');
+            $session->setFlash('after-save', true);
+
+          //  $this->renderPartial('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' => 0]);
         }
 
         return ['status' => $status, 'data' => $data];
