@@ -507,7 +507,7 @@ function showfind(e){
                   'url': "$url_to_get_standard_qty",
                   'data': {'product_id': product_id,'qty': qty},
                   'success': function(data) {
-                      alert(data);
+                    //  alert(data);
                     
                   }
              });

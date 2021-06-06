@@ -13,8 +13,12 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/admi
 $cururl = Yii::$app->controller->id;
 
 $has_group = '';
-if(isset($_SESSION['user_group_id'])){
-    $has_group = $_SESSION['user_group_id'];
+//if(isset($_SESSION['user_group_id'])){
+//    $has_group = $_SESSION['user_group_id'];
+//}
+
+if (!empty(\Yii::$app->user->identity->group_id)) {
+    $has_group = \Yii::$app->user->identity->group_id;
 }
 
 ?>

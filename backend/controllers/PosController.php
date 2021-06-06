@@ -769,7 +769,7 @@ class PosController extends Controller
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
             $model->journal_no = $model->getLastNo($sale_date, $company_id, $branch_id);
-            $model->trans_date = date('Y-m-d', strtotime($sale_date));
+            $model->trans_date = date('Y-m-d');
             $model->status = 1;
             $model->reason_id = 1;
             $model->company_id = $company_id;

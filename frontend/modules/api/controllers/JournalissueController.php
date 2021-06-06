@@ -364,11 +364,25 @@ class JournalissueController extends Controller
             // $model = \common\models\JournalIssue::find()->one();
             $model = \common\models\JournalIssue::find()->where(['delivery_route_id' => $route_id, 'date(trans_date)' => $trans_date, 'status' => 1])->one();
             if ($model) {
-                array_push($data, [
-                    'has_record' => 1,
-                    'issue_id' => $model->id,
-                    'status' => $model->status,
-                ]);
+                $model_line = \common\models\JournalIssueLine::find()->where()->all();
+                if($model_line){
+                    foreach ($model_line as $value){
+                        array_push($data, [
+                            'has_record' => 1,
+                            'issue_id' => $model->id,
+                            'product_id' => $value->product_id,
+                            'code' => \backend\models\Product::findCode($value->product_id),
+                            'name' => \backend\models\Product::findName($value->product_id),
+                            'qty' => $value->qty,
+                            'status' => $model->status,
+                        ]);
+                    }
+                }
+//                array_push($data, [
+//                    'has_record' => 1,
+//                    'issue_id' => $model->id,
+//                    'status' => $model->status,
+//                ]);
             } else {
                 array_push($data, [
                     'has_record' => 0,
