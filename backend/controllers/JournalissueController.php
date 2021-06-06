@@ -167,7 +167,7 @@ class JournalissueController extends Controller
                     for ($i = 0; $i <= count($prod_id) - 1; $i++) {
                         if ($prod_id[$i] == '') continue;
 
-                        $model_chk = \backend\models\Journalissueline::find()->where(['issue_id' => $model->id, 'product_id' => $prod_id[$i]])->one();
+                        $model_chk = \backend\models\Journalissueline::find()->where(['issue_id' => $id, 'product_id' => $prod_id[$i]])->one();
                         if ($model_chk) {
                            // echo 'ok';return;
                             $model_chk->qty = $line_qty[$i];
