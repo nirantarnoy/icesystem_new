@@ -162,13 +162,14 @@ class JournalissueController extends Controller
             $model->trans_date = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
             if ($model->save()) {
-                echo $model->id;return;
+
                 if ($prod_id != null) {
                     for ($i = 0; $i <= count($prod_id) - 1; $i++) {
                         if ($prod_id[$i] == '') continue;
 
                         $model_chk = \backend\models\Journalissueline::find()->where(['issue_id' => $model->id, 'product_id' => $prod_id[$i]])->one();
                         if ($model_chk) {
+                            echo 'ok';return;
                             $model_chk->qty = $line_qty[$i];
                             $model_chk->save(false);
                         } else {
