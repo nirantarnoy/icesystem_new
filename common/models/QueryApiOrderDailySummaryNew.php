@@ -24,6 +24,7 @@ use Yii;
  * @property int|null $product_id
  * @property string|null $product_code
  * @property string|null $product_name
+ * @property int|null $created_at
  */
 class QueryApiOrderDailySummaryNew extends \yii\db\ActiveRecord
 {
@@ -41,7 +42,7 @@ class QueryApiOrderDailySummaryNew extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'status', 'car_ref_id', 'customer_id', 'payment_method_id', 'sale_payment_method_id', 'order_line_id', 'product_id'], 'integer'],
+            [['id', 'status', 'car_ref_id', 'customer_id', 'payment_method_id', 'sale_payment_method_id', 'order_line_id', 'product_id', 'created_at'], 'integer'],
             [['order_date'], 'safe'],
             [['line_total', 'line_qty', 'price'], 'number'],
             [['order_no', 'code', 'name', 'product_code', 'product_name'], 'string', 'max' => 255],
@@ -71,6 +72,7 @@ class QueryApiOrderDailySummaryNew extends \yii\db\ActiveRecord
             'product_id' => 'Product ID',
             'product_code' => 'Product Code',
             'product_name' => 'Product Name',
+            'created_at' => 'Created At',
         ];
     }
 }
