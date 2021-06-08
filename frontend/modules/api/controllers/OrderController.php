@@ -443,7 +443,7 @@ class OrderController extends Controller
                 $sale_date = $t_date;
             }
 
-            $model = \common\models\QueryApiOrderDailySummaryNew::find()->where(['car_ref_id' => $car_id, 'date(order_date)' => $sale_date])->all();
+            $model = \common\models\QueryApiOrderDailySummaryNew::find()->where(['car_ref_id' => $car_id, 'date(order_date)' => $sale_date,'status'=>1])->all();
             // $model = \common\models\Orders::find()->where(['id'=>131])->all();
             //  $model = \common\models\Orders::find()->where(['car_ref_id' => $car_id])->all();
             if ($model) {
