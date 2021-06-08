@@ -20,6 +20,7 @@ class OrderController extends Controller
                     'addorder' => ['POST'],
                     'addordertransfer' => ['POST'],
                     'list' => ['POST'],
+                    'listnew' => ['POST'],
                     'listbycustomer' => ['POST'],
                     'deleteorder' => ['POST'],
                     'deleteorderline' => ['POST'],
@@ -416,6 +417,59 @@ class OrderController extends Controller
         return ['status' => $status, 'data' => $data];
     }
 
+    public function actionListnew()
+    {
+        $status = false;
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        $car_id = $req_data['car_id'];
+        $api_date = $req_data['order_date'];
+
+        $data = [];
+        if ($car_id) {
+
+            $sale_date = date('Y-m-d');
+            $t_date = null;
+            $exp_order_date = explode(' ', $api_date);
+            if ($exp_order_date != null) {
+                if (count($exp_order_date) > 1) {
+                    $x_date = explode('-', $exp_order_date[0]);
+                    if (count($x_date) > 1) {
+                        $t_date = $x_date[0] . "/" . $x_date[1] . "/" . $x_date[2];
+                    }
+                }
+            }
+            if ($t_date != null) {
+                $sale_date = $t_date;
+            }
+
+            $model = \common\models\QueryApiOrderDailySummaryNew::find()->where(['car_ref_id' => $car_id, 'date(order_date)' => $sale_date])->all();
+            // $model = \common\models\Orders::find()->where(['id'=>131])->all();
+            //  $model = \common\models\Orders::find()->where(['car_ref_id' => $car_id])->all();
+            if ($model) {
+                $status = true;
+                foreach ($model as $value) {
+                    array_push($data, [
+                        'id' => $value->id,
+                        'order_no' => $value->order_no,
+                        'order_date' => $value->order_date,
+                        'order_status' => $value->status,
+                        'customer_id' => $value->customer_id,
+                        'customer_code' => $value->code,
+                        'customer_name' => $value->name,
+                        'note' => '',
+                        'payment_method' => $value->payment_method_name,
+                        'payment_method_id' => $value->pay_type,
+                        'sale_payment_method_id' => $value->sale_payment_method_id,
+                        'total_amount' => $value->line_total == null ? 0 : $value->line_total,
+                        'total_qty' => $value->line_qty == null ? 0 : $value->line_qty,
+                    ]);
+                }
+            }
+        }
+        return ['status' => $status, 'data' => $data];
+    }
+
 
     public function actionAddordertransfer()
     {
@@ -630,8 +684,6 @@ class OrderController extends Controller
                         }
                     }
                 }
-
-
             }
 
         }
