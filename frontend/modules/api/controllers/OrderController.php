@@ -466,7 +466,7 @@ class OrderController extends Controller
                         'product_id' => $value->product_id,
                         'product_code' => $value->product_code,
                         'product_name' => $value->product_name,
-                        'order_line_date' => date('d-m-Y H:i', $value->created_at),
+                        'order_line_date' => date('d-m-Y H:i:s', $value->created_at),
                     ]);
                 }
             }
