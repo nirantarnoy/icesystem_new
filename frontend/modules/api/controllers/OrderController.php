@@ -679,7 +679,9 @@ class OrderController extends Controller
         if ($id) {
             $model_data = \backend\models\Orderline::find()->where(['id' => $id])->one();
             if ($model_data) {
-                $model_return_issue = \backend\models\Journalissueline::find()->where(['product_id' => $model_data->product_id, 'issue_id' => $model_data->issue_ref_id])->andFilterWhere(['>', 'qty', 0])->one();
+                // $model_return_issue = \backend\models\Journalissueline::find()->where(['product_id' => $model_data->product_id, 'issue_id' => $model_data->issue_ref_id])->andFilterWhere(['>', 'qty', 0])->one();
+                $model_return_issue = \common\models\OrderStock::find()->where(['product_id' => $model_data->product_id, 'issue_id' => $model_data->issue_id, 'order_id' => $model_data->order_id])->one();
+
                 if ($model_return_issue) {
                     $model_return_issue->avl_qty = (int)$model_return_issue->avl_qty + (int)$model_data->qty;
                     if ($model_return_issue->save(false)) {
