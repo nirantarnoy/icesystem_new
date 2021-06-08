@@ -866,7 +866,8 @@ class OrderController extends Controller
         $res = 0;
         if ($order_id != null && $company_id != null && $branch_id != null) {
             //   $model = \backend\models\Orders::find()->where(['order_channel_id' => $route_id, 'date(order_date)' => $f_date])->andFilterWhere(['<', 'status', 100])->one();
-            $model_close = \common\models\QuerySaleFinished::find()->where(['id' => $order_id])->all();
+           // $model_close = \common\models\QuerySaleFinished::find()->where(['id' => $order_id])->all();
+            $model_close = \common\models\OrderStock::find()->where(['order_id' => $order_id])->all();
             if ($model_close) {
                 foreach ($model_close as $value) {
                     if ($value->avl_qty <= 0 || $value->avl_qty == null) continue;
