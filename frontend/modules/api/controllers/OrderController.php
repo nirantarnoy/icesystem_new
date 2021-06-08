@@ -869,8 +869,12 @@ class OrderController extends Controller
            // $model_close = \common\models\QuerySaleFinished::find()->where(['id' => $order_id])->all();
             $model_close = \common\models\OrderStock::find()->where(['order_id' => $order_id])->all();
             if ($model_close) {
+                $x = 0;
                 foreach ($model_close as $value) {
-                    if ($value->avl_qty <= 0 || $value->avl_qty == null) continue;
+                    if ($value->avl_qty <= 0 || $value->avl_qty == null){
+                        $x+=1;
+                        continue;
+                    }
                     $model = new \backend\models\Stocktrans();
                     $model->journal_no = '';
                     $model->trans_date = date('Y-m-d H:i:s');
@@ -887,7 +891,7 @@ class OrderController extends Controller
                         $data = ['stock' => 'ok', 'order_id' => $order_id];
                     }
                 }
-                if ($res > 0) {
+                if ($res > 0 || $x == count($model_close)) {
                     $model_update = \backend\models\Orders::find()->where(['id' => $order_id])->one();
                     if ($model_update) {
                         $model_update->status = 100;
