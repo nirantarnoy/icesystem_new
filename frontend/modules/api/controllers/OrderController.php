@@ -458,11 +458,14 @@ class OrderController extends Controller
                         'customer_code' => $value->code,
                         'customer_name' => $value->name,
                         'note' => '',
-                        'payment_method' => $value->payment_method_name,
-                        'payment_method_id' => $value->pay_type,
                         'sale_payment_method_id' => $value->sale_payment_method_id,
-                        'total_amount' => $value->line_total == null ? 0 : $value->line_total,
-                        'total_qty' => $value->line_qty == null ? 0 : $value->line_qty,
+                        'line_total' => $value->line_total == null ? 0 : $value->line_total,
+                        'qty' => $value->line_qty == null ? 0 : $value->line_qty,
+                        'price' => $value->price == null ? 0 : $value->price,
+                        'order_line_id' => $value->order_line_id,
+                        'product_id' => $value->product_id,
+                        'product_code' => $value->product_code,
+                        'product_name' => $value->product_name,
                     ]);
                 }
             }
