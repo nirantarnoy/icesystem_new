@@ -420,10 +420,12 @@ class OrderController extends Controller
     public function actionListnew()
     {
         $status = false;
+        $searchcustomer = '';
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $car_id = $req_data['car_id'];
         $api_date = $req_data['order_date'];
+        $searchcustomer = $req_data['searchcustomer'];
 
         $data = [];
         if ($car_id) {
@@ -442,8 +444,13 @@ class OrderController extends Controller
             if ($t_date != null) {
                 $sale_date = $t_date;
             }
+            $model = null;
+            if($searchcustomer != ''){
+                $model = \common\models\QueryApiOrderDailySummaryNew::find()->where(['car_ref_id' => $car_id, 'date(order_date)' => $sale_date,'status'=>1,'customer_id'=>$searchcustomer])->all();
+            }else{
+                $model = \common\models\QueryApiOrderDailySummaryNew::find()->where(['car_ref_id' => $car_id, 'date(order_date)' => $sale_date,'status'=>1])->all();
+            }
 
-            $model = \common\models\QueryApiOrderDailySummaryNew::find()->where(['car_ref_id' => $car_id, 'date(order_date)' => $sale_date,'status'=>1])->all();
             // $model = \common\models\Orders::find()->where(['id'=>131])->all();
             //  $model = \common\models\Orders::find()->where(['car_ref_id' => $car_id])->all();
             if ($model) {
