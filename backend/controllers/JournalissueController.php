@@ -232,7 +232,7 @@ class JournalissueController extends Controller
         if ($route_id > 0) {
 //            $model = \backend\models\Customer::find()->select(['delivery_route_id'])->where(['delivery_route_id' => $route_id])->groupBy('delivery_route_id')->one();
 //            if ($model) {
-                $model_prod_price = \common\models\QueryCategoryPrice::find()->where(['delivery_route_id' => $route_id])->groupBy('product_id')->orderBy(['price_group_name' => SORT_ASC, 'product_id' => SORT_ASC])->all();
+                $model_prod_price = \common\models\QueryCategoryPrice::find()->where(['delivery_route_id' => $route_id])->groupBy('product_id')->orderBy(['product_id' => SORT_ASC])->all();
                 if ($model_prod_price) {
                     foreach ($model_prod_price as $value) {
                         $prod_stock = $this->getStock($value->product_id);
