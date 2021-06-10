@@ -52,7 +52,7 @@ class OrderController extends Controller
             $api_date = $req_data['order_date'];
             $customer_id = $req_data['customer_id'];
             $user_id = $req_data['user_id'] == null ? 0 : $req_data['user_id'];
-            $issue_id = $req_data['issue_id'];
+          //  $issue_id = $req_data['issue_id'];
             $route_id = $req_data['route_id'];
             $car_id = $req_data['car_id'];
             $payment_type_id = $req_data['payment_type_id'];
@@ -76,7 +76,7 @@ class OrderController extends Controller
             if ($has_order != null) {
                 $has_order_id = $has_order->id;
                 if ($has_order_id) {
-                    $this->registerissue($has_order_id, $issue_id, $company_id, $branch_id);
+                    //$this->registerissue($has_order_id, $issue_id, $company_id, $branch_id);
                     //$price = $this->findCustomerprice($customer_id, $product_id, $route_id);
 
                     if (count($datalist) > 0) {
@@ -94,11 +94,11 @@ class OrderController extends Controller
                                 $modelx->is_free = $is_free;
                                 if ($modelx->save(false)) {
                                     $status = true;
-                                    $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $issue_id, 'product_id' => $datalist[$i]['product_id']])->one();
-                                    if ($model_update_issue_line) {
-                                        $model_update_issue_line->avl_qty = ($model_update_issue_line->avl_qty - (int)$datalist[$i]['qty']);
-                                        $model_update_issue_line->save(false);
-                                    }
+//                                    $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $issue_id, 'product_id' => $datalist[$i]['product_id']])->one();
+//                                    if ($model_update_issue_line) {
+//                                        $model_update_issue_line->avl_qty = ($model_update_issue_line->avl_qty - (int)$datalist[$i]['qty']);
+//                                        $model_update_issue_line->save(false);
+//                                    }
                                 }
                             } else {
                                 $model_line = new \backend\models\Orderline();
@@ -182,7 +182,7 @@ class OrderController extends Controller
                 $model->sale_from_mobile = 1;
                 if ($model->save(false)) {
                     array_push($data, ['order_id' => $model->id]);
-                    $this->registerissue($model->id, $issue_id, $company_id, $branch_id);
+                    //$this->registerissue($model->id, $issue_id, $company_id, $branch_id);
                     //   $price = $this->findCustomerprice($customer_id, $product_id, $route_id);
 
                     if (count($datalist) > 0) {
