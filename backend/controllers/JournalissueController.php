@@ -234,17 +234,20 @@ class JournalissueController extends Controller
 //            if ($model) {
                 $model_prod_price = \common\models\QueryCategoryPrice::find()->where(['delivery_route_id' => $route_id])->groupBy('product_id')->orderBy(['product_id' => SORT_ASC])->all();
                 if ($model_prod_price) {
+                    $i=0;
                     foreach ($model_prod_price as $value) {
+                        $i+=1;
                         $prod_stock = $this->getStock($value->product_id);
                         $is_stock_on_car = $this->checkoncar($value->product_id);
                         $html .= '<tr>';
+                        $html .='<td style="text-align: center">'.$i.'</td>';
                         $html .= '<td>
                                 <input type="hidden" class="line-prod-id" name="line_prod_id[]"
                                        value="' . $value->product_id . '">
                                 ' . $value->code . '
                             </td>';
                         $html .= ' <td>' . $value->name . '</td>';
-                        $html .= ' <td>' . $value->price_group_name . '</td>';
+                      //  $html .= ' <td>' . $value->price_group_name . '</td>';
                         $html .= ' <td>' . $prod_stock . '</td>';
                         $html .= '
                                 <td>
