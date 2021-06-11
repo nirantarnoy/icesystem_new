@@ -27,7 +27,8 @@ class OrderController extends Controller
                     'deleteorderline' => ['POST'],
                     'deleteordercustomer' => ['POST'],
                     'customercredit' => ['POST'],
-                    'closeorder' => ['POST']
+                    'closeorder' => ['POST'],
+                    'cancelorer'=>['POST']
                 ],
             ],
         ];
@@ -1182,5 +1183,32 @@ class OrderController extends Controller
         }
     }
 
+    public function actionCancelorder(){
+        return $this->notifymessage('ทดสอบส่งข้อความยกเลิกรายการขายผ่าน line notify');
+    }
+    public function notifymessage($message)
+    {
+        //$message = "This is test send request from camel paperless";
+        $line_api = 'https://notify-api.line.me/api/notify';
+        $line_token = 'ug0EG9LGBKVeIBCPVZkeyVEHi4TxKrMOLjQ2LMIJHfj';
+        // $line_token = 'N3x9CANrOE3qjoAejRBLjrJ7FhLuTBPFuC9ToXh0szh';
+
+        // $queryData = array('message' => $message);
+        $queryData = array('message' => $message);
+        $queryData = http_build_query($queryData, '', '&');
+        $headerOptions = array(
+            'http' => array(
+                'method' => 'POST',
+                'header' => "Content-Type: application/x-www-form-urlencoded\r\n"
+                    . "Authorization: Bearer " . $line_token . "\r\n"
+                    . "Content-Length: " . strlen($queryData) . "\r\n",
+                'content' => $queryData
+            )
+        );
+        $context = stream_context_create($headerOptions);
+        $result = file_get_contents($line_api, FALSE, $context);
+        $res = json_decode($result);
+        return $res;
+    }
 
 }
