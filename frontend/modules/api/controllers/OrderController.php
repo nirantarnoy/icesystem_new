@@ -890,7 +890,7 @@ class OrderController extends Controller
                         'qty' => $value->qty,
                         'price' => $value->price,
                         'price_group_id' => '',
-                        'order_line_id' => \backend\models\Orderline::findStatus($value->line_id),
+                        'order_line_status' => \backend\models\Orderline::findStatus($value->line_id),
                     ]);
 
                 }
