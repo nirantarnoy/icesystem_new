@@ -1197,7 +1197,7 @@ class OrderController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $order_line_id = $req_data['line_id'];
-        $route_name = $req_data['route_id'];
+        $route_name = $req_data['route_name'];
         $order_no = $req_data['order_no'];
         $customer_code = $req_data['customer_code'];
         $product_code = $req_data['product_code'];
