@@ -28,7 +28,7 @@ class OrderController extends Controller
                     'deleteordercustomer' => ['POST'],
                     'customercredit' => ['POST'],
                     'closeorder' => ['POST'],
-                    'cancelorer'=>['POST']
+                    'cancelorer' => ['POST']
                 ],
             ],
         ];
@@ -53,7 +53,7 @@ class OrderController extends Controller
             $api_date = $req_data['order_date'];
             $customer_id = $req_data['customer_id'];
             $user_id = $req_data['user_id'] == null ? 0 : $req_data['user_id'];
-          //  $issue_id = $req_data['issue_id'];
+            //  $issue_id = $req_data['issue_id'];
             $route_id = $req_data['route_id'];
             $car_id = $req_data['car_id'];
             $payment_type_id = $req_data['payment_type_id'];
@@ -889,7 +889,8 @@ class OrderController extends Controller
                         'product_name' => $value->product_name,
                         'qty' => $value->qty,
                         'price' => $value->price,
-                        'price_group_id' => ''
+                        'price_group_id' => '',
+                        'order_line_id' => \backend\models\Orderline::findStatus($value->line_id),
                     ]);
 
                 }
@@ -1184,11 +1185,12 @@ class OrderController extends Controller
         }
     }
 
-    public function actionCancelorder(){
+    public function actionCancelorder()
+    {
         $status = 0;
 
         $order_line_id = 0;
-        $route_name="";
+        $route_name = "";
         $order_no = '';
         $customer_code = '';
         $product_code = '';
@@ -1206,18 +1208,18 @@ class OrderController extends Controller
 
         $data = [];
 
-        if($order_line_id != null ){
-            $model = \backend\models\Orderline::find()->where(['id'=>$order_line_id])->one();
-            if($model){
-                $model_order_stock = \common\models\OrderStock::find()->where(['order_id'=>$model->order_id,'product_id'=>$model->product_id])->one();
-                if($model_order_stock){
+        if ($order_line_id != null) {
+            $model = \backend\models\Orderline::find()->where(['id' => $order_line_id])->one();
+            if ($model) {
+                $model_order_stock = \common\models\OrderStock::find()->where(['order_id' => $model->order_id, 'product_id' => $model->product_id])->one();
+                if ($model_order_stock) {
                     $model_order_stock->avl_qty = $model_order_stock->avl_qty + $model->qty;
-                    if($model_order_stock->save(false)){
+                    if ($model_order_stock->save(false)) {
                         $model->status = 500;
-                        if($model->save(false)){
+                        if ($model->save(false)) {
                             $status = 1;
-                            array_push($data,['cancel_order'=>'successfully']);
-                            return $this->notifymessage('สายส่ง: '.$route_name.' ยกเลิกรายการขาย '.$order_no.' ลูกค้า: '.$customer_code.' เหตุผล: '.$reason);
+                            array_push($data, ['cancel_order' => 'successfully']);
+                            return $this->notifymessage('สายส่ง: ' . $route_name . ' ยกเลิกรายการขาย ' . $order_no . ' ลูกค้า: ' . $customer_code . ' เหตุผล: ' . $reason);
                         }
                     }
                 }
@@ -1225,6 +1227,7 @@ class OrderController extends Controller
         }
         return ['status' => $status, 'data' => $data];
     }
+
     public function notifymessage($message)
     {
         //$message = "This is test send request from camel paperless";
