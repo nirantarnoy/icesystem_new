@@ -1206,7 +1206,7 @@ class OrderController extends Controller
         $data = [];
 
 
-        return $this->notifymessage('ทดสอบส่งข้อความยกเลิกรายการขายผ่าน line notify');
+        return $this->notifymessage('สายส่ง:'.$route_name.' ยกเลิกรายการขาย '.$order_no.' ลูกค้า: '.$customer_code.' เหตุผล: '.$reason);
     }
     public function notifymessage($message)
     {
