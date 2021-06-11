@@ -53,7 +53,7 @@ class Orderline extends \common\models\OrderLine
     public function findStatus($id)
     {
         $model = Orderline::find()->where(['id' => $id])->one();
-        return count($model) > 0 ? $model->status : 0;
+        return $model != null? $model->status : 0;
     }
 //    public function findName($id){
 //        $model = Unit::find()->where(['id'=>$id])->one();
