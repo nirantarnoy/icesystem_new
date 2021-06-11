@@ -714,6 +714,7 @@ class OrderController extends Controller
                         'product_code' => $value->product_code,
                         'product_name' => $value->product_name,
                         'order_line_date' => date('d-m-Y H:i:s', $value->created_at),
+                        'order_line_status' => $value->order_line_status,
                     ]);
                 }
             }
@@ -1205,8 +1206,24 @@ class OrderController extends Controller
 
         $data = [];
 
-
-        return $this->notifymessage('สายส่ง:'.$route_name.' ยกเลิกรายการขาย '.$order_no.' ลูกค้า: '.$customer_code.' เหตุผล: '.$reason);
+        if($order_line_id != null ){
+            $model = \backend\models\Orderline::find()->where(['id'=>$order_line_id])->one();
+            if($model){
+                $model_order_stock = \common\models\OrderStock::find()->where(['order_id'=>$model->order_id,'product_id'=>$model->product_id])->one();
+                if($model_order_stock){
+                    $model_order_stock->avl_qty = $model_order_stock->avl_qty + $model->qty;
+                    if($model_order_stock->save(false)){
+                        $model->status = 500;
+                        if($model->save(false)){
+                            $status = 1;
+                            array_push($data,['cancel_order'=>'successfully']);
+                            return $this->notifymessage('สายส่ง: '.$route_name.' ยกเลิกรายการขาย '.$order_no.' ลูกค้า: '.$customer_code.' เหตุผล: '.$reason);
+                        }
+                    }
+                }
+            }
+        }
+        return ['status' => $status, 'data' => $data];
     }
     public function notifymessage($message)
     {
