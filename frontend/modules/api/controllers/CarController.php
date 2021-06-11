@@ -24,12 +24,14 @@ class CarController extends Controller
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
-       // $route_id = $req_data['route_id'];
+        $car_id = $req_data['car_id'];
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
 
         $data = [];
         $status = false;
-        //if($route_id){
-            $model = \common\models\Car::find()->all();
+        if($company_id && $branch_id && $car_id){
+            $model = \common\models\QueryCarRoute::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->andFilterWhere(['!=','id',$car_id])->all();
             //$model = \common\models\Car::find()->where(['delivery_route_id'=>$route_id])->all();
             if ($model) {
                 $status = true;
@@ -38,11 +40,12 @@ class CarController extends Controller
                         'id' => $value->id,
                         'code' => $value->code,
                         'name' => $value->name,
-                       // 'route_id' => $value->delivery_route_id
+                        'route_id' => $value->delivery_route_id,
+                        'route_name' => $value->route_name
                     ]);
                 }
             }
-       // }
+        }
 
         return ['status' => $status, 'data' => $data];
     }

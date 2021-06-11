@@ -42,7 +42,8 @@ class RunnoTitle
         18 => 'เบิกเติม',
         19 => 'โอนระหว่างสาขา',
         20 => 'เบิกแปรสภาพ',
-        21 => 'รับเข้าแปรสภาพ'
+        21 => 'รับเข้าแปรสภาพ',
+        22 => 'โอนระหว่างรถ'
     ];
 
     private static $dataobj = [
@@ -66,7 +67,8 @@ class RunnoTitle
         ['id' => 18, 'name' => 'เบิกเติม', 'prefix' => 'IF'],
         ['id' => 19, 'name' => 'โอนระหว่างสาขา', 'prefix' => 'TB'],
         ['id' => 20, 'name' => 'เบิกแปรสภาพ', 'prefix' => 'IT'],
-        ['id' => 21, 'name' => 'รับเข้าแปรสภาพ', 'prefix' => 'RT']
+        ['id' => 21, 'name' => 'รับเข้าแปรสภาพ', 'prefix' => 'RT'],
+        ['id' => 22, 'name' => 'โอนระหว่างรถ', 'prefix' => 'TC']
     ];
 
     public static function asArray()

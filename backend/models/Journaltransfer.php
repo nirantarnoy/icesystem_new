@@ -81,5 +81,26 @@ class Journaltransfer extends \common\models\JournalTransfer
             return $prefix.'0001';
         }
     }
+    public static function getLastNo2($date,$company_id,$branch_id){
+        //   $model = Orders::find()->MAX('order_no');
+        $model = Journaltransfer::find()->where(['date(trans_date)'=>date('Y-m-d',strtotime($date)),'company_id'=>$company_id,'branch_id'=>$branch_id])->MAX('journal_no');
+
+        $pre = "TF";
+        if($model != null){
+            $prefix =$pre.'-'.substr(date("Y"),2,2).date('m',strtotime($date)).date('d',strtotime($date)).'-';
+            $cnum = substr((string)$model, 10, strlen($model));
+            $len = strlen($cnum);
+            $clen = strlen($cnum + 1);
+            $loop = $len - $clen;
+            for($i=1;$i<=$loop;$i++){
+                $prefix.="0";
+            }
+            $prefix.=$cnum + 1;
+            return $prefix;
+        }else{
+            $prefix =$pre.'-'.substr(date("Y"),2,2).date('m',strtotime($date)).date('d',strtotime($date)).'-';
+            return $prefix.'0001';
+        }
+    }
 
 }
