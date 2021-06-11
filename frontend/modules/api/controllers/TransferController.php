@@ -33,27 +33,21 @@ class TransferController extends Controller
         $req_data = \Yii::$app->request->getBodyParams();
 
         $from_car_id = $req_data['from_car_id'];
+        $to_route_id = $req_data['to_route_id'];
         $to_car_id = $req_data['to_car_id'];
         $data_list = $req_data['data'];
         $company_id = $req_data['company_id'];
         $branch_id = $req_data['branch_id'];
         $route_id = $req_data['route_id'];
-//        $qty = $req_data['qty'];
-//        $sale_price = $req_data['price'];
-
-//        $order_id = \Yii::$app->request->post('transfer_order_id');
-//        $order_target_id = \Yii::$app->request->post('order_target');
-//        $line_prod = \Yii::$app->request->post('line_issue_product_id');
-//        $line_qty = \Yii::$app->request->post('line_trans_qty');
 
 
-        if ($from_car_id != null && $to_car_id != null && $company_id != null && $branch_id != null && $route_id != null) {
+        if ($from_car_id != null && $to_route_id != null && $company_id != null && $branch_id != null && $route_id != null) {
             //if ($data_list != null) {
-            $to_route_id = 0;
-            $model_to_route = \common\models\QueryCarRoute::find()->where(['id' => $to_car_id])->one();
-            if($model_to_route){
-                $to_route_id = $model_to_route->delivery_route_id;
-            }
+//            $to_route_id = 0;
+//            $model_to_route = \common\models\QueryCarRoute::find()->where(['id' => $to_car_id])->one();
+//            if($model_to_route){
+//                $to_route_id = $model_to_route->delivery_route_id;
+//            }
             if($to_route_id){
                 $trans_date = date('Y/m/d');
                 $model = new \backend\models\Journaltransfer();
@@ -98,7 +92,9 @@ class TransferController extends Controller
                                             $model_new_order_stock->trans_date = date('Y-m-d H:i:s');
                                             $model_new_order_stock->company_id = $company_id;
                                             $model_new_order_stock->branch_id = $branch_id;
-                                            $model_new_order_stock->save();
+                                            if($model_new_order_stock->save()){
+                                                $this->createTransaction($data_list[$i]['product_id'], $data_list[$i]['qty'], $to_car_id, $model->journal_no, 1); // in
+                                            }
                                         }
                                     }
                                 }
