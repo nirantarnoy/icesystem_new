@@ -105,7 +105,7 @@ class TransferController extends Controller
         $branch_id = $req_data['branch_id'];
 
         if ($route_id != null && $company_id != null && $branch_id != null) {
-            $model = \backend\models\Journaltransfer::find()->where(['to_route_id' => $route_id, 'date(trans_date)' => date('Y-m-d'), 'status' => 1])->all();
+            $model = \backend\models\Journaltransfer::find()->where(['to_route_id' => $route_id, 'date(trans_date)' => date('Y-m-d')])->all();
             if ($model) {
                 $status = 1;
                 foreach ($model as $value) {
@@ -114,7 +114,8 @@ class TransferController extends Controller
                         'journal_no' => $value->journal_no,
                         'journal_date' => $value->trans_date,
                         'from_route_id' => $value->from_route_id,
-                        'from_route_name' => \backend\models\Deliveryroute::findName($value->from_route_id)
+                        'from_route_name' => \backend\models\Deliveryroute::findName($value->from_route_id),
+                        'transfer_status' => $value->status,
                     ]);
                 }
             }
