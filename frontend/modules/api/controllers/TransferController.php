@@ -219,13 +219,13 @@ class TransferController extends Controller
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
-        $car_id = $req_data['car_id'];
+        $transfer_id = $req_data['transfer_id'];
 
         $data = [];
         $status = false;
-        if ($car_id) {
+        if ($transfer_id) {
             //  $model = \common\models\JournalTransfer::find()->where(['delivery_route_id'=>$route_id])->all();
-            $model = \common\models\JournalTransfer::find()->where(['to_car_id' => $car_id])->all();
+            $model = \common\models\JournalTransfer::find()->where(['id' => $transfer_id])->all();
             if ($model) {
                 $status = true;
                 foreach ($model as $value) {
