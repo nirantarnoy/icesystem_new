@@ -132,13 +132,13 @@ class TransferController extends Controller
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
-        $journal_id = $req_data['journal_id'];
+        $transfer_id = $req_data['transfer_id'];
         $user_id = $req_data['user_id'];
         $company_id = $req_data['company_id'];
         $branch_id = $req_data['branch_id'];
 
-        if ($journal_id != null && $company_id != null && $branch_id != null && $user_id != null) {
-            $model = \backend\models\Journaltransfer::find()->where(['id' => $journal_id, 'status' => 1])->one();
+        if ($transfer_id != null && $company_id != null && $branch_id != null && $user_id != null) {
+            $model = \backend\models\Journaltransfer::find()->where(['id' => $transfer_id, 'status' => 1])->one();
             if ($model) {
                 $model_line = \backend\models\Transferline::find()->where(['transfer_id' => $model->id])->all();
                 if ($model_line) {
@@ -176,7 +176,6 @@ class TransferController extends Controller
                 if ($model->save(false)) {
                     $status = 1;
                 }
-
             }
         }
         return ['status' => $status, 'data' => $data];
