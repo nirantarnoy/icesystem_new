@@ -1812,10 +1812,25 @@ class OrdersController extends Controller
     public function actionRegisterissue()
     {
 
+        $company_id = 1;
+        $branch_id = 1;
+        $default_warehouse = 6;
+
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+            if($branch_id == 2){
+                $default_warehouse = 5;
+            }
+        }
+
         $order_id = \Yii::$app->request->post('order_id');
         $issuelist = \Yii::$app->request->post('issue_list');
 
-        if ($order_id != null && $issuelist != null) {
+        //  if ($order_id != null && $issuelist != null) {
+        if ($issuelist != null) {
             //  $issue_data = explode(',', $issuelist);
 //            print_r($issuelist[0]);
             if ($issuelist != null) {
@@ -1838,7 +1853,7 @@ class OrdersController extends Controller
                                 $model_check_has_issue->status = 2;
                                 $model_check_has_issue->save(false);
                             }
-                            $this->updateStock($val2->product_id, $val2->qty, 6, '');
+                            $this->updateStock($val2->product_id, $val2->qty, $default_warehouse, '');
                         }
                     }
                 }
@@ -1854,11 +1869,11 @@ class OrdersController extends Controller
             $model_trans->trans_date = date('Y-m-d H:i:s');
             $model_trans->product_id = $product_id;
             $model_trans->qty = $qty;
-            $model_trans->warehouse_id = 6;
+            $model_trans->warehouse_id = $wh_id;
             $model_trans->stock_type = 2; // 1 in 2 out
             $model_trans->activity_type_id = 6; // 6 issue car
             if ($model_trans->save(false)) {
-                $model = \backend\models\Stocksum::find()->where(['warehouse_id' => 6, 'product_id' => $product_id])->one();
+                $model = \backend\models\Stocksum::find()->where(['warehouse_id' => $wh_id, 'product_id' => $product_id])->one();
                 if ($model) {
                     $model->qty = $model->qty - (int)$qty;
                     $model->save(false);
