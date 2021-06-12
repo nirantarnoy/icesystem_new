@@ -111,7 +111,7 @@ class TransferController extends Controller
                 foreach ($model as $value) {
                     array_push($data, [
                         'transfer_id' => $value->id,
-                        'journal_no' => $value->journ_no,
+                        'journal_no' => $value->journal_no,
                         'journal_date' => $value->trans_date,
                         'from_route_id' => $value->from_route_id,
                         'from_route_name' => \bckend\models\Deliveryroute::findName($value->from_route_id)
