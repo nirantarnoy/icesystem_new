@@ -114,7 +114,7 @@ class TransferController extends Controller
                         'journal_no' => $value->journal_no,
                         'journal_date' => $value->trans_date,
                         'from_route_id' => $value->from_route_id,
-                        'from_route_name' => \bckend\models\Deliveryroute::findName($value->from_route_id)
+                        'from_route_name' => \backend\models\Deliveryroute::findName($value->from_route_id)
                     ]);
                 }
             }
