@@ -17,6 +17,7 @@ class TransferController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'outlist' => ['POST'],
+                    'outlistnew' => ['POST'],
                     'inlist' => ['POST'],
                     'addtransfer' => ['POST'],
                     'findtransfer' => ['POST'],
@@ -243,11 +244,50 @@ class TransferController extends Controller
                                 'product_name' => \backend\models\Product::findName($value2->product_id),
                                 'qty' => $value2->avl_qty,
                                 'sale_price' => $value2->sale_price,
+                                'transfer_status' => $model->status,
                             ]);
                         }
                     }
 
                 }
+            }
+        }
+
+        return ['status' => $status, 'data' => $data];
+    }
+
+    public function actionOutlistnew()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        $route_id = $req_data['route_id'];
+
+        $data = [];
+        $status = false;
+        if ($route_id != null || $route_id != '') {
+            //  $model = \common\models\JournalTransfer::find()->where(['delivery_route_id'=>$route_id])->all();
+            $model = \common\models\JournalTransfer::find()->where(['from_route_id' => $route_id])->all();
+            if ($model) {
+                $status = true;
+                array_push($data, [
+                    'transfer_id' => $model->id,
+                    'journal_no' => $model->journal_no,
+                    'to_route_id' => $model->to_route_id,
+                    'to_route_name' => \backend\models\Deliveryroute::findName($model->to_route_id),
+                    'transfer_status' => $model->status,
+                ]);
+//                foreach ($model as $value) {
+//                    $model_line_qty = \common\models\TransferLine::find()->where(['transfer_id' => $value->id])->sum('qty');
+//
+//                    array_push($data, [
+//                        'transfer_id' => $value->id,
+//                        'journal_no' => $value->journal_no,
+//                        'to_route' => $value->order_target_id,
+//                        'to_car_no' => \backend\models\Car::findName($value->to_car_id),
+//                        'to_order_no' => $value->order_ref_id,
+//                        'qty' => $model_line_qty
+//                    ]);
+//                }
             }
         }
 
