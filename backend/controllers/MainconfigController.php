@@ -142,8 +142,8 @@ class MainconfigController extends Controller
                     $payment_term = $this->checkPayterm($rowData[14]);
 
                     $modelx = new \backend\models\Customer();
-                   // $modelx->code = $rowData[0];
-                    $modelx->code = $modelx->getLastNo(1,2);
+                    // $modelx->code = $rowData[0];
+                    $modelx->code = $modelx->getLastNo(1, 2);
                     $modelx->name = $rowData[1];
                     $modelx->description = $rowData[11];
                     $modelx->contact_name = $rowData[9];
@@ -156,7 +156,7 @@ class MainconfigController extends Controller
                     $modelx->address2 = $rowData[8];
                     $modelx->phone = $rowData[10];
                     $modelx->sort_name = $rowData[16];
-                    //  $modelx->payment_method_id = $payment_method;
+                    $modelx->payment_method_id = $payment_method;
                     $modelx->payment_term_id = $payment_term;
                     $modelx->status = 1;
                     $modelx->company_id = 1;
@@ -320,7 +320,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($name != '') {
-            $model = \backend\models\Paymentmethod::find()->where(['code' => $name, 'company_id' => 1, 'branch_id' => 2])->one();
+            $model = \backend\models\Paymentmethod::find()->where(['code' => trim($name), 'company_id' => 1, 'branch_id' => 2])->one();
             if ($model) {
                 $id = $model->id;
             } else {
