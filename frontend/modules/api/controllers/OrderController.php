@@ -1110,10 +1110,12 @@ class OrderController extends Controller
         if ($company_id == 1 && $branch_id == 2) {
             $default_wh = 5;
         }
+        $reprocess_wh = 0;
 
         $data = [];
         $res = 0;
         if ($order_id != null && $company_id != null && $branch_id != null) {
+            $reprocess_wh = $this->findReprocesswh($company_id,$branch_id);
             //   $model = \backend\models\Orders::find()->where(['order_channel_id' => $route_id, 'date(order_date)' => $f_date])->andFilterWhere(['<', 'status', 100])->one();
             // $model_close = \common\models\QuerySaleFinished::find()->where(['id' => $order_id])->all();
             $model_close = \common\models\OrderStock::find()->where(['order_id' => $order_id])->all();
@@ -1135,7 +1137,7 @@ class OrderController extends Controller
                     $model->company_id = $company_id;
                     $model->branch_id = $branch_id;
                     if ($model->save()) {
-                        $this->updateSummary($value->product_id, $default_wh, $value->avl_qty, $company_id, $branch_id);
+                        $this->updateSummary($value->product_id, $reprocess_wh, $value->avl_qty, $company_id, $branch_id);
                         $res += 1;
                         $data = ['stock' => 'ok', 'order_id' => $order_id];
                     }
@@ -1183,6 +1185,17 @@ class OrderController extends Controller
                 $model_new->save(false);
             }
         }
+    }
+
+    public function findReprocesswh($company_id,$branch_id){
+        $id = 0;
+        if($company_id && $branch_id){
+            $model = \backend\models\Warehouse::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id,'is_reprocess'=>1])->one();
+            if($model){
+                $id = $model->id;
+            }
+        }
+        return $id;
     }
 
     public function actionCancelorder()
