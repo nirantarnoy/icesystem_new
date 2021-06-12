@@ -19,6 +19,9 @@ class TransferController extends Controller
                     'outlist' => ['POST'],
                     'inlist' => ['POST'],
                     'addtransfer' => ['POST'],
+                    'findtransfer' => ['POST'],
+                    'accepttransfer' => ['POST'],
+                    'canceltransfer' => ['POST'],
                 ],
             ],
         ];
@@ -48,7 +51,7 @@ class TransferController extends Controller
 //            if($model_to_route){
 //                $to_route_id = $model_to_route->delivery_route_id;
 //            }
-            if($to_route_id){
+            if ($to_route_id) {
                 $trans_date = date('Y/m/d');
                 $model = new \backend\models\Journaltransfer();
                 $model->journal_no = $model->getLastNo2($trans_date, $company_id, $branch_id);
@@ -57,6 +60,10 @@ class TransferController extends Controller
                 $model->order_target_id = 1;
                 $model->from_car_id = $from_car_id;
                 $model->to_car_id = $to_car_id;
+                $model->from_route_id = $route_id;
+                $model->to_route_id = $to_route_id;
+                $model->company_id = $company_id;
+                $model->branch_id = $branch_id;
                 $model->status = 1;
                 if ($model->save(false)) {
                     if (count($data_list) > 0) {
@@ -71,35 +78,6 @@ class TransferController extends Controller
                             $model_line->avl_qty = $data_list[$i]['qty'];
                             $model_line->status = 1;
                             if ($model_line->save(false)) {
-
-//                                $model_from_order_stock = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $data_list[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->one();
-//                                if ($model_from_order_stock) {
-//                                    $model_from_order_stock->avl_qty = ($model_from_order_stock->avl_qty - $data_list[$i]['qty']);
-//                                    if ($model_from_order_stock->save(false)) {
-//                                        $this->createTransaction($data_list[$i]['product_id'], $data_list[$i]['qty'], $from_car_id, $model->journal_no, 2); // out
-//                                        $model_from_order_to_stock = \common\models\OrderStock::find()->where(['route_id' => $to_route_id, 'product_id' => $data_list[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->one();
-//                                        if($model_from_order_to_stock){
-//                                            $model_from_order_to_stock->avl_qty = ($model_from_order_to_stock->avl_qty + $data_list[$i]['qty']);
-//                                            if($model_from_order_to_stock->save(false)){
-//                                                $this->createTransaction($data_list[$i]['product_id'], $data_list[$i]['qty'], $to_car_id, $model->journal_no, 1); // in
-//                                            }
-//                                        }else{
-//                                            $model_new_order_stock = new \common\models\OrderStock();
-//                                            $model_new_order_stock->product_id  = $data_list[$i]['product_id'];
-//                                            $model_new_order_stock->route_id  = $to_route_id;
-//                                            $model_new_order_stock->qty  = $data_list[$i]['qty'];
-//                                            $model_new_order_stock->avl_qty  = $data_list[$i]['qty'];
-//                                            $model_new_order_stock->trans_date = date('Y-m-d H:i:s');
-//                                            $model_new_order_stock->company_id = $company_id;
-//                                            $model_new_order_stock->branch_id = $branch_id;
-//                                            if($model_new_order_stock->save()){
-//                                                $this->createTransaction($data_list[$i]['product_id'], $data_list[$i]['qty'], $to_car_id, $model->journal_no, 1); // in
-//                                            }
-//                                        }
-//                                    }
-//                                }
-
-
                                 //$this->updateIssue($data_list[$i]['issue_id'], $data_list[$i]['product_id'], $data_list[$i]['qty']);
                                 $status = true;
                             }
@@ -111,6 +89,102 @@ class TransferController extends Controller
             // }
         }
         return ['status' => $status, 'data' => count($data_list)];
+    }
+
+    public function actionFindtransfer()
+    {
+        $status = 0;
+        $data = [];
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+
+        $route_id = $req_data['route_id'];
+        $trans_date = $req_data['trans_date'];
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
+
+        if ($route_id != null && $company_id != null && $branch_id != null) {
+            $model = \backend\models\Journaltransfer::find()->where(['to_route_id' => $route_id, 'date(trans_date)' => date('Y-m-d'), 'status' => 1])->all();
+            if ($model) {
+                $status = 1;
+                foreach ($model as $value) {
+                    array_push($data, [
+                        'transfer_id' => $value->id,
+                        'journal_no' => $value->journ_no,
+                        'journal_date' => $value->trans_date,
+                        'from_route_id' => $value->from_route_id,
+                        'from_route_name' => \bckend\models\Deliveryroute::findName($value->from_route_id)
+                    ]);
+                }
+            }
+        }
+
+
+        return ['status' => $status, 'data' => $data];
+    }
+
+
+    public function actionAccepttransfer()
+    {
+        $status = 0;
+        $data = [];
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        $journal_id = $req_data['journal_id'];
+        $user_id = $req_data['user_id'];
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
+
+        if ($journal_id != null && $company_id != null && $branch_id != null && $user_id != null) {
+            $model = \backend\models\Journaltransfer::find()->where(['id' => $journal_id, 'status' => 1])->one();
+            if ($model) {
+                $model_line = \backend\models\Transferline::find()->where(['transfer_id' => $model->id])->all();
+                if ($model_line) {
+                    foreach ($model_line as $value) {
+                        $model_from_order_stock = \common\models\OrderStock::find()->where(['route_id' => $model->from_route_id, 'product_id' => $value->product_id, 'date(trans_date)' => date('Y-m-d')])->one();
+                        if ($model_from_order_stock) {
+                            $model_from_order_stock->avl_qty = ($model_from_order_stock->avl_qty - $value->qty);
+                            if ($model_from_order_stock->save(false)) {
+                                $this->createTransaction($value->product_id, $value->qty, $model->from_car_id, $model->journal_no, 2); // out
+
+                                $model_from_order_to_stock = \common\models\OrderStock::find()->where(['route_id' => $model->to_route_id, 'product_id' => $value->product_id, 'date(trans_date)' => date('Y-m-d')])->one();
+                                if ($model_from_order_to_stock) {
+                                    $model_from_order_to_stock->avl_qty = ($model_from_order_to_stock->avl_qty + $value->qty);
+                                    if ($model_from_order_to_stock->save(false)) {
+                                        $this->createTransaction($value->product_id, $value->qty, $model->to_car_id, $model->journal_no, 1); // in
+                                    }
+                                } else {
+                                    $model_new_order_stock = new \common\models\OrderStock();
+                                    $model_new_order_stock->product_id = $value->product_id;
+                                    $model_new_order_stock->route_id = $model->to_route_id;
+                                    $model_new_order_stock->qty = $value->qty;
+                                    $model_new_order_stock->avl_qty = $value->qty;
+                                    $model_new_order_stock->trans_date = date('Y-m-d H:i:s');
+                                    $model_new_order_stock->company_id = $company_id;
+                                    $model_new_order_stock->branch_id = $branch_id;
+                                    if ($model_new_order_stock->save()) {
+                                        $this->createTransaction($value->product_id, $value->qty, $model->to_car_id, $model->journal_no, 1); // in
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                $model->status = 2;
+                if ($model->save(false)) {
+                    $status = 1;
+                }
+
+            }
+        }
+        return ['status' => $status, 'data' => $data];
+    }
+
+    public function actionCanceltransfer()
+    {
+
     }
 
     public function createTransaction($product_id, $qty, $car_id, $journal_no, $stock_type)
