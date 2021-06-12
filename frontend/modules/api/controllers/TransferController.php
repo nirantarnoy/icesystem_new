@@ -269,14 +269,15 @@ class TransferController extends Controller
             $model = \common\models\JournalTransfer::find()->where(['from_route_id' => $route_id])->all();
             if ($model) {
                 $status = true;
-                array_push($data, [
-                    'transfer_id' => $model->id,
-                    'journal_no' => $model->journal_no,
-                    'to_route_id' => $model->to_route_id,
-                    'to_route_name' => \backend\models\Deliveryroute::findName($model->to_route_id),
-                    'transfer_status' => $model->status,
-                ]);
-//                foreach ($model as $value) {
+
+                foreach ($model as $value) {
+                    array_push($data, [
+                        'transfer_id' => $value->id,
+                        'journal_no' => $value->journal_no,
+                        'to_route_id' => $value->to_route_id,
+                        'to_route_name' => \backend\models\Deliveryroute::findName($value->to_route_id),
+                        'transfer_status' => $value->status,
+                    ]);
 //                    $model_line_qty = \common\models\TransferLine::find()->where(['transfer_id' => $value->id])->sum('qty');
 //
 //                    array_push($data, [
@@ -287,7 +288,7 @@ class TransferController extends Controller
 //                        'to_order_no' => $value->order_ref_id,
 //                        'qty' => $model_line_qty
 //                    ]);
-//                }
+                }
             }
         }
 
