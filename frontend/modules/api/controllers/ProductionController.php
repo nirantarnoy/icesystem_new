@@ -40,6 +40,7 @@ class ProductionController extends Controller
         $warehouse_id = $req_data['warehouse_id'];
         $qty = $req_data['qty'];
         $user_id = $req_data['user_id'];
+        $production_type = $req_data['production_type'];
 
         $data = [];
         $status = false;
@@ -48,6 +49,7 @@ class ProductionController extends Controller
             $model_journal = new \backend\models\Stockjournal();
             $model_journal->journal_no = $model_journal->getLastNo($company_id, $branch_id);
             $model_journal->trans_date = date('Y-m-d');
+
             $model_journal->company_id = $company_id;
             $model_journal->branch_id = $branch_id;
             if ($model_journal->save(false)) {
@@ -60,6 +62,7 @@ class ProductionController extends Controller
                 $model->warehouse_id = $warehouse_id;
                 $model->stock_type = 1;
                 $model->activity_type_id = 15; // 15 prod rec
+                $model->production_type = $production_type;
                 $model->company_id = $company_id;
                 $model->branch_id = $branch_id;
                 if ($model->save()) {
