@@ -137,7 +137,7 @@ class ProductionController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $product_id = $req_data['product_id'];
-        $warehouse_id = $req_data['warehouse_id'];
+        // $warehouse_id = $req_data['warehouse_id'];
         $qty = $req_data['qty'];
         $reason = $req_data['reason'];
         $company_id = $req_data['company_id'];
@@ -146,7 +146,7 @@ class ProductionController extends Controller
         $data = [];
         $status = false;
 
-        if ($company_id != null && $product_id != null && $warehouse_id != null && $branch_id != null) {
+        if ($company_id != null && $product_id != null && $branch_id != null) {
             $model = new \common\models\IssueReprocess();
             $model->journal_no = 'IW-';
             $model->trans_date = date('Y-m-d H:i:s');
@@ -156,14 +156,15 @@ class ProductionController extends Controller
             $model->reason = $reason;
             $model->company_id = $company_id;
             $model->branch_id = $branch_id;
-            if($model->save(false)){
+            if ($model->save(false)) {
                 $model_line = new \common\models\IssueReprocessLine();
                 $model_line->issue_id = $model->id;
                 $model_line->product_id = $product_id;
                 $model_line->to_warehouse_id = 0;
                 $model_line->qty = $qty;
                 $model_line->status = 1;
-                if($model_line->save(false)){
+                if ($model_line->save(false)) {
+                    $this->updatestock($product_id, $qty, $company_id, $branch_id);
                     $status = 1;
                 }
             }
@@ -172,5 +173,45 @@ class ProductionController extends Controller
         return ['status' => $status, 'data' => $data];
     }
 
+    public function updatestock($product_id, $qty, $company_id, $branch_id)
+    {
+        if ($product_id != null && $qty != null) {
+            $warehouse_id = $this->findReprocesswarehouse($company_id, $branch_id);
+            $model_trans = new \backend\models\Stocktrans();
+            $model_trans->journal_no = 'IW-21';
+            $model_trans->trans_date = date('Y-m-d H:i:s');
+            $model_trans->product_id = $product_id;
+            $model_trans->qty = $qty;
+            $model_trans->warehouse_id = $warehouse_id;
+            $model_trans->stock_type = 2; // 1 in 2 out
+            $model_trans->activity_type_id = 20; // 6 issue car
+            if ($model_trans->save(false)) {
+
+                $model = \common\models\StockSum::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id, 'product_id' => $product_id, 'warehouse_id' => $warehouse_id])->one();
+                if ($model) {
+                    $model->qty = ($model->qty - $qty);
+                    $model->save(false);
+                }
+//                $model = \backend\models\Stocksum::find()->where(['warehouse_id' => $wh_id, 'product_id' => $product_id])->one();
+//                if ($model) {
+//                    $model->qty = $model->qty - (int)$qty;
+//                    $model->save(false);
+//                }
+            }
+
+        }
+    }
+
+    public function findReprocesswarehouse($company_id, $branch_id)
+    {
+        $id = 0;
+        if ($company_id != null && $branch_id != null) {
+            $model = \backend\models\Warehouse::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id, 'is_reprocess' => 1])->one();
+            if ($model) {
+                $id = $model->id;
+            }
+        }
+        return $id;
+    }
 
 }
