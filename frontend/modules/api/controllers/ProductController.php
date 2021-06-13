@@ -19,6 +19,7 @@ class ProductController extends Controller
                     'list' => ['POST'],
                     'itemcodelist' => ['POST'],
                     'warehouselist' => ['POST'],
+                    'findreprocessstock' => ['POST'],
                     'issuelist' => ['POST'],
                     'issuelist2' => ['POST'],
                 ],
@@ -238,5 +239,45 @@ class ProductController extends Controller
             }
         }
         return $price;
+    }
+
+    public function actionFindreprocessstock()
+    {
+        $customer_id = 0;
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        $itemcode = $req_data['item_code'];
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
+
+        $data = [];
+        $status = false;
+
+        if ($company_id != null && $branch_id != null) {
+            $trans_date = date('Y/m/d');
+            $t_date = null;
+
+            $model = \common\models\QueryReprocessStcok::find()->where(['LIKE','product_name',$itemcode])->all();
+            // $model = \common\models\QueryCustomerPrice::find()->all();
+            if ($model) {
+                $status = true;
+                foreach ($model as $value) {
+                    if ($value->qty == null || $value->qty <= 0) continue;
+                    array_push($data, [
+                        'id' => $value->product_id,
+                        'warehouse_id' => $value->warehouse_id,
+                        'warehouse_name' => $value->warehouse_name,
+                        'product_id' => $value->product_id,
+                        'product_code' => $value->product_code,
+                        'product_name' => $value->product_name,
+                        'qty' => $value->qty
+                    ]);
+                }
+
+            }
+        }
+
+
+        return ['status' => $status, 'data' => $data];
     }
 }
