@@ -244,7 +244,7 @@ class TransferController extends Controller
                                 'product_name' => \backend\models\Product::findName($value2->product_id),
                                 'qty' => $value2->avl_qty,
                                 'sale_price' => $value2->sale_price,
-                                'transfer_status' => $model->status,
+                                'transfer_status' => $value->status,
                             ]);
                         }
                     }
