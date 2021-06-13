@@ -185,6 +185,8 @@ class ProductionController extends Controller
             $model_trans->warehouse_id = $warehouse_id;
             $model_trans->stock_type = 2; // 1 in 2 out
             $model_trans->activity_type_id = 20; // 6 issue car
+            $model_trans->company_id = $company_id;
+            $model_trans->branch_id = $branch_id;
             if ($model_trans->save(false)) {
 
                 $model = \common\models\StockSum::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id, 'product_id' => $product_id, 'warehouse_id' => $warehouse_id])->one();
