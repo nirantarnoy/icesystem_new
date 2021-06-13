@@ -257,7 +257,7 @@ class ProductController extends Controller
             $trans_date = date('Y/m/d');
             $t_date = null;
 
-            $model = \common\models\QueryReprocessStock::find()->where(['LIKE','product_name',$itemcode])->all();
+            $model = \common\models\QueryReprocessStcok::find()->where(['LIKE','product_name',$itemcode])->all();
             // $model = \common\models\QueryCustomerPrice::find()->all();
             if ($model) {
                 $status = true;
