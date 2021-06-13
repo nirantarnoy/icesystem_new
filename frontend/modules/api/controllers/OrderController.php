@@ -41,7 +41,6 @@ class OrderController extends Controller
         $user_id = 0;
         $issue_id = 0;
         $route_id = 0;
-        $api_date = null;
         $car_id = 0;
         $company_id = 0;
         $branch_id = 0;
@@ -50,7 +49,6 @@ class OrderController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         if ($req_data != null) {
-            $api_date = $req_data['order_date'];
             $customer_id = $req_data['customer_id'];
             $user_id = $req_data['user_id'] == null ? 0 : $req_data['user_id'];
             //  $issue_id = $req_data['issue_id'];
@@ -95,11 +93,7 @@ class OrderController extends Controller
                                 $modelx->is_free = $is_free;
                                 if ($modelx->save(false)) {
                                     $status = true;
-//                                    $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $issue_id, 'product_id' => $datalist[$i]['product_id']])->one();
-//                                    if ($model_update_issue_line) {
-//                                        $model_update_issue_line->avl_qty = ($model_update_issue_line->avl_qty - (int)$datalist[$i]['qty']);
-//                                        $model_update_issue_line->save(false);
-//                                    }
+
                                 }
                             } else {
                                 $model_line = new \backend\models\Orderline();
@@ -125,12 +119,6 @@ class OrderController extends Controller
 
                                     $order_total_all += $model_line->line_total;
                                     $status = true;
-
-//                            $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
-//                            if ($model_update_issue_line) {
-//                                $model_update_issue_line->avl_qty = $model_update_issue_line->avl_qty - $qty;
-//                                $model_update_issue_line->save(false);
-//                            }
 
                                     // issue order stock
                                     $model_update_order_stock = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $datalist[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
@@ -315,20 +303,7 @@ class OrderController extends Controller
         if ($customer_id && $route_id && $car_id) {
             //  $sale_date = date('Y/m/d');
             $sale_date = date('Y/m/d');
-//            $t_date = null;
-//            $exp_order_date = explode(' ', $api_date);
-//            if ($exp_order_date != null) {
-//                if (count($exp_order_date) > 1) {
-//                    $x_date = explode('-', $exp_order_date[0]);
-//                    if (count($x_date) > 1) {
-//                        $t_date = $x_date[0] . "/" . $x_date[1] . "/" . $x_date[2];
-//                    }
-//                }
-//            }
-//            if ($t_date != null) {
-//                $sale_date = $t_date;
-//            }
-            $sale_time = date('H:i:s');
+
             $order_total_all = 0;
             $has_order = $this->hasOrder($sale_date, $route_id, $car_id);
             if ($has_order != null) {
@@ -375,14 +350,8 @@ class OrderController extends Controller
 
                             //  }
 
-                            $order_total_all += $model_line->line_total;
+                           // $order_total_all += $model_line->line_total;
                             $status = true;
-
-//                            $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
-//                            if ($model_update_issue_line) {
-//                                $model_update_issue_line->avl_qty = $model_update_issue_line->avl_qty - $qty;
-//                                $model_update_issue_line->save(false);
-//                            }
 
                             // issue order stock
                             $model_update_order_stock = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $product_id, 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
@@ -459,12 +428,7 @@ class OrderController extends Controller
 
                         $order_total_all += $model_line->line_total;
                         $status = true;
-//
-//                        $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
-//                        if ($model_update_issue_line) {
-//                            $model_update_issue_line->avl_qty = $model_update_issue_line->avl_qty - $qty;
-//                            $model_update_issue_line->save(false);
-//                        }
+
                         // issue order stock
                         $model_update_order_stock = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $product_id, 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
                         if ($model_update_order_stock) {
@@ -502,20 +466,6 @@ class OrderController extends Controller
                             $model_issue->branch_id = $branch_id;
                             $model_issue->save(false);
                         }
-
-                        // add new
-//                        $model_loop_issue = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
-//                        foreach ($model_loop_issue as $val2) {
-//                            $model_order_stock = new \common\models\OrderStock();
-//                            $model_order_stock->issue_id = $val2->issue_id;
-//                            $model_order_stock->product_id = $val2->product_id;
-//                            $model_order_stock->qty = $val2->qty;
-//                            $model_order_stock->used_qty = 0;
-//                            $model_order_stock->avl_qty = $val2->qty;
-//                            $model_order_stock->order_id = $model->id;
-//                            $model_order_stock->save(false);
-//                        }
-                        // end add new
 
                     }
                 }

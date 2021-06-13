@@ -218,6 +218,7 @@ class ProductController extends Controller
                             'code' => \backend\models\Product::findCode($value->product_id),
                             'name' => \backend\models\Product::findName($value->product_id),
                             'sale_price' => $this->findCustomerprice($customer_id,$value->product_id),
+                            'price_group_id' => $this->findCustomerpricegroup($customer_id,$value->product_id),
                             'issue_id' => 0,
                             'onhand' => $value->avl_qty
                         ]);
@@ -239,6 +240,17 @@ class ProductController extends Controller
             }
         }
         return $price;
+    }
+    public function findCustomerpricegroup($customer_id,$product_id){
+        $id = 0;
+        if($customer_id && $product_id){
+            $model = \common\models\QueryCustomerPrice::find()->where(['cus_id'=>$customer_id,'product_id'=>$product_id])->one();
+            if($model){
+                $id = $model->id;
+
+            }
+        }
+        return $id;
     }
 
     public function actionFindreprocessstock()
