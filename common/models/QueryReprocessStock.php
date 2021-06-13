@@ -18,14 +18,14 @@ use Yii;
  * @property int|null $is_reprocess
  * @property int|null $qty
  */
-class QueryReprocessStcok extends \yii\db\ActiveRecord
+class QueryReprocessStock extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'query_reprocess_stcok';
+        return 'query_reprocess_stock';
     }
 
     /**
