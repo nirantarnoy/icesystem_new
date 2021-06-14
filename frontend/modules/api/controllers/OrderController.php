@@ -1184,7 +1184,7 @@ class OrderController extends Controller
         $data = [];
 
         if ($order_line_id != null) {
-            $model = \backend\models\Orderline::find()->where(['id' => $order_line_id])->one();
+            $model = \backend\models\Orderlinetrans::find()->where(['id' => $order_line_id])->one();
             if ($model) {
                 $model_order_stock = \common\models\OrderStock::find()->where(['order_id' => $model->order_id, 'product_id' => $model->product_id])->one();
                 if ($model_order_stock) {
