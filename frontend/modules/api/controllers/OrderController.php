@@ -851,7 +851,7 @@ class OrderController extends Controller
                         'qty' => $value->line_qty,
                         'price' => $value->price,
                         'price_group_id' => '',
-                        'order_line_status' => \backend\models\Orderline::findStatus($value->order_line_id),
+                        'order_line_status' => \backend\models\Orderlinetrans::findStatus($value->order_line_id),
                     ]);
 
                 }
@@ -1194,7 +1194,7 @@ class OrderController extends Controller
                         if ($model->save(false)) {
                             $status = 1;
                             array_push($data, ['cancel_order' => 'successfully']);
-                            return $this->notifymessage('สายส่ง: ' . $route_name . ' ยกเลิกรายการขาย ' . $order_no . ' ลูกค้า: ' . $customer_code . ' ยอดเงิน: 0' . ' เหตุผล: ' . $reason);
+                            return $this->notifymessage('สายส่ง: ' . $route_name . ' ยกเลิกรายการขาย ' . $order_no . ' ลูกค้า: ' . $customer_code . ' ยอดเงิน: '.$model->line_total . ' เหตุผล: ' . $reason);
                         }
                     }
                 }

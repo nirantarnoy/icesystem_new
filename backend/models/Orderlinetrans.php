@@ -52,7 +52,7 @@ class Orderlinetrans extends \common\models\OrderLineTrans
 
     public function findStatus($id)
     {
-        $model = Orderline::find()->where(['id' => $id])->one();
+        $model = Orderlinetrans::find()->where(['id' => $id])->one();
         return $model != null? $model->status : 0;
     }
 //    public function findName($id){
