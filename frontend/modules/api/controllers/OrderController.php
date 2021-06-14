@@ -82,8 +82,7 @@ class OrderController extends Controller
                         for ($i = 0; $i <= count($datalist) - 1; $i++) {
                             if ($datalist[$i]['qty'] <= 0) continue;
 
-
-                            $price_group_id = $this->findCustomerpricgroup($customer_id, $datalist[$i]['product_id'], $route_id);
+                           // $price_group_id = $this->findCustomerpricgroup($customer_id, $datalist[$i]['product_id'], $route_id);
 
                             $modelx = \common\models\OrderLine::find()->where(['product_id' => $datalist[$i]['product_id'], 'order_id' => $has_order_id, 'customer_id' => $customer_id])->one();
                             if ($modelx) {
@@ -103,7 +102,7 @@ class OrderController extends Controller
                                 $model_line->qty = $datalist[$i]['qty'];
                                 $model_line->price = $payment_type_id == 3 ? 0 : $datalist[$i]['price'];
                                 $model_line->line_total = $payment_type_id == 3 ? 0 : ($datalist[$i]['qty'] * $datalist[$i]['price']);
-                                $model_line->price_group_id = $price_group_id;
+                                $model_line->price_group_id = $datalist[$i]['price_group_id'] ;//$price_group_id;
                                 $model_line->sale_payment_method_id = $payment_type_id;
                                 $model_line->issue_ref_id = $issue_id;
                                 $model_line->status = 1;
@@ -179,7 +178,7 @@ class OrderController extends Controller
                             if ($datalist[$i]['qty'] <= 0) continue;
 
 
-                            $price_group_id = $this->findCustomerpricgroup($customer_id, $datalist[$i]['product_id'], $route_id);
+                           // $price_group_id = $this->findCustomerpricgroup($customer_id, $datalist[$i]['product_id'], $route_id);
 
                             $model_line = new \backend\models\Orderline();
                             $model_line->order_id = $model->id;
@@ -188,7 +187,7 @@ class OrderController extends Controller
                             $model_line->qty = $datalist[$i]['qty'];
                             $model_line->price = $payment_type_id == 3 ? 0 : $datalist[$i]['price'];
                             $model_line->line_total = $payment_type_id == 3 ? 0 : ($datalist[$i]['qty'] * $datalist[$i]['price']);
-                            $model_line->price_group_id = $price_group_id;
+                            $model_line->price_group_id = $datalist[$i]['price_group_id'];//$price_group_id;
                             $model_line->status = 1;
                             $model_line->sale_payment_method_id = $payment_type_id;
                             $model_line->issue_ref_id = $issue_id;
@@ -1182,7 +1181,7 @@ class OrderController extends Controller
                         if ($model->save(false)) {
                             $status = 1;
                             array_push($data, ['cancel_order' => 'successfully']);
-                            return $this->notifymessage('สายส่ง: ' . $route_name . ' ยกเลิกรายการขาย ' . $order_no . ' ลูกค้า: ' . $customer_code . ' เหตุผล: ' . $reason);
+                            return $this->notifymessage('สายส่ง: ' . $route_name . ' ยกเลิกรายการขาย ' . $order_no . ' ลูกค้า: ' . $customer_code .' ยอดเงิน: 0'. ' เหตุผล: ' . $reason);
                         }
                     }
                 }
