@@ -831,7 +831,8 @@ class OrderController extends Controller
 
         $data = [];
         if ($customer_id) {
-            $model = \common\models\QueryApiOrderDaily::find()->where(['customer_id' => $customer_id])->andFilterWhere(['id' => $order_id])->andFilterWhere(['>', 'qty', 0])->all();
+            //$model = \common\models\QueryApiOrderDaily::find()->where(['customer_id' => $customer_id])->andFilterWhere(['id' => $order_id])->andFilterWhere(['>', 'qty', 0])->all();
+            $model = \common\models\QueryApiOrderDailySummaryNew::find()->where(['customer_id' => $customer_id])->andFilterWhere(['id' => $order_id])->andFilterWhere(['>', 'line_qty', 0])->all();
             if ($model) {
                 $status = true;
                 foreach ($model as $value) {
@@ -840,17 +841,17 @@ class OrderController extends Controller
                         'order_no' => $value->order_no,
                         'order_date' => $value->order_date,
                         'order_status' => $value->status,
-                        'line_id' => $value->line_id,
+                        'line_id' => $value->order_line_id,
                         'customer_id' => $value->customer_id,
-                        'customer_name' => $value->customer_name,
-                        'customer_code' => $value->customer_code,
+                        'customer_name' => $value->name,
+                        'customer_code' => $value->code,
                         'product_id' => $value->product_id,
                         'product_code' => $value->product_code,
                         'product_name' => $value->product_name,
-                        'qty' => $value->qty,
+                        'qty' => $value->line_qty,
                         'price' => $value->price,
                         'price_group_id' => '',
-                        'order_line_status' => \backend\models\Orderline::findStatus($value->line_id),
+                        'order_line_status' => \backend\models\Orderline::findStatus($value->order_line_id),
                     ]);
 
                 }
