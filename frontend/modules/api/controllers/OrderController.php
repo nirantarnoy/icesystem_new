@@ -81,7 +81,7 @@ class OrderController extends Controller
 
                             // $price_group_id = $this->findCustomerpricgroup($customer_id, $datalist[$i]['product_id'], $route_id);
 
-                            $model_line_trans = new \common\models\OrderLineTrans();
+                            $model_line_trans = new \backend\models\Orderlinetrans();
                             $model_line_trans->order_id = $has_order_id;
                             $model_line_trans->customer_id = $customer_id;
                             $model_line_trans->product_id = $datalist[$i]['product_id'];
@@ -183,7 +183,7 @@ class OrderController extends Controller
 
                             // $price_group_id = $this->findCustomerpricgroup($customer_id, $datalist[$i]['product_id'], $route_id);
 
-                            $model_line_trans = new \common\models\OrderLineTrans();
+                            $model_line_trans = new \backend\models\Orderlinetrans();
                             $model_line_trans->order_id = $model->id;
                             $model_line_trans->customer_id = $customer_id;
                             $model_line_trans->product_id = $datalist[$i]['product_id'];
