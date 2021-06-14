@@ -1194,7 +1194,7 @@ class OrderController extends Controller
                         if ($model->save(false)) {
                             $model_update_line = \backend\models\Orderline::find()->where(['order_id'=>$model->order_id,'product_id'=>$model->product_id])->one();
                             if($model_update_line){
-                                $model_update_line->qty =  $model_update_line->qty - $model->qty;
+                                $model_update_line->qty =  ($model_update_line->qty - $model->qty);
                                 $model_update_line->line_total = $model_update_line->line_total - ($model_update_line->price * $model->qty);
                                 $model_update_line->save(false);
                             }

@@ -108,12 +108,13 @@ class ProductionController extends Controller
         $req_data = \Yii::$app->request->getBodyParams();
         $company_id = $req_data['company_id'];
         $branch_id = $req_data['branch_id'];
+        $warehouse_code = $req_data['wh_code'];
 
         $data = [];
         $status = false;
 
         if ($company_id) {
-            $model = \common\models\Warehouse::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
+            $model = \common\models\Warehouse::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->andFilterWhere(['LIKE','code',$warehouse_code])->all();
             // $model = \common\models\QueryCustomerPrice::find()->all();
             if ($model) {
                 $status = true;
