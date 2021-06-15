@@ -140,6 +140,7 @@ class CustomerController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model_asset_list = \backend\models\Customerasset::find()->where(['customer_id'=>$id])->all();
 
         if ($model->load(Yii::$app->request->post())) {
 //            $group = \Yii::$app->request->post('customer_group_id');
@@ -151,6 +152,13 @@ class CustomerController extends Controller
 //            $model->delivery_route_id = $route;
 //            $model->customer_type_id = $cust_type;
 //            $model->status = $status;
+
+            $asset_id = \Yii::$app->request->post('line_product_id');
+            $asset_qty = \Yii::$app->request->post('line_qty');
+            $asset_start_date = \Yii::$app->request->post('line_start_date');
+
+
+
             $photo = UploadedFile::getInstance($model, 'shop_photo');
             if (!empty($photo)) {
                 $photo_name = time() . "." . $photo->getExtension();
@@ -160,6 +168,19 @@ class CustomerController extends Controller
             $model->sort_name = $model->sort_name == null ? '' : $model->sort_name;
             $model->is_show_pos = $model->sort_name == null || $model->sort_name == '' ? 1 : 0;
             if ($model->save(false)) {
+                if($asset_id!=null){
+                    for($i=0;$i<=count($asset_id)-1;$i++){
+                        $model_asset = new \backend\models\Customerasset();
+                        $model_asset->customer_id = $id;
+                        $model_asset->product_id = $asset_id[$i];
+                        $model_asset->qty = $asset_qty[$i];
+                        $model_asset->start_date = date('Y-m-d');
+                        $model_asset->status = 1;
+                        $model_asset->customer_id = $model->company_id;
+                        $model_asset->branch_id = $model->branch_id;
+                        $model_asset->save(false);
+                    }
+                }
                 $session = Yii::$app->session;
                 $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
                 return $this->redirect(['index']);
@@ -168,6 +189,7 @@ class CustomerController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'model_asset_list' =>$model_asset_list,
         ]);
     }
 

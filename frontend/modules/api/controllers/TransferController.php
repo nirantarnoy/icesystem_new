@@ -266,7 +266,7 @@ class TransferController extends Controller
         $status = false;
         if ($route_id != null || $route_id != '') {
             //  $model = \common\models\JournalTransfer::find()->where(['delivery_route_id'=>$route_id])->all();
-            $model = \common\models\JournalTransfer::find()->where(['from_route_id' => $route_id])->all();
+            $model = \common\models\JournalTransfer::find()->where(['from_route_id' => $route_id,'date(trans_date)'=>date('Y-m-d')])->all();
             if ($model) {
                 $status = true;
 
