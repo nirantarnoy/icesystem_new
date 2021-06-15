@@ -18,6 +18,7 @@ class CustomerController extends Controller
                 'actions' => [
                     'list' => ['POST'],
                     'assetlist' => ['POST'],
+
                 ],
             ],
         ];
@@ -71,6 +72,7 @@ class CustomerController extends Controller
                 foreach ($model as $value) {
                     array_push($data, [
                         'id' => $value->id,
+                        'product_id' => $value->product_id,
                         'code' => \backend\models\Product::findCode($value->product_id),
                         'name' => \backend\models\Product::findName($value->product_id),
                         'qty' => $value->qty,

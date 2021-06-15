@@ -113,7 +113,7 @@ class CustomerController extends Controller
                 $model->shop_photo = $photo_name;
             }
 
-            $model->code = $model->getLastNo($company_id,$branch_id);
+            $model->code = $model->getLastNo($company_id, $branch_id);
             $model->sort_name = $model->sort_name == null ? '' : $model->sort_name;
             $model->company_id = $company_id;
             $model->branch_id = $branch_id;
@@ -140,7 +140,7 @@ class CustomerController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model_asset_list = \backend\models\Customerasset::find()->where(['customer_id'=>$id])->all();
+        $model_asset_list = \backend\models\Customerasset::find()->where(['customer_id' => $id])->all();
 
         if ($model->load(Yii::$app->request->post())) {
 //            $group = \Yii::$app->request->post('customer_group_id');
@@ -156,8 +156,7 @@ class CustomerController extends Controller
             $asset_id = \Yii::$app->request->post('line_product_id');
             $asset_qty = \Yii::$app->request->post('line_qty');
             $asset_start_date = \Yii::$app->request->post('line_start_date');
-
-
+            $removelist = \Yii::$app->request->post('removelist');
 
             $photo = UploadedFile::getInstance($model, 'shop_photo');
             if (!empty($photo)) {
@@ -168,17 +167,34 @@ class CustomerController extends Controller
             $model->sort_name = $model->sort_name == null ? '' : $model->sort_name;
             $model->is_show_pos = $model->sort_name == null || $model->sort_name == '' ? 1 : 0;
             if ($model->save(false)) {
-                if($asset_id!=null){
-                    for($i=0;$i<=count($asset_id)-1;$i++){
-                        $model_asset = new \backend\models\Customerasset();
-                        $model_asset->customer_id = $id;
-                        $model_asset->product_id = $asset_id[$i];
-                        $model_asset->qty = $asset_qty[$i];
-                        $model_asset->start_date = date('Y-m-d');
-                        $model_asset->status = 1;
-                        $model_asset->customer_id = $model->company_id;
-                        $model_asset->branch_id = $model->branch_id;
-                        $model_asset->save(false);
+                if ($asset_id != null) {
+                    for ($i = 0; $i <= count($asset_id) - 1; $i++) {
+                        $model_chk = \backend\models\Customerasset::find()->where(['customer_id' => $model->id, 'product_id' => $asset_id[$i]])->one();
+                        if ($model_chk) {
+                            // echo 'ok';return;
+                            $model_chk->qty = $asset_qty[$i];
+                            $model_chk->save(false);
+                        } else {
+                            $model_asset = new \backend\models\Customerasset();
+                            $model_asset->customer_id = $model->id;
+                            $model_asset->product_id = $asset_id[$i];
+                            $model_asset->qty = $asset_qty[$i];
+                            $model_asset->start_date = date('Y-m-d');
+                            $model_asset->status = 1;
+                            $model_asset->company_id = $model->company_id;
+                            $model_asset->branch_id = $model->branch_id;
+                            $model_asset->save(false);
+                        }
+
+                    }
+                }
+
+                if ($removelist != '') {
+                    $x = explode(',', $removelist);
+                    if (count($x) > 0) {
+                        for ($m = 0; $m <= count($x) - 1; $m++) {
+                            \common\models\CustomerAsset::deleteAll(['id' => $x[$m]]);
+                        }
                     }
                 }
                 $session = Yii::$app->session;
@@ -189,7 +205,7 @@ class CustomerController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'model_asset_list' =>$model_asset_list,
+            'model_asset_list' => $model_asset_list,
         ]);
     }
 
