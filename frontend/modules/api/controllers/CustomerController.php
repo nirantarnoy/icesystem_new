@@ -91,10 +91,10 @@ class CustomerController extends Controller
         $req_data = \Yii::$app->request->getBodyParams();
         $image = base64_decode($req_data['image']);
         $name = $req_data['name'];
-        $realimage = \Yii::$app->getUrlManager()->baseUrl.'/uploads/'. $image;
+       // $realimage = \Yii::$app->getUrlManager()->baseUrl.'/uploads/'. $image;
         //file_put_contents($realimage, $name);
 
-        return ['status' => 1, 'data' => $realimage];
+        return ['status' => 1, 'data' => $image];
 
     }
 }
