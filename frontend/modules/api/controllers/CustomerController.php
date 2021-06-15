@@ -90,11 +90,11 @@ class CustomerController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $image = base64_decode($req_data['image']);
-//        $name = $req_data['name'];
-//        $realimage = \Yii::$app->getUrlManager()->baseUrl.'/uploads/'. base64_decode($image);
+        $name = $req_data['name'];
+        $realimage = \Yii::$app->getUrlManager()->baseUrl.'/uploads/'. $image;
         //file_put_contents($realimage, $name);
 
-        return ['status' => 1, 'data' => $req_data['image']];
+        return ['status' => 1, 'data' => $realimage];
 
     }
 }
