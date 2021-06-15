@@ -44,12 +44,14 @@ class ProductionController extends Controller
 
         $data = [];
         $status = false;
+        $journal_no = '';
 
         if ($product_id && $warehouse_id && $qty) {
             $model_journal = new \backend\models\Stockjournal();
             $model_journal->journal_no = $model_journal->getLastNo($company_id, $branch_id);
             $model_journal->trans_date = date('Y-m-d');
 
+            $journal_no = $model_journal->journal_no;
             $model_journal->company_id = $company_id;
             $model_journal->branch_id = $branch_id;
             if ($model_journal->save(false)) {
@@ -80,7 +82,7 @@ class ProductionController extends Controller
             //  $this->renderPartial('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' => 0]);
         }
 
-        return ['status' => $status, 'data' => $data];
+        return ['status' => $status, 'data' => $data,'journal_no'=>$journal_no];
     }
 
     public function updateSummary($product_id, $wh_id, $qty)
