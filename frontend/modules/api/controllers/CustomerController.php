@@ -91,7 +91,7 @@ class CustomerController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         //$image = utf8_encode(base64_decode($req_data['image']));
-        $image = $req_data['image'];
+        $image = $_FILES['image']['tmp_name'];
         $status = 0;
         //$image = UploadedFile::getInstanceByName('image');
         $name = $req_data['name'];
