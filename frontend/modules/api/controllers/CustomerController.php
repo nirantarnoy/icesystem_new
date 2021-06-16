@@ -89,10 +89,14 @@ class CustomerController extends Controller
     public function actionAssetchecklist(){
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
-        $image = utf8_encode(base64_decode($req_data['image']));
+        //$image = utf8_encode(base64_decode($req_data['image']));
+       // $imagePath = $req_data['image'];
+        $image = $_FILES['image']['name'];
         $name = $req_data['name'];
-        $realimage = \Yii::$app->getUrlManager()->baseUrl.'/uploads/'. $image;
-        file_put_contents($realimage, $name);
+        $imagePath = \Yii::$app->getUrlManager()->baseUrl."/uploads/".$image;
+        move_uploaded_file($_FILES['image']['tmp_name'],$imagePath);
+      // $realimage = \Yii::$app->getUrlManager()->baseUrl.'/uploads/'. $image;
+      //  file_put_contents($realimage, $name);
 
         return ['status' => 1, 'data' => $image];
 
