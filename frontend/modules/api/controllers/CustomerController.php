@@ -90,23 +90,23 @@ class CustomerController extends Controller
     public function actionAssetchecklist(){
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
-        //$image = utf8_encode(base64_decode($req_data['image']));
-        $image = $_FILES['image']['tmp_name'];
+        $image = base64_decode($req_data['image']);
+       // $image = $_FILES['image']['tmp_name'];
         $status = 0;
         //$image = UploadedFile::getInstanceByName('image');
         $name = $req_data['name'];
-        if(is_object($image)){
-            $status = 1000;
-            $filename = time()."_".uniqid().'.'.$image->extension;
-            $imagePath = \Yii::$app->getUrlManager()->baseUrl."/uploads/".$filename;
-            move_uploaded_file($_FILES['image']['tmp_name'],$imagePath);
-        }
+//        if(is_object($image)){
+//            $status = 1000;
+//            $filename = time()."_".uniqid().'.'.$image->extension;
+//            $imagePath = \Yii::$app->getUrlManager()->baseUrl."/uploads/".$filename;
+//            move_uploaded_file($_FILES['image']['tmp_name'],$imagePath);
+//        }
 
       //  move_uploaded_file($_FILES['image']['tmp_name'],$imagePath);
       // $realimage = \Yii::$app->getUrlManager()->baseUrl.'/uploads/'. $image;
       //  file_put_contents($realimage, $name);
 
-        return ['status' => 1, 'data' => $status];
+        return ['status' => 1, 'data' => $image];
 
     }
 }
