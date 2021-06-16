@@ -92,7 +92,7 @@ class CustomerController extends Controller
         $image = utf8_encode(base64_decode($req_data['image']));
         $name = $req_data['name'];
         $realimage = \Yii::$app->getUrlManager()->baseUrl.'/uploads/'. $image;
-        //file_put_contents($realimage, $name);
+        file_put_contents($realimage, $name);
 
         return ['status' => 1, 'data' => $image];
 
