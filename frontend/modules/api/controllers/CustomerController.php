@@ -4,6 +4,7 @@ namespace frontend\modules\api\controllers;
 
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\web\UploadedFile;
 
 
 class CustomerController extends Controller
@@ -91,14 +92,21 @@ class CustomerController extends Controller
         $req_data = \Yii::$app->request->getBodyParams();
         //$image = utf8_encode(base64_decode($req_data['image']));
        // $imagePath = $req_data['image'];
-        $image = $_FILES['image']['name'];
+        $status = 0;
+        $image = UploadedFile::getInstanceByName('image');
         $name = $req_data['name'];
-        $imagePath = \Yii::$app->getUrlManager()->baseUrl."/uploads/".$image;
-        move_uploaded_file($_FILES['image']['tmp_name'],$imagePath);
+        if(is_object($image)){
+            $status = 1000;
+            $filename = time()."_".uniqid().'.'.$image->extension;
+            $imagePath = \Yii::$app->getUrlManager()->baseUrl."/uploads/".$filename;
+            move_uploaded_file($_FILES['image']['tmp_name'],$imagePath);
+        }
+
+      //  move_uploaded_file($_FILES['image']['tmp_name'],$imagePath);
       // $realimage = \Yii::$app->getUrlManager()->baseUrl.'/uploads/'. $image;
       //  file_put_contents($realimage, $name);
 
-        return ['status' => 1, 'data' => $image];
+        return ['status' => 1, 'data' => $status];
 
     }
 }
