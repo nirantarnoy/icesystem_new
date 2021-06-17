@@ -576,16 +576,16 @@ $js = <<<JS
               }
          });
          
-          $.ajax({
-              'type':'post',
-              'dataType': 'html',
-              'async': false,
-              'url': "$url_to_get_sale_item",
-              'data': {'id': e.val()},
-              'success': function(data) {
-                  $("#table-sale-list").html(data);
-              }
-         });
+//          $.ajax({
+//              'type':'post',
+//              'dataType': 'html',
+//              'async': false,
+//              'url': "$url_to_get_sale_item",
+//              'data': {'id': e.val()},
+//              'success': function(data) {
+//                  $("#table-sale-list").html(data);
+//              }
+//         });
 
          $.ajax({
               'type':'post',
