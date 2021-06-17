@@ -97,7 +97,7 @@ class CustomerController extends Controller
         // $image = $_FILES['image']['tmp_name'];
         $status = 0;
         //$image = UploadedFile::getInstanceByName('image');
-        $name = $req_data['name'];
+        $name = time(). uniqid().'.jpg';//$req_data['name'];
 //        if(is_object($image)){
 //            $status = 1000;
 //            $filename = time()."_".uniqid().'.'.$image->extension;
@@ -106,8 +106,9 @@ class CustomerController extends Controller
 //        }
 
         //  move_uploaded_file($_FILES['image']['tmp_name'],$imagePath);
-        //$realimage = \Yii::$app->getUrlManager()->baseUrl . '/uploads/assetcheck/' . $image;
-        $realimage = '@web/uploads/assetcheck/' . $image;
+        $realimage = \Yii::$app->getUrlManager()->baseUrl . '/uploads/assetcheck/' . $image;
+       // move_uploaded_file($_FILES['image']['tmp_name'],$imagePath);
+        //$realimage = '@web/uploads/assetcheck/' . $image;
         file_put_contents($name, $realimage);
 
         return ['status' => 1, 'data' => $realimage];
