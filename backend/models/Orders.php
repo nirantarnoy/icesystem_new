@@ -194,7 +194,7 @@ class Orders extends \common\models\Orders
                 }
             }
         } else {
-            $model = \backend\models\Orderline::find()->select(['qty','price'])->where(['order_id' => $order_id])->all();
+            $model = \backend\models\Orderline::find()->select(['qty','price','customer_id'])->where(['order_id' => $order_id])->all();
             if ($model) {
                 foreach ($model as $value) {
                     $cus_pay_method = \backend\models\Customer::findPayMethod($value->customer_id);
@@ -248,7 +248,7 @@ class Orders extends \common\models\Orders
                 }
             }
         } else {
-            $model = \backend\models\Orderline::find()->select(['qty','price'])->where(['order_id' => $order_id])->all();
+            $model = \backend\models\Orderline::find()->select(['qty','price','customer_id'])->where(['order_id' => $order_id])->all();
             if ($model) {
                 foreach ($model as $value) {
                     $cus_pay_method = \backend\models\Customer::findPayMethod($value->customer_id);
