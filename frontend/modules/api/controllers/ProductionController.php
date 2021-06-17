@@ -79,10 +79,11 @@ class ProductionController extends Controller
             $session->setFlash('msg-index', 'slip_prodrec_index.pdf');
             $session->setFlash('after-save', true);
 
+            array_push($data,['journal_no'=>$journal_no]);
             //  $this->renderPartial('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' => 0]);
         }
 
-        return ['status' => $status, 'data' => $data,'journal_no'=>$journal_no];
+        return ['status' => $status, 'data' => $data];
     }
 
     public function updateSummary($product_id, $wh_id, $qty)

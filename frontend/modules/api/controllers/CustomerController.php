@@ -122,12 +122,13 @@ class CustomerController extends Controller
 
         $company_id = $req_data['company_id'];
         $branch_id = $req_data['branch_id'];
-        $route_id = $req_data['route_id'];
+        $customer_id = $req_data['customer_id'];
+        $product_id = $req_data['product_id'];
         $user_id = $req_data['user_id'];
         $datalist = $req_data['datalist'];
         $base64_string = $req_data['image'];
 
-        if ($company_id != null && $branch_id != null && $route_id != null && $user_id != null) {
+        if ($company_id != null && $branch_id != null && $customer_id != null && $user_id != null) {
             $outputfile = "uploads/assetcheck/" . time() . ".jpg";
             //save as image.jpg in uploads/ folder
 
