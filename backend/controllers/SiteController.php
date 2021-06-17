@@ -27,7 +27,7 @@ class SiteController extends Controller
 //                        'allow' => false,
 //                    ],
                     [
-                        'actions' => ['login', 'error', 'createadmin', 'changepassword'],
+                        'actions' => ['login', 'error', 'createadmin', 'changepassword','decodex'],
                         'allow' => true,
                     ],
                     [
@@ -483,5 +483,10 @@ class SiteController extends Controller
 //        }else{
 //            return ['status'=> false,'data'=>$member->getErrors()];
 //        }
+    }
+
+    public function actionDecodex(){
+        $x = "4d9cRXhpZgAATU0AKgAAAAgADgEAAAMAAAABDMAAAAEBAAMAAAABCZAAAAECAAMAAAADAAAA9gEPAAIAAAAHAAAAtgEQAAIAAAAIAAAAvgESAAMAAAABAAAAAAEaAAUAAAABAAAAxgEbAAUAAAABAAAAzgEoAAMAAAABAAIAAAExAAIAAAAfAAAA1gEyAAIAAAAUAAAA";
+       echo base64_decode($x);
     }
 }

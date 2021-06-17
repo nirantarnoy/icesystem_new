@@ -108,10 +108,25 @@ class CustomerController extends Controller
         //  move_uploaded_file($_FILES['image']['tmp_name'],$imagePath);
      //   $realimage = \Yii::$app->getUrlManager()->baseUrl . '/uploads/assetcheck/' . $image;
        // move_uploaded_file($_FILES['image']['tmp_name'],$imagePath);
-        $realimage = \Yii::getAlias('@frontend/web/').'uploads/assetcheck/' . $image;
-        file_put_contents($name, $realimage);
+//        $realimage = \Yii::getAlias('@frontend/web/').'uploads/assetcheck/' . $image;
+//        file_put_contents($name, $realimage);
 
-        return ['status' => 1, 'data' => $realimage];
+        $base64_string = $req_data['image'];
+        $outputfile = "uploads/image.jpg" ;
+        //save as image.jpg in uploads/ folder
+
+        $filehandler = fopen($outputfile, 'wb' );
+        //file open with "w" mode treat as text file
+        //file open with "wb" mode treat as binary file
+
+        fwrite($filehandler, base64_decode($base64_string));
+        // we could add validation here with ensuring count($data)>1
+
+        // clean up the file resource
+        fclose($filehandler);
+
+
+        return ['status' => 1, 'data' => $base64_string];
 
     }
 }
