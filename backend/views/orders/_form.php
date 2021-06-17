@@ -576,43 +576,46 @@ $js = <<<JS
               }
          });
          
-          $.ajax({
-              'type':'post',
-              'dataType': 'html',
-              'async': false,
-              'url': "$url_to_get_sale_item",
-              'data': {'id': e.val()},
-              'success': function(data) {
-                  $("#table-sale-list").html(data);
-              }
-         });
-
-         $.ajax({
-              'type':'post',
-              'dataType': 'html',
-              'async': false,
-              'url': "$url_to_get_car_item",
-              'data': {'id': e.val()},
-              'success': function(data) {
-                 // alert();
-                 $("#car-ref-id").html(data);
-                 $("#car-ref-id").prop("disabled","");
-                 $("#issue-id").prop("disabled","");
-              }
-         });
+//          $.ajax({
+//              'type':'post',
+//              'dataType': 'html',
+//              'async': false,
+//              'url': "$url_to_get_sale_item",
+//              'data': {'id': e.val()},
+//              'success': function(data) {
+//                  $("#table-sale-list").html(data);
+//              }
+//         });
+//
+//         $.ajax({
+//              'type':'post',
+//              'dataType': 'html',
+//              'async': false,
+//              'url': "$url_to_get_car_item",
+//              'data': {'id': e.val()},
+//              'success': function(data) {
+//                 // alert();
+//                 $("#car-ref-id").html(data);
+//                 $("#car-ref-id").prop("disabled","");
+//                 $("#issue-id").prop("disabled","");
+//              }
+//         });
+//         
+//         $.ajax({
+//              'type':'post',
+//              'dataType': 'html',
+//              'async': false,
+//              'url': "$url_to_get_issue_item",
+//              'data': {'id': e.val()},
+//              'success': function(data) {
+//                 // alert();
+//                 $("#issue-id").html(data);
+//                 $("#issue-id").prop("disabled","");
+//              }
+//         });
          
-         $.ajax({
-              'type':'post',
-              'dataType': 'html',
-              'async': false,
-              'url': "$url_to_get_issue_item",
-              'data': {'id': e.val()},
-              'success': function(data) {
-                 // alert();
-                 $("#issue-id").html(data);
-                 $("#issue-id").prop("disabled","");
-              }
-         });
+         
+         
 
             // tableOffset = $('table[id^="table-sale-list"]').offset().top;
             // headerx = $('table[id^="table-sale-list"] > thead').clone();
