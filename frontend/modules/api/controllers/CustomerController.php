@@ -93,7 +93,7 @@ class CustomerController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
        // $image = base64_decode($req_data['image']);
-        $image = mb_convert_encoding(base64_decode($req_data['image']), 'UTF-8', 'UTF-8');
+        //$image = mb_convert_encoding(base64_decode($req_data['image']), 'UTF-8', 'UTF-8');
         // $image = $_FILES['image']['tmp_name'];
         $status = 0;
         //$image = UploadedFile::getInstanceByName('image');
@@ -112,7 +112,7 @@ class CustomerController extends Controller
 //        file_put_contents($name, $realimage);
 
         $base64_string = $req_data['image'];
-        $outputfile = "uploads/image.jpg" ;
+        $outputfile = "uploads/assetcheck/".time().".jpg" ;
         //save as image.jpg in uploads/ folder
 
         $filehandler = fopen($outputfile, 'wb' );
