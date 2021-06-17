@@ -278,7 +278,7 @@ class OrdersController extends Controller
         }
 
         $model = $this->findModel($id);
-        $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
+      //  $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
 
         $model_has_transfer = \backend\models\Journaltransfer::find()->where(['order_target_id' => $id, 'status' => 1])->one();
         $order_issue_list = \common\models\OrderStock::find()->where(['order_id' => $id])->all();
@@ -379,7 +379,7 @@ class OrdersController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'model_line' => $model_line,
+            'model_line' => null,
             'model_has_transfer' => $model_has_transfer,
             'order_issue_list' => $order_issue_list
         ]);
