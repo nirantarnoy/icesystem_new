@@ -613,7 +613,7 @@ class OrdersController extends Controller
     public function getProductcolumn22($order_id, $price_group_id)
     {
         $html = '';
-        $model_price = \common\models\PriceGroupLine::find()->where(['price_group_id' => $price_group_id])->all();
+        $model_price = \common\models\PriceGroupLine::find()->select(['product_id','sale_price'])->where(['price_group_id' => $price_group_id])->all();
       //  $sql = 'SELECT COUNT(DISTINCT product_id) as cnt FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id;
         $sql = 'SELECT product_id FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id." GROUP BY product_id";
         $query = \Yii::$app->db->createCommand($sql)->queryAll();
@@ -916,7 +916,7 @@ class OrdersController extends Controller
     {
         $html = '';
 
-        $model_price = \common\models\PriceGroupLine::find()->where(['price_group_id' => $price_group_id])->all();
+        $model_price = \common\models\PriceGroupLine::find()->select(['product_id','sale_price'])->where(['price_group_id' => $price_group_id])->all();
 //        $model_order_product = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'price_group_id' => $price_group_id])->distinct('product_id')->count();
         $sql = 'SELECT COUNT(DISTINCT product_id) as cnt FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id;
         $query = \Yii::$app->db->createCommand($sql)->queryAll();
@@ -935,7 +935,7 @@ class OrdersController extends Controller
                     $bg_color = ';background-color:white;color: black';
 
                     //  $model = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id])->all();
-                    $model = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id, 'product_id' => $price_value->product_id])->one();
+                    $model = \common\models\OrderLine::find()->select(['price','qty'])->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id, 'product_id' => $price_value->product_id])->one();
                     if ($model) {
                         //  foreach ($model as $value) {
                         $i += 1;
@@ -981,7 +981,7 @@ class OrdersController extends Controller
                 $html .= '<td style="text-align: center">' . $btn_edit . '</td>';
             }
         } else {
-            $model = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id])->all();
+            $model = \common\models\OrderLine::find()->select(['product_id','price','qty'])->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id])->all();
             $i = 0;
             $line_total_qty = 0;
             $line_total_price = 0;

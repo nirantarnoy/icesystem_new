@@ -62,7 +62,7 @@ class Pricegroup extends \common\models\PriceGroup
     }
 
     public static function findName($id){
-        $model = Pricegroup::find()->where(['id'=>$id])->one();
+        $model = Pricegroup::find()->select('name')->where(['id'=>$id])->one();
         return $model!=null?$model->name:'';
     }
 //    public function findName($id){

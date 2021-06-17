@@ -62,11 +62,11 @@ class Product extends \common\models\Product
     }
 
     public static function findCode($id){
-        $model = Product::find()->where(['id'=>$id])->one();
+        $model = Product::find()->select('code')->where(['id'=>$id])->one();
         return $model != null?$model->code:'';
     }
     public static function findName($id){
-        $model = Product::find()->where(['id'=>$id])->one();
+        $model = Product::find()->select('name')->where(['id'=>$id])->one();
         return $model !=null?$model->name:'';
     }
     public static function findPhoto($id){
