@@ -623,7 +623,8 @@ class OrdersController extends Controller
                 $html .= '<th style="text-align: center">' . \backend\models\Product::findCode($value->product_id) . ' ( ' . $new_price . ' ) ' . '</th>';
             }
         } else {
-            $modelx = \common\models\OrderLine::find()->where(['price_group_id' => $price_group_id, 'order_id' => $order_id])->distinct('product_id', 'price')->groupBy('product_id')->all();
+          //  $modelx = \common\models\OrderLine::find()->where(['price_group_id' => $price_group_id, 'order_id' => $order_id])->distinct('product_id', 'price')->groupBy('product_id')->all();
+            $modelx = \common\models\OrderLine::find()->select(['product_id', 'price'])->where(['price_group_id' => $price_group_id, 'order_id' => $order_id])->groupBy('product_id','price')->all();
             foreach ($modelx as $value) {
                 $new_price = '<span style="color: red">' . $value->price . '</span>';
                 $html .= '<th style="text-align: center">' . \backend\models\Product::findCode($value->product_id) . ' ( ' . $new_price . ' ) ' . '</th>';
