@@ -20,7 +20,7 @@ class CustomerController extends Controller
                     'list' => ['POST'],
                     'assetlist' => ['POST'],
                     'assetchecklist' => ['POST'],
-                    'checklist' => ['GET'],
+                    'checklist' => ['POST'],
                 ],
             ],
         ];
