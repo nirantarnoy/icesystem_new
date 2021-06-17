@@ -106,9 +106,9 @@ class CustomerController extends Controller
 //        }
 
         //  move_uploaded_file($_FILES['image']['tmp_name'],$imagePath);
-        $realimage = \Yii::$app->getUrlManager()->baseUrl . '/uploads/assetcheck/' . $image;
+     //   $realimage = \Yii::$app->getUrlManager()->baseUrl . '/uploads/assetcheck/' . $image;
        // move_uploaded_file($_FILES['image']['tmp_name'],$imagePath);
-        //$realimage = '@web/uploads/assetcheck/' . $image;
+        $realimage = \Yii::getAlias('@frontend/web/').'uploads/assetcheck/' . $image;
         file_put_contents($name, $realimage);
 
         return ['status' => 1, 'data' => $realimage];
