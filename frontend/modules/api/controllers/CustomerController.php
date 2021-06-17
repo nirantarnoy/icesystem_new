@@ -125,12 +125,13 @@ class CustomerController extends Controller
         $customer_id = $req_data['customer_id'];
         $product_id = $req_data['product_id'];
         $user_id = $req_data['user_id'];
+        $route_id = $req_data['route_id'];
         $datalist = $req_data['datalist'];
         $base64_string = $req_data['image'];
 
         if ($company_id != null && $branch_id != null && $customer_id != null && $user_id != null) {
-            $outputfile = "uploads/assetcheck/" . time() . ".jpg";
-            //save as image.jpg in uploads/ folder
+            $newfile = time() . ".jpg";
+            $outputfile = "uploads/assetcheck/" . $newfile;          //save as image.jpg in uploads/ folder
 
             $filehandler = fopen($outputfile, 'wb');
             //file open with "w" mode treat as text file
@@ -142,12 +143,30 @@ class CustomerController extends Controller
             // clean up the file resource
             fclose($filehandler);
 
-            $status = 1;
+            $model = new \common\models\CustomerAssetStatus();
+            $model->customer_id = $customer_id;
+            $model->trans_date = date('Y-m-d H:i:s');
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
+            $model->route_id = $route_id;
+            $model->created_by = $user_id;
+            $model->status = 1;
+            $model->photo = $newfile;
+            $model->created_at = time();
+            if ($model->save()) {
+                $status = 1;
+                if ($datalist != null) {
+                    for ($i = 0; $i <= count($datalist) - 1; $i++) {
+                       $model_line = new \common\models\CustomerAssetStatusLine();
+                       $model_line->asset_status_id = $model->id;
+                       $model_line->checklist_id = $datalist[$i]['id'];
+                       $model_line->check_status = $datalist[$i]['is_check'];
+                       $model_line->save(false);
+                    }
+                }
+            }
         }
-
-
         return ['status' => $status, 'data' => $base64_string];
-
     }
 
     public function actionChecklist()
@@ -158,7 +177,7 @@ class CustomerController extends Controller
         $req_data = \Yii::$app->request->getBodyParams();
         $company_id = $req_data['company_id'];
         $branch_id = $req_data['branch_id'];
-     //   $warehouse_code = $req_data['wh_code'];
+        //   $warehouse_code = $req_data['wh_code'];
 
         $data = [];
         $status = 0;
