@@ -70,7 +70,7 @@ class Car extends \common\models\Car
 //    }
     public static function findName($id)
     {
-        $model = Car::find()->where(['id' => $id])->one();
+        $model = Car::find()->select('name')->where(['id' => $id])->one();
         return $model != null ? $model->name : '';
     }
 
