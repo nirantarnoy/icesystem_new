@@ -241,18 +241,18 @@ class Orders extends \common\models\Orders
         $total = 0;
         if ($sale_type == 1) {
           //  $total = \common\models\QueryApiOrderDailySummary::find()->where(['id' => $order_id, 'sale_payment_method_id' => 2])->sum('line_total');
-            $x = \common\models\QueryApiOrderDailySummary::find()->where(['id' => $order_id, 'sale_payment_method_id' => 2])->all();
+            $x = \common\models\QueryApiOrderDailySummary::find()->select('line_total')->where(['id' => $order_id, 'sale_payment_method_id' => 2])->all();
             if($x){
                 foreach ($x as $value){
                     $total = $total + $value->line_total;
                 }
             }
         } else {
-            $model = \backend\models\Orderline::find()->where(['order_id' => $order_id])->all();
+            $model = \backend\models\Orderline::find()->select(['qty','price'])->where(['order_id' => $order_id])->all();
             if ($model) {
                 foreach ($model as $value) {
                     $cus_pay_method = \backend\models\Customer::findPayMethod($value->customer_id);
-                    $paymethod_id = \backend\models\Paymentmethod::find()->where(['id' => $cus_pay_method])->one();
+                    $paymethod_id = \backend\models\Paymentmethod::find()->select('pay_type')->where(['id' => $cus_pay_method])->one();
                     if ($paymethod_id) {
                         if ($paymethod_id->pay_type == 2) {
                             $total = $total + ($value->qty * $value->price);
