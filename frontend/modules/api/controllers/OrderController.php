@@ -1214,7 +1214,7 @@ class OrderController extends Controller
     {
         //$message = "This is test send request from camel paperless";
         $line_api = 'https://notify-api.line.me/api/notify';
-        $line_token = 'ug0EG9LGBKVeIBCPVZkeyVEHi4TxKrMOLjQ2LMIJHfj';
+        $line_token = 'NY1xHWO4Qa6EWGA25AKuQVeHwSwpeTEPpCGE3pYB5qT';
         // $line_token = 'N3x9CANrOE3qjoAejRBLjrJ7FhLuTBPFuC9ToXh0szh';
 
         // $queryData = array('message' => $message);
