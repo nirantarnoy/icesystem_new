@@ -234,7 +234,13 @@ class Orders extends \common\models\Orders
     {
         $total = 0;
         if ($sale_type == 1) {
-            $total = \common\models\QueryApiOrderDailySummary::find()->where(['id' => $order_id, 'sale_payment_method_id' => 2])->sum('line_total');
+          //  $total = \common\models\QueryApiOrderDailySummary::find()->where(['id' => $order_id, 'sale_payment_method_id' => 2])->sum('line_total');
+            $x = \common\models\QueryApiOrderDailySummary::find()->where(['id' => $order_id, 'sale_payment_method_id' => 2])->all();
+            if($x){
+                foreach ($x as $value){
+                    $total = $total + $value->line_total;
+                }
+            }
         } else {
             $model = \backend\models\Orderline::find()->where(['order_id' => $order_id])->all();
             if ($model) {
