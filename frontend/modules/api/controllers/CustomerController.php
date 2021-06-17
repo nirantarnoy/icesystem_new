@@ -20,6 +20,7 @@ class CustomerController extends Controller
                     'list' => ['POST'],
                     'assetlist' => ['POST'],
                     'assetchecklist' => ['POST'],
+                    'checklist' => ['GET'],
                 ],
             ],
         ];
@@ -90,14 +91,21 @@ class CustomerController extends Controller
 
     public function actionAssetchecklist()
     {
+        $status = 0;
+        $datalist = null;
+        $user_id = null;
+        $company_id = null;
+        $branch_id = null;
+        $route_id = null;
+
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
-       // $image = base64_decode($req_data['image']);
+        // $image = base64_decode($req_data['image']);
         //$image = mb_convert_encoding(base64_decode($req_data['image']), 'UTF-8', 'UTF-8');
         // $image = $_FILES['image']['tmp_name'];
-        $status = 0;
+
         //$image = UploadedFile::getInstanceByName('image');
-        $name = time(). uniqid().'.jpg';//$req_data['name'];
+        //$name = time(). uniqid().'.jpg';//$req_data['name'];
 //        if(is_object($image)){
 //            $status = 1000;
 //            $filename = time()."_".uniqid().'.'.$image->extension;
@@ -106,27 +114,68 @@ class CustomerController extends Controller
 //        }
 
         //  move_uploaded_file($_FILES['image']['tmp_name'],$imagePath);
-     //   $realimage = \Yii::$app->getUrlManager()->baseUrl . '/uploads/assetcheck/' . $image;
-       // move_uploaded_file($_FILES['image']['tmp_name'],$imagePath);
+        //   $realimage = \Yii::$app->getUrlManager()->baseUrl . '/uploads/assetcheck/' . $image;
+        // move_uploaded_file($_FILES['image']['tmp_name'],$imagePath);
 //        $realimage = \Yii::getAlias('@frontend/web/').'uploads/assetcheck/' . $image;
 //        file_put_contents($name, $realimage);
 
+
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
+        $route_id = $req_data['route_id'];
+        $user_id = $req_data['user_id'];
+        $datalist = $req_data['datalist'];
         $base64_string = $req_data['image'];
-        $outputfile = "uploads/assetcheck/".time().".jpg" ;
-        //save as image.jpg in uploads/ folder
 
-        $filehandler = fopen($outputfile, 'wb' );
-        //file open with "w" mode treat as text file
-        //file open with "wb" mode treat as binary file
+        if ($company_id != null && $branch_id != null && $route_id != null && $user_id != null) {
+            $outputfile = "uploads/assetcheck/" . time() . ".jpg";
+            //save as image.jpg in uploads/ folder
 
-        fwrite($filehandler, base64_decode($base64_string));
-        // we could add validation here with ensuring count($data)>1
+            $filehandler = fopen($outputfile, 'wb');
+            //file open with "w" mode treat as text file
+            //file open with "wb" mode treat as binary file
 
-        // clean up the file resource
-        fclose($filehandler);
+            fwrite($filehandler, base64_decode($base64_string));
+            // we could add validation here with ensuring count($data)>1
+
+            // clean up the file resource
+            fclose($filehandler);
+
+            $status = 1;
+        }
 
 
-        return ['status' => 1, 'data' => $base64_string];
+        return ['status' => $status, 'data' => $base64_string];
 
+    }
+
+    public function actionChecklist()
+    {
+        $company_id = 0;
+        $branch_id = 0;
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
+     //   $warehouse_code = $req_data['wh_code'];
+
+        $data = [];
+        $status = 0;
+
+        if ($company_id) {
+            $model = \backend\models\Assetchecklist::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
+            if ($model) {
+                $status = 1;
+                foreach ($model as $value) {
+                    array_push($data, [
+                        'id' => $value->id,
+                        'code' => $value->code,
+                        'name' => $value->name,
+                    ]);
+                }
+            }
+        }
+
+        return ['status' => $status, 'data' => $data];
     }
 }
