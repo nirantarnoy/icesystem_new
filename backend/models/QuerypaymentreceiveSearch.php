@@ -17,7 +17,7 @@ class QuerypaymentreceiveSearch extends QueryPaymentReceive
     {
         return [
             [['id'], 'integer'],
-            [['trans_no', 'trans_date'], 'safe'],
+            [['journal_no', 'trans_date'], 'safe'],
             [['payment_amount'], 'number'],
             [['globalSearch', 'order_no', 'customer_code', 'customer_name'], 'string']
         ];
@@ -77,7 +77,7 @@ class QuerypaymentreceiveSearch extends QueryPaymentReceive
         }
 
         if ($this->globalSearch != '') {
-            $query->orFilterWhere(['like', 'trans_no', $this->globalSearch])
+            $query->orFilterWhere(['like', 'journal_no', $this->globalSearch])
                 ->orFilterWhere(['like', 'order_no', $this->globalSearch])
                 ->orFilterWhere(['like', 'customer_name', $this->globalSearch]);
         }
