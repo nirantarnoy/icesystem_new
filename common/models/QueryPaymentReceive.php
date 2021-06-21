@@ -62,7 +62,7 @@ class QueryPaymentReceive extends \yii\db\ActiveRecord
             'line_id' => 'Line ID',
             'order_no' => 'เลขที่อ้างอิง',
             'payment_amount' => 'จำนวน',
-            'payment_channel_id' => 'Payment Channel ID',
+            'payment_channel_id' => 'ช่องทางชำระ',
             'payment_method_id' => 'Payment Method ID',
             'order_id' => 'Order ID',
         ];

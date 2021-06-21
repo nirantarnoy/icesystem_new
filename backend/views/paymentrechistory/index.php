@@ -68,6 +68,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'customer_code',
             'customer_name',
             [
+                'attribute' => 'payment_channel_id',
+                'value' => function ($data) {
+                    return $data->payment_channel_id == 1 ? 'เงินสด' : 'โอนธนาคาร';
+                }
+            ],
+            [
                 'attribute' => 'payment_amount',
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
