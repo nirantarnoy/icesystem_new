@@ -16,17 +16,29 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-lg-10">
 
         </div>
-        <div class="col-lg-2" style="text-align: right">
-            <form id="form-perpage" class="form-inline" action="<?= Url::to(['paymentrechistory/index'], true) ?>"
+        <div class="col-lg-2"
+             style="text-align: right">
+            <form id="form-perpage"
+                  class="form-inline"
+                  action="<?= Url::to(['paymentrechistory/index'], true) ?>"
                   method="post">
                 <div class="form-group">
                     <label>แสดง </label>
-                    <select class="form-control" name="perpage" id="perpage">
-                        <option value="20" <?= $perpage == '20' ? 'selected' : '' ?>>20</option>
-                        <option value="50" <?= $perpage == '50' ? 'selected' : '' ?> >50</option>
-                        <option value="100" <?= $perpage == '100' ? 'selected' : '' ?>>100</option>
+                    <select class="form-control"
+                            name="perpage"
+                            id="perpage">
+                        <option value="20" <?= $perpage == '20' ? 'selected' : '' ?>>
+                            20
+                        </option>
+                        <option value="50" <?= $perpage == '50' ? 'selected' : '' ?> >
+                            50
+                        </option>
+                        <option value="100" <?= $perpage == '100' ? 'selected' : '' ?>>
+                            100
+                        </option>
                     </select>
-                    <label> รายการ</label>
+                    <label>
+                        รายการ</label>
                 </div>
             </form>
         </div>
@@ -55,6 +67,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'trans_date',
             'customer_code',
             'customer_name',
+            [
+                'attribute' => 'payment_amount',
+                'value' => function ($data) {
+                    return number_format($data->payment_amount);
+                }
+            ],
             [
 
                 'header' => 'ตัวเลือก',
