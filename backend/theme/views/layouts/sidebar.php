@@ -423,16 +423,16 @@
                                 <p>Re process</p>
                             </a>
                         </li>
+<!--                        <li class="nav-item">-->
+<!--                            <a href="index.php?r=ordercollection/index" class="nav-link ordercollection">-->
+<!--                                <i class="far fa-circlez nav-icon"></i>-->
+<!--                                <p>สรุปคำสั่งซื้อ</p>-->
+<!--                            </a>-->
+<!--                        </li>-->
                         <li class="nav-item">
-                            <a href="index.php?r=ordercollection/index" class="nav-link ordercollection">
+                            <a href="index.php?r=plan/index" class="nav-link plan">
                                 <i class="far fa-circlez nav-icon"></i>
-                                <p>สรุปคำสั่งซื้อ</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="index.php?r=masterplanning/index" class="nav-link masterplanning">
-                                <i class="far fa-circlez nav-icon"></i>
-                                <p>คำนวนแผนการผลิต</p>
+                                <p>แผนการผลิต</p>
                             </a>
                         </li>
 

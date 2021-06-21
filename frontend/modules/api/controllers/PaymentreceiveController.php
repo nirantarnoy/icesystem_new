@@ -204,6 +204,7 @@ class PaymentreceiveController extends Controller
                         $model_line->order_id = $order_id;
                         $model_line->payment_amount =$pay_amount;
                         $model_line->payment_channel_id = $payment_channel_id;
+                        $model_line->payment_method_id = 2; // 2 เชื่อ
                         $model_line->status = 1;
                         if ($model_line->save(false)) {
                             $status = true;
@@ -225,6 +226,7 @@ class PaymentreceiveController extends Controller
                             $model_line->order_id = $order_id;
                             $model_line->payment_amount = $pay_amount;
                             $model_line->payment_channel_id = $payment_channel_id;
+                            $model_line->payment_method_id = 2; // 2 เชื่อ
                             $model_line->status = 1;
                             if ($model_line->save(false)) {
                                 $status = true;
