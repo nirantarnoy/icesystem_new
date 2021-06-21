@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use yii\widgets\LinkPager;
 use yii\helpers\Url;
@@ -69,6 +69,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'customer_name',
             [
                 'attribute' => 'payment_amount',
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
                     return number_format($data->payment_amount);
                 }
