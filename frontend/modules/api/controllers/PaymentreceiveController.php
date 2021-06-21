@@ -163,7 +163,7 @@ class PaymentreceiveController extends Controller
     public function actionAddpay2()
     {
         $order_id = 0;
-        $payment_channel_id = 0;
+        $payment_channel_id = 1;
         $customer_id = 0;
         $pay_amount = 0;
         $pay_date = null;
@@ -190,7 +190,7 @@ class PaymentreceiveController extends Controller
         if ($company_id != null && $branch_id != null && $pay_date != null && $data_list != null) {
             if (count($data_list) > 0) {
                 for ($i = 0; $i <= count($data_list) - 1; $i++) {
-                    if ($data_list[$i]['order_id'] == null) continue;
+                    if ($data_list[$i]['order_id'] == null || $data_list[$i]['pay_amount'] == null || $data_list[$i]['pay_amount'] <= 0) continue;
 
                     $customer_id = $data_list[$i]['customer_id'];
                     $order_id = $data_list[$i]['order_id'];
@@ -208,7 +208,7 @@ class PaymentreceiveController extends Controller
                         $model_line->status = 1;
                         if ($model_line->save(false)) {
                             $status = true;
-                            $this->updatePaymenttransline($customer_id, $order_id, $pay_amount, $payment_channel_id);
+                           // $this->updatePaymenttransline($customer_id, $order_id, $pay_amount, $payment_channel_id);
                             $data = ['pay successfully'];
                         }
                         // }
@@ -230,7 +230,7 @@ class PaymentreceiveController extends Controller
                             $model_line->status = 1;
                             if ($model_line->save(false)) {
                                 $status = true;
-                                $this->updatePaymenttransline($customer_id, $order_id, $pay_amount, $payment_channel_id);
+                               // $this->updatePaymenttransline($customer_id, $order_id, $pay_amount, $payment_channel_id);
                                 $data = ['pay successfully'];
                             }
                         }
