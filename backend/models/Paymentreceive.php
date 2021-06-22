@@ -102,7 +102,7 @@ class Paymentreceive extends \common\models\PaymentReceive
 
     public static function findPayorderamt($order_id)
     {
-        $model = null;//\common\models\PaymentReceiveLine::find()->where(['order_id' => $order_id])->sum('payment_amount');
+        $model = \common\models\PaymentReceiveLine::find()->where(['order_id' => $order_id])->sum('payment_amount');
         return $model != null ? $model : 0;
     }
 
