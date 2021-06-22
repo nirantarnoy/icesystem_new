@@ -875,27 +875,27 @@ $js = <<<JS
 function showeditpayment(e){
       var order_id = e.attr('data-id');
       var customer_id = e.attr('data-var');
-        alert(order_id);
-        alert(customer_id);
+        // alert(order_id);
+        // alert(customer_id);
       if(order_id > 0 && customer_id > 0){
           
-//              $.ajax({
-//              'type':'post',
-//              'dataType': 'json',
-//              'async': false,
-//              'url': "$url_to_get_payment_trans",
-//              'data': {'order_id': order_id, 'customer_id': customer_id},
-//              'success': function(data) {
-//                  //  alert(data);
-//                  if(data.length > 0){
-//                       $(".payment-order-update-id").val(order_id);
-//                       $(".text-customer-info").html(data[0]['customer_name']);
-//                       $(".table-payment-trans-list tbody").html(data[0]['data']);
-//                       $("#editpaymentModal").modal('show');
-//                  }
-//                  
-//                 }
-//              });
+              $.ajax({
+              'type':'post',
+              'dataType': 'json',
+              'async': false,
+              'url': "$url_to_get_payment_trans",
+              'data': {'order_id': order_id, 'customer_id': customer_id},
+              'success': function(data) {
+                  //  alert(data);
+                  if(data.length > 0){
+                       $(".payment-order-update-id").val(order_id);
+                       $(".text-customer-info").html(data[0]['customer_name']);
+                       $(".table-payment-trans-list tbody").html(data[0]['data']);
+                       $("#editpaymentModal").modal('show');
+                  }
+                  
+                 }
+              });
               
       }
 }
