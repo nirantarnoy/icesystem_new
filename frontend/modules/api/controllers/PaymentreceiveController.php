@@ -34,9 +34,10 @@ class PaymentreceiveController extends Controller
 
         $data = [];
         $status = false;
-        if ($customer_id) {
+        if ($customer_id != null) {
             // $model = \common\models\JournalIssue::find()->one();
-            $model = \common\models\QuerySalePaySummary::find()->where(['customer_id' => $customer_id])->andfilterWhere(['OR',['=','payment_amounts',null],['>', 'remain_amount', 0]])->all();
+        //    $model = \common\models\QuerySalePaySummary::find()->where(['customer_id' => $customer_id])->andfilterWhere(['OR',['=','payment_amount',null],['>', 'remain_amount', 0]])->all();
+            $model = \common\models\QuerySalePaySummary::find()->where(['customer_id' => $customer_id])->all();
             if ($model) {
                 $status = true;
                 foreach ($model as $value) {
