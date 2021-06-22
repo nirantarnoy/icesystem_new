@@ -1715,20 +1715,20 @@ class OrdersController extends Controller
             payment_receive_line.payment_amount,
             payment_receive_line.payment_method_id,
             
-            '])->innerJoin('payment_receive','payment_receive_line.payment_receive_id=payment_receive.id')->where(['payment_receive_line.order_id' => $order_id, 'payment_receive.customer_id' => $customer_id])->all();
+            '])->join('inner join','payment_receive','payment_receive_line.payment_receive_id=payment_receive.id')->where(['payment_receive_line.order_id' => $order_id, 'payment_receive.customer_id' => $customer_id])->all();
             if ($model) {
-//                foreach ($model as $value) {
-//                    $html .= '<tr>';
-//                    $html .= '<td style="text-align: center">' . date('d/m/Y', strtotime($value->trans_date)) . '</td>';
-//                    $html .= '<td style="text-align: center">' . \backend\models\Paymentmethod::findName($value->payment_method_id) . '</td>';
-//                    $html .= '<td style="text-align: center">' . \backend\models\Paymentterm::findName($value->payment_method_id) . '</td>';
-//                    $html .= '<td style="text-align: center"><input type="text" class="form-control" name="line_trans_amt[]" value="' . number_format($value->payment_amount) . '"> </td>';
-//                    $html .= '<td style="text-align: center">
-//                                <div class="btn btn-danger btn-sm" data-id="' . $value->id . '" onclick="removepayline($(this))">ลบ</div>
-//                                <input type="hidden" name="line_trans_id[]" value="' . $value->id . '">
-//                            </td>';
-//                    $html .= '</tr>';
-//                }
+                foreach ($model as $value) {
+                    $html .= '<tr>';
+                    $html .= '<td style="text-align: center">' . date('d/m/Y', strtotime($value->trans_date)) . '</td>';
+                    $html .= '<td style="text-align: center">' . \backend\models\Paymentmethod::findName($value->payment_method_id) . '</td>';
+                    $html .= '<td style="text-align: center">' . \backend\models\Paymentterm::findName($value->payment_method_id) . '</td>';
+                    $html .= '<td style="text-align: center"><input type="text" class="form-control" name="line_trans_amt[]" value="' . number_format($value->payment_amount) . '"> </td>';
+                    $html .= '<td style="text-align: center">
+                                <div class="btn btn-danger btn-sm" data-id="' . $value->id . '" onclick="removepayline($(this))">ลบ</div>
+                                <input type="hidden" name="line_trans_id[]" value="' . $value->id . '">
+                            </td>';
+                    $html .= '</tr>';
+                }
             }
         }
         array_push($data, ['customer_name' => $customer_name, 'data' => $html]);
