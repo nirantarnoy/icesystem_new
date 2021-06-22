@@ -40,16 +40,13 @@ class OrdersController extends Controller
     public function actionIndex()
     {
 
-//        $model = \backend\models\Orders::find()->where(['emp_count'=>null])->all();
-//        foreach ($model as $value){
-//            $x = \common\models\QueryCarDailyEmpCount::find()->where(['car_id'=>$value->car_ref_id,'date(trans_date)'=>date('Y-m-d',strtotime($value->order_date))])->one();
-//            if($x){
-//                echo $x->emp_qty.'<br />';
-//                $model_update = \backend\models\Orders::find()->where(['id'=>$value->id])->one();
-//                $model_update->emp_count = $x->emp_qty;
-//                $model_update->save(false);
-//            }
-//        }
+//        $model = \common\models\PaymentReceiveLine::find()->select([
+//            'payment_receive.trans_date',
+//            'payment_receive_line.id',
+//            'payment_receive_line.payment_amount',
+//            'payment_receive_line.payment_method_id',
+//
+//            ])->join('inner join','payment_receive','payment_receive_line.payment_receive_id=payment_receive.id')->where(['payment_receive_line.order_id' => 1, 'payment_receive.customer_id' => 1])->all();
 
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new OrdersSearch();
@@ -1709,13 +1706,12 @@ class OrdersController extends Controller
         $html = '';
         if ($order_id > 0 && $customer_id > 0) {
             $customer_name = \backend\models\Customer::findName($customer_id);
-            $model = \common\models\PaymentReceiveLine::find()->select(['
-            payment_receive.trans_date,
-            payment_receive_line.id,
-            payment_receive_line.payment_amount,
-            payment_receive_line.payment_method_id,
-            
-            '])->join('inner join','payment_receive','payment_receive_line.payment_receive_id=payment_receive.id')->where(['payment_receive_line.order_id' => $order_id, 'payment_receive.customer_id' => $customer_id])->all();
+            $model = \common\models\PaymentReceiveLine::find()->select([
+            'payment_receive.trans_date',
+            'payment_receive_line.id',
+            'payment_receive_line.payment_amount',
+            'payment_receive_line.payment_method_id',
+            ])->join('inner join','payment_receive','payment_receive_line.payment_receive_id=payment_receive.id')->where(['payment_receive_line.order_id' => $order_id, 'payment_receive.customer_id' => $customer_id])->all();
             if ($model) {
                 foreach ($model as $value) {
                     $html .= '<tr>';
