@@ -1713,7 +1713,7 @@ class OrdersController extends Controller
             'payment_receive_line.payment_method_id',
             ])->join('inner join','payment_receive','payment_receive_line.payment_receive_id=payment_receive.id')->where(['payment_receive_line.order_id' => $order_id, 'payment_receive.customer_id' => $customer_id])->all();
             if ($model) {
-                $html.='<tr>HAS data</tr>';
+                $html.='<tr><td>HAS data</td></tr>';
 //                foreach ($model as $value) {
 //                    $html .= '<tr>';
 //                    $html .= '<td style="text-align: center">' . date('d/m/Y', strtotime($value->trans_date)) . '</td>';
@@ -1727,7 +1727,7 @@ class OrdersController extends Controller
 //                    $html .= '</tr>';
 //                }
             }else{
-                $html.='<tr>NO data</tr>';
+                $html.='<tr><td>NO data</td></tr>';
             }
         }
         array_push($data, ['customer_name' => $customer_name, 'data' => $html]);
