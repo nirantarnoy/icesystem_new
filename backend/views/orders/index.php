@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
-                    return number_format(\backend\models\Orders::findordercredit($data->id, $data->sale_from_mobile));
+                    return 0;// number_format(\backend\models\Orders::findordercredit($data->id, $data->sale_from_mobile));
 //                    if ($data->payment_method_id == 2) {
 //                        return number_format(\backend\models\Orders::getlinesum($data->id));
 //                    } else {
@@ -109,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
-                    return number_format(\backend\models\Orders::findordercash($data->id, $data->sale_from_mobile));
+                    return 0;//number_format(\backend\models\Orders::findordercash($data->id, $data->sale_from_mobile));
 //                    if ($data->payment_method_id == 1) {
 //                        return number_format(\backend\models\Orders::getlinesum($data->id));
 //                    } else {
