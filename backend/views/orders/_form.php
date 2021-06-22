@@ -875,8 +875,9 @@ $js = <<<JS
 function showeditpayment(e){
       var order_id = e.attr('data-id');
       var customer_id = e.attr('data-var');
+       alert('');
       if(order_id > 0 && customer_id > 0){
-           alert('');
+          
               $.ajax({
               'type':'post',
               'dataType': 'json',
