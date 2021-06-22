@@ -1716,7 +1716,7 @@ class OrdersController extends Controller
               //  $html.='<tr><td>HAS data</td></tr>';
                 foreach ($model as $value) {
                     $html .= '<tr>';
-                    $html .= '<td style="text-align: center">' . date('d/m/Y', strtotime($value->trans_date)) . '</td>';
+                    $html .= '<td style="text-align: center">' .$value->trans_date. '</td>';
                    // $html .= '<td style="text-align: center"></td>';
                     $html .= '<td style="text-align: center">' . \backend\models\Paymentmethod::findName($value->payment_method_id) . '</td>';
                     $html .= '<td style="text-align: center">' . \backend\models\Paymentterm::findName($value->payment_method_id) . '</td>';
