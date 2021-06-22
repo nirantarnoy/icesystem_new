@@ -125,7 +125,7 @@ class OrderController extends Controller
                                 }
 
 
-                                if ($payment_type_id != 3) {
+                                if ($payment_type_id == 1) {
                                     $this->addpayment($has_order_id, $customer_id, ($datalist[$i]['qty'] * $datalist[$i]['price']), $company_id, $branch_id, $payment_type_id);
                                 }
 
@@ -176,7 +176,7 @@ class OrderController extends Controller
                 $model->branch_id = $branch_id;
                 $model->sale_from_mobile = 1;
                 if ($model->save(false)) {
-                    array_push($data, ['order_id' => $model->id]);
+                   // array_push($data, ['order_id' => $model->id]);
                     if (count($datalist) > 0) {
                         for ($i = 0; $i <= count($datalist) - 1; $i++) {
                             if ($datalist[$i]['qty'] <= 0) continue;
@@ -210,10 +210,9 @@ class OrderController extends Controller
                                 $model_line->issue_ref_id = $issue_id;
                                 $model_line->is_free = $is_free;
                                 if ($model_line->save(false)) {
-
                                 }
 
-                                if ($payment_type_id != 3) {
+                                if ($payment_type_id ==1) {
                                     $this->addpayment($model->id, $customer_id, ($datalist[$i]['qty'] * $datalist[$i]['price']), $company_id, $branch_id, $payment_type_id);
                                 }
 
@@ -244,8 +243,6 @@ class OrderController extends Controller
                                     }
                                 }
                                 // end issue order stock
-
-
                             }
                         }
                     }
@@ -269,6 +266,48 @@ class OrderController extends Controller
 
         return ['status' => $status, 'data' => $data];
     }
+
+
+//    public function addPayment($customer_id, $trans_date,$order_id,$pay_amount,$company_id,$branch_id)
+//    {
+//        $status = false;
+//        $model = \common\models\PaymentReceive::find()->where(['date(trans_date)' => $trans_date, 'customer_id' => $customer_id])->one();
+//       // return $model;
+//        if ($model) {
+//            //if(count($check_record) > 0){
+//            $model_line = new \common\models\PaymentReceiveLine();
+//            $model_line->payment_receive_id = $model->id;
+//            $model_line->order_id = $order_id;
+//            $model_line->payment_amount =$pay_amount;
+//            $model_line->payment_channel_id = 1; // 1 เงินสด 2 โอน
+//            $model_line->payment_method_id = 1; // 1 สด
+//            $model_line->status = 1;
+//            if ($model_line->save(false)) {
+//                $status = true;
+//            }
+//            // }
+//        } else {
+//            $model = new \backend\models\Paymentreceive();
+//            $model->trans_date = date('Y-m-d');//date('Y-m-d H:i:s');
+//            $model->customer_id = $customer_id;
+//            $model->journal_no = $model->getLastNo2(date('Y-m-d'), $company_id, $branch_id);
+//            $model->status = 1;
+//            $model->company_id = $company_id;
+//            $model->branch_id = $branch_id;
+//            if ($model->save()) {
+//                $model_line = new \common\models\PaymentReceiveLine();
+//                $model_line->payment_receive_id = $model->id;
+//                $model_line->order_id = $order_id;
+//                $model_line->payment_amount = $pay_amount;
+//                $model_line->payment_channel_id = 1; // 1 เงินสด 2 โอน
+//                $model_line->payment_method_id = 1; // 1 สด
+//                $model_line->status = 1;
+//                if ($model_line->save(false)) {
+//                    $status = true;
+//                }
+//            }
+//        }
+//    }
 
     public function actionAddorder()
     {
@@ -448,7 +487,6 @@ class OrderController extends Controller
                                 $model_update_order_stock->save(false);
                             } else {
                                 $remain_qty = $qty - $model_update_order_stock->avl_qty;
-
                                 $model_update_order_stock->order_id = $model->id;
                                 $model_update_order_stock->avl_qty = 0;
                                 if ($model_update_order_stock->save(false)) {
@@ -534,34 +572,72 @@ class OrderController extends Controller
 
     public function addpayment($order_id, $customer_id, $amount, $company_id, $branch_id, $payment_type_id)
     {
-        $model = new \backend\models\Paymenttrans();
-        $model->trans_no = $model->getLastNo($company_id, $branch_id);
-        $model->trans_date = date('Y-m-d H:i:s');
-        $model->order_id = $order_id;
-        $model->status = 0;
-        $model->company_id = $company_id;
-        $model->branch_id = $branch_id;
-        if ($model->save(false)) {
-            if ($customer_id != null) {
-
-                $model_line = new \backend\models\Paymenttransline();
-                $model_line->trans_id = $model->id;
-                $model_line->customer_id = $customer_id;
-                $model_line->payment_method_id = 8;
-                $model_line->payment_term_id = 0;
-                $model_line->payment_date = date('Y-m-d H:i:s');
-                $model_line->payment_amount = $payment_type_id == 1 ? $amount : 0;
-                $model_line->total_amount = 0;
-                $model_line->order_ref_id = $order_id;
-                $model_line->payment_type_id = $payment_type_id;
+        $status = false;
+        $model = \common\models\PaymentReceive::find()->where(['date(trans_date)' => date('Y-m-d'), 'customer_id' => $customer_id])->one();
+       // return $model;
+        if ($model) {
+            //if(count($check_record) > 0){
+            $model_line = new \common\models\PaymentReceiveLine();
+            $model_line->payment_receive_id = $model->id;
+            $model_line->order_id = $order_id;
+            $model_line->payment_amount =$amount;
+            $model_line->payment_channel_id = 1; // 1 เงินสด 2 โอน
+            $model_line->payment_method_id = 1; // 1 สด
+            $model_line->status = 1;
+            if ($model_line->save(false)) {
+                $status = true;
+            }
+            // }
+        } else {
+            $model = new \backend\models\Paymentreceive();
+            $model->trans_date = date('Y-m-d');//date('Y-m-d H:i:s');
+            $model->customer_id = $customer_id;
+            $model->journal_no = $model->getLastNo2(date('Y-m-d'), $company_id, $branch_id);
+            $model->status = 1;
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
+            if ($model->save()) {
+                $model_line = new \common\models\PaymentReceiveLine();
+                $model_line->payment_receive_id = $model->id;
+                $model_line->order_id = $order_id;
+                $model_line->payment_amount = $amount;
+                $model_line->payment_channel_id = 1; // 1 เงินสด 2 โอน
+                $model_line->payment_method_id = 1; // 1 สด
                 $model_line->status = 1;
-                $model_line->doc = '';
                 if ($model_line->save(false)) {
-
+                    $status = true;
                 }
-
             }
         }
+
+//        $model = new \backend\models\Paymenttrans();
+//        $model->trans_no = $model->getLastNo($company_id, $branch_id);
+//        $model->trans_date = date('Y-m-d H:i:s');
+//        $model->order_id = $order_id;
+//        $model->status = 0;
+//        $model->company_id = $company_id;
+//        $model->branch_id = $branch_id;
+//        if ($model->save(false)) {
+//            if ($customer_id != null) {
+//
+//                $model_line = new \backend\models\Paymenttransline();
+//                $model_line->trans_id = $model->id;
+//                $model_line->customer_id = $customer_id;
+//                $model_line->payment_method_id = 8;
+//                $model_line->payment_term_id = 0;
+//                $model_line->payment_date = date('Y-m-d H:i:s');
+//                $model_line->payment_amount = $payment_type_id == 1 ? $amount : 0;
+//                $model_line->total_amount = 0;
+//                $model_line->order_ref_id = $order_id;
+//                $model_line->payment_type_id = $payment_type_id;
+//                $model_line->status = 1;
+//                $model_line->doc = '';
+//                if ($model_line->save(false)) {
+//
+//                }
+//
+//            }
+//        }
     }
 
     public function actionList()
