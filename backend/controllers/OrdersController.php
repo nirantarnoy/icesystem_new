@@ -935,7 +935,7 @@ class OrdersController extends Controller
                     $bg_color = ';background-color:white;color: black';
 
                     //  $model = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id])->all();
-                    $model = \common\models\OrderLine::find()->select(['price', 'qty'])->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id, 'product_id' => $price_value->product_id])->one();
+                    $model = \common\models\OrderLine::find()->select(['price', 'qty','customer_id'])->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id, 'product_id' => $price_value->product_id])->one();
                     if ($model) {
                         //  foreach ($model as $value) {
                         $i += 1;

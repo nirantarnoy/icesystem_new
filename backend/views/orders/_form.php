@@ -878,7 +878,7 @@ function showeditpayment(e){
         alert(order_id);
         alert(customer_id);
       if(order_id > 0 && customer_id > 0){
-           alert('');
+          
 //              $.ajax({
 //              'type':'post',
 //              'dataType': 'json',
