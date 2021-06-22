@@ -216,10 +216,9 @@ class PaymentreceiveController extends Controller
                     } else {
                         $model = new \backend\models\Paymentreceive();
                         $model->trans_date = date('Y-m-d', strtotime($t_date));//date('Y-m-d H:i:s');
-                        $model->customer_id = 1999;//$customer_id;
+                        $model->customer_id = $customer_id;
                         $model->journal_no = $model->getLastNo2(date('Y-m-d'), $company_id, $branch_id);
                         $model->status = 1;
-                        $model->customer_id = $company_id;
                         $model->company_id = $company_id;
                         $model->branch_id = $branch_id;
                         if ($model->save()) {
