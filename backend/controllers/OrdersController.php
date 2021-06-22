@@ -1700,6 +1700,40 @@ class OrdersController extends Controller
         array_push($data, ['customer_name' => $customer_name, 'data' => $html]);
         return json_encode($data);
     }
+    public function actionGetpaytrans2()
+    {
+        $order_id = \Yii::$app->request->post('order_id');
+        $customer_id = \Yii::$app->request->post('customer_id');
+        $customer_name = '';
+        $data = [];
+        $html = '';
+        if ($order_id > 0 && $customer_id > 0) {
+            $customer_name = \backend\models\Customer::findName($customer_id);
+            $model = \common\models\PaymentReceiveLine::find()->select(['
+            payment_receive.trans_date,
+            payment_receive_line.id,
+            payment_receive_line.payment_amount,
+            payment_receive_line.payment_method_id,
+            
+            '])->innerJoin('payment_receive','payment_receive_line.payment_receive_id=payment_receive.id')->where(['payment_receive_line.order_id' => $order_id, 'payment_receive.customer_id' => $customer_id])->all();
+            if ($model) {
+                foreach ($model as $value) {
+                    $html .= '<tr>';
+                    $html .= '<td style="text-align: center">' . date('d/m/Y', strtotime($value->trans_date)) . '</td>';
+                    $html .= '<td style="text-align: center">' . \backend\models\Paymentmethod::findName($value->payment_method_id) . '</td>';
+                    $html .= '<td style="text-align: center">' . \backend\models\Paymentterm::findName($value->payment_method_id) . '</td>';
+                    $html .= '<td style="text-align: center"><input type="text" class="form-control" name="line_trans_amt[]" value="' . number_format($value->payment_amount) . '"> </td>';
+                    $html .= '<td style="text-align: center">
+                                <div class="btn btn-danger btn-sm" data-id="' . $value->id . '" onclick="removepayline($(this))">ลบ</div>
+                                <input type="hidden" name="line_trans_id[]" value="' . $value->id . '">
+                            </td>';
+                    $html .= '</tr>';
+                }
+            }
+        }
+        array_push($data, ['customer_name' => $customer_name, 'data' => $html]);
+        return json_encode($data);
+    }
 
     public function actionUpdatepayment()
     {
