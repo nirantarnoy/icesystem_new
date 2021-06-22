@@ -164,7 +164,7 @@ class PaymentreceiveController extends Controller
     {
         $order_id = 0;
         $payment_channel_id = 1;
-        $customer_id = 0;
+
         $pay_amount = 0;
         $pay_date = null;
         $company_id = 1;
@@ -192,7 +192,7 @@ class PaymentreceiveController extends Controller
             if (count($data_list) > 0) {
                 for ($i = 0; $i <= count($data_list) - 1; $i++) {
                     if ($data_list[$i]['order_id'] == null || $data_list[$i]['pay_amount'] == null || $data_list[$i]['pay_amount'] <= 0) continue;
-
+                    $customer_id = 0;
                     $customer_id = $data_list[$i]['customer_id'];
                     $order_id = $data_list[$i]['order_id'];
                     $pay_amount = $data_list[$i]['pay_amount'];
