@@ -278,7 +278,7 @@ class OrdersController extends Controller
         }
 
         $model = $this->findModel($id);
-      //  $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
+        //  $model_line = \backend\models\Orderline::find()->where(['order_id' => $id])->all();
 
         $model_has_transfer = \backend\models\Journaltransfer::find()->where(['order_target_id' => $id, 'status' => 1])->one();
         $order_issue_list = \common\models\OrderStock::find()->where(['order_id' => $id])->all();
@@ -613,11 +613,11 @@ class OrdersController extends Controller
     public function getProductcolumn22($order_id, $price_group_id)
     {
         $html = '';
-        $model_price = \common\models\PriceGroupLine::find()->select(['product_id','sale_price'])->where(['price_group_id' => $price_group_id])->all();
-      //  $sql = 'SELECT COUNT(DISTINCT product_id) as cnt FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id;
-        $sql = 'SELECT product_id FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id." GROUP BY product_id";
+        $model_price = \common\models\PriceGroupLine::find()->select(['product_id', 'sale_price'])->where(['price_group_id' => $price_group_id])->all();
+        //  $sql = 'SELECT COUNT(DISTINCT product_id) as cnt FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id;
+        $sql = 'SELECT product_id FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id . " GROUP BY product_id";
         $query = \Yii::$app->db->createCommand($sql)->queryAll();
-       // $order_prod_cnt = $query[0]['cnt'];
+        // $order_prod_cnt = $query[0]['cnt'];
         $order_prod_cnt = count($query);
         if (count($model_price) > $order_prod_cnt) {
             foreach ($model_price as $value) {
@@ -625,8 +625,8 @@ class OrdersController extends Controller
                 $html .= '<th style="text-align: center">' . \backend\models\Product::findCode($value->product_id) . ' ( ' . $new_price . ' ) ' . '</th>';
             }
         } else {
-          //  $modelx = \common\models\OrderLine::find()->where(['price_group_id' => $price_group_id, 'order_id' => $order_id])->distinct('product_id', 'price')->groupBy('product_id')->all();
-            $modelx = \common\models\OrderLine::find()->select(['product_id', 'price'])->where(['price_group_id' => $price_group_id, 'order_id' => $order_id])->groupBy('product_id','price')->all();
+            //  $modelx = \common\models\OrderLine::find()->where(['price_group_id' => $price_group_id, 'order_id' => $order_id])->distinct('product_id', 'price')->groupBy('product_id')->all();
+            $modelx = \common\models\OrderLine::find()->select(['product_id', 'price'])->where(['price_group_id' => $price_group_id, 'order_id' => $order_id])->groupBy('product_id', 'price')->all();
             foreach ($modelx as $value) {
                 $new_price = '<span style="color: red">' . $value->price . '</span>';
                 $html .= '<th style="text-align: center">' . \backend\models\Product::findCode($value->product_id) . ' ( ' . $new_price . ' ) ' . '</th>';
@@ -916,7 +916,7 @@ class OrdersController extends Controller
     {
         $html = '';
 
-        $model_price = \common\models\PriceGroupLine::find()->select(['product_id','sale_price'])->where(['price_group_id' => $price_group_id])->all();
+        $model_price = \common\models\PriceGroupLine::find()->select(['product_id', 'sale_price'])->where(['price_group_id' => $price_group_id])->all();
 //        $model_order_product = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'price_group_id' => $price_group_id])->distinct('product_id')->count();
         $sql = 'SELECT COUNT(DISTINCT product_id) as cnt FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id;
         $query = \Yii::$app->db->createCommand($sql)->queryAll();
@@ -935,7 +935,7 @@ class OrdersController extends Controller
                     $bg_color = ';background-color:white;color: black';
 
                     //  $model = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id])->all();
-                    $model = \common\models\OrderLine::find()->select(['price','qty'])->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id, 'product_id' => $price_value->product_id])->one();
+                    $model = \common\models\OrderLine::find()->select(['price', 'qty'])->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id, 'product_id' => $price_value->product_id])->one();
                     if ($model) {
                         //  foreach ($model as $value) {
                         $i += 1;
@@ -981,7 +981,7 @@ class OrdersController extends Controller
                 $html .= '<td style="text-align: center">' . $btn_edit . '</td>';
             }
         } else {
-            $model = \common\models\OrderLine::find()->select(['product_id','price','qty'])->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id])->all();
+            $model = \common\models\OrderLine::find()->select(['product_id', 'price', 'qty'])->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id])->all();
             $i = 0;
             $line_total_qty = 0;
             $line_total_price = 0;
@@ -1564,6 +1564,102 @@ class OrdersController extends Controller
 
     }
 
+    public function actionAddpayment2()
+    {
+
+        $company_id = 1;
+        $branch_id = 1;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
+        $order_id = \Yii::$app->request->post('payment_order_id');
+        $customer_id = \Yii::$app->request->post('line_pay_customer_id');
+        $pay_method = \Yii::$app->request->post('line_payment_id');
+        $pay_term = \Yii::$app->request->post('line_payment_term_id');
+        $pay_amount = \Yii::$app->request->post('line_pay_amount');
+        $pay_date = \Yii::$app->request->post('payment_date');
+
+        $order_pay_date = date('Y-m-d H:i:s');
+        $x_date = explode('/', $pay_date);
+        $t_date = null;
+        if (count($x_date) > 1) {
+            $order_pay_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0] . ' ' . date('H:i:s');
+            $t_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
+        }
+
+        // echo date('Y-m-d H:i:s',strtotime($order_pay_date));return;
+        //    print_r(Yii::$app->request->post());
+//        echo '<br />';
+        //  print_r($pay_term);
+//
+        //   return false;
+
+        $res = 0;
+        if ($order_id > 0 && $customer_id != null) {
+            if (count($customer_id) > 0) {
+                for ($i = 0; $i <= count($customer_id) - 1; $i++) {
+                    if ($customer_id[$i] == '' || $customer_id[$i] == null) continue;
+
+                    $check_record = $this->checkHasRecord($customer_id[$i], $t_date);
+                    if ($check_record != null) {
+                        //if(count($check_record) > 0){
+                        $model_line = new \common\models\PaymentReceiveLine();
+                        $model_line->payment_receive_id = $check_record->id;
+                        $model_line->order_id = $order_id;
+                        $model_line->payment_amount = $pay_amount[$i];
+                        $model_line->payment_channel_id = 1;
+                        $model_line->payment_method_id = $pay_method[$i]; // 2 เชื่อ
+                        $model_line->status = 1;
+                        if ($model_line->save(false)) {
+                            $status = true;
+                            // $this->updatePaymenttransline($customer_id, $order_id, $pay_amount, $payment_channel_id);
+                            $data = ['pay successfully'];
+                        }
+                        // }
+                    } else {
+                        $model = new \backend\models\Paymentreceive();
+                        $model->trans_date = date('Y-m-d HH', strtotime($t_date));//date('Y-m-d H:i:s');
+                        $model->customer_id = $customer_id[$i];
+                        $model->journal_no = $model->getLastNo2(date('Y-m-d'), $company_id, $branch_id);
+                        $model->status = 1;
+                        $model->customer_id = $company_id;
+                        $model->branch_id = $branch_id;
+                        if ($model->save()) {
+                            $model_line = new \common\models\PaymentReceiveLine();
+                            $model_line->payment_receive_id = $model->id;
+                            $model_line->order_id = $order_id;
+                            $model_line->payment_amount = $pay_amount[$i];
+                            $model_line->payment_channel_id = 1; // 1 เงินสด 2 โอน
+                            $model_line->payment_method_id = $pay_method[$i]; // 2 เชื่อ
+                            $model_line->status = 1;
+                            if ($model_line->save(false)) {
+                                $status = true;
+                                // $this->updatePaymenttransline($customer_id, $order_id, $pay_amount, $payment_channel_id);
+                                $data = ['pay successfully'];
+                            }
+                        }
+                    }
+
+                }
+            }
+        } else {
+            echo "erorr";
+            return false;
+        }
+        return $this->redirect(['orders/update', 'id' => $order_id]);
+
+    }
+
+    public function checkHasRecord($customer_id, $trans_date)
+    {
+        $model = \common\models\PaymentReceive::find()->where(['date(trans_date)' => date('Y-m-d', strtotime($trans_date)), 'customer_id' => $customer_id])->one();
+        return $model;
+    }
+
     public function findPaytype($payment_id)
     {
         $res = 0;
@@ -1823,7 +1919,7 @@ class OrdersController extends Controller
         }
         if (!empty(\Yii::$app->user->identity->branch_id)) {
             $branch_id = \Yii::$app->user->identity->branch_id;
-            if($branch_id == 2){
+            if ($branch_id == 2) {
                 $default_warehouse = 5;
             }
         }

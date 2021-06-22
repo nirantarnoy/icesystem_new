@@ -259,7 +259,6 @@ class Orders extends \common\models\Orders
                         }
                     }
                 }
-
             }
         }
 

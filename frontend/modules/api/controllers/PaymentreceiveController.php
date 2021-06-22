@@ -179,6 +179,7 @@ class PaymentreceiveController extends Controller
         $branch_id = $req_data['branch_id'];
         $data_list = $req_data['data'];
 
+
         $xdate = explode('-', trim($pay_date));
         $t_date = date('Y-m-d');
         if (count($xdate) > 1) {
@@ -219,6 +220,7 @@ class PaymentreceiveController extends Controller
                         $model->journal_no = $model->getLastNo2(date('Y-m-d'), $company_id, $branch_id);
                         $model->status = 1;
                         $model->customer_id = $company_id;
+                        $model->company_id = $company_id;
                         $model->branch_id = $branch_id;
                         if ($model->save()) {
                             $model_line = new \common\models\PaymentReceiveLine();
