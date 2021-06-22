@@ -64,13 +64,13 @@ class SaleorderCustomerLoanSearch extends QuerySaleorderByCustomerLoanSum
             return $dataProvider;
         }
 
-        $query->andFilterWhere([
-            'customer_id' => $this->customer_id,
-            'rt_id' => $this->rt_id,
-            'customer_type_id' => $this->customer_type_id,
-            'car_ref_id' => $this->car_ref_id
-            //'!=','route_code','NULL'
-        ]);
+//        $query->andFilterWhere([
+//            'customer_id' => $this->customer_id,
+//            'rt_id' => $this->rt_id,
+//            'customer_type_id' => $this->customer_type_id,
+//            'car_ref_id' => $this->car_ref_id
+//            //'!=','route_code','NULL'
+//        ]);
 
         if (!empty(\Yii::$app->user->identity->company_id)) {
             $query->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
@@ -79,8 +79,13 @@ class SaleorderCustomerLoanSearch extends QuerySaleorderByCustomerLoanSum
             $query->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
         }
 
-        $query->andFilterWhere(['IN', 'car_ref_id', $this->car_selected])
-            ->andFilterWhere(['IN', 'customer_id', $this->customer_selected]);
+        if($this->car_ref_id != null ){
+            $query->andFilterWhere(['IN', 'car_ref_id', $this->car_selected]);
+        }
+        if($this->customer_id != null ){
+            $query->andFilterWhere(['IN', 'customer_id', $this->customer_selected]);
+        }
+
 
 
         return $dataProvider;
