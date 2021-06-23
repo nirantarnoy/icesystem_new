@@ -191,7 +191,7 @@ class ProductionController extends Controller
         $data = [];
         $status = false;
 
-        if ($journal_no ) {
+        //if ($journal_no ) {
             $model = \common\models\StockTrans::find()->where(['LIKE','journal_no',$journal_no])->all();
             // $model = \common\models\QueryCustomerPrice::find()->all();
             if ($model) {
@@ -209,7 +209,7 @@ class ProductionController extends Controller
                     ]);
                 }
             }
-        }
+        //}
 
         return ['status' => $status, 'data' => $data];
     }
