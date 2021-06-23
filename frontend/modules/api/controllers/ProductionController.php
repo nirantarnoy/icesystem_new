@@ -68,6 +68,7 @@ class ProductionController extends Controller
                 $model->production_type = $production_type;
                 $model->company_id = $company_id;
                 $model->branch_id = $branch_id;
+                $model->created_by = $user_id;
                 if ($model->save()) {
                     $status = 1;
                     $this->updateSummary($product_id, $warehouse_id, $qty);
