@@ -1726,6 +1726,7 @@ class OrdersController extends Controller
             if ($model) {
                 //  $html.='<tr><td>HAS data</td></tr>';
                 foreach ($model as $value) {
+                    $t_date = date('d/m/Y H:i:s', strtotime($value->trans_date));
                     $html .= '<tr>';
                    // $html .= '<td style="text-align: center">' . $value->trans_date . '</td>';
                     $html .= '<td style="text-align: center"></td>';
