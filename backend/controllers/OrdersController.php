@@ -63,21 +63,7 @@ class OrdersController extends Controller
         ]);
     }
 
-    public function actionTest(){
-         $model = \common\models\PaymentReceiveLine::find()->select([
-                'payment_receive.trans_date',
-                'payment_receive_line.id',
-                'payment_receive_line.payment_amount',
-                'payment_receive_line.payment_type_id',
-                'payment_receive_line.payment_term_id',
-            ])->join('inner join', 'payment_receive', 'payment_receive_line.payment_receive_id=payment_receive.id')->where(['payment_receive_line.order_id' => 26620, 'payment_receive.customer_id' =>4457])->all();
-            if ($model) {
-                print_r($model);
-//                foreach ($model as $value){
-//                    echo $value->transaction_date;
-//                }
-            }
-   }
+
 
     public function actionView($id)
     {
@@ -1733,20 +1719,22 @@ class OrdersController extends Controller
         $html = '';
         if ($order_id > 0 && $customer_id > 0) {
             $customer_name = \backend\models\Customer::findName($customer_id);
-            $model = \common\models\PaymentReceiveLine::find()->select([
-                'date(payment_receive.trans_date)',
-                'payment_receive_line.id',
-                'payment_receive_line.payment_amount',
-                'payment_receive_line.payment_type_id',
-                'payment_receive_line.payment_term_id',
-            ])->join('inner join', 'payment_receive', 'payment_receive_line.payment_receive_id=payment_receive.id')->where(['payment_receive_line.order_id' => $order_id, 'payment_receive.customer_id' => $customer_id])->all();
+//            $model = \common\models\PaymentReceiveLine::find()->select([
+//                'date(payment_receive.trans_date)',
+//                'payment_receive_line.id',
+//                'payment_receive_line.payment_amount',
+//                'payment_receive_line.payment_type_id',
+//                'payment_receive_line.payment_term_id',
+//            ])->join('inner join', 'payment_receive', 'payment_receive_line.payment_receive_id=payment_receive.id')->where(['payment_receive_line.order_id' => $order_id, 'payment_receive.customer_id' => $customer_id])->all();
+
+            $model = \common\models\QueryPaymentReceive::find()->where(['order_id'=>$order_id,'customer_id'=>$customer_id])->all();
             if ($model) {
                 //  $html.='<tr><td>HAS data</td></tr>';
                 foreach ($model as $value) {
                    // $t_date = date('d/m/Y H:i:s', strtotime($value->trans_date));
                     $html .= '<tr>';
-                   // $html .= '<td style="text-align: center">' . $value->trans_date . '</td>';
-                    $html .= '<td style="text-align: center"></td>';
+                    $html .= '<td style="text-align: center">' . date('d-m-Y H:i',strtotime($value->trans_date)) . '</td>';
+                   // $html .= '<td style="text-align: center"></td>';
                     $html .= '<td style="text-align: center">' . \backend\models\Paymentmethod::findName($value->payment_type_id) . '</td>';
                     $html .= '<td style="text-align: center">' . \backend\models\Paymentterm::findName($value->payment_term_id) . '</td>';
                     $html .= '<td style="text-align: center"><input type="text" class="form-control" name="line_trans_amt[]" value="' . number_format($value->payment_amount) . '"> </td>';
