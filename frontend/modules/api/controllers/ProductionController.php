@@ -187,12 +187,27 @@ class ProductionController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $journal_no = $req_data['journal_no'];
+        $trans_date = $req_data['trans_date'];
 
         $data = [];
         $status = false;
 
+        $journal_date = date('Y-m-d');
+        $t_date = null;
+        $exp_order_date = explode(' ', $trans_date);
+        if ($exp_order_date != null) {
+            if (count($exp_order_date) > 1) {
+                $x_date = explode('-', $exp_order_date[0]);
+                if (count($x_date) > 1) {
+                    $t_date = $x_date[0] . "/" . $x_date[1] . "/" . $x_date[2];
+                }
+            }
+        }
+        if ($t_date != null) {
+            $journal_date = $t_date;
+        }
         //if ($journal_no ) {
-            $model = \common\models\StockTrans::find()->where(['LIKE','journal_no',$journal_no])->all();
+            $model = \common\models\StockTrans::find()->where(['LIKE','journal_no',$journal_no,'date(trans_date)'=>$journal_date])->all();
             // $model = \common\models\QueryCustomerPrice::find()->all();
             if ($model) {
                 $status = true;
