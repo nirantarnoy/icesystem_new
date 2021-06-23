@@ -923,6 +923,7 @@ class OrdersController extends Controller
                 $i = 0;
                 $line_total_qty = 0;
                 $line_total_price = 0;
+                $btn_edit = '';
                 foreach ($model_price as $price_value) {
                     // for after add product_id to price group
                     $std_price = $price_value->sale_price;
@@ -944,7 +945,7 @@ class OrdersController extends Controller
                         $line_total_price = $line_total_price + ($model->qty * $model->price);
 
                         $bg_color = '';
-                        $btn_edit = '';
+
 
                         if ($model->qty > 0) {
                             $bg_color = ';background-color:#33CC00;color: black';
@@ -952,9 +953,7 @@ class OrdersController extends Controller
                             $bg_color = ';background-color:white;color: black';
                         }
 
-                        if ($has_payment) {
-                            $btn_edit = '<div class="btn btn-info btn-sm" data-id="' . $order_id . '" data-var="' . $customer_id . '" onclick="showeditpayment($(this))">แก้ไข</div>';
-                        }
+
 
                         $html .= '<td>
                        <input type="hidden" class="line-qty-">
@@ -973,6 +972,9 @@ class OrdersController extends Controller
                   </td>';
                     }
                 }
+                if ($has_payment) {
+                    $btn_edit = '<div class="btn btn-info btn-sm" data-id="' . $order_id . '" data-var="' . $customer_id . '" onclick="showeditpayment($(this))">แก้ไข</div>';
+                }
                 $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right" value="' . number_format($line_total_qty) . '"></td>';
                 $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"  value="' . number_format($line_total_price) . '"><input type="hidden" class="form-control line-total-price-cal" style="text-align: right" value="' . $line_total_price . '"></td>';
                 $html .= '<td style="text-align: center">' . $btn_edit . '</td>';
@@ -982,6 +984,7 @@ class OrdersController extends Controller
             $i = 0;
             $line_total_qty = 0;
             $line_total_price = 0;
+            $btn_edit = '';
             foreach ($model as $value) {
                 $i += 1;
                 $line_prod_code = \backend\models\Product::findCode($value->product_id) . $price_group_id . "[]";
@@ -992,7 +995,7 @@ class OrdersController extends Controller
                 $line_total_price = $line_total_price + ($value->qty * $value->price);
 
                 $bg_color = '';
-                $btn_edit = '';
+
 
                 if ($value->qty > 0) {
                     $bg_color = ';background-color:#33CC00;color: black';
@@ -1000,9 +1003,6 @@ class OrdersController extends Controller
                     $bg_color = ';background-color:white;color: black';
                 }
 
-                if ($has_payment) {
-                    $btn_edit = '<div class="btn btn-info btn-sm" data-id="' . $order_id . '" data-var="' . $value->customer_id . '" onclick="showeditpayment($(this))">แก้ไข</div>';
-                }
 
                 $html .= '<td>
                        <input type="hidden" class="line-qty-' . $i . '">
@@ -1011,6 +1011,10 @@ class OrdersController extends Controller
                        <input type="number" name="' . $input_name . '" data-var="' . $value->price . '" style="text-align: center' . $bg_color . '" value="' . $value->qty . '" class="form-control" min="0" onchange="line_qty_cal($(this))">
                   </td>';
             }
+            if ($has_payment) {
+                $btn_edit = '<div class="btn btn-info btn-sm" data-id="' . $order_id . '" data-var="' . $customer_id . '" onclick="showeditpayment($(this))">แก้ไข</div>';
+            }
+
             $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right" value="' . number_format($line_total_qty) . '"></td>';
             $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"  value="' . number_format($line_total_price) . '"><input type="hidden" class="form-control line-total-price-cal" style="text-align: right" value="' . $line_total_price . '"></td>';
             $html .= '<td style="text-align: center">' . $btn_edit . '</td>';
