@@ -953,7 +953,7 @@ class OrdersController extends Controller
                         }
 
                         if ($has_payment) {
-                            $btn_edit = '<div class="btn btn-info btn-sm" data-id="' . $order_id . '" data-var="' . $model->customer_id . '" onclick="showeditpayment($(this))">แก้ไข</div>';
+                            $btn_edit = '<div class="btn btn-info btn-sm" data-id="' . $order_id . '" data-var="' . $customer_id . '" onclick="showeditpayment($(this))">แก้ไข</div>';
                         }
 
                         $html .= '<td>
