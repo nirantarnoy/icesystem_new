@@ -207,7 +207,13 @@ class ProductionController extends Controller
             $journal_date = $t_date;
         }
         //if ($journal_no ) {
+            $model = null;
+        if($journal_no == ''){
+            $model = \common\models\StockTrans::find()->where(['date(trans_date)'=>$journal_date])->all();
+        }else{
             $model = \common\models\StockTrans::find()->where(['LIKE','journal_no',$journal_no,'date(trans_date)'=>$journal_date])->all();
+        }
+
             // $model = \common\models\QueryCustomerPrice::find()->all();
             if ($model) {
                 $status = true;
