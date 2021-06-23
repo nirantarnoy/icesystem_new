@@ -932,7 +932,7 @@ class OrdersController extends Controller
                     $bg_color = ';background-color:white;color: black';
 
                     //  $model = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id])->all();
-                    $model = \common\models\OrderLine::find()->select(['price', 'qty','customer_id'])->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id, 'product_id' => $price_value->product_id])->one();
+                    $model = \common\models\OrderLine::find()->select(['price', 'qty', 'customer_id'])->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id, 'product_id' => $price_value->product_id])->one();
                     if ($model) {
                         //  foreach ($model as $value) {
                         $i += 1;
@@ -1601,6 +1601,7 @@ class OrdersController extends Controller
                 for ($i = 0; $i <= count($customer_id) - 1; $i++) {
                     if ($customer_id[$i] == '' || $customer_id[$i] == null) continue;
 
+                    $pay_type = \backend\models\Paymentmethod::find()->where(['id' => $pay_method[$i]])->one();
                     $check_record = $this->checkHasRecord($customer_id[$i], $t_date);
                     if ($check_record != null) {
                         //if(count($check_record) > 0){
@@ -1609,7 +1610,9 @@ class OrdersController extends Controller
                         $model_line->order_id = $order_id;
                         $model_line->payment_amount = $pay_amount[$i];
                         $model_line->payment_channel_id = 1;
-                        $model_line->payment_method_id = $pay_method[$i]; // 2 เชื่อ
+                        $model_line->payment_method_id = $pay_type != null ? $pay_type->pay_type : 0; // 2 เชื่อ
+                        $model_line->payment_type_id = $pay_method[$i];
+                        $model_line->payment_term_id = $pay_term[$i];
                         $model_line->status = 1;
                         if ($model_line->save(false)) {
                             $status = true;
@@ -1623,7 +1626,7 @@ class OrdersController extends Controller
                         $model->customer_id = $customer_id[$i];
                         $model->journal_no = $model->getLastNo2(date('Y-m-d'), $company_id, $branch_id);
                         $model->status = 1;
-                        $model->customer_id = $company_id;
+                        $model->company_id = $company_id;
                         $model->branch_id = $branch_id;
                         if ($model->save()) {
                             $model_line = new \common\models\PaymentReceiveLine();
@@ -1631,7 +1634,9 @@ class OrdersController extends Controller
                             $model_line->order_id = $order_id;
                             $model_line->payment_amount = $pay_amount[$i];
                             $model_line->payment_channel_id = 1; // 1 เงินสด 2 โอน
-                            $model_line->payment_method_id = $pay_method[$i]; // 2 เชื่อ
+                            $model_line->payment_method_id = $pay_type != null ? $pay_type->pay_type : 0; // 2 เชื่อ
+                            $model_line->payment_type_id = $pay_method[$i];
+                            $model_line->payment_term_id = $pay_term[$i];
                             $model_line->status = 1;
                             if ($model_line->save(false)) {
                                 $status = true;
@@ -1697,6 +1702,7 @@ class OrdersController extends Controller
         array_push($data, ['customer_name' => $customer_name, 'data' => $html]);
         return json_encode($data);
     }
+
     public function actionGetpaytrans2()
     {
         $order_id = \Yii::$app->request->post('order_id');
@@ -1707,17 +1713,17 @@ class OrdersController extends Controller
         if ($order_id > 0 && $customer_id > 0) {
             $customer_name = \backend\models\Customer::findName($customer_id);
             $model = \common\models\PaymentReceiveLine::find()->select([
-            'payment_receive.trans_date',
-            'payment_receive_line.id',
-            'payment_receive_line.payment_amount',
-            'payment_receive_line.payment_method_id',
-            ])->join('inner join','payment_receive','payment_receive_line.payment_receive_id=payment_receive.id')->where(['payment_receive_line.order_id' => $order_id, 'payment_receive.customer_id' => $customer_id])->all();
+                'payment_receive.trans_date',
+                'payment_receive_line.id',
+                'payment_receive_line.payment_amount',
+                'payment_receive_line.payment_method_id',
+            ])->join('inner join', 'payment_receive', 'payment_receive_line.payment_receive_id=payment_receive.id')->where(['payment_receive_line.order_id' => $order_id, 'payment_receive.customer_id' => $customer_id])->all();
             if ($model) {
-              //  $html.='<tr><td>HAS data</td></tr>';
+                //  $html.='<tr><td>HAS data</td></tr>';
                 foreach ($model as $value) {
                     $html .= '<tr>';
-                    $html .= '<td style="text-align: center">' .$value->trans_date. '</td>';
-                   // $html .= '<td style="text-align: center"></td>';
+                    $html .= '<td style="text-align: center">' . $value->trans_date . '</td>';
+                    // $html .= '<td style="text-align: center"></td>';
                     $html .= '<td style="text-align: center">' . \backend\models\Paymentmethod::findName($value->payment_method_id) . '</td>';
                     $html .= '<td style="text-align: center">' . \backend\models\Paymentterm::findName($value->payment_method_id) . '</td>';
                     $html .= '<td style="text-align: center"><input type="text" class="form-control" name="line_trans_amt[]" value="' . number_format($value->payment_amount) . '"> </td>';
@@ -1727,8 +1733,8 @@ class OrdersController extends Controller
                             </td>';
                     $html .= '</tr>';
                 }
-            }else{
-                $html.='<tr><td>NO data</td></tr>';
+            } else {
+                $html .= '<tr><td>NO data</td></tr>';
             }
         }
         array_push($data, ['customer_name' => $customer_name, 'data' => $html]);

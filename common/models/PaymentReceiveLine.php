@@ -31,7 +31,7 @@ class PaymentReceiveLine extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['payment_receive_id', 'order_id', 'product_id', 'status','payment_channel_id'], 'integer'],
+            [['payment_receive_id', 'order_id', 'product_id', 'status','payment_channel_id','payment_type_id','payment_term_id'], 'integer'],
             [['remain_amount', 'payment_amount'], 'number'],
             [['doc'],'string']
         ];
@@ -51,6 +51,8 @@ class PaymentReceiveLine extends \yii\db\ActiveRecord
             'doc' => 'Doc',
             'remain_amount' => 'Remain Amount',
             'payment_amount' => 'Payment Amount',
+            'payment_type_id' => 'Payment type id',
+            'payment_term_id' => 'Payment term id',
             'status' => 'Status',
         ];
     }
