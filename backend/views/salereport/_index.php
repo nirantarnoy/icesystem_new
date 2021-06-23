@@ -58,7 +58,7 @@ echo GridView::widget([
                 return 'สายส่ง ' . $model->route_code;
             },
             'filterType' => GridView::FILTER_SELECT2,
-            'filter' => ArrayHelper::map(\backend\models\Deliveryroute::find()->orderBy('name')->asArray()->all(), 'id', 'name'),
+            'filter' => ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id'=>\Yii::$app->user->identity->company_id,'branch_id'=>\Yii::$app->user->identity->branch_id])->orderBy('name')->asArray()->all(), 'id', 'name'),
             'filterWidgetOptions' => [
                 'pluginOptions' => ['allowClear' => true],
             ],
@@ -126,7 +126,7 @@ echo GridView::widget([
                 return \backend\models\Paymentmethod::findName($model->payment_method_id);
             },
             'filterType' => GridView::FILTER_SELECT2,
-            'filter' => ArrayHelper::map(\backend\models\Paymentmethod::find()->orderBy('name')->asArray()->all(), 'id', 'name'),
+            'filter' => ArrayHelper::map(\backend\models\Paymentmethod::find()->where(['company_id'=>\Yii::$app->user->identity->company_id,'branch_id'=>\Yii::$app->user->identity->branch_id])->orderBy('name')->asArray()->all(), 'id', 'name'),
             'filterWidgetOptions' => [
                 'pluginOptions' => ['allowClear' => true],
             ],
@@ -141,7 +141,7 @@ echo GridView::widget([
                 return \backend\models\Customer::findName($model->customer_id);
             },
             'filterType' => GridView::FILTER_SELECT2,
-            'filter' => ArrayHelper::map(\backend\models\Customer::find()->orderBy('name')->asArray()->all(), 'id', 'name'),
+            'filter' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id'=>\Yii::$app->user->identity->company_id,'branch_id'=>\Yii::$app->user->identity->branch_id])->orderBy('name')->asArray()->all(), 'id', 'name'),
             'filterWidgetOptions' => [
                 'pluginOptions' => ['allowClear' => true],
             ],
@@ -167,7 +167,7 @@ echo GridView::widget([
                 return \backend\models\Product::findName($model->product_id);
             },
             'filterType' => GridView::FILTER_SELECT2,
-            'filter' => ArrayHelper::map(\backend\models\Product::find()->orderBy('name')->asArray()->all(), 'id', 'name'),
+            'filter' => ArrayHelper::map(\backend\models\Product::find()->where(['company_id'=>\Yii::$app->user->identity->company_id,'branch_id'=>\Yii::$app->user->identity->branch_id])->orderBy('name')->asArray()->all(), 'id', 'name'),
             'filterWidgetOptions' => [
                 'pluginOptions' => ['allowClear' => true],
             ],
