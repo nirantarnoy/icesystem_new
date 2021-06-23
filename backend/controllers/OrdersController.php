@@ -63,6 +63,21 @@ class OrdersController extends Controller
         ]);
     }
 
+    public function actionTest(){
+         $model = \common\models\PaymentReceiveLine::find()->select([
+                'date(payment_receive.trans_date)',
+                'payment_receive_line.id',
+                'payment_receive_line.payment_amount',
+                'payment_receive_line.payment_type_id',
+                'payment_receive_line.payment_term_id',
+            ])->join('inner join', 'payment_receive', 'payment_receive_line.payment_receive_id=payment_receive.id')->where(['payment_receive_line.order_id' => 26620, 'payment_receive.customer_id' =>4457])->all();
+            if ($model) {
+                foreach ($model as $value){
+                    echo $value->trans_date;
+                }
+            }
+   }
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -1727,7 +1742,7 @@ class OrdersController extends Controller
             if ($model) {
                 //  $html.='<tr><td>HAS data</td></tr>';
                 foreach ($model as $value) {
-                    $t_date = date('d/m/Y H:i:s', strtotime($value->trans_date));
+                   // $t_date = date('d/m/Y H:i:s', strtotime($value->trans_date));
                     $html .= '<tr>';
                    // $html .= '<td style="text-align: center">' . $value->trans_date . '</td>';
                     $html .= '<td style="text-align: center"></td>';
