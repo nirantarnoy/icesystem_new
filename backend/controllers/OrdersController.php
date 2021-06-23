@@ -1024,7 +1024,7 @@ class OrdersController extends Controller
     public function haspayment($order_id, $customer_id)
     {
      //   $model = \common\models\QueryPayment::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id])->count();
-        $model = \common\models\PaymentReceive::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id])->count();
+        $model = \common\models\QuerySaleCustomerPaySummary::find()->where(['order_ref_id' => $order_id, 'customer_id' => $customer_id])->count();
         return $model;
     }
 //    public function actionFindSaledataUpdate()
