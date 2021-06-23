@@ -19,6 +19,7 @@ class ProductionController extends Controller
                     'addprodrec' => ['POST'],
                     'warehouselist' => ['POST'],
                     'addreprocesswip' => ['POST'],
+                    'productionreprint' => ['POST'],
                 ],
             ],
         ];
@@ -173,6 +174,39 @@ class ProductionController extends Controller
                 if ($model_line->save(false)) {
                     $this->updatestock($product_id, $qty, $company_id, $branch_id);
                     $status = 1;
+                }
+            }
+        }
+
+        return ['status' => $status, 'data' => $data];
+    }
+
+    public function actionProductionreprint()
+    {
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        $journal_no = $req_data['journal_no'];
+
+        $data = [];
+        $status = false;
+
+        if ($journal_no ) {
+            $model = \common\models\StockTrans::find()->where(['LIKE','journal_no',$journal_no])->all();
+            // $model = \common\models\QueryCustomerPrice::find()->all();
+            if ($model) {
+                $status = true;
+                foreach ($model as $value) {
+                    array_push($data, [
+                        'id' => $value->id,
+                        'journal_no' => $value->journal_no,
+                        'journal_date' => date('d-m-Y', strtotime($value->trans_date)),
+                        'journal_time' => date('H:i:s', strtotime($value->trans_date)),
+                        'warehouse_name' => \backend\models\Warehouse::findName($value->warehouse_id),
+                        'product_name' => \backend\models\Product::findName($value->product_id),
+                        'qty' => $value->qty,
+                        'user' => \backend\models\User::findName($value->created_by),
+                    ]);
                 }
             }
         }
