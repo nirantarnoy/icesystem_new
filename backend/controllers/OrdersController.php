@@ -64,7 +64,6 @@ class OrdersController extends Controller
     }
 
 
-
     public function actionView($id)
     {
         return $this->render('view', [
@@ -111,14 +110,14 @@ class OrdersController extends Controller
             if (count($x_date) > 1) {
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
-            $emp_count = \backend\models\Cardaily::find()->where(['car_id' => $model->car_ref_id])->andFilterWhere(['date(trans_date)' => date('Y-m-d', strtotime($sale_date))])->count('employee_id');
+            $emp_count = \backend\models\Cardaily::find()->where(['car_id' => $model->car_ref_id])->andFilterWhere(['date(trans_date)' => date('Y-m-d', strtotime($sale_date))])->all();
             $model->order_no = $model::getLastNo($sale_date, $company_id, $branch_id);
             $model->order_date = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
             $model->sale_channel_id = 1;
             $model->company_id = $company_id;
             $model->branch_id = $branch_id;
-            $model->emp_count = $emp_count;
+            $model->emp_count = count($emp_count);
             if ($model->save(false)) {
                 $this->updateEmpqty($model->id);
                 if ($price_group_list_arr != null) {
@@ -255,12 +254,31 @@ class OrdersController extends Controller
     {
         $model = \backend\models\Orders::find()->where(['id' => $order_id])->one();
         if ($model) {
-            $x = \common\models\QueryCarDailyEmpCount::find()->where(['car_id' => $model->car_ref_id, 'date(trans_date)' => date('Y-m-d', strtotime($model->order_date))])->one();
-            if ($x) {
-                echo $x->emp_qty . '<br />';
-                $model_update = \backend\models\Orders::find()->where(['id' => $order_id])->one();
-                $model_update->emp_count = $x->emp_qty;
-                $model_update->save(false);
+//            $x = \common\models\QueryCarDailyEmpCount::find()->where(['car_id' => $model->car_ref_id, 'date(trans_date)' => date('Y-m-d', strtotime($model->order_date))])->one();
+//            if ($x) {
+//             //   echo $x->emp_qty . '<br />';
+//                $model_update = \backend\models\Orders::find()->where(['id' => $order_id])->one();
+//                $model_update->emp_count = $x->emp_qty;
+//                $model_update->save(false);
+//            }
+
+            $model_car_daily = Cardaily::find()->where(['car_id' => $model->car_ref_id, 'date(trans_date)' => date('Y-m-d', strtotime($model->order_date))])->all();
+            if ($model_car_daily) {
+                $i = 0;
+                $emp_1 = 0;
+                $emp_2 = 0;
+                foreach ($model_car_daily as $value) {
+                    if ($i = 0) {
+                        $emp_1 = $value->employee_id;
+                    } else if ($i == 1) {
+                        $emp_2 = $value->employee_id;
+                    }
+                    $model->emp_count = count($model_car_daily);
+                    $model->emp_1 = $emp_1;
+                    $model->emp_2 = $emp_2;
+                    $model->save(false);
+                    $i += 1;
+                }
             }
         }
     }
@@ -956,7 +974,6 @@ class OrdersController extends Controller
                         }
 
 
-
                         $html .= '<td>
                        <input type="hidden" class="line-qty-">
                        <input type="hidden" class="line-product-code" name="' . $line_prod_code . '" value="' . $line_prod_code . '">
@@ -1029,7 +1046,7 @@ class OrdersController extends Controller
 
     public function haspayment($order_id, $customer_id)
     {
-     //   $model = \common\models\QueryPayment::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id])->count();
+        //   $model = \common\models\QueryPayment::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id])->count();
         $model = \common\models\QuerySaleCustomerPaySummary::find()->where(['order_ref_id' => $order_id, 'customer_id' => $customer_id])->count();
         return $model;
     }
@@ -1727,14 +1744,14 @@ class OrdersController extends Controller
 //                'payment_receive_line.payment_term_id',
 //            ])->join('inner join', 'payment_receive', 'payment_receive_line.payment_receive_id=payment_receive.id')->where(['payment_receive_line.order_id' => $order_id, 'payment_receive.customer_id' => $customer_id])->all();
 
-            $model = \common\models\QueryPaymentReceive::find()->where(['order_id'=>$order_id,'customer_id'=>$customer_id])->all();
+            $model = \common\models\QueryPaymentReceive::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id])->all();
             if ($model) {
                 //  $html.='<tr><td>HAS data</td></tr>';
                 foreach ($model as $value) {
-                   // $t_date = date('d/m/Y H:i:s', strtotime($value->trans_date));
+                    // $t_date = date('d/m/Y H:i:s', strtotime($value->trans_date));
                     $html .= '<tr>';
-                    $html .= '<td style="text-align: center">' . date('d-m-Y H:i',strtotime($value->trans_date)) . '</td>';
-                   // $html .= '<td style="text-align: center"></td>';
+                    $html .= '<td style="text-align: center">' . date('d-m-Y H:i', strtotime($value->trans_date)) . '</td>';
+                    // $html .= '<td style="text-align: center"></td>';
                     $html .= '<td style="text-align: center">' . \backend\models\Paymentmethod::findName($value->payment_type_id) . '</td>';
                     $html .= '<td style="text-align: center">' . \backend\models\Paymentterm::findName($value->payment_term_id) . '</td>';
                     $html .= '<td style="text-align: center"><input type="text" class="form-control" name="line_trans_amt[]" value="' . number_format($value->payment_amount) . '"> </td>';
