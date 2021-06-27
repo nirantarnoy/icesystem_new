@@ -113,6 +113,7 @@ class OrdersController extends Controller
             $emp_count = \backend\models\Cardaily::find()->where(['car_id' => $model->car_ref_id])->andFilterWhere(['date(trans_date)' => date('Y-m-d', strtotime($sale_date))])->all();
             $model->order_no = $model::getLastNo($sale_date, $company_id, $branch_id);
             $model->order_date = date('Y-m-d', strtotime($sale_date));
+            $model->order_date2 = date('Y-m-d', strtotime($sale_date));
             $model->status = 1;
             $model->sale_channel_id = 1;
             $model->company_id = $company_id;
