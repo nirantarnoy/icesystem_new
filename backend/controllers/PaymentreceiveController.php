@@ -278,7 +278,8 @@ class PaymentreceiveController extends Controller
         $html = '';
         $total_amount = 0;
         if ($cus_id) {
-            $model = \common\models\QuerySalePaySummary::find()->where(['customer_id' => $cus_id])->andFilterWhere(['>', 'remain_amount', 0])->all();
+           // $model = \common\models\QuerySalePaySummary::find()->where(['customer_id' => $cus_id])->andFilterWhere(['>', 'remain_amount', 0])->all();
+            $model = \common\models\QuerySalePaySummary::find()->where(['customer_id' => $cus_id])->andfilterWhere(['OR',['is','payment_amount',new \yii\db\Expression('null')],['>', 'remain_amount', 0]])->all();
             if ($model) {
 //                $html = $cus_id;
                 $i = 0;
