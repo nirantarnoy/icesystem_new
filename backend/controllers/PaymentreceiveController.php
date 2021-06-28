@@ -286,6 +286,7 @@ class PaymentreceiveController extends Controller
                 foreach ($model as $value) {
                     $i += 1;
                     //   $total_amount = $total_amount + ($value->remain_amount == null ? 0 : $value->remain_amount);
+                    $remain_amt = $value->remain_amount == null?$value->payment_amount:$value->remain_amount;
                     $html .= '<tr>';
                     $html .= '<td style="text-align: center">' . $i . '</td>';
                     $html .= '<td style="text-align: center">' . \backend\models\Orders::getNumber($value->order_id) . '</td>';
@@ -301,8 +302,8 @@ class PaymentreceiveController extends Controller
                     </td>';
 //                    $html .= '<td style="text-align: center"><input type="file" class="form-control"></td>';
                     $html .= '<td>
-                            <input type="text" class="form-control line-remain" style="text-align: right" name="line_remain[]" value="' . number_format($value->remain_amount, 2) . '" readonly>
-                            <input type="hidden" class="line-remain-qty" value="' . $value->remain_amount . '">
+                            <input type="text" class="form-control line-remain" style="text-align: right" name="line_remain[]" value="' . number_format($remain_amt, 2) . '" readonly>
+                            <input type="hidden" class="line-remain-qty" value="' . $remain_amt . '">
                             </td>';
                     $html .= '<td><input type="number" class="form-control line-pay" name="line_pay[]" value="0" min="0" onchange="linepaychange($(this))"></td>';
                     $html .= '</tr>';
