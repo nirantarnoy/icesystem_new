@@ -38,7 +38,7 @@ class Plan extends \yii\db\ActiveRecord
     {
         return [
             [['trans_date'], 'safe'],
-            [['customer_id', 'route_id', 'status', 'company_id', 'branch_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['customer_id', 'route_id', 'status', 'company_id', 'branch_id', 'created_at', 'created_by', 'updated_at', 'updated_by','car_id'], 'integer'],
             [['journal_no', 'description'], 'string', 'max' => 255],
         ];
     }
