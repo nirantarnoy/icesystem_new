@@ -97,10 +97,10 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                                    value="" min="0">
                         </td>
                         <td style="text-align: center">
-                            <?php if (!$model->isNewRecord): ?>
+
                                 <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
                                             class="fa fa-trash"></i></div>
-                            <?php endif; ?>
+
                         </td>
                     </tr>
                 <?php else: ?>
