@@ -106,7 +106,7 @@ class PlanController extends Controller
         $model_line = \backend\models\Planline::find()->where(['plan_id'=>$id])->all();
 
         if ($model->load(Yii::$app->request->post())) {
-            $product_id = \Yii::$app->request->post('line_product_id');
+            $product_id = \Yii::$app->request->post('line_prod_id');
             $qty = \Yii::$app->request->post('line_qty');
             $removelist = \Yii::$app->request->post('removelist');
 
