@@ -37,8 +37,8 @@ class Plan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['trans_date'], 'safe'],
-            [['customer_id', 'route_id', 'status', 'company_id', 'branch_id', 'created_at', 'created_by', 'updated_at', 'updated_by','car_id'], 'integer'],
+            [['trans_date','status'], 'safe'],
+            [['customer_id', 'route_id',  'company_id', 'branch_id', 'created_at', 'created_by', 'updated_at', 'updated_by','car_id'], 'integer'],
             [['journal_no', 'description'], 'string', 'max' => 255],
         ];
     }
@@ -50,12 +50,12 @@ class Plan extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'journal_no' => 'Journal No',
-            'trans_date' => 'Trans Date',
-            'customer_id' => 'Customer ID',
-            'route_id' => 'Route ID',
-            'description' => 'Description',
-            'status' => 'Status',
+            'journal_no' => 'เลขที่',
+            'trans_date' => 'วันที่',
+            'customer_id' => 'ลูกค้า',
+            'route_id' => 'สายส่ง',
+            'description' => 'หมายเหตุ',
+            'status' => 'สถานะ',
             'company_id' => 'Company ID',
             'branch_id' => 'Branch ID',
             'created_at' => 'Created At',

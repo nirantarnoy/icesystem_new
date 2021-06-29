@@ -29,6 +29,14 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
             ]) ?>
         </div>
         <div class="col-lg-3">
+            <?= $form->field($model, 'route_id')->widget(\kartik\select2\Select2::className(), [
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', 'name'),
+                'options' => [
+                    'placeholder' => 'เลือกสายส่ง'
+                ]
+            ]) ?>
+        </div>
+        <div class="col-lg-3">
             <?= $form->field($model, 'customer_id')->widget(\kartik\select2\Select2::className(), [
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customer::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', 'name'),
                 'options' => [
@@ -36,11 +44,11 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 ]
             ]) ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-lg-3">
             <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
         </div>
-    </div>
-    <div class="row">
         <div class="col-lg-3">
             <?= $form->field($model, 'status')->textInput(['readonly'=>'readonly']) ?>
         </div>

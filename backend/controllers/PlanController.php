@@ -103,6 +103,7 @@ class PlanController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model_line = \backend\models\Planline::find()->where(['plan_id'=>$id])->all();
 
         if ($model->load(Yii::$app->request->post())) {
             $product_id = \Yii::$app->request->post('line_product_id');
@@ -143,6 +144,7 @@ class PlanController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'model_line' =>$model_line,
         ]);
     }
 

@@ -5,17 +5,15 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Plan */
 
-$this->title = 'Update Plan: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Plans', 'url' => ['index']];
+$this->title = 'แก้ไขแผนผลิต: ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'แผนผลิต', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'แก้ไข';
 ?>
 <div class="plan-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
+        'model_line' => $model_line,
     ]) ?>
 
 </div>
