@@ -83,7 +83,7 @@ class PlanController extends Controller
                 }
             } else {
                 $model = new \backend\models\Plan();
-                $model->order_no = $model->getLastNo($sale_date, $company_id, $branch_id);
+                $model->journal_no = $model->getLastNo($sale_date, $company_id, $branch_id);
                 // $model->order_date = date('Y-m-d H:i:s', strtotime($sale_date . ' ' . $sale_time));
                 $model->trans_date = date('Y-m-d H:i:s');
                 $model->customer_id = 0;
