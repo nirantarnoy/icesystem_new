@@ -22,7 +22,7 @@ class PlanController extends Controller
                     'listplan' => ['POST'],
                     'listplanbycustomer' => ['POST'],
                     'deleteplanline' => ['POST'],
-                    'deleteplancustomer' => ['POST'],
+                    'deleteplan' => ['POST'],
                     'updateplan' => ['POST'],
 
                 ],
@@ -78,7 +78,8 @@ class PlanController extends Controller
                             $model_line_trans->product_id = $datalist[$i]['product_id'];
                             $model_line_trans->qty = $datalist[$i]['qty'];
                             $model_line_trans->status = 1;
-                            if ($model_line_trans->save(false)) {}
+                            if ($model_line_trans->save(false)) {
+                            }
 
 
                         }
@@ -195,7 +196,7 @@ class PlanController extends Controller
         if ($customer_id) {
             //$model = \common\models\QueryApiOrderDaily::find()->where(['customer_id' => $customer_id])->andFilterWhere(['id' => $order_id])->andFilterWhere(['>', 'qty', 0])->all();
             //$model = \backend\models\Plan::find()->where([])->one();
-            $model_line = \common\models\PlanLine::find()->where(['plan_id'=>$plan_id])->all();
+            $model_line = \common\models\PlanLine::find()->where(['plan_id' => $plan_id])->all();
             if ($model_line) {
                 $status = true;
                 foreach ($model_line as $value) {
@@ -226,7 +227,7 @@ class PlanController extends Controller
 
         $data = [];
         if ($id) {
-            if(\backend\models\Planline::deleteAll(['id'=>$id])){
+            if (\backend\models\Planline::deleteAll(['id' => $id])) {
                 $status = true;
             }
         }
@@ -234,20 +235,24 @@ class PlanController extends Controller
         return ['status' => $status, 'data' => $data];
     }
 
-    public function actionDeleteplancustomer()
+    public function actionDeleteplan()
     {
         $status = false;
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $plan_id = $req_data['plan_id'];
-        $customer_id = $req_data['customer_id'];
+      //  $customer_id = $req_data['customer_id'];
 
         $data = [];
-        if ($plan_id != null && $customer_id != null) {
-            if(\backend\models\Planline::deleteAll(['plan_id'=>$plan_id])){
-                Plan::deleteAll(['id'=>$plan_id]);
+        if ($plan_id != null) {
+            if (\backend\models\Planline::deleteAll(['plan_id' => $plan_id])) {
+                Plan::deleteAll(['id' => $plan_id]);
+                $status = true;
+            }else{
+                Plan::deleteAll(['id' => $plan_id]);
                 $status = true;
             }
+
 //            if (\common\models\Planline::updateAll(['qty' => 0, 'price' => 0, 'line_total' => 0], ['order_id' => $order_id, 'customer_id' => $customer_id])) {
 //                $status = true;
 //            }
