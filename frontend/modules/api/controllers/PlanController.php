@@ -193,7 +193,7 @@ class PlanController extends Controller
         if ($customer_id) {
             //$model = \common\models\QueryApiOrderDaily::find()->where(['customer_id' => $customer_id])->andFilterWhere(['id' => $order_id])->andFilterWhere(['>', 'qty', 0])->all();
             //$model = \backend\models\Plan::find()->where([])->one();
-            $model_line = \common\models\PlanLine::find()->where(['customer_id' => $customer_id,'plan_id'=>$plan_id])->all();
+            $model_line = \common\models\PlanLine::find()->where(['plan_id'=>$plan_id])->all();
             if ($model_line) {
                 $status = true;
                 foreach ($model_line as $value) {
