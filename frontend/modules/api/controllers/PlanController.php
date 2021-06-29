@@ -19,6 +19,7 @@ class PlanController extends Controller
                 'actions' => [
                     'addplan' => ['POST'],
                     'listplan' => ['POST'],
+                    'listplanbycustomer' => ['POST'],
                     'deleteplan' => ['POST'],
                     'updateplan' => ['POST'],
 
@@ -180,39 +181,29 @@ class PlanController extends Controller
     }
 
 
-    public function actionListbycustomer()
+    public function actionListplanbycustomer()
     {
         $status = false;
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         $customer_id = $req_data['customer_id'];
-        $order_id = $req_data['order_id'];
+        $plan_id = $req_data['plan_id'];
 
         $data = [];
         if ($customer_id) {
             //$model = \common\models\QueryApiOrderDaily::find()->where(['customer_id' => $customer_id])->andFilterWhere(['id' => $order_id])->andFilterWhere(['>', 'qty', 0])->all();
-            $model = \common\models\QueryApiOrderDailySummaryNew::find()->where(['customer_id' => $customer_id])->andFilterWhere(['id' => $order_id])->andFilterWhere(['>', 'line_qty', 0])->all();
-            if ($model) {
+            //$model = \backend\models\Plan::find()->where([])->one();
+            $model_line = \common\models\PlanLine::find()->where(['customer_id' => $customer_id,'plan_id'=>$plan_id])->all();
+            if ($model_line) {
                 $status = true;
-                foreach ($model as $value) {
+                foreach ($model_line as $value) {
                     array_push($data, [
-                        'order_id' => $value->id,
-                        'order_no' => $value->order_no,
-                        'order_date' => $value->order_date,
-                        'order_status' => $value->status,
-                        'line_id' => $value->order_line_id,
-                        'customer_id' => $value->customer_id,
-                        'customer_name' => $value->name,
-                        'customer_code' => $value->code,
+                        'id' => $value->id,
                         'product_id' => $value->product_id,
-                        'product_code' => $value->product_code,
-                        'product_name' => $value->product_name,
-                        'qty' => $value->line_qty,
-                        'price' => $value->price,
-                        'price_group_id' => '',
-                        'order_line_status' => \backend\models\Orderlinetrans::findStatus($value->order_line_id),
+                        'product_name' => \backend\models\Product::findName($value->product_id),
+                        'qty' => $value->qty,
+                        'status' => $value->status,
                     ]);
-
                 }
             }
         }
