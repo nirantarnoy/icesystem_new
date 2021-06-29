@@ -64,14 +64,24 @@ class PlanController extends Controller
 
     public function actionCreate()
     {
+        $company_id = 1;
+        $branch_id = 1;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
         $model = new Plan();
 
         if ($model->load(Yii::$app->request->post())) {
-            $product_id = \Yii::$app->request->post('line_product_id');
+            $product_id = \Yii::$app->request->post('line_prod_id');
             $qty = \Yii::$app->request->post('line_qty');
             $removelist = \Yii::$app->request->post('remove_list');
 
-
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
+            $model->status = 1;
             if($model->save()){
                   if($product_id != null){
                       for($i=0;$i<=count($product_id)-1;$i++){
