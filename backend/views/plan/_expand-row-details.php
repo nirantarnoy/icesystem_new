@@ -12,7 +12,7 @@
        <?php foreach ($model_detail as $value):?>
        <tr>
          <td><?=$value->customer_name?></td>
-           <td style="text-align: center"><?=number_format($value->qty)?></td>
+           <td style="text-align: right"><?=number_format($value->qty)?></td>
        </tr>
       <?php endforeach;?>
     </table>
