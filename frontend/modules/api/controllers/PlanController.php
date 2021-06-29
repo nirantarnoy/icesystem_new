@@ -86,7 +86,7 @@ class PlanController extends Controller
                 $model->journal_no = $model->getLastNo($sale_date, $company_id, $branch_id);
                 // $model->order_date = date('Y-m-d H:i:s', strtotime($sale_date . ' ' . $sale_time));
                 $model->trans_date = date('Y-m-d H:i:s');
-                $model->customer_id = 0;
+                $model->customer_id = $customer_id;
                 $model->route_id = $route_id;
                 $model->car_id = $car_id;
                 $model->status = 1;
