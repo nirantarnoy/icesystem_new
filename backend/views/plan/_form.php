@@ -93,7 +93,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                                    name="line_prod_name[]" value="" disabled>
                         </td>
                         <td>
-                            <input type="number" class="line-qty form-control" name="line_qty[]"
+                            <input type="number" style="text-align: right" class="line-qty form-control" name="line_qty[]"
                                    value="" min="0">
                         </td>
                         <td style="text-align: center">
@@ -126,7 +126,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                                            disabled>
                                 </td>
                                 <td>
-                                    <input type="number" class="line-qty form-control" name="line_qty[]"
+                                    <input type="number" class="line-qty form-control" name="line_qty[]" style="text-align: right"
                                            value="<?= $value2->qty ?>" min="0">
                                 </td>
                                 <td style="text-align: center">
@@ -154,7 +154,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                                        name="line_prod_name[]" value="" disabled>
                             </td>
                             <td>
-                                <input type="number" class="line-qty form-control" name="line_qty[]"
+                                <input type="number" class="line-qty form-control" name="line_qty[]" style="text-align: right"
                                        value="" min="0">
                             </td>
                             <td style="text-align: center">
