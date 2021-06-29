@@ -2,6 +2,7 @@
 
 namespace frontend\modules\api\controllers;
 
+use common\models\Plan;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 
@@ -20,7 +21,8 @@ class PlanController extends Controller
                     'addplan' => ['POST'],
                     'listplan' => ['POST'],
                     'listplanbycustomer' => ['POST'],
-                    'deleteplan' => ['POST'],
+                    'deleteplanline' => ['POST'],
+                    'deleteplancustomer' => ['POST'],
                     'updateplan' => ['POST'],
 
                 ],
@@ -212,7 +214,7 @@ class PlanController extends Controller
     }
 
 
-    public function actionDeleteorderline()
+    public function actionDeleteplanline()
     {
         $status = false;
         $id = null;
@@ -224,39 +226,31 @@ class PlanController extends Controller
 
         $data = [];
         if ($id) {
-            $model_data = \backend\models\Orderline::find()->where(['id' => $id])->one();
-            if ($model_data) {
-                // $model_return_issue = \backend\models\Journalissueline::find()->where(['product_id' => $model_data->product_id, 'issue_id' => $model_data->issue_ref_id])->andFilterWhere(['>', 'qty', 0])->one();
-                $model_return_issue = \common\models\OrderStock::find()->where(['product_id' => $model_data->product_id, 'order_id' => $model_data->order_id])->one();
-
-                if ($model_return_issue) {
-                    $model_return_issue->avl_qty = (int)$model_return_issue->avl_qty + (int)$model_data->qty;
-                    if ($model_return_issue->save(false)) {
-                        if (\common\models\OrderLine::deleteAll(['id' => $id])) {
-                            $status = true;
-                        }
-                    }
-                }
+            if(\backend\models\Planline::deleteAll(['id'=>$id])){
+                $status = true;
             }
-
         }
 
         return ['status' => $status, 'data' => $data];
     }
 
-    public function actionDeleteordercustomer()
+    public function actionDeleteplancustomer()
     {
         $status = false;
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
-        $order_id = $req_data['order_id'];
+        $plan_id = $req_data['plan_id'];
         $customer_id = $req_data['customer_id'];
 
         $data = [];
-        if ($order_id != null && $customer_id != null) {
-            if (\common\models\OrderLine::updateAll(['qty' => 0, 'price' => 0, 'line_total' => 0], ['order_id' => $order_id, 'customer_id' => $customer_id])) {
+        if ($plan_id != null && $customer_id != null) {
+            if(\backend\models\Planline::deleteAll(['plan_id'=>$plan_id])){
+                Plan::deleteAll(['id'=>$plan_id]);
                 $status = true;
             }
+//            if (\common\models\Planline::updateAll(['qty' => 0, 'price' => 0, 'line_total' => 0], ['order_id' => $order_id, 'customer_id' => $customer_id])) {
+//                $status = true;
+//            }
         }
         return ['status' => $status, 'data' => $data];
     }
