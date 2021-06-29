@@ -168,7 +168,10 @@ class PlanController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(\backend\models\Planline::deleteAll(['plan_id'=>$id])){
+            $this->findModel($id)->delete();
+        }
+
 
         return $this->redirect(['index']);
     }
