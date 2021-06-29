@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\PlansummarySearch;
 use Yii;
 use backend\models\Plan;
 use backend\models\PlanSearch;
@@ -157,13 +158,7 @@ class PlanController extends Controller
         ]);
     }
 
-    /**
-     * Deletes an existing Plan model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionDelete($id)
     {
         if(\backend\models\Planline::deleteAll(['plan_id'=>$id])){
@@ -174,13 +169,6 @@ class PlanController extends Controller
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Plan model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Plan the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Plan::findOne($id)) !== null) {
@@ -188,5 +176,19 @@ class PlanController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionCalsummary(){
+        $pageSize = \Yii::$app->request->post("perpage");
+        $searchModel = new PlansummarySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
+        $dataProvider->pagination->pageSize = $pageSize;
+
+        return $this->render('plansummary', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'perpage' => $pageSize,
+        ]);
     }
 }
