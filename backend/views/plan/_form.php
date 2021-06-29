@@ -96,8 +96,6 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                             <input type="number" class="line-qty form-control" name="line_qty[]"
                                    value="" min="0">
                         </td>
-                        <td>
-                        </td>
                         <td style="text-align: center">
                             <?php if (!$model->isNewRecord): ?>
                                 <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
@@ -185,6 +183,63 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
 
     <?php ActiveForm::end(); ?>
 
+</div>
+<div id="findModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row" style="width: 100%">
+                    <div class="col-lg-11">
+                        <div class="input-group">
+                            <input type="text" class="form-control search-item" placeholder="ค้นหาสินค้า">
+                            <span class="input-group-addon">
+                                        <button type="submit" class="btn btn-primary btn-search-submit">
+                                            <span class="fa fa-search"></span>
+                                        </button>
+                                    </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                </div>
+
+            </div>
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+
+            <div class="modal-body">
+
+                <input type="hidden" name="line_qc_product" class="line_qc_product" value="">
+                <table class="table table-bordered table-striped table-find-list" width="100%">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center">เลือก</th>
+                        <th>รหัสสินค้า</th>
+                        <th>รายละเอียด</th>
+                        <th>ต้นทุน</th>
+                        <th>ราคาขาย</th>
+                        <th>จำนวนคงเหลือ</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline-success btn-product-selected" data-dismiss="modalx" disabled><i
+                            class="fa fa-check"></i> ตกลง
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                            class="fa fa-close text-danger"></i> ปิดหน้าต่าง
+                </button>
+            </div>
+        </div>
+
+    </div>
 </div>
 <?php
 $url_to_find_item = \yii\helpers\Url::to(['pricegroup/productdata'], true);
