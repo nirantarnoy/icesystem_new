@@ -93,7 +93,6 @@ class PlanController extends Controller
                 $model->created_by = $user_id;
                 $model->company_id = $company_id;
                 $model->branch_id = $branch_id;
-                $model->sale_from_mobile = 1;
                 if ($model->save(false)) {
                     // array_push($data, ['order_id' => $model->id]);
                     if (count($datalist) > 0) {
