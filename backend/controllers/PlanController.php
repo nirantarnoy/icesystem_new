@@ -82,18 +82,19 @@ class PlanController extends Controller
             $model->company_id = $company_id;
             $model->branch_id = $branch_id;
             $model->status = 1;
-            if($model->save()){
-                  if($product_id != null){
-                      for($i=0;$i<=count($product_id)-1;$i++){
-                          if($product_id[$i]==null || $product_id=='')continue;
-                          $model_line = new \backend\models\Planline();
-                          $model_line->plan_id = $model->id;
-                          $model_line->product_id = $product_id[$i];
-                          $model_line->qty = $qty[$i];
-                          $model_line->status = 1;
-                          $model_line->save();
-                      }
-                  }
+            $model->journal_no = $model->getLastNo(date('Y-m-d'), $company_id, $branch_id);
+            if ($model->save()) {
+                if ($product_id != null) {
+                    for ($i = 0; $i <= count($product_id) - 1; $i++) {
+                        if ($product_id[$i] == null || $product_id == '') continue;
+                        $model_line = new \backend\models\Planline();
+                        $model_line->plan_id = $model->id;
+                        $model_line->product_id = $product_id[$i];
+                        $model_line->qty = $qty[$i];
+                        $model_line->status = 1;
+                        $model_line->save();
+                    }
+                }
             }
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -113,23 +114,23 @@ class PlanController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model_line = \backend\models\Planline::find()->where(['plan_id'=>$id])->all();
+        $model_line = \backend\models\Planline::find()->where(['plan_id' => $id])->all();
 
         if ($model->load(Yii::$app->request->post())) {
             $product_id = \Yii::$app->request->post('line_prod_id');
             $qty = \Yii::$app->request->post('line_qty');
             $removelist = \Yii::$app->request->post('removelist');
 
-            if($model->save()){
-                if($product_id != null){
-                    for($i=0;$i<=count($product_id)-1;$i++){
-                        if($product_id[$i]==null || $product_id=='')continue;
+            if ($model->save()) {
+                if ($product_id != null) {
+                    for ($i = 0; $i <= count($product_id) - 1; $i++) {
+                        if ($product_id[$i] == null || $product_id == '') continue;
 
-                        $model_check = \backend\models\Planline::find()->where(['plan_id'=>$id,'product_id'=>$product_id[$i]])->one();
-                        if($model_check){
+                        $model_check = \backend\models\Planline::find()->where(['plan_id' => $id, 'product_id' => $product_id[$i]])->one();
+                        if ($model_check) {
                             $model_check->qty = $qty[$i];
                             $model_check->save();
-                        }else{
+                        } else {
                             $model_line = new \backend\models\Planline();
                             $model_line->plan_id = $model->id;
                             $model_line->product_id = $product_id[$i];
@@ -154,7 +155,7 @@ class PlanController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'model_line' =>$model_line,
+            'model_line' => $model_line,
         ]);
     }
 
