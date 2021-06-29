@@ -32,19 +32,19 @@ class PlanController extends Controller
         $customer_id = null;
         $status = false;
         $user_id = 0;
-        $issue_id = 0;
         $route_id = 0;
         $car_id = 0;
         $company_id = 0;
         $branch_id = 0;
         $datalist = null;
+        $plan_date = null;
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         if ($req_data != null) {
+            $plan_date = $req_data['plan_date'];
             $customer_id = $req_data['customer_id'];
             $user_id = $req_data['user_id'] == null ? 0 : $req_data['user_id'];
-            //  $issue_id = $req_data['issue_id'];
             $route_id = $req_data['route_id'];
             $car_id = $req_data['car_id'];
             $company_id = $req_data['company_id'];
@@ -54,7 +54,7 @@ class PlanController extends Controller
 
         $data = [];
 
-        if ($customer_id && $route_id && $car_id) {
+        if ($customer_id && $route_id && $car_id && $company_id && $branch_id) {
             //  $sale_date = date('Y/m/d');
             $sale_date = date('Y/m/d');
 
@@ -120,8 +120,6 @@ class PlanController extends Controller
 
         return ['status' => $status, 'data' => $data];
     }
-
-
 
     public function hasPlan($order_date, $route_id, $car_id)
     {
