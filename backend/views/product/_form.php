@@ -5,17 +5,17 @@ use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
 
 $company_id = 1;
-$brach_id = 1;
-if(isset($_SESSION['user_company_id'])){
-    $company_id = $_SESSION['user_company_id'];
+$branch_id = 1;
+if (!empty(\Yii::$app->user->identity->company_id)) {
+    $company_id = \Yii::$app->user->identity->company_id;
 }
-if(isset($_SESSION['user_branch_id'])){
-    $brach_id = $_SESSION['user_branch_id'];
+if (!empty(\Yii::$app->user->identity->branch_id)) {
+    $branch_id = \Yii::$app->user->identity->branch_id;
 }
 
-$unit_data = \backend\models\Unit::find()->where(['company_id'=>$company_id,'branch_id'=>$brach_id])->all();
-$prod_group_data = \backend\models\Productgroup::find()->where(['company_id'=>$company_id,'branch_id'=>$brach_id])->all();
-$prod_type_data = \backend\models\Producttype::find()->where(['company_id'=>$company_id,'branch_id'=>$brach_id])->all();
+$unit_data = \backend\models\Unit::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
+$prod_group_data = \backend\models\Productgroup::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
+$prod_type_data = \backend\models\Producttype::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
 $prod_status = \backend\helpers\ProductStatus::asArrayObject();
 //print_r($prod_status);
 

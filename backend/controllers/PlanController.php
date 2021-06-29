@@ -66,7 +66,25 @@ class PlanController extends Controller
     {
         $model = new Plan();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $product_id = \Yii::$app->request->post('line_product_id');
+            $qty = \Yii::$app->request->post('line_qty');
+            $removelist = \Yii::$app->request->post('remove_list');
+
+
+            if($model->save()){
+                  if($product_id != null){
+                      for($i=0;$i<=count($product_id)-1;$i++){
+                          if($product_id[$i]==null || $product_id=='')continue;
+                          $model_line = new \backend\models\Planline();
+                          $model_line->plan_id = $model->id;
+                          $model_line->product_id = $product_id[$i];
+                          $model_line->qty = $qty[$i];
+                          $model_line->status = 1;
+                          $model_line->save();
+                      }
+                  }
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -86,7 +104,40 @@ class PlanController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $product_id = \Yii::$app->request->post('line_product_id');
+            $qty = \Yii::$app->request->post('line_qty');
+            $removelist = \Yii::$app->request->post('removelist');
+
+            if($model->save()){
+                if($product_id != null){
+                    for($i=0;$i<=count($product_id)-1;$i++){
+                        if($product_id[$i]==null || $product_id=='')continue;
+
+                        $model_check = \backend\models\Planline::find()->where(['plan_id'=>$id,'product_id'=>$product_id[$i]])->one();
+                        if($model_check){
+                            $model_check->qty = $qty[$i];
+                            $model_check->save();
+                        }else{
+                            $model_line = new \backend\models\Planline();
+                            $model_line->plan_id = $model->id;
+                            $model_line->product_id = $product_id[$i];
+                            $model_line->qty = $qty[$i];
+                            $model_line->status = 1;
+                            $model_line->save();
+                        }
+
+                    }
+                }
+                if ($removelist != '') {
+                    $x = explode(',', $removelist);
+                    if (count($x) > 0) {
+                        for ($m = 0; $m <= count($x) - 1; $m++) {
+                            \common\models\PlanLine::deleteAll(['id' => $x[$m]]);
+                        }
+                    }
+                }
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

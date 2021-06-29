@@ -3,12 +3,12 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 $company_id = 1;
-$brach_id = 1;
-if(isset($_SESSION['user_company_id'])){
-    $company_id = $_SESSION['user_company_id'];
+$branch_id = 1;
+if (!empty(\Yii::$app->user->identity->company_id)) {
+    $company_id = \Yii::$app->user->identity->company_id;
 }
-if(isset($_SESSION['user_branch_id'])){
-    $brach_id = $_SESSION['user_branch_id'];
+if (!empty(\Yii::$app->user->identity->branch_id)) {
+    $branch_id = \Yii::$app->user->identity->branch_id;
 }
 ?>
 
@@ -20,7 +20,7 @@ if(isset($_SESSION['user_branch_id'])){
         </div>
         <div class="col-lg-10">
             <?= $form->field($model, 'warehouse_id')->Widget(\kartik\select2\Select2::className(),[
-                'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Warehouse::find()->where(['company_id'=>$company_id,'branch_id'=>$brach_id])->all(),'id','name'),
+                'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Warehouse::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(),'id','name'),
                 'options'=>[
                     'placeholder'=>'--เลือกคลังสินค้า--'
                 ]

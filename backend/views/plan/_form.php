@@ -12,29 +12,34 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'journal_no')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'trans_date')->textInput() ?>
-
-    <?= $form->field($model, 'customer_id')->textInput() ?>
-
-    <?= $form->field($model, 'route_id')->textInput() ?>
-
-    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'status')->textInput() ?>
-
-    <?= $form->field($model, 'company_id')->textInput() ?>
-
-    <?= $form->field($model, 'branch_id')->textInput() ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'created_by')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_by')->textInput() ?>
+    <div class="row">
+        <div class="col-lg-3">
+            <?= $form->field($model, 'journal_no')->textInput(['maxlength' => true, 'readonly' => 'readonly']) ?>
+        </div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'trans_date')->widget(\kartik\date\DatePicker::className(), [
+                'options' => [
+                    'format' => 'dd/mm/yyyy'
+                ]
+            ]) ?>
+        </div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'customer_id')->widget(\kartik\select2\Select2::className(), [
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customer::find()->where(['companay_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', 'name'),
+                'options' => [
+                    'placeholder' => 'เลือกลูกค้า'
+                ]
+            ]) ?>
+        </div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <?= $form->field($model, 'status')->textInput(['readonly'=>'readonly']) ?>
+        </div>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
