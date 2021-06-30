@@ -50,7 +50,8 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
             <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'status')->textInput(['readonly'=>'readonly','value'=>\backend\helpers\PlanStatus::getTypeById($model->status)]) ?>
+            <?php $status = $model->isNewRecord? 'Open' : \backend\helpers\PlanStatus::getTypeById($model->status);?>
+            <?= $form->field($model, 'status')->textInput(['readonly'=>'readonly','value'=> $status]) ?>
         </div>
     </div>
     <br />
