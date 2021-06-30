@@ -22,8 +22,9 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
             <?= $form->field($model, 'journal_no')->textInput(['maxlength' => true, 'readonly' => 'readonly']) ?>
         </div>
         <div class="col-lg-3">
+            <?php $model->trans_date = $model->isNewRecord ? date('Y-m-d'): date('Y-m-d',strtotime($model->trans_date));?>
             <?= $form->field($model, 'trans_date')->widget(\kartik\date\DatePicker::className(), [
-                'options' => [
+                'pluginOptions' => [
                     'format' => 'dd/mm/yyyy'
                 ]
             ]) ?>
