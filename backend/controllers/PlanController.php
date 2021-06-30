@@ -78,6 +78,13 @@ class PlanController extends Controller
             $qty = \Yii::$app->request->post('line_qty');
             $removelist = \Yii::$app->request->post('remove_list');
 
+
+            $x_date = explode('/', $model->trans_date);
+            $sale_date = date('Y-m-d');
+            if (count($x_date) > 1) {
+                $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
+            }
+            $model->trans_date = date('Y-m-d', strtotime($sale_date));
             $model->company_id = $company_id;
             $model->branch_id = $branch_id;
             $model->status = 1;
@@ -119,6 +126,13 @@ class PlanController extends Controller
             $product_id = \Yii::$app->request->post('line_prod_id');
             $qty = \Yii::$app->request->post('line_qty');
             $removelist = \Yii::$app->request->post('removelist');
+
+            $x_date = explode('/', $model->trans_date);
+            $sale_date = date('Y-m-d');
+            if (count($x_date) > 1) {
+                $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
+            }
+            $model->trans_date = date('Y-m-d', strtotime($sale_date));
 
             if ($model->save()) {
                 if ($product_id != null) {
