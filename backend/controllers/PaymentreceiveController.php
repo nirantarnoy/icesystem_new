@@ -286,7 +286,12 @@ class PaymentreceiveController extends Controller
                 foreach ($model as $value) {
                     $i += 1;
                     //   $total_amount = $total_amount + ($value->remain_amount == null ? 0 : $value->remain_amount);
-                    $remain_amt = $value->remain_amount == null?$value->payment_amount:$value->remain_amount;
+                    $remain_amt = $value->line_total;
+
+                    if($value->remain_amount == null && $value->payment_amount != null){
+                        $remain_amt = $value->line_total - $value->payment_amount;
+                    }
+                  //  $remain_amt = $value->remain_amount == null?$value->payment_amount:$value->remain_amount;
                     $html .= '<tr>';
                     $html .= '<td style="text-align: center">' . $i . '</td>';
                     $html .= '<td style="text-align: center">' . \backend\models\Orders::getNumber($value->order_id) . '</td>';
