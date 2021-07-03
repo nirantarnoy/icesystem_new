@@ -121,9 +121,7 @@ class OrderController extends Controller
                                     if ($model_line->save(false)) {
 
                                     }
-
                                 }
-
 
                                 if ($payment_type_id == 1) {
                                     $this->addpayment($has_order_id, $customer_id, ($datalist[$i]['qty'] * $datalist[$i]['price']), $company_id, $branch_id, $payment_type_id);
@@ -180,9 +178,7 @@ class OrderController extends Controller
                     if (count($datalist) > 0) {
                         for ($i = 0; $i <= count($datalist) - 1; $i++) {
                             if ($datalist[$i]['qty'] <= 0) continue;
-
                             // $price_group_id = $this->findCustomerpricgroup($customer_id, $datalist[$i]['product_id'], $route_id);
-
                             $model_line_trans = new \backend\models\Orderlinetrans();
                             $model_line_trans->order_id = $model->id;
                             $model_line_trans->customer_id = $customer_id;
@@ -249,16 +245,16 @@ class OrderController extends Controller
 
                     $model->order_total_amt = $order_total_all;
                     $model->save(false);
-                    if ($model->issue_id > 0) {
-                        $model_issue = \backend\models\Journalissue::find()->where(['id' => $model->issue_id])->one();
-                        if ($model_issue) {
-                            $model_issue->status = 2;
-                            $model_issue->order_ref_id = $model->id;
-                            $model_issue->company_id = $company_id;
-                            $model_issue->branch_id = $branch_id;
-                            $model_issue->save(false);
-                        }
-                    }
+//                    if ($model->issue_id > 0) {
+//                        $model_issue = \backend\models\Journalissue::find()->where(['id' => $model->issue_id])->one();
+//                        if ($model_issue) {
+//                            $model_issue->status = 2;
+//                            $model_issue->order_ref_id = $model->id;
+//                            $model_issue->company_id = $company_id;
+//                            $model_issue->branch_id = $branch_id;
+//                            $model_issue->save(false);
+//                        }
+//                    }
                 }
             }
         }
@@ -806,7 +802,7 @@ class OrderController extends Controller
 //            if ($t_date != null) {
 //                $sale_date = $t_date;
 //            }
-            $sale_time = date('H:i:s');
+           // $sale_time = date('H:i:s');
 
             $order_total_all = 0;
 
