@@ -97,7 +97,7 @@ class OrderController extends Controller
                             $model_line_trans->is_free = $is_free;
                             if ($model_line_trans->save(false)) {
 
-                                $modelx = \common\models\OrderLine::find()->where(['product_id' => $datalist[$i]['product_id'], 'order_id' => $has_order_id, 'customer_id' => $customer_id])->one();
+                                $modelx = \common\models\OrderLine::find()->select(['qty','line_total','status','is_free'])->where(['product_id' => $datalist[$i]['product_id'], 'order_id' => $has_order_id, 'customer_id' => $customer_id])->one();
                                 if ($modelx) {
                                     $modelx->qty = ($modelx->qty + $datalist[$i]['qty']);
                                     $modelx->line_total = $payment_type_id == 3 ? 0 : ($modelx->qty * $datalist[$i]['price']);
@@ -132,7 +132,7 @@ class OrderController extends Controller
                                 //  $order_total_all += $model_line_trans->line_total;
 
                                 // issue order stock
-                                $model_update_order_stock = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $datalist[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
+                                $model_update_order_stock = \common\models\OrderStock::find()->select(['avl_qty','order_id'])->where(['route_id' => $route_id, 'product_id' => $datalist[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
                                 if ($model_update_order_stock) {
                                     if ($model_update_order_stock->avl_qty >= $datalist[$i]['qty']) {
                                         $model_update_order_stock->order_id = $has_order_id;
@@ -145,7 +145,7 @@ class OrderController extends Controller
                                         $model_update_order_stock->avl_qty = 0;
                                         if ($model_update_order_stock->save(false)) {
 
-                                            $model_update_order_stock2 = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $datalist[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
+                                            $model_update_order_stock2 = \common\models\OrderStock::find()->select(['avl_qty','order_id'])->where(['route_id' => $route_id, 'product_id' => $datalist[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
                                             if ($model_update_order_stock2) {
                                                 $model_update_order_stock2->order_id = $has_order_id;
                                                 $model_update_order_stock2->avl_qty = ($model_update_order_stock2->avl_qty - $remain_qty);
@@ -528,7 +528,7 @@ class OrderController extends Controller
         $order_date = date('Y-m-d');
         $res = null;
         if ($route_id && $car_id) {
-            $model = \common\models\Orders::find()->where(['date(order_date)' => $order_date, 'order_channel_id' => $route_id, 'car_ref_id' => $car_id, 'status' => 1])->one();
+            $model = \common\models\Orders::find()->select('id')->where(['date(order_date)' => $order_date, 'order_channel_id' => $route_id, 'car_ref_id' => $car_id, 'status' => 1])->one();
             $res = $model;
         }
         return $res;
@@ -817,7 +817,7 @@ class OrderController extends Controller
 
                     $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
 
-                    $modelx = \common\models\OrderLine::find()->where(['product_id' => $product_id, 'order_id' => $has_order_id, 'customer_id' => $customer_id])->one();
+                    $modelx = \common\models\OrderLine::find()->select(['qty','line_total','status'])->where(['product_id' => $product_id, 'order_id' => $has_order_id, 'customer_id' => $customer_id])->one();
                     if ($modelx) {
                         $modelx->qty = ($modelx->qty + $qty);
                         $modelx->line_total = ($modelx->qty * $price);
