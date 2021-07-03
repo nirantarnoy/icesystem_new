@@ -6,11 +6,11 @@ $is_print_do = "";
 
 $company_id = 1;
 $branch_id = 1;
-if (isset($_SESSION['user_company_id'])) {
-    $company_id = $_SESSION['user_company_id'];
+if (!empty(\Yii::$app->user->identity->company_id)) {
+    $company_id = \Yii::$app->user->identity->company_id;
 }
-if (isset($_SESSION['user_branch_id'])) {
-    $branch_id = $_SESSION['user_branch_id'];
+if (!empty(\Yii::$app->user->identity->branch_id)) {
+    $branch_id = \Yii::$app->user->identity->branch_id;
 }
 $default_warehouse = 6;
 if($company_id==1 && $branch_id==2){
@@ -20,11 +20,15 @@ if($company_id==1 && $branch_id==2){
 $prod_data = \backend\models\Product::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
 $wh_date = null;
 
-if($_SESSION['user_group_id'] ==1){
-    $wh_date = \backend\models\Warehouse::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
-}else{
-    $wh_date = \backend\models\Warehouse::find()->where(['id'=> $default_warehouse, 'company_id'=>$company_id,'branch_id'=>$branch_id])->all();
+if (!empty(\Yii::$app->user->identity->group_id)) {
+    if(\Yii::$app->user->identity->group_id ==1){
+        $wh_date = \backend\models\Warehouse::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
+    }else{
+        $wh_date = \backend\models\Warehouse::find()->where(['id'=> $default_warehouse, 'company_id'=>$company_id,'branch_id'=>$branch_id])->all();
+    }
 }
+
+
 
 if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
     $f_name = \Yii::$app->session->getFlash('msg-index');
