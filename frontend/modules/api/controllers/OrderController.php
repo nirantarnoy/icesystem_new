@@ -69,7 +69,7 @@ class OrderController extends Controller
             //  $sale_date = date('Y/m/d');
             $sale_date = date('Y/m/d');
 
-            $sale_time = date('H:i:s');
+           // $sale_time = date('H:i:s');
             $order_total_all = 0;
             $has_order = $this->hasOrder($sale_date, $route_id, $car_id);
             if ($has_order != null) {
@@ -81,13 +81,15 @@ class OrderController extends Controller
 
                             // $price_group_id = $this->findCustomerpricgroup($customer_id, $datalist[$i]['product_id'], $route_id);
 
+                            $line_total = ($datalist[$i]['qty'] * $datalist[$i]['price']);
+
                             $model_line_trans = new \backend\models\Orderlinetrans();
                             $model_line_trans->order_id = $has_order_id;
                             $model_line_trans->customer_id = $customer_id;
                             $model_line_trans->product_id = $datalist[$i]['product_id'];
                             $model_line_trans->qty = $datalist[$i]['qty'];
                             $model_line_trans->price = $payment_type_id == 3 ? 0 : $datalist[$i]['price'];
-                            $model_line_trans->line_total = $payment_type_id == 3 ? 0 : ($datalist[$i]['qty'] * $datalist[$i]['price']);
+                            $model_line_trans->line_total = $payment_type_id == 3 ? 0 : $line_total;
                             $model_line_trans->price_group_id = $datalist[$i]['price_group_id'];//$price_group_id;
                             $model_line_trans->sale_payment_method_id = $payment_type_id;
                             $model_line_trans->issue_ref_id = $issue_id;
@@ -112,7 +114,7 @@ class OrderController extends Controller
                                     $model_line->product_id = $datalist[$i]['product_id'];
                                     $model_line->qty = $datalist[$i]['qty'];
                                     $model_line->price = $payment_type_id == 3 ? 0 : $datalist[$i]['price'];
-                                    $model_line->line_total = $payment_type_id == 3 ? 0 : ($datalist[$i]['qty'] * $datalist[$i]['price']);
+                                    $model_line->line_total = $payment_type_id == 3 ? 0 : $line_total;
                                     $model_line->price_group_id = $datalist[$i]['price_group_id'];//$price_group_id;
                                     $model_line->sale_payment_method_id = $payment_type_id;
                                     $model_line->issue_ref_id = $issue_id;
@@ -124,7 +126,7 @@ class OrderController extends Controller
                                 }
 
                                 if ($payment_type_id == 1) {
-                                    $this->addpayment($has_order_id, $customer_id, ($datalist[$i]['qty'] * $datalist[$i]['price']), $company_id, $branch_id, $payment_type_id);
+                                    $this->addpayment($has_order_id, $customer_id, $line_total, $company_id, $branch_id, $payment_type_id);
                                 }
 
                                 //  $order_total_all += $model_line_trans->line_total;
@@ -134,10 +136,10 @@ class OrderController extends Controller
                                 if ($model_update_order_stock) {
                                     if ($model_update_order_stock->avl_qty >= $datalist[$i]['qty']) {
                                         $model_update_order_stock->order_id = $has_order_id;
-                                        $model_update_order_stock->avl_qty = $model_update_order_stock->avl_qty - $datalist[$i]['qty'];
+                                        $model_update_order_stock->avl_qty = ($model_update_order_stock->avl_qty - $datalist[$i]['qty']);
                                         $model_update_order_stock->save(false);
                                     } else {
-                                        $remain_qty = $datalist[$i]['qty'] - $model_update_order_stock->avl_qty;
+                                        $remain_qty = ($datalist[$i]['qty'] - $model_update_order_stock->avl_qty);
 
                                         $model_update_order_stock->order_id = $has_order_id;
                                         $model_update_order_stock->avl_qty = 0;
@@ -146,7 +148,7 @@ class OrderController extends Controller
                                             $model_update_order_stock2 = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $datalist[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
                                             if ($model_update_order_stock2) {
                                                 $model_update_order_stock2->order_id = $has_order_id;
-                                                $model_update_order_stock2->avl_qty = $model_update_order_stock2->avl_qty - $remain_qty;
+                                                $model_update_order_stock2->avl_qty = ($model_update_order_stock2->avl_qty - $remain_qty);
                                                 $model_update_order_stock2->save(false);
                                             }
                                         }
@@ -179,13 +181,14 @@ class OrderController extends Controller
                         for ($i = 0; $i <= count($datalist) - 1; $i++) {
                             if ($datalist[$i]['qty'] <= 0) continue;
                             // $price_group_id = $this->findCustomerpricgroup($customer_id, $datalist[$i]['product_id'], $route_id);
+                            $line_total = ($datalist[$i]['qty'] * $datalist[$i]['price']);
                             $model_line_trans = new \backend\models\Orderlinetrans();
                             $model_line_trans->order_id = $model->id;
                             $model_line_trans->customer_id = $customer_id;
                             $model_line_trans->product_id = $datalist[$i]['product_id'];
                             $model_line_trans->qty = $datalist[$i]['qty'];
                             $model_line_trans->price = $payment_type_id == 3 ? 0 : $datalist[$i]['price'];
-                            $model_line_trans->line_total = $payment_type_id == 3 ? 0 : ($datalist[$i]['qty'] * $datalist[$i]['price']);
+                            $model_line_trans->line_total = $payment_type_id == 3 ? 0 : $line_total;
                             $model_line_trans->price_group_id = $datalist[$i]['price_group_id'];//$price_group_id;
                             $model_line_trans->sale_payment_method_id = $payment_type_id;
                             $model_line_trans->issue_ref_id = $issue_id;
@@ -199,7 +202,7 @@ class OrderController extends Controller
                                 $model_line->product_id = $datalist[$i]['product_id'];
                                 $model_line->qty = $datalist[$i]['qty'];
                                 $model_line->price = $payment_type_id == 3 ? 0 : $datalist[$i]['price'];
-                                $model_line->line_total = $payment_type_id == 3 ? 0 : ($datalist[$i]['qty'] * $datalist[$i]['price']);
+                                $model_line->line_total = $payment_type_id == 3 ? 0 : $line_total;
                                 $model_line->price_group_id = $datalist[$i]['price_group_id'];//$price_group_id;
                                 $model_line->status = 1;
                                 $model_line->sale_payment_method_id = $payment_type_id;
@@ -209,7 +212,7 @@ class OrderController extends Controller
                                 }
 
                                 if ($payment_type_id ==1) {
-                                    $this->addpayment($model->id, $customer_id, ($datalist[$i]['qty'] * $datalist[$i]['price']), $company_id, $branch_id, $payment_type_id);
+                                    $this->addpayment($model->id, $customer_id, $line_total, $company_id, $branch_id, $payment_type_id);
                                 }
 
                                 $order_total_all += $model_line_trans->line_total;
@@ -220,10 +223,10 @@ class OrderController extends Controller
                                 if ($model_update_order_stock) {
                                     if ($model_update_order_stock->avl_qty >= $datalist[$i]['qty']) {
                                         $model_update_order_stock->order_id = $model->id;
-                                        $model_update_order_stock->avl_qty = $model_update_order_stock->avl_qty - $datalist[$i]['qty'];
+                                        $model_update_order_stock->avl_qty = ($model_update_order_stock->avl_qty - $datalist[$i]['qty']);
                                         $model_update_order_stock->save(false);
                                     } else {
-                                        $remain_qty = $datalist[$i]['qty'] - $model_update_order_stock->avl_qty;
+                                        $remain_qty = ($datalist[$i]['qty'] - $model_update_order_stock->avl_qty);
 
                                         $model_update_order_stock->order_id = $model->id;
                                         $model_update_order_stock->avl_qty = 0;
@@ -232,7 +235,7 @@ class OrderController extends Controller
                                             $model_update_order_stock2 = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $datalist[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
                                             if ($model_update_order_stock2) {
                                                 $model_update_order_stock2->order_id = $model->id;
-                                                $model_update_order_stock2->avl_qty = $model_update_order_stock2->avl_qty - $remain_qty;
+                                                $model_update_order_stock2->avl_qty = ($model_update_order_stock2->avl_qty - $remain_qty);
                                                 $model_update_order_stock2->save(false);
                                             }
                                         }
@@ -389,7 +392,7 @@ class OrderController extends Controller
                         if ($model_line->save(false)) {
 
                             //  if ($payment_type_id == 2) {
-                            if ($payment_type_id != 3) {
+                            if ($payment_type_id == 1) {
                                 $this->addpayment($has_order_id, $customer_id, ($qty * $price), $company_id, $branch_id, $payment_type_id);
                             }
 
