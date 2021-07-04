@@ -132,7 +132,7 @@ class OrderController extends Controller
                                 //  $order_total_all += $model_line_trans->line_total;
 
                                 // issue order stock
-                                $model_update_order_stock = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $datalist[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
+                                $model_update_order_stock = \common\models\OrderStock::find()->select(['avl_qty','order_id'])->where(['route_id' => $route_id, 'product_id' => $datalist[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
                                 if ($model_update_order_stock) {
                                     if ($model_update_order_stock->avl_qty >= $datalist[$i]['qty']) {
                                         $model_update_order_stock->order_id = $has_order_id;
