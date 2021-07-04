@@ -1272,11 +1272,13 @@ class OrderController extends Controller
                                 $new_line_total = ($model_update_line->price * $model->qty);
                                 $model_update_line->qty = ($model_update_line->qty - $model->qty);
                                 $model_update_line->line_total = ($model_update_line->line_total - $new_line_total);
-                                $model_update_line->save(false);
+                                if($model_update_line->save(false)){
+                                    $status = 1;
+                                    array_push($data, ['cancel_order' => 'successfully']);
+                                    $this->notifymessage('สายส่ง: ' . $route_name . ' ยกเลิกรายการขาย ' . $order_no . ' ลูกค้า: ' . $customer_code . ' ยอดเงิน: ' . $model->line_total . ' เหตุผล: ' . $reason);
+                                }
                             }
-                            $status = 1;
-                            array_push($data, ['cancel_order' => 'successfully']);
-                            $this->notifymessage('สายส่ง: ' . $route_name . ' ยกเลิกรายการขาย ' . $order_no . ' ลูกค้า: ' . $customer_code . ' ยอดเงิน: ' . $model->line_total . ' เหตุผล: ' . $reason);
+
                         }
                     }
                 }
