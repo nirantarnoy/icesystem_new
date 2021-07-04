@@ -132,7 +132,7 @@ class OrderController extends Controller
                                 //  $order_total_all += $model_line_trans->line_total;
 
                                 // issue order stock
-                                $model_update_order_stock = \common\models\OrderStock::find()->select(['avl_qty','order_id'])->where(['route_id' => $route_id, 'product_id' => $datalist[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
+                                $model_update_order_stock = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $datalist[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
                                 if ($model_update_order_stock) {
                                     if ($model_update_order_stock->avl_qty >= $datalist[$i]['qty']) {
                                         $model_update_order_stock->order_id = $has_order_id;
@@ -528,7 +528,7 @@ class OrderController extends Controller
         $order_date = date('Y-m-d');
         $res = null;
         if ($route_id && $car_id) {
-            $model = \common\models\Orders::find()->select('id')->where(['date(order_date)' => $order_date, 'order_channel_id' => $route_id, 'car_ref_id' => $car_id, 'status' => 1])->one();
+            $model = \common\models\Orders::find()->where(['date(order_date)' => $order_date, 'order_channel_id' => $route_id, 'car_ref_id' => $car_id, 'status' => 1])->one();
             $res = $model;
         }
         return $res;
