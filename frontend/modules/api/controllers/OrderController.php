@@ -1254,8 +1254,8 @@ class OrderController extends Controller
         $order_line_id = $req_data['line_id'];
         $route_name = $req_data['route_name'];
         $order_no = $req_data['order_no'];
-        $customer_id = $req_data['customer_id'];
-        $customer_code = $req_data['customer_code'];
+        //$customer_id = $req_data['customer_id'];
+        $customer_id = $req_data['customer_code'];
         $product_code = $req_data['product_code'];
         $reason = $req_data['reason'];
 
