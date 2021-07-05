@@ -449,8 +449,6 @@ $js = <<<JS
   var current_row = 0;
   var payment_remove_list = [];
   
-  
-  
   var tableOffset = null;
   var headerx = null;
   var fixedHeader = null;

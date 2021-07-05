@@ -132,7 +132,7 @@ class OrderController extends Controller
                                 //  $order_total_all += $model_line_trans->line_total;
 
                                 // issue order stock
-                                $model_update_order_stock = \common\models\OrderStock::find()->select(['avl_qty','order_id'])->where(['route_id' => $route_id, 'product_id' => $datalist[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
+                                $model_update_order_stock = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $datalist[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
                                 if ($model_update_order_stock) {
                                     if ($model_update_order_stock->avl_qty >= $datalist[$i]['qty']) {
                                         $model_update_order_stock->order_id = $has_order_id;
@@ -145,7 +145,7 @@ class OrderController extends Controller
                                         $model_update_order_stock->avl_qty = 0;
                                         if ($model_update_order_stock->save(false)) {
 
-                                            $model_update_order_stock2 = \common\models\OrderStock::find()->select(['avl_qty','order_id'])->where(['route_id' => $route_id, 'product_id' => $datalist[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
+                                            $model_update_order_stock2 = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $datalist[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
                                             if ($model_update_order_stock2) {
                                                 $model_update_order_stock2->order_id = $has_order_id;
                                                 $model_update_order_stock2->avl_qty = ($model_update_order_stock2->avl_qty - $remain_qty);
@@ -175,6 +175,9 @@ class OrderController extends Controller
                 $model->company_id = $company_id;
                 $model->branch_id = $branch_id;
                 $model->sale_from_mobile = 1;
+                $model->emp_1 = 0;
+                $model->emp_2 = 0;
+
                 if ($model->save(false)) {
                    // array_push($data, ['order_id' => $model->id]);
                     if (count($datalist) > 0) {
@@ -220,6 +223,7 @@ class OrderController extends Controller
 
                                 // issue order stock
                                 $model_update_order_stock = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $datalist[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
+                                //$model_update_order_stock = \common\models\OrderStock::find()->where(['route_id' => $route_id,  'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
                                 if ($model_update_order_stock) {
                                     if ($model_update_order_stock->avl_qty >= $datalist[$i]['qty']) {
                                         $model_update_order_stock->order_id = $model->id;
@@ -227,11 +231,9 @@ class OrderController extends Controller
                                         $model_update_order_stock->save(false);
                                     } else {
                                         $remain_qty = ($datalist[$i]['qty'] - $model_update_order_stock->avl_qty);
-
                                         $model_update_order_stock->order_id = $model->id;
                                         $model_update_order_stock->avl_qty = 0;
                                         if ($model_update_order_stock->save(false)) {
-
                                             $model_update_order_stock2 = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $datalist[$i]['product_id'], 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
                                             if ($model_update_order_stock2) {
                                                 $model_update_order_stock2->order_id = $model->id;
@@ -308,220 +310,220 @@ class OrderController extends Controller
 //        }
 //    }
 
-    public function actionAddorder()
-    {
-        $customer_id = null;
-        $product_id = null;
-        $qty = 0;
-//        $price = 0;
-//        $price_group_id = null;
-        $status = false;
-        $user_id = 0;
-        $issue_id = 0;
-        $route_id = 0;
-        $api_date = null;
-        $car_id = 0;
-        $company_id = 0;
-        $branch_id = 0;
-
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $req_data = \Yii::$app->request->getBodyParams();
-        if ($req_data != null) {
-            $api_date = $req_data['order_date'];
-            $customer_id = $req_data['customer_id'];
-            $product_id = $req_data['product_id'];
-            $qty = $req_data['qty'];
-            $price = $req_data['price']; // find by route_id
-            //  $price_group_id = $req_data['price_group_id'];
-            $user_id = $req_data['user_id'] == null ? 0 : $req_data['user_id'];
-            $issue_id = $req_data['issue_id'];
-            $route_id = $req_data['route_id'];
-            $car_id = $req_data['car_id'];
-            $payment_type_id = $req_data['payment_type_id'];
-            $company_id = $req_data['company_id'];
-            $branch_id = $req_data['branch_id'];
-
-        }
-
-        $data = [];
-        $is_free = 0;
-        if ($payment_type_id == 3) {
-            $is_free = 1;
-        }
-        if ($customer_id && $route_id && $car_id) {
-            //  $sale_date = date('Y/m/d');
-            $sale_date = date('Y/m/d');
-
-            $order_total_all = 0;
-            $has_order = $this->hasOrder($sale_date, $route_id, $car_id);
-            if ($has_order != null) {
-                $has_order_id = $has_order->id;
-                if ($has_order_id) {
-                    $this->registerissue($has_order_id, $issue_id, $company_id, $branch_id);
-                    //$price = $this->findCustomerprice($customer_id, $product_id, $route_id);
-
-                    $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
-
-                    $modelx = \common\models\OrderLine::find()->where(['product_id' => $product_id, 'order_id' => $has_order_id, 'customer_id' => $customer_id])->one();
-                    if ($modelx) {
-                        $modelx->qty = ($modelx->qty + $qty);
-                        $modelx->line_total = $payment_type_id == 3 ? 0 : ($modelx->qty * $price);
-                        $modelx->status = 1;
-                        $modelx->is_free = $is_free;
-                        if ($modelx->save(false)) {
-                            $status = true;
-                            $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
-                            if ($model_update_issue_line) {
-                                $model_update_issue_line->avl_qty = ($model_update_issue_line->avl_qty - (int)$qty);
-                                $model_update_issue_line->save(false);
-                            }
-                        }
-                    } else {
-                        $model_line = new \backend\models\Orderline();
-                        $model_line->order_id = $has_order_id;
-                        $model_line->customer_id = $customer_id;
-                        $model_line->product_id = $product_id;
-                        $model_line->qty = $qty;
-                        $model_line->price = $payment_type_id == 3 ? 0 : $price;
-                        $model_line->line_total = $payment_type_id == 3 ? 0 : ($qty * $price);
-                        $model_line->price_group_id = $price_group_id;
-                        $model_line->sale_payment_method_id = $payment_type_id;
-                        $model_line->issue_ref_id = $issue_id;
-                        $model_line->status = 1;
-                        $model_line->is_free = $is_free;
-                        if ($model_line->save(false)) {
-
-                            //  if ($payment_type_id == 2) {
-                            if ($payment_type_id == 1) {
-                                $this->addpayment($has_order_id, $customer_id, ($qty * $price), $company_id, $branch_id, $payment_type_id);
-                            }
-
-                            //  }
-
-                            // $order_total_all += $model_line->line_total;
-                            $status = true;
-
-                            // issue order stock
-                            $model_update_order_stock = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $product_id, 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
-                            if ($model_update_order_stock) {
-                                if ($model_update_order_stock->avl_qty >= $qty) {
-                                    $model_update_order_stock->order_id = $has_order_id;
-                                    $model_update_order_stock->avl_qty = $model_update_order_stock->avl_qty - $qty;
-                                    $model_update_order_stock->save(false);
-                                } else {
-                                    $remain_qty = $qty - $model_update_order_stock->avl_qty;
-
-                                    $model_update_order_stock->order_id = $has_order_id;
-                                    $model_update_order_stock->avl_qty = 0;
-                                    if ($model_update_order_stock->save(false)) {
-
-                                        $model_update_order_stock2 = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $product_id, 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
-                                        if ($model_update_order_stock2) {
-                                            $model_update_order_stock2->order_id = $has_order_id;
-                                            $model_update_order_stock2->avl_qty = $model_update_order_stock2->avl_qty - $remain_qty;
-                                            $model_update_order_stock2->save(false);
-                                        }
-                                    }
-                                }
-                            }
-                            // end issue order stock
-
-                        }
-                    }
-
+//    public function actionAddorder()
+//    {
+//        $customer_id = null;
+//        $product_id = null;
+//        $qty = 0;
+////        $price = 0;
+////        $price_group_id = null;
+//        $status = false;
+//        $user_id = 0;
+//        $issue_id = 0;
+//        $route_id = 0;
+//        $api_date = null;
+//        $car_id = 0;
+//        $company_id = 0;
+//        $branch_id = 0;
+//
+//        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+//        $req_data = \Yii::$app->request->getBodyParams();
+//        if ($req_data != null) {
+//            $api_date = $req_data['order_date'];
+//            $customer_id = $req_data['customer_id'];
+//            $product_id = $req_data['product_id'];
+//            $qty = $req_data['qty'];
+//            $price = $req_data['price']; // find by route_id
+//            //  $price_group_id = $req_data['price_group_id'];
+//            $user_id = $req_data['user_id'] == null ? 0 : $req_data['user_id'];
+//            $issue_id = $req_data['issue_id'];
+//            $route_id = $req_data['route_id'];
+//            $car_id = $req_data['car_id'];
+//            $payment_type_id = $req_data['payment_type_id'];
+//            $company_id = $req_data['company_id'];
+//            $branch_id = $req_data['branch_id'];
+//
+//        }
+//
+//        $data = [];
+//        $is_free = 0;
+//        if ($payment_type_id == 3) {
+//            $is_free = 1;
+//        }
+//        if ($customer_id && $route_id && $car_id) {
+//            //  $sale_date = date('Y/m/d');
+//            $sale_date = date('Y/m/d');
+//
+//            $order_total_all = 0;
+//            $has_order = $this->hasOrder($sale_date, $route_id, $car_id);
+//            if ($has_order != null) {
+//                $has_order_id = $has_order->id;
+//                if ($has_order_id) {
+//                    $this->registerissue($has_order_id, $issue_id, $company_id, $branch_id);
+//                    //$price = $this->findCustomerprice($customer_id, $product_id, $route_id);
+//
+//                    $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
+//
+//                    $modelx = \common\models\OrderLine::find()->where(['product_id' => $product_id, 'order_id' => $has_order_id, 'customer_id' => $customer_id])->one();
+//                    if ($modelx) {
+//                        $modelx->qty = ($modelx->qty + $qty);
+//                        $modelx->line_total = $payment_type_id == 3 ? 0 : ($modelx->qty * $price);
+//                        $modelx->status = 1;
+//                        $modelx->is_free = $is_free;
+//                        if ($modelx->save(false)) {
+//                            $status = true;
+//                            $model_update_issue_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $issue_id, 'product_id' => $product_id])->one();
+//                            if ($model_update_issue_line) {
+//                                $model_update_issue_line->avl_qty = ($model_update_issue_line->avl_qty - (int)$qty);
+//                                $model_update_issue_line->save(false);
+//                            }
+//                        }
+//                    } else {
+//                        $model_line = new \backend\models\Orderline();
+//                        $model_line->order_id = $has_order_id;
+//                        $model_line->customer_id = $customer_id;
+//                        $model_line->product_id = $product_id;
+//                        $model_line->qty = $qty;
+//                        $model_line->price = $payment_type_id == 3 ? 0 : $price;
+//                        $model_line->line_total = $payment_type_id == 3 ? 0 : ($qty * $price);
+//                        $model_line->price_group_id = $price_group_id;
+//                        $model_line->sale_payment_method_id = $payment_type_id;
+//                        $model_line->issue_ref_id = $issue_id;
+//                        $model_line->status = 1;
+//                        $model_line->is_free = $is_free;
+//                        if ($model_line->save(false)) {
+//
+//                            //  if ($payment_type_id == 2) {
+//                            if ($payment_type_id == 1) {
+//                                $this->addpayment($has_order_id, $customer_id, ($qty * $price), $company_id, $branch_id, $payment_type_id);
+//                            }
+//
+//                            //  }
+//
+//                            // $order_total_all += $model_line->line_total;
+//                            $status = true;
+//
+//                            // issue order stock
+//                            $model_update_order_stock = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $product_id, 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
+//                            if ($model_update_order_stock) {
+//                                if ($model_update_order_stock->avl_qty >= $qty) {
+//                                    $model_update_order_stock->order_id = $has_order_id;
+//                                    $model_update_order_stock->avl_qty = $model_update_order_stock->avl_qty - $qty;
+//                                    $model_update_order_stock->save(false);
+//                                } else {
+//                                    $remain_qty = $qty - $model_update_order_stock->avl_qty;
+//
+//                                    $model_update_order_stock->order_id = $has_order_id;
+//                                    $model_update_order_stock->avl_qty = 0;
+//                                    if ($model_update_order_stock->save(false)) {
+//
+//                                        $model_update_order_stock2 = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $product_id, 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
+//                                        if ($model_update_order_stock2) {
+//                                            $model_update_order_stock2->order_id = $has_order_id;
+//                                            $model_update_order_stock2->avl_qty = $model_update_order_stock2->avl_qty - $remain_qty;
+//                                            $model_update_order_stock2->save(false);
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                            // end issue order stock
+//
+//                        }
+//                    }
+//
+////                    $model->order_total_amt = $order_total_all;
+////                    $model->save(false);
+//                }
+//            } else {
+//                $model = new \backend\models\Ordermobile();
+//                $model->order_no = $model->getLastNo($sale_date, $company_id, $branch_id);
+//                // $model->order_date = date('Y-m-d H:i:s', strtotime($sale_date . ' ' . $sale_time));
+//                $model->order_date = date('Y-m-d H:i:s');
+//                $model->customer_id = 0;
+//                $model->order_channel_id = $route_id; // สายส่ง
+//                $model->sale_channel_id = 1; //ช่องทาง
+//                $model->car_ref_id = $car_id;
+//                $model->issue_id = $issue_id;
+//                $model->status = 1;
+//                $model->created_by = $user_id;
+//                $model->company_id = $company_id;
+//                $model->branch_id = $branch_id;
+//                $model->sale_from_mobile = 1;
+//                if ($model->save(false)) {
+//                    array_push($data, ['order_id' => $model->id]);
+//                    $this->registerissue($model->id, $issue_id, $company_id, $branch_id);
+//                    //   $price = $this->findCustomerprice($customer_id, $product_id, $route_id);
+//                    $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
+//
+//                    $model_line = new \backend\models\Orderline();
+//                    $model_line->order_id = $model->id;
+//                    $model_line->customer_id = $customer_id;
+//                    $model_line->product_id = $product_id;
+//                    $model_line->qty = $qty;
+//                    $model_line->price = $payment_type_id == 3 ? 0 : $price;
+//                    $model_line->line_total = $payment_type_id == 3 ? 0 : ($qty * $price);
+//                    $model_line->price_group_id = $price_group_id;
+//                    $model_line->status = 1;
+//                    $model_line->sale_payment_method_id = $payment_type_id;
+//                    $model_line->issue_ref_id = $issue_id;
+//                    $model_line->is_free = $is_free;
+//                    if ($model_line->save(false)) {
+//
+//                        //   if ($payment_type_id == 2) {
+//
+//                        if ($payment_type_id != 3) {
+//                            $this->addpayment($model->id, $customer_id, ($qty * $price), $company_id, $branch_id, $payment_type_id);
+//                        }
+//                        //  }
+//
+//                        $order_total_all += $model_line->line_total;
+//                        $status = true;
+//
+//                        // issue order stock
+//                        $model_update_order_stock = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $product_id, 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
+//                        if ($model_update_order_stock) {
+//                            if ($model_update_order_stock->avl_qty >= $qty) {
+//                                $model_update_order_stock->order_id = $model->id;
+//                                $model_update_order_stock->avl_qty = $model_update_order_stock->avl_qty - $qty;
+//                                $model_update_order_stock->save(false);
+//                            } else {
+//                                $remain_qty = $qty - $model_update_order_stock->avl_qty;
+//                                $model_update_order_stock->order_id = $model->id;
+//                                $model_update_order_stock->avl_qty = 0;
+//                                if ($model_update_order_stock->save(false)) {
+//
+//                                    $model_update_order_stock2 = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $product_id, 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
+//                                    if ($model_update_order_stock2) {
+//                                        $model_update_order_stock2->order_id = $model->id;
+//                                        $model_update_order_stock2->avl_qty = $model_update_order_stock2->avl_qty - $remain_qty;
+//                                        $model_update_order_stock2->save(false);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        // end issue order stock
+//
+//                    }
 //                    $model->order_total_amt = $order_total_all;
 //                    $model->save(false);
-                }
-            } else {
-                $model = new \backend\models\Ordermobile();
-                $model->order_no = $model->getLastNo($sale_date, $company_id, $branch_id);
-                // $model->order_date = date('Y-m-d H:i:s', strtotime($sale_date . ' ' . $sale_time));
-                $model->order_date = date('Y-m-d H:i:s');
-                $model->customer_id = 0;
-                $model->order_channel_id = $route_id; // สายส่ง
-                $model->sale_channel_id = 1; //ช่องทาง
-                $model->car_ref_id = $car_id;
-                $model->issue_id = $issue_id;
-                $model->status = 1;
-                $model->created_by = $user_id;
-                $model->company_id = $company_id;
-                $model->branch_id = $branch_id;
-                $model->sale_from_mobile = 1;
-                if ($model->save(false)) {
-                    array_push($data, ['order_id' => $model->id]);
-                    $this->registerissue($model->id, $issue_id, $company_id, $branch_id);
-                    //   $price = $this->findCustomerprice($customer_id, $product_id, $route_id);
-                    $price_group_id = $this->findCustomerpricgroup($customer_id, $product_id, $route_id);
-
-                    $model_line = new \backend\models\Orderline();
-                    $model_line->order_id = $model->id;
-                    $model_line->customer_id = $customer_id;
-                    $model_line->product_id = $product_id;
-                    $model_line->qty = $qty;
-                    $model_line->price = $payment_type_id == 3 ? 0 : $price;
-                    $model_line->line_total = $payment_type_id == 3 ? 0 : ($qty * $price);
-                    $model_line->price_group_id = $price_group_id;
-                    $model_line->status = 1;
-                    $model_line->sale_payment_method_id = $payment_type_id;
-                    $model_line->issue_ref_id = $issue_id;
-                    $model_line->is_free = $is_free;
-                    if ($model_line->save(false)) {
-
-                        //   if ($payment_type_id == 2) {
-
-                        if ($payment_type_id != 3) {
-                            $this->addpayment($model->id, $customer_id, ($qty * $price), $company_id, $branch_id, $payment_type_id);
-                        }
-                        //  }
-
-                        $order_total_all += $model_line->line_total;
-                        $status = true;
-
-                        // issue order stock
-                        $model_update_order_stock = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $product_id, 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
-                        if ($model_update_order_stock) {
-                            if ($model_update_order_stock->avl_qty >= $qty) {
-                                $model_update_order_stock->order_id = $model->id;
-                                $model_update_order_stock->avl_qty = $model_update_order_stock->avl_qty - $qty;
-                                $model_update_order_stock->save(false);
-                            } else {
-                                $remain_qty = $qty - $model_update_order_stock->avl_qty;
-                                $model_update_order_stock->order_id = $model->id;
-                                $model_update_order_stock->avl_qty = 0;
-                                if ($model_update_order_stock->save(false)) {
-
-                                    $model_update_order_stock2 = \common\models\OrderStock::find()->where(['route_id' => $route_id, 'product_id' => $product_id, 'date(trans_date)' => date('Y-m-d')])->andFilterWhere(['>', 'avl_qty', 0])->orderBy('id')->one();
-                                    if ($model_update_order_stock2) {
-                                        $model_update_order_stock2->order_id = $model->id;
-                                        $model_update_order_stock2->avl_qty = $model_update_order_stock2->avl_qty - $remain_qty;
-                                        $model_update_order_stock2->save(false);
-                                    }
-                                }
-                            }
-                        }
-                        // end issue order stock
-
-                    }
-                    $model->order_total_amt = $order_total_all;
-                    $model->save(false);
-                    if ($model->issue_id > 0) {
-                        $model_issue = \backend\models\Journalissue::find()->where(['id' => $model->issue_id])->one();
-                        if ($model_issue) {
-                            $model_issue->status = 2;
-                            $model_issue->order_ref_id = $model->id;
-                            $model_issue->company_id = $company_id;
-                            $model_issue->branch_id = $branch_id;
-                            $model_issue->save(false);
-                        }
-
-                    }
-                }
-            }
-        }
-        //  array_push($data,['data'=>$req_data]);
-
-        return ['status' => $status, 'data' => $data];
-    }
+//                    if ($model->issue_id > 0) {
+//                        $model_issue = \backend\models\Journalissue::find()->where(['id' => $model->issue_id])->one();
+//                        if ($model_issue) {
+//                            $model_issue->status = 2;
+//                            $model_issue->order_ref_id = $model->id;
+//                            $model_issue->company_id = $company_id;
+//                            $model_issue->branch_id = $branch_id;
+//                            $model_issue->save(false);
+//                        }
+//
+//                    }
+//                }
+//            }
+//        }
+//        //  array_push($data,['data'=>$req_data]);
+//
+//        return ['status' => $status, 'data' => $data];
+//    }
 
     public function hasOrder($order_date, $route_id, $car_id)
     {
@@ -1252,6 +1254,7 @@ class OrderController extends Controller
         $order_line_id = $req_data['line_id'];
         $route_name = $req_data['route_name'];
         $order_no = $req_data['order_no'];
+        $customer_id = $req_data['customer_id'];
         $customer_code = $req_data['customer_code'];
         $product_code = $req_data['product_code'];
         $reason = $req_data['reason'];
@@ -1267,7 +1270,7 @@ class OrderController extends Controller
                     if ($model_order_stock->save(false)) {
                         $model->status = 500;
                         if ($model->save(false)) {
-                            $model_update_line = \backend\models\Orderline::find()->where(['order_id' => $model->order_id, 'product_id' => $model->product_id])->one();
+                            $model_update_line = \backend\models\Orderline::find()->where(['order_id' => $model->order_id, 'product_id' => $model->product_id,'customer_id'=>$customer_id])->one();
                             if ($model_update_line) {
                                 $new_line_total = ($model_update_line->price * $model->qty);
                                 $model_update_line->qty = ($model_update_line->qty - $model->qty);
@@ -1275,7 +1278,7 @@ class OrderController extends Controller
                                 if($model_update_line->save(false)){
                                     $status = 1;
                                     array_push($data, ['cancel_order' => 'successfully']);
-                                    $this->notifymessage('สายส่ง: ' . $route_name . ' ยกเลิกรายการขาย ' . $order_no . ' ลูกค้า: ' . $customer_code . ' ยอดเงิน: ' . $model->line_total . ' เหตุผล: ' . $reason);
+                                   // $this->notifymessage('สายส่ง: ' . $route_name . ' ยกเลิกรายการขาย ' . $order_no . ' ลูกค้า: ' . $customer_code . ' ยอดเงิน: ' . $model->line_total . ' เหตุผล: ' . $reason);
                                 }
                             }
 
