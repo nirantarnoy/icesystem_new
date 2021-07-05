@@ -1278,7 +1278,7 @@ class OrderController extends Controller
                                 if($model_update_line->save(false)){
                                     $status = 1;
                                     array_push($data, ['cancel_order' => 'successfully']);
-                                   // $this->notifymessage('สายส่ง: ' . $route_name . ' ยกเลิกรายการขาย ' . $order_no . ' ลูกค้า: ' . $customer_code . ' ยอดเงิน: ' . $model->line_total . ' เหตุผล: ' . $reason);
+                                    $this->notifymessage('สายส่ง: ' . $route_name . ' ยกเลิกรายการขาย ' . $order_no . ' ลูกค้า: ' . $customer_code . ' ยอดเงิน: ' . $model->line_total . ' เหตุผล: ' . $reason);
                                 }
                             }
 

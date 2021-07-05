@@ -8,6 +8,7 @@ use backend\models\Orderline;
 
 //use backend\models\WarehouseSearch;
 use backend\models\Pricegroup;
+use common\models\OrderLineTrans;
 use common\models\PriceCustomerType;
 use Yii;
 use backend\models\Orders;
@@ -412,6 +413,7 @@ class OrdersController extends Controller
     public function actionDelete($id)
     {
         Orderline::deleteAll(['order_id' => $id]);
+        OrderLineTrans::deleteAll(['order_id' => $id]);
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
