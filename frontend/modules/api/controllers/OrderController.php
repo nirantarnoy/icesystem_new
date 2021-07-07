@@ -194,6 +194,7 @@ class OrderController extends Controller
                 $model->sale_from_mobile = 1;
                 $model->emp_1 = $emp_1;
                 $model->emp_2 = $emp_2;
+                $model->order_date2 = date('Y-m-d');
 
                 if ($model->save(false)) {
                    // array_push($data, ['order_id' => $model->id]);
