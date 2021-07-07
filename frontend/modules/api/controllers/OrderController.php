@@ -161,6 +161,23 @@ class OrderController extends Controller
                     }
                 }
             } else {
+
+                $emp_1 = 0;
+                $emp_2 = 0;
+                $empdaily = $this->findCarempdaily($car_id);
+                if($empdaily != null){
+                    $xx=0;
+                    foreach($empdaily as $value_emp){
+                        if($xx == 0){
+                            $emp_1 = $value_emp->employee_id;
+                        }
+                        else{
+                            $emp_2 = $value_emp->employee_id;
+                        }
+                        $xx+=1;
+                    }
+                }
+
                 $model = new \backend\models\Ordermobile();
                 $model->order_no = $model->getLastNo($sale_date, $company_id, $branch_id);
                 // $model->order_date = date('Y-m-d H:i:s', strtotime($sale_date . ' ' . $sale_time));
@@ -175,8 +192,8 @@ class OrderController extends Controller
                 $model->company_id = $company_id;
                 $model->branch_id = $branch_id;
                 $model->sale_from_mobile = 1;
-                $model->emp_1 = 0;
-                $model->emp_2 = 0;
+                $model->emp_1 = $emp_1;
+                $model->emp_2 = $emp_2;
 
                 if ($model->save(false)) {
                    // array_push($data, ['order_id' => $model->id]);
@@ -1223,6 +1240,14 @@ class OrderController extends Controller
                 $model_new->save(false);
             }
         }
+    }
+
+    public function findCarempdaily($car_id){
+        $model = null;
+        if($car_id){
+            $model = \backend\models\Cardaily::find()->select(['employee_id'])->where(['car_id'=>$car_id,'date(trans_date)'=>date('Y-m-d')])->all();
+        }
+        return $model;
     }
 
     public function findReprocesswh($company_id, $branch_id)

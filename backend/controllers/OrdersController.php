@@ -106,12 +106,30 @@ class OrdersController extends Controller
 
             //  echo $model->issue_id;return;
 
+
+
             $x_date = explode('/', $model->order_date);
             $sale_date = date('Y-m-d');
             if (count($x_date) > 1) {
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
-            $emp_count = \backend\models\Cardaily::find()->where(['car_id' => $model->car_ref_id])->andFilterWhere(['date(trans_date)' => date('Y-m-d', strtotime($sale_date))])->all();
+            $emp_count = \backend\models\Cardaily::find()->select(['employee_id'])->where(['car_id' => $model->car_ref_id])->andFilterWhere(['date(trans_date)' => date('Y-m-d', strtotime($sale_date))])->all();
+
+            $emp_1 = 0;
+            $emp_2 = 0;
+            if($emp_count != null){
+                $xx=0;
+                foreach($emp_count as $value_emp){
+                    if($xx == 0){
+                        $emp_1 = $value_emp->employee_id;
+                    }
+                    else{
+                        $emp_2 = $value_emp->employee_id;
+                    }
+                    $xx+=1;
+                }
+            }
+
             $model->order_no = $model::getLastNo($sale_date, $company_id, $branch_id);
             $model->order_date = date('Y-m-d', strtotime($sale_date));
             $model->order_date2 = date('Y-m-d', strtotime($sale_date));
@@ -120,6 +138,8 @@ class OrdersController extends Controller
             $model->company_id = $company_id;
             $model->branch_id = $branch_id;
             $model->emp_count = count($emp_count);
+            $model->emp_1 = $emp_1;
+            $model->emp_2 = $emp_2;
             if ($model->save(false)) {
                 $this->updateEmpqty($model->id);
                 if ($price_group_list_arr != null) {
