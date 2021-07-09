@@ -185,7 +185,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 ],
                 [
                     'attribute' => 'payment_amount',
-                    'label' => 'รับชำระ',
+                    'label' => 'ชำระแล้ว',
                     //'format' => 'html',
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
@@ -208,6 +208,15 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_SUM
                 ],
+                [
+                    'label' => 'ประวัติชำระ',
+                    'format' => 'html',
+                    'headerOptions' => ['style' => 'text-align: center,width: 5%'],
+                    'contentOptions' => ['style' => 'text-align: center'],
+                    'value' => function ($data) {
+                        return '<div class="btn btn-info">' . 'ดูประวัติ' . '</div>';
+                    }
+                ]
 
 //        [
 //            'class' => 'kartik\grid\FormulaColumn',
