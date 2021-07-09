@@ -210,7 +210,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 ],
                 [
                     'label' => 'ประวัติชำระ',
-                    'format' => 'html',
+                    'format' => 'raw',
                     'headerOptions' => ['style' => 'text-align: center'],
                     'contentOptions' => ['style' => 'text-align: center; width:10%;vertical-align: middle'],
                     'value' => function ($data) {
