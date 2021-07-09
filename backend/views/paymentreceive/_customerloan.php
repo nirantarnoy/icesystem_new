@@ -240,3 +240,70 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
         ?>
     </div>
 </div>
+<div id="payhistoryModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-xl">
+        <!-- Modal content-->
+<!--        <form id="form-transfer-sale" action="--><?//= \yii\helpers\Url::to(['orders/savetransfersale'], true) ?><!--"-->
+<!--              method="post">-->
+
+<!--            <input type="hidden" class="transfer-order-id" name="transfer_order_id" value="0">-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row" style="width: 100%">
+                        <div class="col-lg-11">
+                            <h2 style="color: #255985"><i class="fa fa-cart-arrow-down"></i> ประวัติการชำระ
+                            </h2>
+                        </div>
+                        <div class="col-lg-1">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                    </div>
+
+                </div>
+                <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+                <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+
+                <div class="modal-body">
+                    <table class="table table-bordered table-striped table-list">
+                        <thead>
+                        <tr>
+                            <th>เลขที่</th>
+                            <th>วันที่</th>
+                            <th>จำนวนเงิน</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+<!--                    <button class="btn btn-outline-success btn-transfer-sale-submit" data-dismiss="modalx"><i-->
+<!--                                class="fa fa-check"></i> ตกลง-->
+<!--                    </button>-->
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                                class="fa fa-close text-danger"></i> ปิดหน้าต่าง
+                    </button>
+                </div>
+            </div>
+<!--        </form>-->
+    </div>s
+</div>
+
+<?php
+$js=<<<JS
+$(function(){
+    
+});
+
+function showhistory(e){
+    var ids = e.attr('data-id');
+    if(ids){
+        $("#payhistoryModal").modal('show');
+    }
+}
+
+JS;
+$this->registerJs($js,static::POS_END);
+?>
