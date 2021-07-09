@@ -215,7 +215,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     'contentOptions' => ['style' => 'text-align: center; width:10%;vertical-align: middle'],
                     'value' => function ($data) {
                         if($data->payment_amount > 0){
-                            return '<div class="btn btn-info" data-id="'.$data->id.'" onclick="showhistory($(this))">' . 'ดูประวัติ' . '</div>';
+                            return '<div class="btn btn-info" data-id="'.$data->sale_channel_id.'" onclick="showhistory($(this))">' . 'ดูประวัติ' . '</div>';
                         }else{
                             return '';
                         }
