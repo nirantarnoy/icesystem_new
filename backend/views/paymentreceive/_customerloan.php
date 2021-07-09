@@ -211,8 +211,8 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 [
                     'label' => 'ประวัติชำระ',
                     'format' => 'html',
-                    'headerOptions' => ['style' => 'text-align: center,width: 5%'],
-                    'contentOptions' => ['style' => 'text-align: center'],
+                    'headerOptions' => ['style' => 'text-align: center'],
+                    'contentOptions' => ['style' => 'text-align: center; width:10%;'],
                     'value' => function ($data) {
                         return '<div class="btn btn-info">' . 'ดูประวัติ' . '</div>';
                     }
