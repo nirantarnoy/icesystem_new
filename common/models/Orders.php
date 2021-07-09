@@ -23,7 +23,7 @@ class Orders extends \yii\db\ActiveRecord
         //    [['order_no'], 'unique'],
             [['order_no', 'order_date', 'order_channel_id', 'car_ref_id'], 'required'],
             [['customer_id', 'customer_type', 'emp_sale_id', 'payment_status', 'car_ref_id', 'order_channel_id', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['order_date', 'status', 'order_total_amt_text', 'issue_id'], 'safe'],
+            [['order_date', 'order_date2','status', 'order_total_amt_text', 'issue_id'], 'safe'],
             [['vat_amt', 'vat_per', 'order_total_amt'], 'number'],
             [['order_no', 'customer_name'], 'string', 'max' => 255],
             [['payment_method_id', 'payment_term_id', 'is_approve_status'], 'safe'],

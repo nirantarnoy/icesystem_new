@@ -19,11 +19,11 @@ use kartik\select2\Select2;
 
     <div class="row">
         <div class="col-lg-3">
-            <div class="label">รถ</div>
-            <?= $form->field($model, 'car_selected')->widget(Select2::className(), [
-                'data' => ArrayHelper::map(\backend\models\Car::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'code'),
+            <div class="label">สายส่ง</div>
+            <?= $form->field($model, 'rt_id')->widget(Select2::className(), [
+                'data' => ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'code'),
                 'options' => [
-                    'placeholder' => 'เลือกรถ',
+                    'placeholder' => 'เลือกสายส่ง',
                     'multiple' => true
                 ],
                 // 'theme' => \kartik\select2\Select2::THEME_KRAJEE,
@@ -35,7 +35,7 @@ use kartik\select2\Select2;
         <div class="col-lg-3">
             <div class="label">ลูกค้า</div>
             <?= $form->field($model, 'customer_selected')->widget(Select2::className(), [
-                'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'code'),
+                'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'name'),
                 'options' => [
                     'placeholder' => 'เลือกลูกค้า',
                     'multiple' => true

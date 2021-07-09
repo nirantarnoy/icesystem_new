@@ -80,7 +80,7 @@ class SaleorderCustomerLoanSearch extends QuerySaleorderByCustomerLoanSum
         }
 
         if($this->car_ref_id != null ){
-            $query->andFilterWhere(['IN', 'car_ref_id', $this->car_selected]);
+            $query->andFilterWhere(['IN', 'rt_id', $this->car_selected]);
         }
         if($this->customer_id != null ){
             $query->andFilterWhere(['IN', 'customer_id', $this->customer_selected]);
