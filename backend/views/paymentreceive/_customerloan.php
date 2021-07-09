@@ -190,7 +190,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
                     'value'=> function($data){
-                       return '<a href="#">'.number_format($data->payment_amount).'</a>';
+                       return '<a href="#">'.$data->payment_amount.'</a>';
                     },
                     'width' => '150px',
                     'hAlign' => 'right',
