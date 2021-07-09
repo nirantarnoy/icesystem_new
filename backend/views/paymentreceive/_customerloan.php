@@ -159,6 +159,8 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
 //        ],
                 [
                     'attribute' => 'order_date',
+                    'headerOptions' => ['style' => 'text-align: center'],
+                    'contentOptions' => ['style' => 'text-align: center;vertical-align: middle'],
                     'width' => '10%',
                     'value' => function ($model, $key, $index, $widget) {
                         return date('d/m/Y', strtotime($model->order_date));
@@ -169,14 +171,14 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     'label' => 'เลขที่ขาย',
                     'width' => '10%',
                     'headerOptions' => ['style' => 'text-align: center'],
-                    'contentOptions' => ['style' => 'text-align: center'],
+                    'contentOptions' => ['style' => 'text-align: center;vertical-align: middle'],
                     // 'pageSummary' => 'Page Summary',
                 ],
                 [
                     'attribute' => 'line_total',
                     'label' => 'มูลค่า',
                     'headerOptions' => ['style' => 'text-align: right'],
-                    'contentOptions' => ['style' => 'text-align: right'],
+                    'contentOptions' => ['style' => 'text-align: right;vertical-align: middle'],
                     'width' => '150px',
                     'hAlign' => 'right',
                     'format' => ['decimal', 2],
@@ -188,7 +190,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     'label' => 'ชำระแล้ว',
                     //'format' => 'html',
                     'headerOptions' => ['style' => 'text-align: right'],
-                    'contentOptions' => ['style' => 'text-align: right'],
+                    'contentOptions' => ['style' => 'text-align: right;vertical-align: middle'],
                     'width' => '150px',
                     'hAlign' => 'right',
                     'format' => ['decimal', 0],
@@ -198,7 +200,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 [
                     'label' => 'ค้างชำระ',
                     'headerOptions' => ['style' => 'text-align: right'],
-                    'contentOptions' => ['style' => 'text-align: right'],
+                    'contentOptions' => ['style' => 'text-align: right;vertical-align: middle'],
                     'value' => function ($model, $key, $index, $widget) {
                         return ($model->line_total - $model->payment_amount);
                     },
