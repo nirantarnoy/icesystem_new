@@ -194,7 +194,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     },
                     'width' => '150px',
                     'hAlign' => 'right',
-                    'format' => ['decimal', 0],
+                   // 'format' => ['decimal', 0],
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_SUM
                 ],
