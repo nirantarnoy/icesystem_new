@@ -208,11 +208,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_SUM
                 ],
-                [
-                    'label' => 'ประวัติชำระ',
-                    'headerOptions' => ['style' => 'text-align: center'],
-                    'contentOptions' => ['style' => 'text-align: center'],
-                ]
+
 //        [
 //            'class' => 'kartik\grid\FormulaColumn',
 //            'header' => 'Amount In Stock',
