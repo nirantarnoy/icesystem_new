@@ -18,14 +18,14 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
 ?>
 
 <br/>
-<?php echo $this->render('_customerloan_search', ['model' => $searchModel, 'company_id'=>$company_id,'branch_id'=>$branch_id]); ?>
+<?php echo $this->render('_customerloan_search', ['model' => $searchModel, 'company_id' => $company_id, 'branch_id' => $branch_id]); ?>
 
 <div class="row">
     <div class="col-lg-12">
         <?php
         echo GridView::widget([
             'dataProvider' => $dataProvider,
-        //    'filterModel' => $searchModel,
+            //    'filterModel' => $searchModel,
             'showPageSummary' => true,
             'pjax' => true,
             'striped' => true,
@@ -186,15 +186,12 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 [
                     'attribute' => 'payment_amount',
                     'label' => 'รับชำระ',
-                    'format' => 'html',
+                    //'format' => 'html',
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
-                    'value'=> function($data){
-                       return '<a href="#">'.$data->payment_amount.'</a>';
-                    },
                     'width' => '150px',
                     'hAlign' => 'right',
-                   // 'format' => ['decimal', 0],
+                    'format' => ['decimal', 0],
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_SUM
                 ],
@@ -211,6 +208,11 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_SUM
                 ],
+                [
+                    'label' => 'ประวัติชำระ',
+                    'headerOptions' => ['style' => 'text-align: center'],
+                    'contentOptions' => ['style' => 'text-align: center'],
+                ]
 //        [
 //            'class' => 'kartik\grid\FormulaColumn',
 //            'header' => 'Amount In Stock',
