@@ -20,7 +20,7 @@ use kartik\select2\Select2;
     <div class="row">
         <div class="col-lg-3">
             <div class="label">สายส่ง</div>
-            <?= $form->field($model, 'rt_id')->widget(Select2::className(), [
+            <?= $form->field($model, 'car_selected')->widget(Select2::className(), [
                 'data' => ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'code'),
                 'options' => [
                     'placeholder' => 'เลือกสายส่ง',
