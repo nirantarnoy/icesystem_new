@@ -212,9 +212,13 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     'label' => 'ประวัติชำระ',
                     'format' => 'html',
                     'headerOptions' => ['style' => 'text-align: center'],
-                    'contentOptions' => ['style' => 'text-align: center; width:10%;'],
+                    'contentOptions' => ['style' => 'text-align: center; width:10%;vertical-align: middle'],
                     'value' => function ($data) {
-                        return '<div class="btn btn-info">' . 'ดูประวัติ' . '</div>';
+                        if($data->payment_amount > 0){
+                            return '<div class="btn btn-info">' . 'ดูประวัติ' . '</div>';
+                        }else{
+                            return '';
+                        }
                     }
                 ]
 
