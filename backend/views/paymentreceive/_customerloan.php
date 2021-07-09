@@ -186,8 +186,12 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 [
                     'attribute' => 'payment_amount',
                     'label' => 'รับชำระ',
+                    'format' => 'html',
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
+                    'value'=> function($data){
+                       return '<a href="#">'.number_format($data->payment_amount).'</a>';
+                    },
                     'width' => '150px',
                     'hAlign' => 'right',
                     'format' => ['decimal', 0],
