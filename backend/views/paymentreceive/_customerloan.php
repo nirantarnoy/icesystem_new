@@ -113,6 +113,8 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 ],
                 [
                     'attribute' => 'customer_id',
+                    'headerOptions' => ['style' => 'text-align: center'],
+                    'contentOptions' => ['style' => 'text-align: center;vertical-align: middle'],
                     'label' => 'ลูกค้า',
                     'width' => '10%',
                     'value' => function ($model, $key, $index, $widget) {
