@@ -219,7 +219,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     'contentOptions' => ['style' => 'text-align: center; width:10%;vertical-align: middle'],
                     'value' => function ($data) {
                         if($data->payment_amount > 0){
-                            return '<div class="btn btn-info" data-id="'.$data->sale_channel_id.'" onclick="showhistory($(this))">' . 'ดูประวัติ' . '</div>';
+                            return '<div class="btn btn-info" data-id="'.$data->order_id.'" onclick="showhistory($(this))">' . 'ดูประวัติ' . '</div>';
                         }else{
                             return '';
                         }
@@ -282,7 +282,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                             <th>เลขที่</th>
                             <th>วันที่</th>
                             <th>จำนวนเงิน</th>
-                            <th></th>
+                            <th>วิธีชำระ</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -304,6 +304,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
 </div>
 
 <?php
+$url_to_find_item = \yii\helpers\Url::to(['paymentreceive/findpayhistory'], true);
 $js=<<<JS
 $(function(){
     
@@ -312,7 +313,19 @@ $(function(){
 function showhistory(e){
     var ids = e.attr('data-id');
     if(ids){
-        $("#payhistoryModal").modal('show');
+        $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_find_item",
+              'data': {'order_id': ids},
+              'success': function(data) {
+                  //  alert(data);
+                   $(".table-list tbody").html(data);
+                   $("#payhistoryModal").modal('show');
+                 }
+              });
+       
     }
 }
 
