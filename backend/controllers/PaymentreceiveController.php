@@ -355,7 +355,8 @@ class PaymentreceiveController extends Controller
         $order_id = \Yii::$app->request->post('order_id');
         $html = '';
 
-        $model = \backend\models\Querypaymentreceive::find()->where(['order_id'=>$order_id,'company_id' => $company_id, 'branch_id' => $branch_id])->all();
+      //  $model = \backend\models\Querypaymentreceive::find()->where(['order_id'=>$order_id,'company_id' => $company_id, 'branch_id' => $branch_id])->all();
+        $model = \backend\models\Querypaymentreceive::find()->where(['order_id'=>$order_id])->all();
 
         foreach ($model as $value) {
             $payment_channel = '';
