@@ -255,7 +255,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 <div class="modal-header">
                     <div class="row" style="width: 100%">
                         <div class="col-lg-11">
-                            <h2 style="color: #255985"><i class="fa fa-cart-arrow-down"></i> ประวัติการชำระ
+                            <h2 style="color: #255985"><i class="fa fa-list-alt"></i> ประวัติการชำระ
                             </h2>
                         </div>
                         <div class="col-lg-1">
@@ -268,6 +268,14 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
 
                 <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h4>สายส่ง <span class="route-name"></span></h4>
+                        </div>
+                        <div class="col-lg-6">
+                            <h4>ลูกค้า <span class="customer-name"></span></h4>
+                        </div>
+                    </div>
                     <table class="table table-bordered table-striped table-list">
                         <thead>
                         <tr>
