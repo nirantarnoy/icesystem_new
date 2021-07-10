@@ -360,17 +360,13 @@ class PaymentreceiveController extends Controller
         $model = \common\models\QueryPaymentReceive::find()->where(['order_id'=>$order_id])->all();
         if($model){
             foreach ($model as $value) {
-                $payment_channel = '';
+                $payment_channel = 'เงินสด';
                 if($value->payment_channel_id==1){
                     $payment_channel = 'เงินสด';
-                }
-                if($value->payment_channel_id==2){
+                }else if($value->payment_channel_id==2){
                     $payment_channel = 'โอนธนาคาร';
                 }
                 $html .= '<tr>';
-                $html .= '<td style="text-align: center">
-                        <input type="hidden" class="payment-id" value="' . $value->id . '">
-                       </td>';
                 $html .= '<td>' . date('d/m/Y',strtotime($value->trans_date)) . '</td>';
                 $html .= '<td>' . $value->journal_no . '</td>';
                 $html .= '<td>' . number_format($value->payment_amount) . '</td>';
