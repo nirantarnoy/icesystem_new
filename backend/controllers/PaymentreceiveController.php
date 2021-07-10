@@ -377,8 +377,8 @@ class PaymentreceiveController extends Controller
                 $html .= '</tr>';
             }
             $html .= '<tr>';
-            $html .= '<td style="text-align: right" colspan="2">รวมรับชำระ</td>';
-            $html .= '<td style="text-align: right">' . number_format($value->payment_amount) . '</td>';
+            $html .= '<td style="text-align: right" colspan="2"><h5 class="text-orange">รวมรับชำระ</h5></td>';
+            $html .= '<td style="text-align: right"><b>' . number_format($total) . '</b></td>';
             $html .= '<td style="text-align: center"></td>';
             $html .= '</tr>';
         }
