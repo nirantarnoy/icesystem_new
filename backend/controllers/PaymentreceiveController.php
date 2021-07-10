@@ -359,7 +359,9 @@ class PaymentreceiveController extends Controller
       //  $model = \backend\models\Querypaymentreceive::find()->where(['order_id'=>$order_id,'company_id' => $company_id, 'branch_id' => $branch_id])->all();
         $model = \common\models\QueryPaymentReceive::find()->where(['order_id'=>$order_id])->all();
         if($model){
+            $total = 0;
             foreach ($model as $value) {
+                $total = ($total + $value->payment_amount);
                 $payment_channel = 'เงินสด';
                 if($value->payment_channel_id==1){
                     $payment_channel = 'เงินสด';
@@ -367,13 +369,18 @@ class PaymentreceiveController extends Controller
                     $payment_channel = 'โอนธนาคาร';
                 }
                 $html .= '<tr>';
-                $html .= '<td>' . $value->journal_no . '</td>';
-                $html .= '<td>' . date('d/m/Y',strtotime($value->trans_date)) . '</td>';
+                $html .= '<td style="text-align: center">' . $value->journal_no . '</td>';
+                $html .= '<td style="text-align: center">' . date('d/m/Y',strtotime($value->trans_date)) . '</td>';
 
-                $html .= '<td>' . number_format($value->payment_amount) . '</td>';
-                $html .= '<td>' . $payment_channel  . '</td>';
+                $html .= '<td style="text-align: right">' . number_format($value->payment_amount) . '</td>';
+                $html .= '<td style="text-align: center">' . $payment_channel  . '</td>';
                 $html .= '</tr>';
             }
+            $html .= '<tr>';
+            $html .= '<td style="text-align: right" colspan="2">รวมรับชำระ</td>';
+            $html .= '<td style="text-align: right">' . number_format($value->payment_amount) . '</td>';
+            $html .= '<td style="text-align: center"></td>';
+            $html .= '</tr>';
         }
 
         echo $html;

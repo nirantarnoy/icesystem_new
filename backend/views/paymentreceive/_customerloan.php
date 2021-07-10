@@ -279,10 +279,10 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     <table class="table table-bordered table-striped table-list">
                         <thead>
                         <tr>
-                            <th>เลขที่</th>
-                            <th>วันที่</th>
-                            <th>จำนวนเงิน</th>
-                            <th>วิธีชำระ</th>
+                            <th style="text-align: center">เลขที่</th>
+                            <th style="text-align: center">วันที่</th>
+                            <th style="text-align: right">จำนวนเงิน</th>
+                            <th style="text-align: center">วิธีชำระ</th>
                         </tr>
                         </thead>
                         <tbody>
