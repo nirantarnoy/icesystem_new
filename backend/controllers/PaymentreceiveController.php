@@ -367,8 +367,9 @@ class PaymentreceiveController extends Controller
                     $payment_channel = 'โอนธนาคาร';
                 }
                 $html .= '<tr>';
-                $html .= '<td>' . date('d/m/Y',strtotime($value->trans_date)) . '</td>';
                 $html .= '<td>' . $value->journal_no . '</td>';
+                $html .= '<td>' . date('d/m/Y',strtotime($value->trans_date)) . '</td>';
+
                 $html .= '<td>' . number_format($value->payment_amount) . '</td>';
                 $html .= '<td>' . $payment_channel  . '</td>';
                 $html .= '</tr>';

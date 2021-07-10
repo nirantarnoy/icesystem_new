@@ -321,7 +321,7 @@ function showhistory(e){
               'url': "$url_to_find_item",
               'data': {'order_id': ids},
               'success': function(data) {
-                    alert(data);
+                   // alert(data);
                    $(".table-list tbody").html(data);
                    $("#payhistoryModal").modal('show');
                  }
