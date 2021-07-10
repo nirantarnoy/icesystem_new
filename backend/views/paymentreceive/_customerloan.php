@@ -313,6 +313,7 @@ $(function(){
 function showhistory(e){
     var ids = e.attr('data-id');
     if(ids){
+        alert(ids);
         $.ajax({
               'type':'post',
               'dataType': 'html',
