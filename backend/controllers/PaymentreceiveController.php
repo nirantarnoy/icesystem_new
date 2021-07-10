@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\QueryPaymentReceive;
 use Yii;
 use backend\models\Paymentreceive;
 use backend\models\PaymentreceiveSearch;
@@ -342,21 +343,21 @@ class PaymentreceiveController extends Controller
 
     public function actionFindpayhistory()
     {
-        $company_id = 1;
-        $branch_id = 1;
-        if (!empty(\Yii::$app->user->identity->company_id)) {
-            $company_id = \Yii::$app->user->identity->company_id;
-        }
-        if (!empty(\Yii::$app->user->identity->branch_id)) {
-            $branch_id = \Yii::$app->user->identity->branch_id;
-        }
+//        $company_id = 1;
+//        $branch_id = 1;
+//        if (!empty(\Yii::$app->user->identity->company_id)) {
+//            $company_id = \Yii::$app->user->identity->company_id;
+//        }
+//        if (!empty(\Yii::$app->user->identity->branch_id)) {
+//            $branch_id = \Yii::$app->user->identity->branch_id;
+//        }
 
         //$customer_code = \Yii::$app->request->post('customer_code');
         $order_id = \Yii::$app->request->post('order_id');
         $html = '';
 
       //  $model = \backend\models\Querypaymentreceive::find()->where(['order_id'=>$order_id,'company_id' => $company_id, 'branch_id' => $branch_id])->all();
-        $model = \backend\models\Querypaymentreceive::find()->where(['order_id'=>$order_id])->all();
+        $model = \common\models\QueryPaymentReceive::find()->where(['order_id'=>$order_id])->all();
         if($model){
             foreach ($model as $value) {
                 $payment_channel = '';
@@ -370,7 +371,7 @@ class PaymentreceiveController extends Controller
                 $html .= '<td style="text-align: center">
                         <input type="hidden" class="payment-id" value="' . $value->id . '">
                        </td>';
-                $html .= '<td>' . date("d/m/Y",strtotime($value->trans_date)) . '</td>';
+                $html .= '<td>' . date('d/m/Y',strtotime($value->trans_date)) . '</td>';
                 $html .= '<td>' . $value->journal_no . '</td>';
                 $html .= '<td>' . number_format($value->payment_amount) . '</td>';
                 $html .= '<td>' . $payment_channel  . '</td>';
