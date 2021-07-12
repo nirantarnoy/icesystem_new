@@ -125,7 +125,7 @@ class OrderController extends Controller
                                     }
                                 }
 
-                                if ($payment_type_id == 1) {
+                                if ($payment_type_id != 3) {
                                     $this->addpayment($has_order_id, $customer_id, $line_total, $company_id, $branch_id, $payment_type_id);
                                 }
 
@@ -232,7 +232,7 @@ class OrderController extends Controller
                                 if ($model_line->save(false)) {
                                 }
 
-                                if ($payment_type_id ==1) {
+                                if ($payment_type_id !=3) {
                                     $this->addpayment($model->id, $customer_id, $line_total, $company_id, $branch_id, $payment_type_id);
                                 }
 
@@ -601,7 +601,7 @@ class OrderController extends Controller
             $model_line->order_id = $order_id;
             $model_line->payment_amount =$amount;
             $model_line->payment_channel_id = 1; // 1 เงินสด 2 โอน
-            $model_line->payment_method_id = 1; // 1 สด
+            $model_line->payment_method_id = $payment_type_id; // 1 สด
             $model_line->status = 1;
             if ($model_line->save(false)) {
                 $status = true;
@@ -621,7 +621,7 @@ class OrderController extends Controller
                 $model_line->order_id = $order_id;
                 $model_line->payment_amount = $amount;
                 $model_line->payment_channel_id = 1; // 1 เงินสด 2 โอน
-                $model_line->payment_method_id = 1; // 1 สด
+                $model_line->payment_method_id = $payment_type_id; // 1 สด
                 $model_line->status = 1;
                 if ($model_line->save(false)) {
                     $status = true;
