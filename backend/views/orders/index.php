@@ -83,14 +83,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     return \backend\models\Car::findName($data->car_ref_id);
                 }
             ],
-            [
-                'label' => 'ยอดรับชำระ',
-                'headerOptions' => ['style' => 'text-align: right'],
-                'contentOptions' => ['style' => 'text-align: right'],
-                'value' => function ($data) {
-                    return number_format(\backend\models\Paymentreceive::findPayorderamt($data->id));
-                }
-            ],
+//            [
+//                'label' => 'ยอดรับชำระ',
+//                'headerOptions' => ['style' => 'text-align: right'],
+//                'contentOptions' => ['style' => 'text-align: right'],
+//                'value' => function ($data) {
+//                    return number_format(\backend\models\Paymentreceive::findPayorderamt($data->id));
+//                }
+//            ],
             [
                 'label' => 'เครดิต/เชื่อ',
                 'headerOptions' => ['style' => 'text-align: right'],
