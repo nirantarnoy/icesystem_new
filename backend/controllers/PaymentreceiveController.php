@@ -391,13 +391,13 @@ class PaymentreceiveController extends Controller
         $html = '';
         $data = [];
         if($list != null){
-            for($i=0;$i<=count($list)-1;$i++){
-                array_push($data,$list[$i]);
-            }
+//            for($i=0;$i<=count($list)-1;$i++){
+//                array_push($data,$list[$i]);
+//            }
             //$ids = explode(',',$list);
 
             if(count($list)>0){
-                $model = \common\models\QueryCustomerInfo::find()->where(['customer_id'=>$data])->all();
+                $model = \common\models\QueryCustomerInfo::find()->where(['rt_id'=>$list])->all();
                // $model = \common\models\QueryCustomerInfo::find()->all();
                 if($model){
                     foreach ($model as $value){
