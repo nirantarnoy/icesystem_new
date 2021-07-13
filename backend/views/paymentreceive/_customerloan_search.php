@@ -24,7 +24,8 @@ use kartik\select2\Select2;
                 'data' => ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'code'),
                 'options' => [
                     'placeholder' => 'เลือกสายส่ง',
-                    'multiple' => true
+                    'multiple' => true,
+                    'onchange'=>'getcustomer($(this))',
                 ],
                 // 'theme' => \kartik\select2\Select2::THEME_KRAJEE,
                 'pluginOptions' => [
@@ -37,6 +38,7 @@ use kartik\select2\Select2;
             <?= $form->field($model, 'customer_selected')->widget(Select2::className(), [
                 'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'name'),
                 'options' => [
+                        'id'=>'customer-select',
                     'placeholder' => 'เลือกลูกค้า',
                     'multiple' => true
                 ],

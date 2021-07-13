@@ -305,6 +305,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
 
 <?php
 $url_to_find_item = \yii\helpers\Url::to(['paymentreceive/findpayhistory'], true);
+$url_to_find_customer = \yii\helpers\Url::to(['paymentreceive/findcustomer'], true);
 $js=<<<JS
 $(function(){
     
@@ -327,6 +328,24 @@ function showhistory(e){
                  }
               });
        
+    }
+}
+
+function getcustomer(e){
+    //alert(e.val());
+    if(e.val() != null){
+        $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_find_customer",
+              'data': {'customer_list': e.val()},
+              'success': function(data) {
+                  //  alert(data);
+                  
+                   $("#customer-select").html(data);
+                 }
+              });
     }
 }
 

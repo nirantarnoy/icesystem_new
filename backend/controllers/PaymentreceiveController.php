@@ -386,4 +386,25 @@ class PaymentreceiveController extends Controller
         echo $html;
     }
 
+    public function actionFindcustomer(){
+        $list = \Yii::$app->request->post('customer_list');
+        $html = '';
+        if($list != null){
+            //$ids = explode(',',$list);
+
+            if(count($list)>0){
+                $model = \common\models\QueryCustomerInfo::find()->where(['customer_id'=>$list])->all();
+                if($model){
+                    foreach ($model as $value){
+                        $html.='<option id="'.$value->customer_id.'">';
+                        $html.= $value->cus_name;
+                        $html.='</option';
+                    }
+
+                }
+            }
+        }
+        echo $html;
+    }
+
 }
