@@ -341,7 +341,7 @@ function getcustomer(e){
               'url': "$url_to_find_customer",
               'data': {'customer_list': e.val()},
               'success': function(data) {
-                  //  alert(data);
+                    alert(data);
                   
                    $("#customer-select").html(data);
                  }
