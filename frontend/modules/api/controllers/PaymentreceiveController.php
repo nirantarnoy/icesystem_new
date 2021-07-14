@@ -41,7 +41,12 @@ class PaymentreceiveController extends Controller
             if ($model) {
                 $status = true;
                 foreach ($model as $value) {
-                    $xtotal = $value->payment_amount == null ? 0: $value->line_total;
+               //     $xtotal = $value->payment_amount == null ? 0: $value->line_total;
+                    $remain_amt = $value->line_total;
+
+                    if($value->remain_amount == null && $value->payment_amount != null){
+                        $remain_amt = $value->line_total - $value->payment_amount;
+                    }
                     array_push($data, [
                         'order_id' => $value->order_id,
                         'order_no' => \backend\models\Orders::getNumber($value->order_id),
@@ -50,7 +55,7 @@ class PaymentreceiveController extends Controller
                         'order_date' => $value->order_date,
                         'line_total' => $value->line_total,
                         //'payment_amount' => $value->payment_amount,
-                        'remain_amount' => $value->remain_amount == null ? ($value->line_total - $xtotal) : $value->remain_amount,
+                        'remain_amount' => $remain_amt,
                         //'pay_type' => $value->pay_type,
                     ]);
                 }

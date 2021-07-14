@@ -218,9 +218,9 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     'headerOptions' => ['style' => 'text-align: center'],
                     'contentOptions' => ['style' => 'text-align: center; width:10%;vertical-align: middle'],
                     'value' => function ($data) {
-                        if($data->payment_amount > 0){
-                            return '<div class="btn btn-info" data-id="'.$data->order_id.'" onclick="showhistory($(this))">' . 'ดูประวัติ' . '</div>';
-                        }else{
+                        if ($data->payment_amount > 0) {
+                            return '<div class="btn btn-info" data-id="' . $data->order_id . '" onclick="showhistory($(this))">' . 'ดูประวัติ' . '</div>';
+                        } else {
                             return '';
                         }
                     }
@@ -244,69 +244,98 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
         ?>
     </div>
 </div>
-<div id="payhistoryModal" class="modal fade" role="dialog">
+<div id="payhistoryModal"
+     class="modal fade"
+     role="dialog">
     <div class="modal-dialog modal-xl">
         <!-- Modal content-->
-<!--        <form id="form-transfer-sale" action="--><?//= \yii\helpers\Url::to(['orders/savetransfersale'], true) ?><!--"-->
-<!--              method="post">-->
+        <!--        <form id="form-transfer-sale" action="-->
+        <? //= \yii\helpers\Url::to(['orders/savetransfersale'], true) ?><!--"-->
+        <!--              method="post">-->
 
-<!--            <input type="hidden" class="transfer-order-id" name="transfer_order_id" value="0">-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="row" style="width: 100%">
-                        <div class="col-lg-11">
-                            <h2 style="color: #255985"><i class="fa fa-list-alt"></i> ประวัติการชำระ
-                            </h2>
-                        </div>
-                        <div class="col-lg-1">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
+        <!--            <input type="hidden" class="transfer-order-id" name="transfer_order_id" value="0">-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row"
+                     style="width: 100%">
+                    <div class="col-lg-11">
+                        <h2 style="color: #255985">
+                            <i class="fa fa-list-alt"></i>
+                            ประวัติการชำระ
+                        </h2>
                     </div>
-
-                </div>
-                <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
-                <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
-
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <h4>สายส่ง <span class="route-name"></span></h4>
-                        </div>
-                        <div class="col-lg-6">
-                            <h4>ลูกค้า <span class="customer-name"></span></h4>
-                        </div>
+                    <div class="col-lg-1">
+                        <button type="button"
+                                class="close"
+                                data-dismiss="modal">
+                            &times;
+                        </button>
                     </div>
-                    <table class="table table-bordered table-striped table-list">
-                        <thead>
-                        <tr>
-                            <th style="text-align: center">เลขที่</th>
-                            <th style="text-align: center">วันที่</th>
-                            <th style="text-align: right">จำนวนเงิน</th>
-                            <th style="text-align: center">วิธีชำระ</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                </div>
 
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-<!--                    <button class="btn btn-outline-success btn-transfer-sale-submit" data-dismiss="modalx"><i-->
-<!--                                class="fa fa-check"></i> ตกลง-->
-<!--                    </button>-->
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><i
-                                class="fa fa-close text-danger"></i> ปิดหน้าต่าง
-                    </button>
-                </div>
             </div>
-<!--        </form>-->
-    </div>s
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h4>
+                            สายส่ง
+                            <span class="route-name"></span>
+                        </h4>
+                    </div>
+                    <div class="col-lg-6">
+                        <h4>
+                            ลูกค้า
+                            <span class="customer-name"></span>
+                        </h4>
+                    </div>
+                </div>
+                <table class="table table-bordered table-striped table-list">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center">
+                            เลขที่
+                        </th>
+                        <th style="text-align: center">
+                            วันที่
+                        </th>
+                        <th style="text-align: right">
+                            จำนวนเงิน
+                        </th>
+                        <th style="text-align: center">
+                            วิธีชำระ
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <!--                    <button class="btn btn-outline-success btn-transfer-sale-submit" data-dismiss="modalx"><i-->
+                <!--                                class="fa fa-check"></i> ตกลง-->
+                <!--                    </button>-->
+                <button type="button"
+                        class="btn btn-default"
+                        data-dismiss="modal">
+                    <i
+                            class="fa fa-close text-danger"></i>
+                    ปิดหน้าต่าง
+                </button>
+            </div>
+        </div>
+        <!--        </form>-->
+    </div>
+    s
 </div>
 
 <?php
 $url_to_find_item = \yii\helpers\Url::to(['paymentreceive/findpayhistory'], true);
 $url_to_find_customer = \yii\helpers\Url::to(['paymentreceive/findcustomer'], true);
-$js=<<<JS
+$js = <<<JS
 $(function(){
     
 });
@@ -326,8 +355,7 @@ function showhistory(e){
                    $(".table-list tbody").html(data);
                    $("#payhistoryModal").modal('show');
                  }
-              });
-       
+        });
     }
 }
 
@@ -350,5 +378,5 @@ function getcustomer(e){
 }
 
 JS;
-$this->registerJs($js,static::POS_END);
+$this->registerJs($js, static::POS_END);
 ?>
