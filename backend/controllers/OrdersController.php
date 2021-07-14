@@ -956,72 +956,72 @@ class OrdersController extends Controller
     {
         $html = '';
 
-        $model_price = \common\models\PriceGroupLine::find()->select(['product_id', 'sale_price'])->where(['price_group_id' => $price_group_id])->all();
-//        $model_order_product = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'price_group_id' => $price_group_id])->distinct('product_id')->count();
-        $sql = 'SELECT COUNT(DISTINCT product_id) as cnt FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id;
-        $query = \Yii::$app->db->createCommand($sql)->queryAll();
-        $model_order_product = $query[0]['cnt'];
-        if (count($model_price) > $model_order_product) {
-            if ($model_price) {
-                $i = 0;
-                $line_total_qty = 0;
-                $line_total_price = 0;
-                $btn_edit = '';
-                foreach ($model_price as $price_value) {
-                    // for after add product_id to price group
-                    $std_price = $price_value->sale_price;
-                    $line_prod_code = \backend\models\Product::findCode($price_value->product_id) . $price_group_id . "[]";
-                    $input_name = "line_qty_" . $line_prod_code;
-                    $input_name_price = "line_sale_price_" . $line_prod_code;
-                    $bg_color = ';background-color:white;color: black';
-
-                    //  $model = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id])->all();
-                    $model = \common\models\OrderLine::find()->select(['price', 'qty', 'customer_id'])->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id, 'product_id' => $price_value->product_id])->one();
-                    if ($model) {
-                        //  foreach ($model as $value) {
-                        $i += 1;
-//                    $line_prod_code = \backend\models\Product::findCode($model->product_id) . $price_group_id . "[]";
-//                    $input_name = "line_qty_" . $line_prod_code . $price_group_id . "[]";
-//                    $input_name_price = "line_sale_price_" . $line_prod_code . $price_group_id . "[]";
-
-                        $line_total_qty = $line_total_qty + $model->qty;
-                        $line_total_price = $line_total_price + ($model->qty * $model->price);
-
-                        $bg_color = '';
-
-
-                        if ($model->qty > 0) {
-                            $bg_color = ';background-color:#33CC00;color: black';
-                        } else {
-                            $bg_color = ';background-color:white;color: black';
-                        }
-
-
-                        $html .= '<td>
-                       <input type="hidden" class="line-qty-">
-                       <input type="hidden" class="line-product-code" name="' . $line_prod_code . '" value="' . $line_prod_code . '">
-                       <input type="hidden" class="line-sale-price" name="' . $input_name_price . '" value="' . $model->price . '">
-                       <input type="number" name="' . $input_name . '" data-var="' . $model->price . '" style="text-align: center' . $bg_color . '" value="' . $model->qty . '" class="form-control" min="0" onchange="line_qty_cal($(this))">
-                  </td>';
-                        //  }
-
-                    } else {
-                        $html .= '<td>
-                       <input type="hidden" class="line-qty-">
-                       <input type="hidden" class="line-product-code" name="' . $line_prod_code . '" value="' . $line_prod_code . '">
-                       <input type="hidden" class="line-sale-price" name="' . $input_name_price . '" value="' . $std_price . '">
-                       <input type="number" name="' . $input_name . '" data-var="' . $std_price . '" style="text-align: center' . $bg_color . '" value="0" class="form-control" min="0" onchange="line_qty_cal($(this))">
-                  </td>';
-                    }
-                }
-                if ($has_payment) {
-                    $btn_edit = '<div class="btn btn-info btn-sm" data-id="' . $order_id . '" data-var="' . $customer_id . '" onclick="showeditpayment($(this))">แก้ไข</div>';
-                }
-                $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right" value="' . number_format($line_total_qty) . '"></td>';
-                $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"  value="' . number_format($line_total_price) . '"><input type="hidden" class="form-control line-total-price-cal" style="text-align: right" value="' . $line_total_price . '"></td>';
-                $html .= '<td style="text-align: center">' . $btn_edit . '</td>';
-            }
-        } else {
+//        $model_price = \common\models\PriceGroupLine::find()->select(['product_id', 'sale_price'])->where(['price_group_id' => $price_group_id])->all();
+////        $model_order_product = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'price_group_id' => $price_group_id])->distinct('product_id')->count();
+//        $sql = 'SELECT COUNT(DISTINCT product_id) as cnt FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id;
+//        $query = \Yii::$app->db->createCommand($sql)->queryAll();
+//        $model_order_product = $query[0]['cnt'];
+//        if (count($model_price) > $model_order_product) {
+//            if ($model_price) {
+//                $i = 0;
+//                $line_total_qty = 0;
+//                $line_total_price = 0;
+//                $btn_edit = '';
+//                foreach ($model_price as $price_value) {
+//                    // for after add product_id to price group
+//                    $std_price = $price_value->sale_price;
+//                    $line_prod_code = \backend\models\Product::findCode($price_value->product_id) . $price_group_id . "[]";
+//                    $input_name = "line_qty_" . $line_prod_code;
+//                    $input_name_price = "line_sale_price_" . $line_prod_code;
+//                    $bg_color = ';background-color:white;color: black';
+//
+//                    //  $model = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id])->all();
+//                    $model = \common\models\OrderLine::find()->select(['price', 'qty', 'customer_id'])->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id, 'product_id' => $price_value->product_id])->one();
+//                    if ($model) {
+//                        //  foreach ($model as $value) {
+//                        $i += 1;
+////                    $line_prod_code = \backend\models\Product::findCode($model->product_id) . $price_group_id . "[]";
+////                    $input_name = "line_qty_" . $line_prod_code . $price_group_id . "[]";
+////                    $input_name_price = "line_sale_price_" . $line_prod_code . $price_group_id . "[]";
+//
+//                        $line_total_qty = $line_total_qty + $model->qty;
+//                        $line_total_price = $line_total_price + ($model->qty * $model->price);
+//
+//                        $bg_color = '';
+//
+//
+//                        if ($model->qty > 0) {
+//                            $bg_color = ';background-color:#33CC00;color: black';
+//                        } else {
+//                            $bg_color = ';background-color:white;color: black';
+//                        }
+//
+//
+//                        $html .= '<td>
+//                       <input type="hidden" class="line-qty-">
+//                       <input type="hidden" class="line-product-code" name="' . $line_prod_code . '" value="' . $line_prod_code . '">
+//                       <input type="hidden" class="line-sale-price" name="' . $input_name_price . '" value="' . $model->price . '">
+//                       <input type="number" name="' . $input_name . '" data-var="' . $model->price . '" style="text-align: center' . $bg_color . '" value="' . $model->qty . '" class="form-control" min="0" onchange="line_qty_cal($(this))">
+//                  </td>';
+//                        //  }
+//
+//                    } else {
+//                        $html .= '<td>
+//                       <input type="hidden" class="line-qty-">
+//                       <input type="hidden" class="line-product-code" name="' . $line_prod_code . '" value="' . $line_prod_code . '">
+//                       <input type="hidden" class="line-sale-price" name="' . $input_name_price . '" value="' . $std_price . '">
+//                       <input type="number" name="' . $input_name . '" data-var="' . $std_price . '" style="text-align: center' . $bg_color . '" value="0" class="form-control" min="0" onchange="line_qty_cal($(this))">
+//                  </td>';
+//                    }
+//                }
+//                if ($has_payment) {
+//                    $btn_edit = '<div class="btn btn-info btn-sm" data-id="' . $order_id . '" data-var="' . $customer_id . '" onclick="showeditpayment($(this))">แก้ไข</div>';
+//                }
+//                $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-qty-cal" name="line_qty_cal[]" style="text-align: right" value="' . number_format($line_total_qty) . '"></td>';
+//                $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"  value="' . number_format($line_total_price) . '"><input type="hidden" class="form-control line-total-price-cal" style="text-align: right" value="' . $line_total_price . '"></td>';
+//                $html .= '<td style="text-align: center">' . $btn_edit . '</td>';
+//            }
+//        } else {
             $model = \common\models\OrderLine::find()->select(['product_id', 'price', 'qty'])->where(['order_id' => $order_id, 'customer_id' => $customer_id, 'price_group_id' => $price_group_id])->all();
             $i = 0;
             $line_total_qty = 0;
@@ -1061,7 +1061,7 @@ class OrdersController extends Controller
             $html .= '<td style="text-align: right"><input type="text" disabled class="form-control line-total-price" style="text-align: right"  value="' . number_format($line_total_price) . '"><input type="hidden" class="form-control line-total-price-cal" style="text-align: right" value="' . $line_total_price . '"></td>';
             $html .= '<td style="text-align: center">' . $btn_edit . '</td>';
 
-        }
+       // }
 
 
         return $html;
