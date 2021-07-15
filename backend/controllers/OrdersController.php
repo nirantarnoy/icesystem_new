@@ -1608,7 +1608,7 @@ class OrdersController extends Controller
 
     }
 
-    public function acionAddpayment2()
+    public function actionAddpayment2()
     {
 
         $company_id = 1;
@@ -1619,6 +1619,8 @@ class OrdersController extends Controller
         if (!empty(\Yii::$app->user->identity->branch_id)) {
             $branch_id = \Yii::$app->user->identity->branch_id;
         }
+
+
 
         $order_id = \Yii::$app->request->post('payment_order_id');
         $customer_id = \Yii::$app->request->post('line_pay_customer_id');
