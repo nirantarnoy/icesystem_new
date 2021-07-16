@@ -57,15 +57,15 @@ class DeliveryrouteSearch extends Deliveryroute
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-//            'company_id' => $this->company_id,
-//            'branch_id' => $this->branch_id,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
-        ]);
+//        $query->andFilterWhere([
+//            'id' => $this->id,
+////            'company_id' => $this->company_id,
+////            'branch_id' => $this->branch_id,
+//            'created_at' => $this->created_at,
+//            'updated_at' => $this->updated_at,
+//            'created_by' => $this->created_by,
+//            'updated_by' => $this->updated_by,
+//        ]);
 
         if (!empty(\Yii::$app->user->identity->company_id)) {
             $query->andFilterWhere(['company_id' => \Yii::$app->user->identity->company_id]);
