@@ -59,8 +59,8 @@ class DeliveryrouteSearch extends Deliveryroute
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'company_id' => $this->company_id,
-            'branch_id' => $this->branch_id,
+//            'company_id' => $this->company_id,
+//            'branch_id' => $this->branch_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'created_by' => $this->created_by,
