@@ -1307,7 +1307,6 @@ class OrderController extends Controller
                                     $this->notifymessage('สายส่ง: ' . $route_name . ' ยกเลิกรายการขาย ' . $order_no . ' ลูกค้า: ' . $customer_code . ' ยอดเงิน: ' . $model->line_total . ' เหตุผล: ' . $reason);
                                 }
                             }
-
                         }
                     }
                 }

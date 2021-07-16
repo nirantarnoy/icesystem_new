@@ -1038,13 +1038,11 @@ class OrdersController extends Controller
 
                 $bg_color = '';
 
-
                 if ($value->qty > 0) {
                     $bg_color = ';background-color:#33CC00;color: black';
                 } else {
                     $bg_color = ';background-color:white;color: black';
                 }
-
 
                 $html .= '<td>
                        <input type="hidden" class="line-qty-' . $i . '">
