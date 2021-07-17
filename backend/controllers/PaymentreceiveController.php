@@ -326,7 +326,7 @@ class PaymentreceiveController extends Controller
     {
         $searchModel = new \backend\models\SaleorderCustomerLoanSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->limit(300);
+        $dataProvider->query->limit(100);
         //   $dataProvider->query->andFilterWhere(['>','qty',0])->andFilterWhere(['customer_id'=>2247]);
         $dataProvider->setSort([
             'defaultOrder'=>['customer_id'=>SORT_ASC,'order_date'=>SORT_ASC]
