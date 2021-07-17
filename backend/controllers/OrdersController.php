@@ -2042,9 +2042,21 @@ class OrdersController extends Controller
                             if ($model_update_issue_status) {
                                 $model_check_has_issue->status = 2;
                                 $model_check_has_issue->save(false);
-                                $this->updateStock($val2->product_id, $val2->qty, $default_warehouse, $model_check_has_issue->journal_no,$company_id,$branch_id);
+                               // $this->updateStock($val2->product_id, $val2->qty, $default_warehouse, $model_check_has_issue->journal_no,$company_id,$branch_id);
                             }
+                            $model_trans = new \backend\models\Stocktrans();
+                            $model_trans->journal_no = '000';
+                            $model_trans->trans_date = date('Y-m-d H:i:s');
+                            $model_trans->product_id = $val2->product_id;
+                            $model_trans->qty = $val2->qty;
+                            $model_trans->warehouse_id = $default_warehouse;
+                            $model_trans->stock_type = 2; // 1 in 2 out
+                            $model_trans->activity_type_id = 6; // 6 issue car
+                            $model_trans->company_id = $company_id;
+                            $model_trans->branch_id = $branch_id;
+                            if ($model_trans->save(false)) {
 
+                            }
                         }
                     }
                 }
