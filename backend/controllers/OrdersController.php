@@ -243,6 +243,7 @@ class OrdersController extends Controller
                         }
                         $model_loop_issue = \backend\models\Journalissueline::find()->where(['issue_id' => $model->issue_id[$i]])->all();
                         foreach ($model_loop_issue as $val2) {
+                            if($val2->qty <= 0 || $val2->qty == null)continue;
                             $model_order_stock = new \common\models\OrderStock();
                             $model_order_stock->issue_id = $model_issue->id;
                             $model_order_stock->product_id = 1;
