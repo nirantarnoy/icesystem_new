@@ -2042,8 +2042,9 @@ class OrdersController extends Controller
                             if ($model_update_issue_status) {
                                 $model_check_has_issue->status = 2;
                                 $model_check_has_issue->save(false);
+                                $this->updateStock($val2->product_id, $val2->qty, $default_warehouse, $model_check_has_issue->journal_no,$company_id,$branch_id);
                             }
-                            $this->updateStock($val2->product_id, $val2->qty, $default_warehouse, $model_check_has_issue->journal_no,$company_id,$branch_id);
+
                         }
                     }
                 }
