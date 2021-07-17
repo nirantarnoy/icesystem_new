@@ -2043,7 +2043,7 @@ class OrdersController extends Controller
                                 $model_check_has_issue->status = 2;
                                 $model_check_has_issue->save(false);
                             }
-                            $this->updateStock($val2->product_id, $val2->qty, $default_warehouse, $model_check_has_issue->journal_no);
+                            $this->updateStock($val2->product_id, $val2->qty, $default_warehouse, $model_check_has_issue->journal_no,$company_id,$branch_id);
                         }
                     }
                 }
@@ -2051,9 +2051,9 @@ class OrdersController extends Controller
         }
     }
 
-    public function updateStock($product_id, $qty, $wh_id, $journal_no)
+    public function updateStock($product_id, $qty, $wh_id, $journal_no, $company_id, $branch_id)
     {
-       // if ($product_id != null && $qty > 0) {
+        if ($product_id != null && $qty > 0) {
             $model_trans = new \backend\models\Stocktrans();
             $model_trans->journal_no = $journal_no;
             $model_trans->trans_date = date('Y-m-d H:i:s');
@@ -2062,6 +2062,8 @@ class OrdersController extends Controller
             $model_trans->warehouse_id = $wh_id;
             $model_trans->stock_type = 2; // 1 in 2 out
             $model_trans->activity_type_id = 6; // 6 issue car
+            $model_trans->company_id = $company_id;
+            $model_trans->branch_id = $branch_id;
             if ($model_trans->save(false)) {
                 $model = \backend\models\Stocksum::find()->where(['warehouse_id' => $wh_id, 'product_id' => $product_id])->one();
                 if ($model) {
@@ -2069,6 +2071,6 @@ class OrdersController extends Controller
                     $model->save(false);
                 }
             }
-       // }
+        }
     }
 }
