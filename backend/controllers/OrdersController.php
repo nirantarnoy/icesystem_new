@@ -76,11 +76,15 @@ class OrdersController extends Controller
     {
         $company_id = 1;
         $branch_id = 1;
+        $default_warehouse = 6;
         if (!empty(\Yii::$app->user->identity->company_id)) {
             $company_id = \Yii::$app->user->identity->company_id;
         }
         if (!empty(\Yii::$app->user->identity->branch_id)) {
             $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+        if($branch_id == 2){
+            $default_warehouse= 5;
         }
 
         $model = new Orders();
@@ -246,7 +250,27 @@ class OrdersController extends Controller
                             $model_order_stock->used_qty = 0;
                             $model_order_stock->avl_qty = $val2->qty;
                             $model_order_stock->order_id = $model->id;
-                            $model_order_stock->save();
+                            if ($model_order_stock->save(false)) {
+                                $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $model->issue_id[$i]])->one();
+                                if ($model_update_issue_status) {
+                                    $model_update_issue_status->status = 3;
+                                    $model_update_issue_status->save(false);
+                                    // $this->updateStock($val2->product_id, $val2->qty, $default_warehouse, $model_check_has_issue->journal_no,$company_id,$branch_id);
+                                }
+                                $model_trans = new \backend\models\Stocktrans();
+                                $model_trans->journal_no = '000';
+                                $model_trans->trans_date = date('Y-m-d H:i:s');
+                                $model_trans->product_id = $val2->product_id;
+                                $model_trans->qty = $val2->qty;
+                                $model_trans->warehouse_id = $default_warehouse;
+                                $model_trans->stock_type = 2; // 1 in 2 out
+                                $model_trans->activity_type_id = 6; // 6 issue car
+                                $model_trans->company_id = $company_id;
+                                $model_trans->branch_id = $branch_id;
+                                if ($model_trans->save(false)) {
+
+                                }
+                            }
                         }
                     }
                 }
@@ -2020,48 +2044,48 @@ class OrdersController extends Controller
         $issuelist = \Yii::$app->request->post('issue_list');
 
         //  if ($order_id != null && $issuelist != null) {
-        if ($issuelist != null) {
-            //  $issue_data = explode(',', $issuelist);
-//            print_r($issuelist[0]);
-            if ($issuelist != null) {
-                for ($i = 0; $i <= count($issuelist) - 1; $i++) {
-                    $model_check_has_issue = \common\models\OrderStock::find()->where(['order_id' => $order_id, 'issue_id' => $issuelist[$i]])->count();
-                    if ($model_check_has_issue) continue;
-                    $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issuelist[$i]])->all();
-                    foreach ($model_issue_line as $val2) {
-                        if ($val2->qty <= 0 || $val2->qty != null) continue;
-                        $model_order_stock = new \common\models\OrderStock();
-                        $model_order_stock->issue_id = $issuelist[$i];
-                        $model_order_stock->product_id = $val2->product_id;
-                        $model_order_stock->qty = $val2->qty;
-                        $model_order_stock->used_qty = 0;
-                        $model_order_stock->avl_qty = $val2->qty;
-                        $model_order_stock->order_id = $order_id;
-                        if ($model_order_stock->save(false)) {
-                            $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issuelist[$i]])->one();
-                            if ($model_update_issue_status) {
-                                $model_check_has_issue->status = 3;
-                                $model_check_has_issue->save(false);
-                               // $this->updateStock($val2->product_id, $val2->qty, $default_warehouse, $model_check_has_issue->journal_no,$company_id,$branch_id);
-                            }
-                            $model_trans = new \backend\models\Stocktrans();
-                            $model_trans->journal_no = '000';
-                            $model_trans->trans_date = date('Y-m-d H:i:s');
-                            $model_trans->product_id = $val2->product_id;
-                            $model_trans->qty = $val2->qty;
-                            $model_trans->warehouse_id = $default_warehouse;
-                            $model_trans->stock_type = 2; // 1 in 2 out
-                            $model_trans->activity_type_id = 6; // 6 issue car
-                            $model_trans->company_id = $company_id;
-                            $model_trans->branch_id = $branch_id;
-                            if ($model_trans->save(false)) {
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
+//        if ($issuelist != null) {
+//            //  $issue_data = explode(',', $issuelist);
+////            print_r($issuelist[0]);
+//            if ($issuelist != null) {
+//                for ($i = 0; $i <= count($issuelist) - 1; $i++) {
+//                    $model_check_has_issue = \common\models\OrderStock::find()->where(['order_id' => $order_id, 'issue_id' => $issuelist[$i]])->count();
+//                    if ($model_check_has_issue) continue;
+//                    $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issuelist[$i]])->all();
+//                    foreach ($model_issue_line as $val2) {
+//                        if ($val2->qty <= 0 || $val2->qty != null) continue;
+//                        $model_order_stock = new \common\models\OrderStock();
+//                        $model_order_stock->issue_id = $issuelist[$i];
+//                        $model_order_stock->product_id = $val2->product_id;
+//                        $model_order_stock->qty = $val2->qty;
+//                        $model_order_stock->used_qty = 0;
+//                        $model_order_stock->avl_qty = $val2->qty;
+//                        $model_order_stock->order_id = $order_id;
+//                        if ($model_order_stock->save(false)) {
+//                            $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issuelist[$i]])->one();
+//                            if ($model_update_issue_status) {
+//                                $model_update_issue_status->status = 3;
+//                                $model_update_issue_status->save(false);
+//                               // $this->updateStock($val2->product_id, $val2->qty, $default_warehouse, $model_check_has_issue->journal_no,$company_id,$branch_id);
+//                            }
+//                            $model_trans = new \backend\models\Stocktrans();
+//                            $model_trans->journal_no = '000';
+//                            $model_trans->trans_date = date('Y-m-d H:i:s');
+//                            $model_trans->product_id = $val2->product_id;
+//                            $model_trans->qty = $val2->qty;
+//                            $model_trans->warehouse_id = $default_warehouse;
+//                            $model_trans->stock_type = 2; // 1 in 2 out
+//                            $model_trans->activity_type_id = 6; // 6 issue car
+//                            $model_trans->company_id = $company_id;
+//                            $model_trans->branch_id = $branch_id;
+//                            if ($model_trans->save(false)) {
+//
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 
     public function updateStock($product_id, $qty, $wh_id, $journal_no, $company_id, $branch_id)
