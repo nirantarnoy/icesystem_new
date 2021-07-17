@@ -2004,17 +2004,17 @@ class OrdersController extends Controller
 
         $company_id = 1;
         $branch_id = 1;
-        $default_warehouse = 6;
+        $default_warehouse = 5;
 
-        if (!empty(\Yii::$app->user->identity->company_id)) {
-            $company_id = \Yii::$app->user->identity->company_id;
-        }
-        if (!empty(\Yii::$app->user->identity->branch_id)) {
-            $branch_id = \Yii::$app->user->identity->branch_id;
-            if ($branch_id == 2) {
-                $default_warehouse = 5;
-            }
-        }
+//        if (!empty(\Yii::$app->user->identity->company_id)) {
+//            $company_id = \Yii::$app->user->identity->company_id;
+//        }
+//        if (!empty(\Yii::$app->user->identity->branch_id)) {
+//            $branch_id = \Yii::$app->user->identity->branch_id;
+//            if ($branch_id == 2) {
+//                $default_warehouse = 5;
+//            }
+//        }
 
         $order_id = \Yii::$app->request->post('order_id');
         $issuelist = \Yii::$app->request->post('issue_list');
