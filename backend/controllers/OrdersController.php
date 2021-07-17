@@ -937,7 +937,7 @@ class OrdersController extends Controller
     {
         $html = '';
         if ($price_group_id > 0 && $order_id > 0) {
-            $model = \common\models\QueryOrderUpdate::find()->where(['order_id' => $order_id, 'price_group_id' => $price_group_id])->groupBy('customer_id')->all();
+            $model = \common\models\QueryOrderUpdate::find()->select(['order_id','customer_id','name','bill_no'])->where(['order_id' => $order_id, 'price_group_id' => $price_group_id])->groupBy('customer_id')->all();
             $html .= '<thead>';
             $html .= '<tr>';
             $html .= '<th style="width: 5%;text-align: center"><input type="checkbox" onchange="showselectpaymentall($(this))" class="selected-all-item"></th>';
