@@ -964,8 +964,8 @@ class OrdersController extends Controller
                         $payment_color = ';background-color: pink';
                     }
 
-                    $customer_has_order = \backend\models\Orderline::find()->select('id')->where(['customer_id'=>$value->customer_id,'order_id'=>$value->order_id])->andFilterWhere(['>','qty',0])->one();
-                    if(!$customer_has_order)continue;
+//                    $customer_has_order = \backend\models\Orderline::find()->select('id')->where(['customer_id'=>$value->customer_id,'order_id'=>$value->order_id])->andFilterWhere(['>','qty',0])->one();
+//                    if(!$customer_has_order)continue;
                     $i += 1;
                     $html .= '<tr>';
                     $html .= '<td style="text-align: center"><input type="checkbox" data-var="' . $value->customer_id . '" class="selected-line-item" onchange="showselectpayment($(this))"></td>';
