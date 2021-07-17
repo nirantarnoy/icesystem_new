@@ -2004,17 +2004,17 @@ class OrdersController extends Controller
 
         $company_id = 1;
         $branch_id = 1;
-        $default_warehouse = 5;
+        $default_warehouse = 6;
 
-//        if (!empty(\Yii::$app->user->identity->company_id)) {
-//            $company_id = \Yii::$app->user->identity->company_id;
-//        }
-//        if (!empty(\Yii::$app->user->identity->branch_id)) {
-//            $branch_id = \Yii::$app->user->identity->branch_id;
-//            if ($branch_id == 2) {
-//                $default_warehouse = 5;
-//            }
-//        }
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+            if ($branch_id == 2) {
+                $default_warehouse = 5;
+            }
+        }
 
         $order_id = \Yii::$app->request->post('order_id');
         $issuelist = \Yii::$app->request->post('issue_list');
@@ -2029,7 +2029,7 @@ class OrdersController extends Controller
                     if ($model_check_has_issue) continue;
                     $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issuelist[$i]])->all();
                     foreach ($model_issue_line as $val2) {
-                        if ($val2->qty <= 0 || $val2->qty != null) continue;
+                        if ($val2->qty <= 0 || $val2->qty == null) continue;
                         $model_order_stock = new \common\models\OrderStock();
                         $model_order_stock->issue_id = $issuelist[$i];
                         $model_order_stock->product_id = $val2->product_id;
