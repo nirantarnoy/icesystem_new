@@ -253,12 +253,12 @@ class OrdersController extends Controller
                             if ($model_order_stock->save(false)) {
                                 $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $model->issue_id[$i]])->one();
                                 if ($model_update_issue_status) {
-                                    $model_update_issue_status->status = 3;
+                                    $model_update_issue_status->status = 2;
                                     $model_update_issue_status->save(false);
                                     // $this->updateStock($val2->product_id, $val2->qty, $default_warehouse, $model_check_has_issue->journal_no,$company_id,$branch_id);
                                 }
                                 $model_trans = new \backend\models\Stocktrans();
-                                $model_trans->journal_no = '000';
+                                $model_trans->journal_no = $model_update_issue_status->journal_no;
                                 $model_trans->trans_date = date('Y-m-d H:i:s');
                                 $model_trans->product_id = $val2->product_id;
                                 $model_trans->qty = $val2->qty;
@@ -268,7 +268,11 @@ class OrdersController extends Controller
                                 $model_trans->company_id = $company_id;
                                 $model_trans->branch_id = $branch_id;
                                 if ($model_trans->save(false)) {
-
+                                    $model_sum = \backend\models\Stocksum::find()->where(['warehouse_id' => $default_warehouse, 'product_id' => $val2->product_id])->one();
+                                    if ($model_sum) {
+                                        $model_sum->qty = $model_sum->qty - (int)$val2->qty;
+                                        $model_sum->save(false);
+                                    }
                                 }
                             }
                         }
