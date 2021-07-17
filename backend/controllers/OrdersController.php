@@ -2053,7 +2053,7 @@ class OrdersController extends Controller
 
     public function updateStock($product_id, $qty, $wh_id, $journal_no)
     {
-        if ($product_id != null && $qty > 0) {
+       // if ($product_id != null && $qty > 0) {
             $model_trans = new \backend\models\Stocktrans();
             $model_trans->journal_no = $journal_no;
             $model_trans->trans_date = date('Y-m-d H:i:s');
@@ -2069,6 +2069,6 @@ class OrdersController extends Controller
                     $model->save(false);
                 }
             }
-        }
+       // }
     }
 }
