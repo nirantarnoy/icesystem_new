@@ -2029,7 +2029,7 @@ class OrdersController extends Controller
                     if ($model_check_has_issue) continue;
                     $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issuelist[$i]])->all();
                     foreach ($model_issue_line as $val2) {
-                        if ($val2->qty <= 0) continue;
+                        if ($val2->qty <= 0 || $val2->qty != null) continue;
                         $model_order_stock = new \common\models\OrderStock();
                         $model_order_stock->issue_id = $issuelist[$i];
                         $model_order_stock->product_id = $val2->product_id;
@@ -2043,7 +2043,7 @@ class OrdersController extends Controller
                                 $model_check_has_issue->status = 2;
                                 $model_check_has_issue->save(false);
                             }
-                            $this->updateStock($val2->product_id, $val2->qty, $default_warehouse, '');
+                            $this->updateStock($val2->product_id, $val2->qty, $default_warehouse, $model_check_has_issue->journal_no);
                         }
                     }
                 }
