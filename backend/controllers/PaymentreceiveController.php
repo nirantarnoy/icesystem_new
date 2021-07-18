@@ -352,12 +352,12 @@ class PaymentreceiveController extends Controller
 //            $branch_id = \Yii::$app->user->identity->branch_id;
 //        }
 
-        //$customer_code = \Yii::$app->request->post('customer_code');
+        $customer_id = \Yii::$app->request->post('customer_id');
         $order_id = \Yii::$app->request->post('order_id');
         $html = '';
 
       //  $model = \backend\models\Querypaymentreceive::find()->where(['order_id'=>$order_id,'company_id' => $company_id, 'branch_id' => $branch_id])->all();
-        $model = \common\models\QueryPaymentReceive::find()->where(['order_id'=>$order_id])->all();
+        $model = \common\models\QueryPaymentReceive::find()->where(['order_id'=>$order_id,'customer_id'=>$customer_id])->all();
         if($model){
             $total = 0;
             foreach ($model as $value) {
