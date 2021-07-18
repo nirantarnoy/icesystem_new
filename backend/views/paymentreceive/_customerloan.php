@@ -329,7 +329,6 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
         </div>
         <!--        </form>-->
     </div>
-    s
 </div>
 
 <?php
