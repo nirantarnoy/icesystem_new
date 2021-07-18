@@ -282,13 +282,13 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     <div class="col-lg-6">
                         <h4>
                             สายส่ง
-                            <span class="route-name"></span>
+                            <span class="route-name" style="color: dodgerblue"></span>
                         </h4>
                     </div>
                     <div class="col-lg-6">
                         <h4>
                             ลูกค้า
-                            <span class="customer-name"></span>
+                            <span class="customer-name" style="color: dodgerblue"></span>
                         </h4>
                     </div>
                 </div>
