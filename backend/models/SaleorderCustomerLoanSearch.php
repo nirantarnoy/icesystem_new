@@ -4,6 +4,7 @@ namespace backend\models;
 
 use backend\models\Paymentmethod;
 use common\models\QuerySaleorderByCustomerLoanSum;
+use common\models\QuerySaleorderByCustomerLoanSumNew;
 use common\models\QuerySaleorderByRoute;
 use yii\base\BaseObject;
 use yii\base\Model;
@@ -13,7 +14,7 @@ use \common\models\QuerySaleTransData;
 /**
  * PaymentmethodSearch represents the model behind the search form of `backend\models\Paymentmethod`.
  */
-class SaleorderCustomerLoanSearch extends QuerySaleorderByCustomerLoanSum
+class SaleorderCustomerLoanSearch extends QuerySaleorderByCustomerLoanSumNew
 {
     public $globalSearch;
     public $car_selected = [];
@@ -48,7 +49,7 @@ class SaleorderCustomerLoanSearch extends QuerySaleorderByCustomerLoanSum
      */
     public function search($params)
     {
-        $query = QuerySaleorderByCustomerLoanSum::find();
+        $query = QuerySaleorderByCustomerLoanSumNew::find();
 
         // add conditions that should always apply here
 
