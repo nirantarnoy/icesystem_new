@@ -219,7 +219,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     'contentOptions' => ['style' => 'text-align: center; width:10%;vertical-align: middle'],
                     'value' => function ($data) {
                         if ($data->payment_amount > 0) {
-                            return '<div class="btn btn-info" data-var="'.$data->customer_id.'" data-id="' . $data->order_id . '" onclick="showhistory($(this))">' . 'ดูประวัติ' . '</div>';
+                            return '<div class="btn btn-info" data-route="'.$data->route_code.'" data-cusname="'.$data->cus_name.'" data-var="'.$data->customer_id.'" data-id="' . $data->order_id . '" onclick="showhistory($(this))">' . 'ดูประวัติ' . '</div>';
                         } else {
                             return '';
                         }
@@ -343,6 +343,8 @@ $(function(){
 function showhistory(e){
     var ids = e.attr('data-id');
     var customer_id = e.attr('data-var');
+    var route_code = e.attr('data-route');
+    var cus_name = e.attr('data-cusname');
     if(ids){
      //   alert(ids);
         $.ajax({
@@ -354,6 +356,10 @@ function showhistory(e){
               'success': function(data) {
                    // alert(data);
                    $(".table-list tbody").html(data);
+                   
+                   $(".route-name").html(route_code);
+                   $(".customer-name").html(cus_name);
+                   
                    $("#payhistoryModal").modal('show');
                  }
         });
