@@ -592,6 +592,10 @@ class OrderController extends Controller
     public function addpayment($order_id, $customer_id, $amount, $company_id, $branch_id, $payment_type_id)
     {
         $status = false;
+        $pay_amt = 0;
+        if($payment_type_id == 1){
+            $pay_amt = $amount;
+        }
         $model = \common\models\PaymentReceive::find()->where(['date(trans_date)' => date('Y-m-d'), 'customer_id' => $customer_id])->one();
        // return $model;
         if ($model) {
@@ -599,7 +603,7 @@ class OrderController extends Controller
             $model_line = new \common\models\PaymentReceiveLine();
             $model_line->payment_receive_id = $model->id;
             $model_line->order_id = $order_id;
-            $model_line->payment_amount =$amount;
+            $model_line->payment_amount =$pay_amt;
             $model_line->payment_channel_id = 1; // 1 เงินสด 2 โอน
             $model_line->payment_method_id = $payment_type_id; // 1 สด
             $model_line->status = 1;
@@ -619,7 +623,7 @@ class OrderController extends Controller
                 $model_line = new \common\models\PaymentReceiveLine();
                 $model_line->payment_receive_id = $model->id;
                 $model_line->order_id = $order_id;
-                $model_line->payment_amount = $amount;
+                $model_line->payment_amount = $pay_amt;
                 $model_line->payment_channel_id = 1; // 1 เงินสด 2 โอน
                 $model_line->payment_method_id = $payment_type_id; // 1 สด
                 $model_line->status = 1;
