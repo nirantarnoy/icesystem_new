@@ -32,6 +32,23 @@ if ($show_pos_date != null) {
             </div>
 
         </div>
+        <div class="col-lg-3">
+            <div class="label">
+                สายส่ง
+            </div>
+            <div class="input-group">
+                <?php
+                echo \kartik\select2\Select2::widget([
+                    'name' => 'route_id',
+                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(),'id','name'),
+                    'options' => [
+                       'placeholder'=>'เลือกสายส่ง'
+                    ]
+                ]);
+                ?>
+            </div>
+
+        </div>
         <div class="col-lg-2">
             <div class="label"
                  style="color: white">
