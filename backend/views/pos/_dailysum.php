@@ -128,6 +128,32 @@ if ($show_pos_date != null) {
                     'pageSummary' => false,
                 ],
                 [
+                    'attribute' => 'line_qty_cash',
+                    'label' => 'จำนวน(สด)',
+                    'headerOptions' => ['style' => 'text-align: right'],
+                    'contentOptions' => ['style' => 'text-align: right'],
+                    'value' => function ($data) {
+                        return $data->line_qty_cash;
+                    },
+                    'format' => ['decimal', 0],
+                    'pageSummary' => true,
+                    'pageSummaryFunc' => GridView::F_SUM,
+                    'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
+                ],
+                [
+                    'attribute' => 'line_qty_credit',
+                    'label' => 'จำนวน(เชื่อ)',
+                    'headerOptions' => ['style' => 'text-align: right'],
+                    'contentOptions' => ['style' => 'text-align: right'],
+                    'value' => function ($data) {
+                        return $data->line_qty_credit;
+                    },
+                    'format' => ['decimal', 0],
+                    'pageSummary' => true,
+                    'pageSummaryFunc' => GridView::F_SUM,
+                    'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
+                ],
+                [
                     'attribute' => 'qty',
                     'label' => 'รวมจำนวน',
                     'headerOptions' => ['style' => 'text-align: right'],

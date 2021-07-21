@@ -44,7 +44,7 @@ class QuerySalePosData extends \yii\db\ActiveRecord
         return [
             [['id', 'sale_channel_id', 'product_id', 'emp_sale_id', 'item_pos_seq', 'created_by', 'company_id', 'branch_id', 'payment_method_id'], 'integer'],
             [['order_date'], 'safe'],
-            [['qty', 'price', 'line_total', 'line_total_cash', 'line_total_credit'], 'number'],
+            [['qty', 'price', 'line_total', 'line_total_cash', 'line_total_credit','line_qty_cash','line_qty_credit'], 'number'],
             [['order_no', 'code', 'name'], 'string', 'max' => 255],
         ];
     }
