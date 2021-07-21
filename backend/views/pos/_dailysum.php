@@ -10,11 +10,14 @@ if ($show_pos_date != null) {
     $pos_date = date('d/m/Y', strtotime($show_pos_date));
 }
 ?>
-<form action="<?= \yii\helpers\Url::to(['pos/dailysum'], true) ?>" method="post">
+<form action="<?= \yii\helpers\Url::to(['pos/dailysum'], true) ?>"
+      method="post">
     <div class="row">
 
         <div class="col-lg-3">
-            <div class="label">เลือกดูตามวันที่</div>
+            <div class="label">
+                เลือกดูตามวันที่
+            </div>
             <div class="input-group">
                 <?php
                 echo \kartik\date\DatePicker::widget([
@@ -30,8 +33,13 @@ if ($show_pos_date != null) {
 
         </div>
         <div class="col-lg-2">
-            <div class="label" style="color: white">ค้นหา</div>
-            <input type="submit" class="btn btn-primary" value="ค้นหา"></input>
+            <div class="label"
+                 style="color: white">
+                ค้นหา
+            </div>
+            <input type="submit"
+                   class="btn btn-primary"
+                   value="ค้นหา"></input>
         </div>
 
     </div>
@@ -39,7 +47,8 @@ if ($show_pos_date != null) {
 <br/>
 <div class="row">
     <div class="col-lg-12">
-        <h4 class="text-success">รายการขาย</h4>
+        <h4 class="text-success">
+            รายการขาย</h4>
     </div>
 </div>
 <div class="row">
@@ -80,20 +89,20 @@ if ($show_pos_date != null) {
                                 1 => 'ยอดสินค้า (' . $model->code . ')',
                                 3 => GridView::F_SUM,
                                 4 => GridView::F_SUM,
-//                        7 => GridView::F_SUM,
+                                5 => GridView::F_SUM,
                             ],
                             'contentFormats' => [      // content reformatting for each summary cell
                                 //4 => ['format' => 'number', 'decimals' => 0],
                                 3 => ['format' => 'number', 'decimals' => 0],
                                 4 => ['format' => 'number', 'decimals' => 0],
-//                        7 => ['format' => 'number', 'decimals' => 0],
+                                5 => ['format' => 'number', 'decimals' => 0],
                             ],
                             'contentOptions' => [      // content html attributes for each summary cell
                                 1 => ['style' => 'font-variant:small-caps'],
                                 //4 => ['style' => 'text-align:right'],
                                 3 => ['style' => 'text-align:right'],
                                 4 => ['style' => 'text-align:right'],
-//                        7 => ['style' => 'text-align:right'],
+                                5 => ['style' => 'text-align:right'],
                             ],
                             // html attributes for group summary row
                             'options' => ['class' => 'info table-info', 'style' => 'font-weight:bold;']
@@ -178,7 +187,8 @@ if ($show_pos_date != null) {
 <br>
 <div class="row">
     <div class="col-lg-12">
-        <h4 class="text-success">ประเภทชำระเงิน</h4>
+        <h4 class="text-success">
+            ประเภทชำระเงิน</h4>
     </div>
 </div>
 <div class="row">
@@ -234,8 +244,13 @@ if ($show_pos_date != null) {
     </div>
     <div class="col-lg-2"></div>
     <div class="col-lg-6">
-        <a href="<?=\yii\helpers\Url::to(['pos/posttrans'],true)?>" class="btn btn-success"><i class="fa fa-check"></i> ตรวจสอบและปิดยอดขาย</a>
-        <p><small>หมายเหตุ: </small><small class="text-danger">กรุณาตรวจสอบข้อมูลให้ครบถ้วนก่อนการยืนยันยอดการทำรายการก่อนส่งยอด</small>
+        <a href="<?= \yii\helpers\Url::to(['pos/posttrans'], true) ?>"
+           class="btn btn-success"><i
+                    class="fa fa-check"></i>
+            ตรวจสอบและปิดยอดขาย</a>
+        <p>
+            <small>หมายเหตุ: </small><small
+                    class="text-danger">กรุณาตรวจสอบข้อมูลให้ครบถ้วนก่อนการยืนยันยอดการทำรายการก่อนส่งยอด</small>
         </p>
     </div>
 </div>
