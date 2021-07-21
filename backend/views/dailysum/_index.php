@@ -139,7 +139,7 @@ if ($show_pos_date != null) {
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
                     'value' => function ($data) {
-                        return $data->line_total_cash;
+                        return $data->line_qty_cash;
                     },
                     'format' => ['decimal', 0],
                     'pageSummary' => true,
@@ -152,7 +152,7 @@ if ($show_pos_date != null) {
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
                     'value' => function ($data) {
-                        return $data->line_total_credit;
+                        return $data->line_qty_credit;
                     },
                     'format' => ['decimal', 0],
                     'pageSummary' => true,
