@@ -47,6 +47,7 @@ class DailysumController extends Controller
             'SUM(line_qty_cash) as line_qty_cash','SUM(line_qty_credit) as line_qty_credit']);
         $dataProvider->query->andFilterWhere(['>', 'qty', 0]);
         $dataProvider->query->andFilterWhere(['=', 'date(order_date)', $t_date]);
+        $dataProvider->query->andFilterWhere(['=', 'order_no', 'SO-210721-0057']);
 
         $dataProvider->query->groupBy(['code', 'name', 'price']);
         $dataProvider->setSort([
