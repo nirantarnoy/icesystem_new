@@ -15,9 +15,16 @@ use Yii;
  * @property float|null $qty
  * @property float|null $price
  * @property float|null $line_total
+ * @property float|null $line_total_cash
+ * @property float|null $line_total_credit
  * @property int|null $emp_sale_id
  * @property string|null $code
  * @property string|null $name
+ * @property int|null $item_pos_seq
+ * @property int|null $created_by
+ * @property int|null $company_id
+ * @property int|null $branch_id
+ * @property int|null $payment_method_id
  */
 class QuerySalePosData extends \yii\db\ActiveRecord
 {
@@ -35,9 +42,9 @@ class QuerySalePosData extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'sale_channel_id', 'product_id', 'emp_sale_id','created_by'], 'integer'],
+            [['id', 'sale_channel_id', 'product_id', 'emp_sale_id', 'item_pos_seq', 'created_by', 'company_id', 'branch_id', 'payment_method_id'], 'integer'],
             [['order_date'], 'safe'],
-            [['qty', 'price', 'line_total'], 'number'],
+            [['qty', 'price', 'line_total', 'line_total_cash', 'line_total_credit'], 'number'],
             [['order_no', 'code', 'name'], 'string', 'max' => 255],
         ];
     }
@@ -56,10 +63,16 @@ class QuerySalePosData extends \yii\db\ActiveRecord
             'qty' => 'Qty',
             'price' => 'Price',
             'line_total' => 'Line Total',
+            'line_total_cash' => 'Line Total Cash',
+            'line_total_credit' => 'Line Total Credit',
             'emp_sale_id' => 'Emp Sale ID',
             'code' => 'Code',
             'name' => 'Name',
-            'created_by' => 'Created By'
+            'item_pos_seq' => 'Item Pos Seq',
+            'created_by' => 'Created By',
+            'company_id' => 'Company ID',
+            'branch_id' => 'Branch ID',
+            'payment_method_id' => 'Payment Method ID',
         ];
     }
 }

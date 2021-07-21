@@ -567,7 +567,7 @@ class PosController extends Controller
 
         $searchModel = new \backend\models\SaleposdataSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->select(['code', 'name', 'price', 'SUM(qty) as qty', 'SUM(line_total) as line_total']);
+        $dataProvider->query->select(['code', 'name', 'price', 'SUM(qty) as qty', 'SUM(line_total) as line_total','SUM(line_total_cash) as line_total_cash,SUM(line_total_credit) as line_total_credit']);
         $dataProvider->query->andFilterWhere(['>', 'qty', 0]);
         $dataProvider->query->andFilterWhere(['=', 'date(order_date)', $t_date]);
 

@@ -128,6 +128,32 @@ if ($show_pos_date != null) {
                     'pageSummaryFunc' => GridView::F_SUM,
                     'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
                 ],
+                [
+                    'attribute' => 'line_total_cash',
+                    'label' => 'สด',
+                    'headerOptions' => ['style' => 'text-align: right'],
+                    'contentOptions' => ['style' => 'text-align: right'],
+                    'value' => function ($data) {
+                        return $data->line_total_cash;
+                    },
+                    'format' => ['decimal', 0],
+                    'pageSummary' => true,
+                    'pageSummaryFunc' => GridView::F_SUM,
+                    'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
+                ],
+                [
+                    'attribute' => 'line_total_credit',
+                    'label' => 'เชื่อ',
+                    'headerOptions' => ['style' => 'text-align: right'],
+                    'contentOptions' => ['style' => 'text-align: right'],
+                    'value' => function ($data) {
+                        return $data->line_total_credit;
+                    },
+                    'format' => ['decimal', 0],
+                    'pageSummary' => true,
+                    'pageSummaryFunc' => GridView::F_SUM,
+                    'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
+                ],
 
                 [
                     'attribute' => 'line_total',
