@@ -91,6 +91,8 @@ if ($show_pos_date != null) {
                                 4 => GridView::F_SUM,
                                 5 => GridView::F_SUM,
                                 6 => GridView::F_SUM,
+                                7 => GridView::F_SUM,
+                                8 => GridView::F_SUM,
                             ],
                             'contentFormats' => [      // content reformatting for each summary cell
                                 //4 => ['format' => 'number', 'decimals' => 0],
@@ -98,6 +100,8 @@ if ($show_pos_date != null) {
                                 4 => ['format' => 'number', 'decimals' => 0],
                                 5 => ['format' => 'number', 'decimals' => 0],
                                 6 => ['format' => 'number', 'decimals' => 0],
+                                7 => ['format' => 'number', 'decimals' => 0],
+                                8 => ['format' => 'number', 'decimals' => 0],
                             ],
                             'contentOptions' => [      // content html attributes for each summary cell
                                 1 => ['style' => 'font-variant:small-caps'],
@@ -106,6 +110,8 @@ if ($show_pos_date != null) {
                                 4 => ['style' => 'text-align:right'],
                                 5 => ['style' => 'text-align:right'],
                                 6 => ['style' => 'text-align:right'],
+                                7 => ['style' => 'text-align:right'],
+                                8 => ['style' => 'text-align:right'],
                             ],
                             // html attributes for group summary row
                             'options' => ['class' => 'info table-info', 'style' => 'font-weight:bold;']
