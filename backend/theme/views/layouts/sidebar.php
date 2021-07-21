@@ -317,6 +317,12 @@
                                 <p>จบการขาย</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="index.php?r=dailysum" class="nav-link dailysum">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>สรุปการขาย</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item has-treeview has-sub">
