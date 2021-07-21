@@ -4,6 +4,15 @@ use kartik\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
 
+$company_id = 1;
+$branch_id = 1;
+if (!empty(\Yii::$app->user->identity->company_id)) {
+    $company_id = \Yii::$app->user->identity->company_id;
+}
+if (!empty(\Yii::$app->user->identity->branch_id)) {
+    $branch_id = \Yii::$app->user->identity->branch_id;
+}
+
 $this->title = 'สรุปยอดขายประจำวัน';
 $pos_date = date('d/m/Y');
 if ($show_pos_date != null) {
@@ -41,7 +50,7 @@ $route_id = $selected_route_id;
                 <?php
                 echo \kartik\select2\Select2::widget([
                     'name' => 'route_id',
-                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(),'id','name'),
+                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(),'id','name'),
                     'value' => $route_id,
                     'options' => [
                        'placeholder'=>'เลือกสายส่ง'
