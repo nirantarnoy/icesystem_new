@@ -10,7 +10,7 @@ if ($show_pos_date != null) {
     $pos_date = date('d/m/Y', strtotime($show_pos_date));
 }
 ?>
-<form action="<?= \yii\helpers\Url::to(['pos/dailysum'], true) ?>"
+<form action="<?= \yii\helpers\Url::to(['dailysum/index'], true) ?>"
       method="post">
     <div class="row">
 
