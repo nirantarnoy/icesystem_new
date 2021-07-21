@@ -174,7 +174,7 @@ if ($show_pos_date != null) {
                 ],
                 [
                     'attribute' => 'line_total_cash',
-                    'label' => 'สด',
+                    'label' => 'เงินสด',
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
                     'value' => function ($data) {
@@ -187,7 +187,7 @@ if ($show_pos_date != null) {
                 ],
                 [
                     'attribute' => 'line_total_credit',
-                    'label' => 'เชื่อ',
+                    'label' => 'เงินเชื่อ',
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
                     'value' => function ($data) {
