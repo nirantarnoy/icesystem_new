@@ -32,6 +32,7 @@ class DailysumController extends Controller
         // $t_date = date('Y-m-d',strtotime($x));
 
         $order_date = \Yii::$app->request->post('pos_date');
+        $route_id = \Yii::$app->request->post('route_id');
 
         $t_date = date('Y-m-d');
 
@@ -47,7 +48,10 @@ class DailysumController extends Controller
             'SUM(line_qty_cash) as line_qty_cash','SUM(line_qty_credit) as line_qty_credit']);
         $dataProvider->query->andFilterWhere(['>', 'qty', 0]);
         $dataProvider->query->andFilterWhere(['=', 'date(order_date)', $t_date]);
-       // $dataProvider->query->andFilterWhere(['=', 'order_no', 'SO-210721-0057']);
+        $dataProvider->query->andFilterWhere(['=', 'route_id', $route_id]);
+
+
+        // $dataProvider->query->andFilterWhere(['=', 'order_no', 'SO-210721-0057']);
 
         $dataProvider->query->groupBy(['code', 'name', 'price']);
         $dataProvider->setSort([
@@ -78,7 +82,8 @@ class DailysumController extends Controller
             'dataProvider' => $dataProvider,
             'searchModel2' => $searchModel2,
             'dataProvider2' => $dataProvider2,
-            'show_pos_date' => $t_date
+            'show_pos_date' => $t_date,
+            'selected_route_id' => $route_id,
         ]);
     }
 }

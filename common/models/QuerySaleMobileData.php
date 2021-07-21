@@ -44,7 +44,7 @@ class QuerySaleMobileData extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'sale_channel_id', 'product_id', 'emp_sale_id', 'item_pos_seq', 'created_by', 'company_id', 'branch_id', 'payment_method_id'], 'integer'],
+            [['id', 'sale_channel_id', 'product_id', 'emp_sale_id', 'item_pos_seq', 'created_by', 'company_id', 'branch_id', 'payment_method_id','route_id'], 'integer'],
             [['order_date'], 'safe'],
             [['qty', 'price', 'line_total', 'line_qty_cash', 'line_qty_credit', 'line_total_cash', 'line_total_credit'], 'number'],
             [['order_no', 'code', 'name'], 'string', 'max' => 255],
@@ -63,6 +63,7 @@ class QuerySaleMobileData extends \yii\db\ActiveRecord
             'sale_channel_id' => 'Sale Channel ID',
             'product_id' => 'Product ID',
             'qty' => 'Qty',
+            'route_id' => 'Route_id',
             'price' => 'Price',
             'line_total' => 'Line Total',
             'line_qty_cash' => 'Line Qty Cash',

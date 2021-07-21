@@ -9,6 +9,7 @@ $pos_date = date('d/m/Y');
 if ($show_pos_date != null) {
     $pos_date = date('d/m/Y', strtotime($show_pos_date));
 }
+$route_id = $selected_route_id;
 ?>
 <form action="<?= \yii\helpers\Url::to(['dailysum/index'], true) ?>"
       method="post">
@@ -41,6 +42,7 @@ if ($show_pos_date != null) {
                 echo \kartik\select2\Select2::widget([
                     'name' => 'route_id',
                     'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->all(),'id','name'),
+                    'value' => $route_id,
                     'options' => [
                        'placeholder'=>'เลือกสายส่ง'
                     ]
