@@ -682,25 +682,25 @@ class OrdersController extends Controller
     public function getProductcolumn22($order_id, $price_group_id)
     {
         $html = '';
-//        $model_price = \common\models\PriceGroupLine::find()->select(['product_id', 'sale_price'])->where(['price_group_id' => $price_group_id])->all();
-//        //  $sql = 'SELECT COUNT(DISTINCT product_id) as cnt FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id;
-//        $sql = 'SELECT product_id FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id . " GROUP BY product_id";
-//        $query = \Yii::$app->db->createCommand($sql)->queryAll();
-//        // $order_prod_cnt = $query[0]['cnt'];
-//        $order_prod_cnt = count($query);
-//        if (count($model_price) > $order_prod_cnt) {
-//            foreach ($model_price as $value) {
-//                $new_price = '<span style="color: red">' . $value->sale_price . '</span>';
-//                $html .= '<th style="text-align: center">' . \backend\models\Product::findCode($value->product_id) . ' ( ' . $new_price . ' ) ' . '</th>';
-//            }
-//        } else {
+        $model_price = \common\models\PriceGroupLine::find()->select(['product_id', 'sale_price'])->where(['price_group_id' => $price_group_id])->all();
+        //  $sql = 'SELECT COUNT(DISTINCT product_id) as cnt FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id;
+        $sql = 'SELECT product_id FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id . " GROUP BY product_id";
+        $query = \Yii::$app->db->createCommand($sql)->queryAll();
+        // $order_prod_cnt = $query[0]['cnt'];
+        $order_prod_cnt = count($query);
+        if (count($model_price) > $order_prod_cnt) {
+            foreach ($model_price as $value) {
+                $new_price = '<span style="color: red">' . $value->sale_price . '</span>';
+                $html .= '<th style="text-align: center">' . \backend\models\Product::findCode($value->product_id) . ' ( ' . $new_price . ' ) ' . '</th>';
+            }
+        } else {
             //  $modelx = \common\models\OrderLine::find()->where(['price_group_id' => $price_group_id, 'order_id' => $order_id])->distinct('product_id', 'price')->groupBy('product_id')->all();
             $modelx = \common\models\OrderLine::find()->select(['product_id', 'price'])->where(['price_group_id' => $price_group_id, 'order_id' => $order_id])->groupBy('product_id', 'price')->all();
             foreach ($modelx as $value) {
                 $new_price = '<span style="color: red">' . $value->price . '</span>';
                 $html .= '<th style="text-align: center">' . \backend\models\Product::findCode($value->product_id) . ' ( ' . $new_price . ' ) ' . '</th>';
             }
-       // }
+        }
 
 
         return $html;
