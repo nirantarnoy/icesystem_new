@@ -41,7 +41,7 @@ class DailysumController extends Controller
             $t_date = $x_date[2] . '-' . $x_date[1] . '-' . $x_date[0];
         }
 
-        $searchModel = new \backend\models\SalemobiledataSearch();
+        $searchModel = new \backend\models\SalemobiledatanewSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->select(['code', 'name', 'price', 'SUM(qty) as qty',
             'SUM(line_total) as line_total','SUM(line_total_cash) as line_total_cash,SUM(line_total_credit) as line_total_credit',

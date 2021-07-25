@@ -239,7 +239,7 @@ class Orders extends \common\models\Orders
     public static function findordercredit($order_id, $sale_type)
     {
         $total = 0;
-        if ($sale_type == 1) {
+        if ($sale_type == 1) { // 1 sale from mobile
           //  $total = \common\models\QueryApiOrderDailySummary::find()->where(['id' => $order_id, 'sale_payment_method_id' => 2])->sum('line_total');
             $x = \common\models\QueryApiOrderDailySummaryNew::find()->select('line_total')->where(['id' => $order_id, 'sale_payment_method_id' => 2])->andFilterWhere(['!=','order_line_status',500])->all();
             if($x){
