@@ -104,7 +104,7 @@ class PaymentreceiveController extends Controller
 
                             }
 
-                            if ($model_line->save()) {
+                            if ($model_line->save(false)) {
                                 $this->updatePaymenttransline($model->customer_id, $line_order[$i], $line_pay[$i], 1);
                             }
                         }
@@ -289,8 +289,10 @@ class PaymentreceiveController extends Controller
                     //   $total_amount = $total_amount + ($value->remain_amount == null ? 0 : $value->remain_amount);
                     $remain_amt = $value->line_total;
 
-                    if($value->remain_amount == null && $value->payment_amount != null){
+                    if($value->remain_amount == null && $value->payment_amount != null) {
                         $remain_amt = $value->line_total - $value->payment_amount;
+                    }else{
+                        $remain_amt = $value->remain_amount;
                     }
                   //  $remain_amt = $value->remain_amount == null?$value->payment_amount:$value->remain_amount;
                     $html .= '<tr>';

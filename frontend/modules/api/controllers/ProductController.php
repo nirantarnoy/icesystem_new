@@ -247,7 +247,6 @@ class ProductController extends Controller
             $model = \common\models\QueryCustomerPrice::find()->where(['cus_id'=>$customer_id,'product_id'=>$product_id,'delivery_route_id'=>$route_id])->one();
             if($model){
                 $id = $model->id;
-
             }
         }
         return $id;
