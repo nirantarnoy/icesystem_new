@@ -684,7 +684,7 @@ class OrdersController extends Controller
         $html = '';
         $model_price = \common\models\PriceGroupLine::find()->select(['product_id', 'sale_price'])->where(['price_group_id' => $price_group_id])->all();
         //  $sql = 'SELECT COUNT(DISTINCT product_id) as cnt FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id;
-        $sql = 'SELECT product_id FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id . " GROUP BY product_id";
+        $sql = 'SELECT product_id FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id . " GROUP BY product_id ORDER BY product_id ASC";
         $query = \Yii::$app->db->createCommand($sql)->queryAll();
         // $order_prod_cnt = $query[0]['cnt'];
         $order_prod_cnt = count($query);
@@ -988,7 +988,7 @@ class OrdersController extends Controller
     {
         $html = '';
 
-        $model_price = \common\models\PriceGroupLine::find()->select(['product_id', 'sale_price'])->where(['price_group_id' => $price_group_id])->all();
+        $model_price = \common\models\PriceGroupLine::find()->select(['product_id', 'sale_price'])->where(['price_group_id' => $price_group_id])->orderby(['product_id'=>SORT_ASC])->all();
 //        $model_order_product = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'price_group_id' => $price_group_id])->distinct('product_id')->count();
         $sql = 'SELECT COUNT(DISTINCT product_id) as cnt FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id;
         $query = \Yii::$app->db->createCommand($sql)->queryAll();
