@@ -91,6 +91,7 @@ class PaymentreceiveController extends Controller
                             $model_line->payment_receive_id = $model->id;
                             $model_line->payment_amount = $line_pay[$i];
                             $model_line->payment_channel_id = $line_pay_type[$i];
+                            $model_line->payment_method_id = 2;
                             $model_line->status = 1;
 
                             if ($i == $line_number[$i]) {
@@ -184,6 +185,7 @@ class PaymentreceiveController extends Controller
                                 $model_line->order_id = $line_order[$i];
                                 $model_line->payment_receive_id = $model->id;
                                 $model_line->payment_amount = $line_pay[$i];
+                                $model_line->payment_method_id = 2;
                                 $model_line->status = 1;
                                 if ($i == $line_number[$i]) {
                                     if (!empty($uploaded_file)) {
