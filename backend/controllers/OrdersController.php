@@ -688,7 +688,7 @@ class OrdersController extends Controller
         $query = \Yii::$app->db->createCommand($sql)->queryAll();
         // $order_prod_cnt = $query[0]['cnt'];
         $order_prod_cnt = count($query);
-        if (count($model_price) > $order_prod_cnt) {
+        if (count($model_price) >= $order_prod_cnt) {
             foreach ($model_price as $value) {
                 $new_price = '<span style="color: red">' . $value->sale_price . '</span>';
                 $html .= '<th style="text-align: center">' . \backend\models\Product::findCode($value->product_id) . ' ( ' . $new_price . ' ) ' . '</th>';
