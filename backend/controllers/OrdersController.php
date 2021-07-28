@@ -682,7 +682,7 @@ class OrdersController extends Controller
     public function getProductcolumn22($order_id, $price_group_id)
     {
         $html = '';
-        $model_price = \common\models\PriceGroupLine::find()->select(['product_id', 'sale_price'])->where(['price_group_id' => $price_group_id])->all();
+        $model_price = \common\models\PriceGroupLine::find()->select(['product_id', 'sale_price'])->where(['price_group_id' => $price_group_id])->orderBy(['id'=>SORT_ASC])->all();
         //  $sql = 'SELECT COUNT(DISTINCT product_id) as cnt FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id;
         $sql = 'SELECT product_id FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id . " GROUP BY product_id ORDER BY product_id ASC";
         $query = \Yii::$app->db->createCommand($sql)->queryAll();
