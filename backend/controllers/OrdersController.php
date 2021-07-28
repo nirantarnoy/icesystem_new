@@ -944,7 +944,7 @@ class OrdersController extends Controller
             $html .= '<th style="width: 5%;text-align: center">#</th>';
 //            $html .= '<th style="width: 8%">รหัสลูกค้า</th>';
             $html .= '<th style="width: 15%">ชื่อลูกค้า</th>';
-            $html .= '<th style="width: 10%">เลขที่บิล</th>';
+            $html .= '<th style="width: 10%">เลขที่บิล2</th>';
             $html .= $this->getProductcolumn22($order_id, $price_group_id); // getProductcolumn2
 //            $html .= $this->getProductcolumn2($price_group_id); // getProductcolumn2
             $html .= '<th style="width: 8%;text-align: right">รวมจำนวน</th>';
