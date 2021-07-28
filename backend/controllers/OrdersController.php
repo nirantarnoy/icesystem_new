@@ -988,12 +988,12 @@ class OrdersController extends Controller
     {
         $html = '';
 
-        $model_price = \common\models\PriceGroupLine::find()->select(['product_id', 'sale_price'])->where(['price_group_id' => $price_group_id])->orderby(['product_id'=>SORT_ASC])->all();
+        $model_price = \common\models\PriceGroupLine::find()->select(['product_id', 'sale_price'])->where(['price_group_id' => $price_group_id])->orderby(['id'=>SORT_ASC])->all();
 //        $model_order_product = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'price_group_id' => $price_group_id])->distinct('product_id')->count();
         $sql = 'SELECT COUNT(DISTINCT product_id) as cnt FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id;
         $query = \Yii::$app->db->createCommand($sql)->queryAll();
         $model_order_product = $query[0]['cnt'];
-        if (count($model_price) > $model_order_product) {
+        if (count($model_price) >= $model_order_product) {
             if ($model_price) {
                 $i = 0;
                 $line_total_qty = 0;
