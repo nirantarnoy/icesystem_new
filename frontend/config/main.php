@@ -16,6 +16,7 @@ return [
             'class' => 'frontend\modules\api\Api',
         ],
     ],
+    'timeZone' => 'Asia/Bangkok',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
