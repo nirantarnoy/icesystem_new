@@ -79,8 +79,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'created_by',
                 'label'=>'พนักงาน',
-                'headerOptions' => ['style' => 'text-align: right'],
-                'contentOptions' => ['style' => 'text-align: right'],
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
                     return \backend\models\User::findName($data->created_by);
                 }
