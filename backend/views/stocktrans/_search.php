@@ -54,6 +54,18 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
             ]
         ])->label(false) ?>
         <span style="margin-left: 5px;"></span>
+        <?= $form->field($model, 'activity_type_id')->widget(\kartik\select2\Select2::className(), [
+            'data' => \yii\helpers\ArrayHelper::map(\backend\helpers\ActivityType::asArrayObject(),'id','name'),
+            'options' => [
+                'placeholder' => '--กิจกรรม--',
+                'onchange' => 'this.form.submit();'
+            ],
+            'pluginOptions' => [
+                'allowClear' => true,
+                'width'=> '300px',
+            ]
+        ])->label(false) ?>
+        <span style="margin-left: 5px;"></span>
         <?= $form->field($model, 'created_by')->widget(\kartik\select2\Select2::className(), [
             'data' => \yii\helpers\ArrayHelper::map(\backend\models\User::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', function ($data) {
                 return $data->username;
