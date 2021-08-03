@@ -55,7 +55,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
         ])->label(false) ?>
         <span style="margin-left: 5px;"></span>
         <?= $form->field($model, 'activity_type_id')->widget(\kartik\select2\Select2::className(), [
-            'data' => \yii\helpers\ArrayHelper::map(\backend\helpers\ActivityType::asArrayObject(),'id','name'),
+            'data' => \yii\helpers\ArrayHelper::map(\backend\helpers\RunnoTitle::asArrayObject(),'id','name'),
             'options' => [
                 'placeholder' => '--กิจกรรม--',
                 'onchange' => 'this.form.submit();'
