@@ -147,6 +147,7 @@ $this->registerCss('
     <br/>
     <?= $form->field($model, 'order_total_amt')->hiddenInput(['readonly' => 'readonly', 'id' => 'order-total-amt'])->label(false) ?>
     <div class="form-group">
+        <div class="btn btn-primary">บันทึกขายเพิ่มเติม</div>
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>
 

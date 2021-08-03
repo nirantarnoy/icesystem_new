@@ -76,6 +76,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     return \backend\helpers\RunnoTitle::getTypeById($data->activity_type_id);
                 }
             ],
+            [
+                'attribute' => 'created_by',
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
+                'value' => function ($data) {
+                    return \backend\models\User::findName($data->created_by);
+                }
+            ],
+
             //'location_id',
             //'lot_no',
 //            [
