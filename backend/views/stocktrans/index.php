@@ -52,7 +52,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
                     return number_format($data->qty);
-                }
+                },
+                'pageSummary' => true,
+                'pageSummaryFunc' => GridView::F_SUM
             ],
             [
                 'attribute' => 'stock_type',
