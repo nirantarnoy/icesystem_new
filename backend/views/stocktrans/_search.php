@@ -3,9 +3,15 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\StocktransSearch */
-/* @var $form yii\widgets\ActiveForm */
+$company_id = 0;
+$branch_id = 0;
+
+if (!empty(\Yii::$app->user->identity->company_id)) {
+    $company_id = \Yii::$app->user->identity->company_id];
+}
+if (!empty(\Yii::$app->user->identity->branch_id)) {
+    $branch_id= \Yii::$app->user->identity->branch_id];
+}
 ?>
 
 <div class="stocktrans-search">
@@ -40,6 +46,20 @@ use yii\widgets\ActiveForm;
             }),
             'options' => [
                 'placeholder' => '--เลือกสินค้า--',
+                'onchange' => 'this.form.submit();'
+            ],
+            'pluginOptions' => [
+                'allowClear' => true,
+                'width'=> '300px',
+            ]
+        ])->label(false) ?>
+        <span style="margin-left: 5px;"></span>
+        <?= $form->field($model, 'created_by')->widget(\kartik\select2\Select2::className(), [
+            'data' => \yii\helpers\ArrayHelper::map(\backend\models\Product::User()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', function ($data) {
+                return $data->username;
+            }),
+            'options' => [
+                'placeholder' => '--พนักงาน--',
                 'onchange' => 'this.form.submit();'
             ],
             'pluginOptions' => [

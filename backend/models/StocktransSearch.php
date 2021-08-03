@@ -17,8 +17,8 @@ class StocktransSearch extends Stocktrans
     public function rules()
     {
         return [
-            [['id', 'company_id', 'branch_id', 'product_id', 'warehouse_id', 'location_id', 'qty', 'created_at', 'created_by'], 'integer'],
-            [['journal_no', 'trans_date', 'lot_no'], 'safe'],
+            [['id', 'company_id', 'branch_id', 'product_id', 'warehouse_id', 'location_id', 'qty', 'created_at'], 'integer'],
+            [['journal_no', 'trans_date', 'lot_no','activity_type_id', 'created_by'], 'safe'],
         ];
     }
 
@@ -75,6 +75,13 @@ class StocktransSearch extends Stocktrans
         }
         if (!empty(\Yii::$app->user->identity->branch_id)) {
             $query->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
+        }
+
+        if($this->activity_type_id != null){
+            $query->andFilterWhere(['activity_type_id' => $this->activity_type_id]);
+        }
+        if($this->created_by != null){
+            $query->andFilterWhere(['created_by' => $this->created_by]);
         }
 
         $query->andFilterWhere(['like', 'journal_no', $this->journal_no])
