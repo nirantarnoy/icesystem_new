@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+        'showPageSummary' => true,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn',
                 'headerOptions' => ['style' => 'text-align: center'],
