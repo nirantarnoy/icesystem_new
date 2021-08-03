@@ -54,6 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($data) {
                     return number_format($data->qty);
                 },
+                'hAlign' => 'right',
                 'pageSummary' => true,
                 'pageSummaryFunc' => GridView::F_SUM
             ],
