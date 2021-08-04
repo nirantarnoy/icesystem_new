@@ -13,6 +13,16 @@ if ($model->order_date != null) {
     $trigger_submit = 1;
 }
 
+$company_id = 0;
+$branch_id = 0;
+
+if (!empty(\Yii::$app->user->identity->company_id)) {
+    $company_id = \Yii::$app->user->identity->company_id;
+}
+if (!empty(\Yii::$app->user->identity->branch_id)) {
+    $branch_id= \Yii::$app->user->identity->branch_id;
+}
+
 //echo $dash_date;
 ?>
 
@@ -31,7 +41,7 @@ if ($model->order_date != null) {
         <?= $form->field($model, 'globalSearch')->textInput(['placeholder' => 'ค้นหา', 'class' => 'form-control', 'aria-describedby' => 'basic-addon1'])->label(false) ?>
         <?php $model->created_by = $model->created_by == null ? \Yii::$app->user->id : $model->created_by ?>
         <?= $form->field($model, 'created_by')->widget(\kartik\select2\Select2::className(), [
-            'data' => \yii\helpers\ArrayHelper::map(\backend\models\User::find()->all(), 'id', function ($data) {
+            'data' => \yii\helpers\ArrayHelper::map(\backend\models\User::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', function ($data) {
                 return $data->username;
             }),
             'options' => [
