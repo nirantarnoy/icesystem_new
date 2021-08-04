@@ -27,7 +27,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
     <div class="input-group">
 
         <?= $form->field($model, 'warehouse_id')->widget(\kartik\select2\Select2::className(), [
-            'data' => \yii\helpers\ArrayHelper::map(\backend\models\Warehouse::find()->all(), 'id', function ($data) {
+            'data' => \yii\helpers\ArrayHelper::map(\backend\models\Warehouse::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', function ($data) {
                 return $data->code . ' ' . $data->name;
             }),
             'options' => [
@@ -41,7 +41,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
         ])->label(false) ?>
         <span style="margin-left: 5px;"></span>
         <?= $form->field($model, 'product_id')->widget(\kartik\select2\Select2::className(), [
-            'data' => \yii\helpers\ArrayHelper::map(\backend\models\Product::find()->all(), 'id', function ($data) {
+            'data' => \yii\helpers\ArrayHelper::map(\backend\models\Product::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', function ($data) {
                 return $data->code . ' ' . $data->name;
             }),
             'options' => [
