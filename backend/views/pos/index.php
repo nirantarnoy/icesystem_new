@@ -1181,7 +1181,7 @@ function calpayprice2(e){
             c_pay = price_val;
         }else{
             if(price_val == "100"){
-                price_val = ".";
+                price_val = "5";
             }
             c_pay = ''+$(".edit-amount").val()+price_val;
         }
