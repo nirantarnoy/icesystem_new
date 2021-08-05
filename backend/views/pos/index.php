@@ -826,7 +826,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                         </div>
                     </div>
                     <div class="col-lg-3">
-                        <div class="btn btn-outline-primary" data-var="."
+                        <div class="btn btn-outline-primary" data-var="100"
                              style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
                              onclick="calpayprice2($(this))">.
                         </div>
@@ -1183,6 +1183,10 @@ function calpayprice2(e){
             c_pay = ''+$(".edit-amount").val()+price_val;
         }
        
+    }
+    
+    if(price_val == '100'){
+        c_pay = ''+c_pay+price_val;
     }
     
     $(".edit-amount").val(c_pay);
