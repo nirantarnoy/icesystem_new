@@ -385,7 +385,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                 <div class="row">
                     <div class="col-lg-3"></div>
                     <div class="col-lg-6">
-                        <input type="number" class="form-control popup-qty" value="" min="1"
+                        <input type="number" class="form-control popup-qty" value="" min="0"
                                style="font-size: 100px;height: 100px;text-align: center">
                     </div>
                     <div class="col-lg-3"></div>
@@ -402,7 +402,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                 <div class="row">
                     <div class="col-lg-3"></div>
                     <div class="col-lg-6">
-                        <input type="number" class="form-control popup-price" min="1"
+                        <input type="number" class="form-control popup-price" min="0"
                                style="font-size: 100px;height: 100px;text-align: center">
                     </div>
                     <div class="col-lg-3"></div>
