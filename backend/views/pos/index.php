@@ -322,7 +322,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                             <td style="text-align: right">
                                 <input type="number" style="vertical-align: middle;text-align: right"
                                        class="form-control cart-qty" name="cart_qty[]" onchange="line_cal($(this))"
-                                       value="" min="1" onclick="edit_qty($(this))">
+                                       value="" min="0" onclick="edit_qty($(this))">
                             </td>
                             <td style="text-align: right;vertical-align: middle"></td>
                             <td style="text-align: right;vertical-align: middle"></td>
@@ -478,7 +478,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                         <div class="row">
                             <div class="col-lg-3"></div>
                             <div class="col-lg-6">
-                                <input type="number" class="form-control pay-total-amount" value="" min="1"
+                                <input type="number" class="form-control pay-total-amount" value="" min="0"
                                        style="font-size: 50px;height: 60px;text-align: center" disabled>
                             </div>
                             <div class="col-lg-3"></div>
@@ -495,7 +495,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                         <div class="row">
                             <div class="col-lg-3"></div>
                             <div class="col-lg-6">
-                                <input type="number" class="form-control pay-amount" min="1"
+                                <input type="number" class="form-control pay-amount" min="0"
                                        style="font-size: 50px;height: 60px;text-align: center" value="0">
                                 <br>
                                 <div class="alert alert-danger pay-alert" style="height: 50px;display: none;">
@@ -675,7 +675,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                         <div class="row">
                             <div class="col-lg-3"></div>
                             <div class="col-lg-6">
-                                <input type="number" class="form-control pay-total-amount" value="" min="1"
+                                <input type="number" class="form-control pay-total-amount" value="" min="0"
                                        style="font-size: 50px;height: 60px;text-align: center" disabled>
                             </div>
                             <div class="col-lg-3"></div>
@@ -752,7 +752,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-12">
-                        <input type="number" class="form-control edit-amount" min="1"
+                        <input type="number" class="form-control edit-amount" min="0"
                                style="font-size: 50px;height: 60px;text-align: center" value="0"
                                onchange="checkonhand($(this))">
                     </div>
