@@ -752,7 +752,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-12">
-                        <input type="number" class="form-control edit-amount" min="0"
+                        <input type="text" class="form-control edit-amount"
                                style="font-size: 50px;height: 60px;text-align: center" value="0"
                                onchange="checkonhand($(this))">
                     </div>
@@ -1181,7 +1181,7 @@ function calpayprice2(e){
             c_pay = price_val;
         }else{
             if(price_val == "100"){
-                price_val = "5";
+                price_val = ".";
             }
             c_pay = ''+$(".edit-amount").val()+price_val;
         }
