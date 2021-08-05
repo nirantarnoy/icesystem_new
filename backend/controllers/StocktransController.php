@@ -99,6 +99,7 @@ class StocktransController extends Controller
                     $model->activity_type_id = 15; // 15 prod rec
                     $model->company_id = $company_id;
                     $model->branch_id = $branch_id;
+                    $model->created_by = \Yii::$app->user->id;
                     if($model->save()){
                         $this->updateSummary($prodid[$i],$wh_id[$i],$qty[$i]);
                     }
