@@ -197,7 +197,7 @@ $mpdf->AddPageByArray([
     <tfoot>
     <tr>
         <td style="font-size: 18px;border-top: 1px dotted gray">จำนวนรายการ</td>
-        <td style="font-size: 18px;border-top: 1px dotted gray;text-align: center"><?= number_format($total_qty) ?></td>
+        <td style="font-size: 18px;border-top: 1px dotted gray;text-align: center"><?= number_format($total_qty, 2) ?></td>
         <td style="font-size: 18px;border-top: 1px dotted gray;text-align: center"></td>
         <td style="font-size: 18px;border-top: 1px dotted gray;text-align: right"><?= number_format($total_amt, 2) ?></td>
     </tr>
@@ -205,19 +205,19 @@ $mpdf->AddPageByArray([
         <td style="font-size: 18px;">ส่วนลด</td>
         <td></td>
         <td></td>
-        <td style="font-size: 18px;text-align: right"><?= number_format($discount) ?></td>
+        <td style="font-size: 18px;text-align: right"><?= number_format($discount, 2) ?></td>
     </tr>
     <tr>
         <td style="font-size: 18px;">จำนวนสุทธิ</td>
         <td></td>
         <td></td>
-        <td style="font-size: 18px;text-align: right"> <?= number_format($total_amt - $discount) ?></td>
+        <td style="font-size: 18px;text-align: right"> <?= number_format($total_amt - $discount, 2) ?></td>
     </tr>
     <tr>
         <td style="font-size: 18px;">ทอนเงิน</td>
         <td></td>
         <td></td>
-        <td style="font-size: 18px;text-align: right"> <?= number_format($change) ?></td>
+        <td style="font-size: 18px;text-align: right"> <?= number_format($change, 2) ?></td>
     </tr>
     </tfoot>
 </table>
