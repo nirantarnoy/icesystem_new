@@ -1180,13 +1180,12 @@ function calpayprice2(e){
         if($(".edit-amount").val() == 0){
             c_pay = price_val;
         }else{
+            if(price_val == "100"){
+                price_val = ".";
+            }
             c_pay = ''+$(".edit-amount").val()+price_val;
         }
        
-    }
-    
-    if(price_val == '100'){
-        c_pay = ''+c_pay+price_val;
     }
     
     $(".edit-amount").val(c_pay);
