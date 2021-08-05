@@ -141,7 +141,7 @@ if ($show_pos_date != null) {
                     'value' => function ($data) {
                         return $data->line_qty_cash;
                     },
-                    'format' => ['decimal', 0],
+                    'format' => ['decimal', 2],
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_SUM,
                     'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
@@ -154,7 +154,7 @@ if ($show_pos_date != null) {
                     'value' => function ($data) {
                         return $data->line_qty_credit;
                     },
-                    'format' => ['decimal', 0],
+                    'format' => ['decimal', 2],
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_SUM,
                     'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
@@ -167,7 +167,7 @@ if ($show_pos_date != null) {
                     'value' => function ($data) {
                         return $data->qty;
                     },
-                    'format' => ['decimal', 0],
+                    'format' => ['decimal', 2],
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_SUM,
                     'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
@@ -180,7 +180,7 @@ if ($show_pos_date != null) {
                     'value' => function ($data) {
                         return $data->line_total_cash;
                     },
-                    'format' => ['decimal', 0],
+                    'format' => ['decimal', 2],
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_SUM,
                     'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
@@ -193,7 +193,7 @@ if ($show_pos_date != null) {
                     'value' => function ($data) {
                         return $data->line_total_credit;
                     },
-                    'format' => ['decimal', 0],
+                    'format' => ['decimal', 2],
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_SUM,
                     'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
@@ -207,7 +207,7 @@ if ($show_pos_date != null) {
                     'value' => function ($data) {
                         return $data->line_total;
                     },
-                    'format' => ['decimal', 0],
+                    'format' => ['decimal', 2],
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_SUM,
                     'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
@@ -268,7 +268,7 @@ if ($show_pos_date != null) {
                     'value' => function ($data) {
                         return $data->payment_amount;
                     },
-                    'format' => ['decimal', 0],
+                    'format' => ['decimal', 2],
                     'pageSummary' => true,
                     'pageSummaryFunc' => GridView::F_SUM,
                     'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
