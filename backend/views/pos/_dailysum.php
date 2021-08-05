@@ -96,12 +96,12 @@ if ($show_pos_date != null) {
                             ],
                             'contentFormats' => [      // content reformatting for each summary cell
                                 //4 => ['format' => 'number', 'decimals' => 0],
-                                3 => ['format' => 'number', 'decimals' => 0],
-                                4 => ['format' => 'number', 'decimals' => 0],
-                                5 => ['format' => 'number', 'decimals' => 0],
-                                6 => ['format' => 'number', 'decimals' => 0],
-                                7 => ['format' => 'number', 'decimals' => 0],
-                                8 => ['format' => 'number', 'decimals' => 0],
+                                3 => ['format' => 'number', 'decimals' => 2],
+                                4 => ['format' => 'number', 'decimals' => 2],
+                                5 => ['format' => 'number', 'decimals' => 2],
+                                6 => ['format' => 'number', 'decimals' => 2],
+                                7 => ['format' => 'number', 'decimals' => 2],
+                                8 => ['format' => 'number', 'decimals' => 2],
                             ],
                             'contentOptions' => [      // content html attributes for each summary cell
                                 1 => ['style' => 'font-variant:small-caps'],
