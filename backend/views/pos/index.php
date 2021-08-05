@@ -831,7 +831,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                              onclick="calpayprice2($(this))">.
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-3">
                         <div class="btn btn-outline-danger" data-var="-1"
                              style="width: 100%;height: 60px;font-weight: bold;font-size: 30px;"
                              onclick="calpayprice2($(this))"> Clear
