@@ -1,5 +1,7 @@
 <?php
 date_default_timezone_set('Asia/Bangkok');
+use chillerlan\QRCode\QRCode;
+use yii\web\Response;
 
 //require_once __DIR__ . '/vendor/autoload.php';
 //require_once 'vendor/autoload.php';
@@ -23,7 +25,7 @@ $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp',
 //$mpdf->SetMargins(-10, 1, 1);
 //$mpdf->SetDisplayMode('fullpage');
 $mpdf->AddPageByArray([
-    'margin-left' => 2,
+    'margin-left' => 3,
     'margin-right' => 0,
     'margin-top' => 0,
     'margin-bottom' => 1,
@@ -110,14 +112,41 @@ $mpdf->AddPageByArray([
 
 </table>
 <table class="table-header" width="100%">
+<!--    <tr>-->
+<!--        <td style="font-size: 20px;text-align: center;vertical-align: bottom">-->
+<!--            <h5>น้ำแข็ง</h5>-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--        <td style="font-size: 20px;text-align: center;vertical-align: top">-->
+<!--            <h5>ใบเบิกสินค้า</h5>-->
+<!--        </td>-->
+<!--    </tr>-->
+
     <tr>
-        <td style="font-size: 20px;text-align: center;vertical-align: bottom">
-            <h5>น้ำแข็ง</h5>
+        <td style="width: 2%">
+            <div style="height: 20px;width: 20px;">
+                <?php
+                \Yii::$app->response->format = Response::FORMAT_HTML;
+                $data = $model->journal_no;
+                $qr = new QRCode();
+                echo '<img src="' . $qr->render($data) . '" />';
+                ?>
+            </div>
         </td>
-    </tr>
-    <tr>
-        <td style="font-size: 20px;text-align: center;vertical-align: top">
-            <h5>ใบเบิกสินค้า</h5>
+        <td style="width: 98%">
+            <table class="table-header" width="100%">
+                <tr>
+                    <td style="font-size: 20px;text-align: center;vertical-align: bottom">
+                        <h2>น้ำแข็ง</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: 20px;text-align: center;vertical-align: top">
+                        <h2>ใบเบิกสินค้า</h2>
+                    </td>
+                </tr>
+            </table>
         </td>
     </tr>
 
