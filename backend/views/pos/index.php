@@ -95,7 +95,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                     echo Select2::widget([
                         'name' => 'customer_id',
                         // 'value' => 1,
-                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->andFilterWhere(['is_show_pos' => 1])->all(), 'id', function ($data) {
+                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->andFilterWhere(['is_show_pos' => 1])->andFilterWhere(['status'=>1])->all(), 'id', function ($data) {
                             return $data->code . ' ' . $data->name;
                         }),
                         'options' => [
