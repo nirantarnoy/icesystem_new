@@ -1721,6 +1721,16 @@ function myPrint3(){
         getMyFrame.focus();
         getMyFrame.contentWindow.print();
     }
+    myPrint3Copy();
+}
+function myPrint3Copy(){
+    var has_print_car_pos = $(".has-print-car-pos").attr("data-var");
+   // alert(has_print_do);
+    if(has_print_car_pos != "" || has_print_car_pos != null){
+        var getMyFrame = document.getElementById('iFramePdfCarPos');
+        getMyFrame.focus();
+        getMyFrame.contentWindow.print();
+    }
     
 }
 
