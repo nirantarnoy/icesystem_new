@@ -847,10 +847,10 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
             </div>
 
             <div class="modal-footer">
-                <button class="btn btn-outline-success btn-add-cart" data-dismiss="modalx"
+                <div class="btn btn-outline-success btn-edit-cart-qty" data-dismiss="modalx"
                         onclick="sumitchangeqty($(this))">
                     <i class="fa fa-check"></i> ตกลง
-                </button>
+                </div>
                 <button type="button" class="btn btn-default" data-dismiss="modal"><i
                             class="fa fa-close text-danger"></i> ยกเลิก
                 </button>
