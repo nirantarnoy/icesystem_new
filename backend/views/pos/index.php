@@ -960,6 +960,7 @@ $js = <<<JS
          if(xx3 !="empty"){
           //  alert();
            myPrint3();
+           myPrint3Copy();
         }
         
        
@@ -1721,7 +1722,7 @@ function myPrint3(){
         getMyFrame.focus();
         getMyFrame.contentWindow.print();
     }
-    myPrint3Copy();
+   
 }
 function myPrint3Copy(){
     var has_print_car_pos = $(".has-print-car-pos").attr("data-var");
