@@ -25,7 +25,7 @@ $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp',
 //$mpdf->SetMargins(-10, 1, 1);
 //$mpdf->SetDisplayMode('fullpage');
 $mpdf->AddPageByArray([
-    'margin-left' => 3,
+    'margin-left' => 5,
     'margin-right' => 0,
     'margin-top' => 0,
     'margin-bottom' => 1,
@@ -172,7 +172,7 @@ $mpdf->AddPageByArray([
             สายส่ง <span><?= \backend\models\Deliveryroute::findName($model->delivery_route_id); ?> <?=$driver_name?></span>
         </td>
         <td style="font-size: 18px;text-align: left">
-            เวลา <span><?=date('H:i')?></span>
+            เวลา <span><?=date('H:i:s')?></span>
         </td>
     </tr>
 

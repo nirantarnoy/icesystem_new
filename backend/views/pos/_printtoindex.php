@@ -27,8 +27,8 @@ $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp',
 //$mpdf->SetMargins(-10, 1, 1);
 //$mpdf->SetDisplayMode('fullpage');
 $mpdf->AddPageByArray([
-    'margin-left' => 2,
-    'margin-right' => 1,
+    'margin-left' => 5,
+    'margin-right' => 0,
     'margin-top' => 0,
     'margin-bottom' => 1,
 ]);
