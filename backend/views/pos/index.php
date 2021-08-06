@@ -872,6 +872,10 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
     <input type="hidden" class="slip-print-car-pos" value="<?= $filename_car_pos ?>">
     <iframe id="iFramePdfCarPos" src="<?= $filename_car_pos ?>" style="display:none;"></iframe>
 </div>
+<div class="has-print-car-pos2" data-var="<?= $filename_car_pos ?>">
+    <input type="hidden" class="slip-print-car-pos2" value="<?= $filename_car_pos ?>">
+    <iframe id="iFramePdfCarPos2" src="<?= $filename_car_pos ?>" style="display:none;"></iframe>
+</div>
 
 <form id="form-print-do" action="<?= \yii\helpers\Url::to(['pos/printdo'], true); ?>" method="post">
     <input type="hidden" class="order-do" name="order_id" value="<?= $order_do ?>">
@@ -1725,10 +1729,10 @@ function myPrint3(){
    
 }
 function myPrint3Copy(){
-    var has_print_car_pos = $(".has-print-car-pos").attr("data-var");
+    var has_print_car_pos = $(".has-print-car-pos2").attr("data-var");
    // alert(has_print_do);
     if(has_print_car_pos != "" || has_print_car_pos != null){
-        var getMyFrame = document.getElementById('iFramePdfCarPos');
+        var getMyFrame = document.getElementById('iFramePdfCarPos2');
         getMyFrame.focus();
         getMyFrame.contentWindow.print();
     }
