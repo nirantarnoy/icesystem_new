@@ -133,10 +133,17 @@ $mpdf->AddPageByArray([
     </tr>
     <tr>
         <td style="font-size: 18px;text-align: left">
-            สายส่ง <span><?= \backend\models\Deliveryroute::findName($model->delivery_route_id); ?></span>
+            <?php
+            $driver_name = '';
+              $driver_data = \common\models\QueryCarEmpData::find()->where(['id'=>$model->delivery_route_id,'is_driver'=>1,'date(trans_date)'=>date('Y-m-d')])->one();
+              if($driver_data){
+                  $driver_name = $driver_data->fname;
+              }
+            ?>
+            สายส่ง <span><?= \backend\models\Deliveryroute::findName($model->delivery_route_id); ?> <?=$driver_name?></span>
         </td>
         <td style="font-size: 18px;text-align: left">
-            คนขับ <span></span>
+            เวลา <span><?=date('H:i')?></span>
         </td>
     </tr>
 
