@@ -75,7 +75,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                     'value' => function ($data) {
                        // return number_format(\backend\models\Orders::findordercredit($data->id));
                         if($data->payment_method_id == 2){
-                            return number_format(\backend\models\Orders::getlinesum($data->id));
+                            return number_format(\backend\models\Orders::getlinesum($data->id),1);
                         }else{
                             return 0;
                         }
@@ -87,7 +87,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                     'contentOptions' => ['style' => 'text-align: right'],
                     'value' => function ($data) {
                         if($data->payment_method_id == 1){
-                            return number_format(\backend\models\Orders::getlinesum($data->id));
+                            return number_format(\backend\models\Orders::getlinesum($data->id),1);
                         }else{
                             return 0;
                         }
@@ -99,7 +99,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
                     'value' => function ($data) {
-                        return number_format($data->order_total_amt);
+                        return number_format($data->order_total_amt,1);
                     }
                 ],
                 //'vat_per',
