@@ -195,14 +195,14 @@ $mpdf->AddPageByArray([
         ?>
         <tr>
             <td><?= \backend\models\Product::findName($value->product_id); ?></td>
-            <td style="text-align: center"><?= $value->qty ?></td>
+            <td style="text-align: center"><?= number_format($value->qty,1) ?></td>
         </tr>
 
     <?php endforeach; ?>
     <tfoot>
     <tr>
         <td style="font-size: 18px;border-top: 1px dotted gray">จำนวนรายการ</td>
-        <td style="font-size: 18px;border-top: 1px dotted gray;text-align: center"><?= number_format($total_qty) ?></td>
+        <td style="font-size: 18px;border-top: 1px dotted gray;text-align: center"><?= number_format($total_qty,1) ?></td>
     </tr>
     </tfoot>
 </table>

@@ -100,8 +100,8 @@ function getStock($prod_id, $warehouse)
                         <td>
                             <input type="hidden" class="line-issue-sale-price"
                                    name="line_issue_line_price[]" value="">
-                            <input type="number" class="line-qty form-control" name="line_qty[]"
-                                   value="" min="0">
+                            <input type="number" class="line-qty form-control" name="line_qty[]" step="0.10" placeholder="0.00" pattern="^\d+(?:\.\d{1,2})?$"
+                                   value="100" min="0">
                         </td>
                         <td>
                         </td>
@@ -173,7 +173,7 @@ function getStock($prod_id, $warehouse)
                                 <input type="hidden" class="line-issue-sale-price"
                                        name="line_issue_line_price[]" value="">
                                 <input type="number" class="line-qty form-control" name="line_qty[]"
-                                       value="" min="0">
+                                       value="" min="0" step="0.10">
                             </td>
                             <td style="text-align: center">
                                 <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i

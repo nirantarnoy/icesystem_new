@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
-                    return number_format($data->qty);
+                    return number_format($data->qty, 1);
                 }
             ],
             //'location_id',
