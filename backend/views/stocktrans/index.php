@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
-                    return number_format($data->qty);
+                    return number_format($data->qty,2);
                 },
                 'format' => ['decimal', 2],
                 'hAlign' => 'right',
