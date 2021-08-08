@@ -87,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
-                    return \backend\models\User::findName($data->created_by);
+                   // return \backend\models\User::findName($data->created_by);
                 }
             ],
 
