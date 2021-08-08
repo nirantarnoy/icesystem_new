@@ -498,7 +498,7 @@ class JournalissueController extends Controller
             //$data = ['issue_id'=> $issue_id,'user_id'=>$user_id];
             $model = \common\models\JournalIssue::find()->where(['journal_no' => $issue_no,'company_id'=>$company_id,'branch_id'=>$branch_id])->one();
             if($model){
-                $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $model->id])->all();
+                $model_issue_line = \backend\models\Journalissueline::find()->where(['id' => $issue_line_id])->all();
                 foreach ($model_issue_line as $val2) {
                     $status = 1;
                     array_push($data,[
