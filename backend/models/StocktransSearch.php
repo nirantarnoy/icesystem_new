@@ -82,6 +82,35 @@ class StocktransSearch extends Stocktrans
             $query->andFilterWhere(['created_by' => $this->created_by]);
         }
 
+        if($this->from_date != null && $this->to_date != null){
+            $fx_datetime = explode(' ',$this->from_date);
+            $tx_datetime = explode(' ',$this->from_date);
+
+            $f_date = null;
+            $f_time = null;
+            $t_date = null;
+            $t_time = null;
+
+            $from_date_time = null;
+            $to_date_time = null;
+
+            if(count($fx_datetime) > 0){
+                $f_date = $fx_datetime[0];
+                $f_time = $fx_datetime[1];
+
+                $x_date = explode('-', $f_date);
+                $xx_date = date('Y-m-d');
+                if (count($x_date) > 1) {
+                    $xx_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
+                }
+
+                $from_date_time = date('Y-m-d',strtotime($xx_date.' '.$f_time));
+
+            }
+
+        }
+
+
         $query->andFilterWhere(['like', 'journal_no', $this->journal_no])
             ->andFilterWhere(['like', 'lot_no', $this->lot_no]);
 
