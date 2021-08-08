@@ -295,7 +295,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                 </div>
                 <div class="col-lg-5" style="text-align: right">
                     <input type="hidden" class="total-value-top" value="0">
-                    <h5> ยอดขาย <span style="color: red" class="total-text-top">0</span> <span> บาท</span></h5>
+                    <h5> ยอดขาย <span style="color: red" class="total-text-top">0.00</span> <span> บาท</span></h5>
                 </div>
             </div>
             <hr style="border-top: 1px dashed gray">
@@ -1182,15 +1182,31 @@ function calpayprice2(e){
     if(price_val == "-1"){
         $(".edit-amount").val(0);
     }else{
-        if($(".edit-amount").val() == 0){
-            c_pay = price_val;
+        if($(".edit-amount").val() == "0"){
+            if(price_val == "100"){
+                 c_pay = '0.';
+            }else{
+                 c_pay = price_val;
+            }
+           
+        }else if($(".edit-amount").val() == "0."){
+            c_pay = '0.'+ price_val;
+           
+        }else if(price_val == "100"){
+            
+            c_pay = $(".edit-amount").val()+".";
         }else{
+          //  alert('>0');
             if(price_val == "100"){
                 price_val = ".";
+                 c_pay = price_val;
+            }else{
+                c_pay = $(".edit-amount").val();
+                c_pay = c_pay + price_val;
             }
-            c_pay = ''+$(".edit-amount").val()+price_val;
+         //   c_pay = ''+$(".edit-amount").val()+".";
+          
         }
-       
     }
     
     $(".edit-amount").val(c_pay);
@@ -1653,8 +1669,8 @@ function line_cal(e){
           line_total = parseFloat(qty) * parseFloat(price);
         //  alert(price);
    // });
-    e.closest('tr').find('.cart-total-price').val(line_total);
-    e.closest('tr').find('td:eq(5)').html(addCommas(line_total));
+    e.closest('tr').find('.cart-total-price').val(parseFloat(line_total).toFixed(2));
+    e.closest('tr').find('td:eq(5)').html(addCommas(parseFloat(line_total).toFixed(2)));
     calall();
 }
 function calall(){
@@ -1674,14 +1690,14 @@ function calall(){
          
         // alert("qty "+qty+" price "+price);
           
-          total_qty = total_qty + parseFloat(qty);
+          total_qty =  parseFloat(total_qty) + parseFloat(qty);
           total_price = total_price + parseFloat(price);
           // alert(total_price);
       });
 
       $(".table-cart tfoot tr").find('td:eq(1)').html(total_qty);
-      $(".table-cart tfoot tr").find('td:eq(3)').html(addCommas(total_price));
-      $(".total-text-top").html(addCommas(total_price));
+      $(".table-cart tfoot tr").find('td:eq(3)').html(addCommas(parseFloat(total_price).toFixed(2)));
+      $(".total-text-top").html(addCommas(parseFloat(total_price).toFixed(2)));
       $(".total-value-top").val(total_price);
 
 }
@@ -1689,7 +1705,7 @@ function clearall(){
       $(".table-cart tfoot tr").find('td:eq(1)').html(0);
       $(".table-cart tfoot tr").find('td:eq(3)').html(addCommas(0));
       $(".total-text-top").html(addCommas(0));
-      $(".total-value-top").val(0);
+      $(".total-value-top").val(0.00);
 }
 function addCommas(nStr) {
         nStr += '';
