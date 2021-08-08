@@ -457,7 +457,7 @@ class JournalissueController extends Controller
                     array_push($data,[
                         'issue_id'=>$model->id,
                         'issue_no'=>$model->journal_no,
-                        'issue_date' => $model->trans_date,
+                        'issue_date' => date('d/m/Y', strtotime($model->trans_date)),
                         'route_name' => \backend\models\Deliveryroute::findName($model->delivery_route_id),
                         'issue_line_id' => $val2->id,
                         'product_id' => $val2->product_id,

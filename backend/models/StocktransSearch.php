@@ -84,7 +84,7 @@ class StocktransSearch extends Stocktrans
 
         if($this->from_date != null && $this->to_date != null){
             $fx_datetime = explode(' ',$this->from_date);
-            $tx_datetime = explode(' ',$this->from_date);
+            $tx_datetime = explode(' ',$this->to_date);
 
             $f_date = null;
             $f_time = null;
@@ -103,9 +103,21 @@ class StocktransSearch extends Stocktrans
                 if (count($x_date) > 1) {
                     $xx_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
                 }
+                $from_date_time = date('Y-m-d H:i',strtotime($xx_date.' '.$f_time));
+                $query->andFilterWhere(['>=','trans_date',$from_date_time]);
+            }
 
-                $from_date_time = date('Y-m-d',strtotime($xx_date.' '.$f_time));
+            if(count($tx_datetime) > 0){
+                $t_date = $tx_datetime[0];
+                $t_time = $tx_datetime[1];
 
+                $n_date = explode('-', $t_date);
+                $nn_date = date('Y-m-d');
+                if (count($n_date) > 1) {
+                    $nn_date = $n_date[2] . '/' . $n_date[1] . '/' . $n_date[0];
+                }
+                $to_date_time = date('Y-m-d H:i',strtotime($nn_date.' '.$t_time));
+                $query->andFilterWhere(['<=','trans_date',$to_date_time]);
             }
 
         }
