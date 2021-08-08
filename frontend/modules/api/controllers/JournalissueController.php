@@ -487,29 +487,43 @@ class JournalissueController extends Controller
         return $qty;
     }
 
-    public function actionIssueqrscanupdate()
+    public function actionIssueqrscanaddtemp()
     {
         $issue_id = null;
         $status = 0;
+        $prodrec_id = null;
         $issue_line_id = null;
         $product_id = null;
         $qty = 0;
+        $user_id = null;
+        $company_id = 1;
+        $branch_id = 1;
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
-        //$route_id = $req_data['route_id'];
+        $prodrec_id = $req_data['prodrec_id'];
         $issue_id = $req_data['issue_id'];
         $product_id = $req_data['product_id'];
         $qty = $req_data['qty'];
+        $user_id = $req_data['user_id'];
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
 
 
         $data = [];
-        if ($issue_id != null) {
-
-            $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
-            foreach ($model_issue_line as $val2) {
+        if ($issue_id != null && $prodrec_id != null && $product_id != null && $qty != null) {
+            $model =new \common\models\IssueStockTemp();
+            $model->issue_id = $issue_id;
+            $model->prodrec_id = $prodrec_id;
+            $model->prodrec_id = $product_id;
+            $model->qty = $qty;
+            $model->status = 1;
+            $model->created_by = $user_id;
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
+            if($model->save(false)){
                 $status = 1;
-
+                array_push($data,['message'=>'complated']);
             }
         }
         return ['status' => $status, 'data' => $data];
