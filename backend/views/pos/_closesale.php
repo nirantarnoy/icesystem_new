@@ -208,7 +208,7 @@ echo $user_login_datetime; //return;
         <div class="col-lg-2"><h5>เบิกเติม</h5></div>
         <div class="col-lg-2">
             <input type="text" class="form-control" name="order_refill_qty"
-                   value="<?= number_format($issue_refill_qty) ?>" readonly>
+                   value="<?= number_format($issue_refill_qty,2) ?>" readonly>
         </div>
     </div>
     <div style="height: 10px;"></div>
@@ -216,12 +216,12 @@ echo $user_login_datetime; //return;
         <div class="col-lg-2"><h5>ขายเชื่อ(จำนวน)</h5></div>
         <div class="col-lg-2">
             <input type="text" class="form-control" name="order_credit_qty"
-                   value="<?= number_format($total_order_credit_qty) ?>" readonly>
+                   value="<?= number_format($total_order_credit_qty,2) ?>" readonly>
         </div>
         <div class="col-lg-2"><h5>ขายเชื่อ(เงิน)</h5></div>
         <div class="col-lg-2">
             <input type="text" class="form-control" name="order_credit_amount"
-                   value="<?= number_format($order_credit_amount) ?>" readonly>
+                   value="<?= number_format($order_credit_amount,2) ?>" readonly>
         </div>
     </div>
     <div style="height: 10px;"></div>
@@ -232,7 +232,7 @@ echo $user_login_datetime; //return;
         </div>
         <div class="col-lg-2"><h5>ขายทั้งหมด(เงิน)</h5></div>
         <div class="col-lg-2">
-            <input type="text" class="form-control" name="order_amount" value="<?= number_format($order_amount) ?>"
+            <input type="text" class="form-control" name="order_amount" value="<?= number_format($order_amount,2) ?>"
                    readonly>
         </div>
     </div>
@@ -241,7 +241,7 @@ echo $user_login_datetime; //return;
         <div class="col-lg-2"><h5>ยอดยกไป</h5></div>
         <div class="col-lg-2">
             <input type="text" class="form-control" name="order_qty"
-                   value="<?=number_format($total_balance_out)?>" readonly>
+                   value="<?=number_format($total_balance_out,2)?>" readonly>
         </div>
     </div>
     <br/>
