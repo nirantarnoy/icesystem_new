@@ -20,6 +20,7 @@ class ProductionController extends Controller
                     'warehouselist' => ['POST'],
                     'addreprocesswip' => ['POST'],
                     'productionreprint' => ['POST'],
+                    'findprodrec' => ['POST'],
                 ],
             ],
         ];
@@ -81,7 +82,7 @@ class ProductionController extends Controller
             $session->setFlash('msg-index', 'slip_prodrec_index.pdf');
             $session->setFlash('after-save', true);
 
-            array_push($data,['journal_no'=>$journal_no]);
+            array_push($data, ['journal_no' => $journal_no]);
             //  $this->renderPartial('_printtoindex', ['model' => $model, 'model_line' => $model_line, 'change_amount' => 0]);
         }
 
@@ -119,7 +120,7 @@ class ProductionController extends Controller
         $status = false;
 
         if ($company_id) {
-            $model = \common\models\Warehouse::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->andFilterWhere(['LIKE','code',$warehouse_code])->all();
+            $model = \common\models\Warehouse::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->andFilterWhere(['LIKE', 'code', $warehouse_code])->all();
             // $model = \common\models\QueryCustomerPrice::find()->all();
             if ($model) {
                 $status = true;
@@ -208,29 +209,29 @@ class ProductionController extends Controller
             $journal_date = $t_date;
         }
         //if ($journal_no ) {
-            $model = null;
-        if($journal_no == ''){
-            $model = \common\models\StockTrans::find()->where(['date(trans_date)'=>$journal_date])->all();
-        }else{
-            $model = \common\models\StockTrans::find()->where(['LIKE','journal_no',$journal_no,'date(trans_date)'=>$journal_date])->all();
+        $model = null;
+        if ($journal_no == '') {
+            $model = \common\models\StockTrans::find()->where(['date(trans_date)' => $journal_date])->all();
+        } else {
+            $model = \common\models\StockTrans::find()->where(['LIKE', 'journal_no', $journal_no, 'date(trans_date)' => $journal_date])->all();
         }
 
-            // $model = \common\models\QueryCustomerPrice::find()->all();
-            if ($model) {
-                $status = true;
-                foreach ($model as $value) {
-                    array_push($data, [
-                        'id' => $value->id,
-                        'journal_no' => $value->journal_no,
-                        'journal_date' => date('d-m-Y', strtotime($value->trans_date)),
-                        'journal_time' => date('H:i:s', strtotime($value->trans_date)),
-                        'warehouse_name' => \backend\models\Warehouse::findName($value->warehouse_id),
-                        'product_name' => \backend\models\Product::findName($value->product_id),
-                        'qty' => $value->qty,
-                        'user' => \backend\models\User::findName($value->created_by),
-                    ]);
-                }
+        // $model = \common\models\QueryCustomerPrice::find()->all();
+        if ($model) {
+            $status = true;
+            foreach ($model as $value) {
+                array_push($data, [
+                    'id' => $value->id,
+                    'journal_no' => $value->journal_no,
+                    'journal_date' => date('d-m-Y', strtotime($value->trans_date)),
+                    'journal_time' => date('H:i:s', strtotime($value->trans_date)),
+                    'warehouse_name' => \backend\models\Warehouse::findName($value->warehouse_id),
+                    'product_name' => \backend\models\Product::findName($value->product_id),
+                    'qty' => $value->qty,
+                    'user' => \backend\models\User::findName($value->created_by),
+                ]);
             }
+        }
         //}
 
         return ['status' => $status, 'data' => $data];
@@ -278,5 +279,44 @@ class ProductionController extends Controller
         }
         return $id;
     }
+
+    public function actionFindprodrec()
+    {
+        $prodrec_no = null;
+        $company_id = null;
+        $branch_id = null;
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        $prodrec_no = $req_data['prodrec_no'];
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
+
+
+        $data = [];
+        $status = false;
+
+
+        if ($prodrec_no!= null) {
+            $model = \common\models\StockTrans::find()->where(['journal_no' => $prodrec_no,'company_id'=>$company_id,'branch_id'=>$branch_id])->all();
+            // $model = \common\models\QueryCustomerPrice::find()->all();
+            if ($model) {
+                $status = true;
+                foreach ($model as $value) {
+                    array_push($data, [
+                        'id' => $value->id,
+                        'rec_no' => $value->journal_no,
+                        'rec_date' => date('d/m/Y', strtotime($value->trans_date)),
+                        'warehouse_name' => \backend\models\Warehouse::findName($value->warehouse_id),
+                        'product_id' => $value->product_id,
+                        'product_name' => \backend\models\Product::findName($value->product_id),
+                        'qty' => $value->qty
+                    ]);
+                }
+            }
+        }
+
+        return ['status' => $status, 'data' => $data];
+    }
+
 
 }

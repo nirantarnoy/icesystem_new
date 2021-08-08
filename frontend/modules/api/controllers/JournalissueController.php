@@ -23,6 +23,7 @@ class JournalissueController extends Controller
                     'issueqrscan' => ['POST'],
                     'issueqrscanupdate' => ['POST'],
                     'issueconfirm2' => ['POST'],
+                    'issuetempcreate' => ['POST'],
                 ],
             ],
         ];
