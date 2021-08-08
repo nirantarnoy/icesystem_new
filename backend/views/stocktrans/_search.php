@@ -113,6 +113,10 @@ if ($f_date != null && $t_date != null) {
             'value'=>'2015-10-19 12:00 AM',
             //    'useWithAddon'=>true,
             'convertFormat'=>true,
+            'options' => [
+                    'class' => 'form-control',
+                    'onchange' => 'this.form.submit();'
+            ],
             'pluginOptions'=>[
                 'timePicker'=>true,
                 'timePickerIncrement'=>15,
