@@ -477,9 +477,14 @@ class JournalissueController extends Controller
     }
 
     public function findIssuereserve($issue_id, $product_id){
+        $qty = 0;
         if($issue_id != null && $product_id != null){
-            $model = \common\models\IssueStockTemp::find()->where(['issue_id'=>$issue_id,'prodrec_id'=>$product_id])->sum();
+            $model = \common\models\IssueStockTemp::find()->where(['issue_id'=>$issue_id,'prodrec_id'=>$product_id])->sum('qty');
+            if($model){
+                $qty = $model;
+            }
         }
+        return $qty;
     }
 
     public function actionIssueqrscanupdate()
