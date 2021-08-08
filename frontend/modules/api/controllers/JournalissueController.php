@@ -20,6 +20,7 @@ class JournalissueController extends Controller
                     'list2' => ['POST'],
                     'checkopen' => ['POST'],
                     'issueconfirm' => ['POST'],
+                    'issueqrscan' => ['POST'],
                     'issueconfirm2' => ['POST'],
                 ],
             ],
@@ -425,6 +426,38 @@ class JournalissueController extends Controller
                     'issue_id' => 0,
                     'status' => 0,
                 ]);
+            }
+        }
+        return ['status' => $status, 'data' => $data];
+    }
+
+    public function actionIssueqrscan()
+    {
+        $issue_id = null;
+        $status = 0;
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        //$route_id = $req_data['route_id'];
+        $issue_id = $req_data['issue_id'];
+
+
+        $data = [];
+        if ($issue_id != null) {
+            //$data = ['issue_id'=> $issue_id,'user_id'=>$user_id];
+            $model = \common\models\JournalIssue::find()->where(['id' => $issue_id])->one();
+            $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
+            foreach ($model_issue_line as $val2) {
+                  array_push($data,[
+                      'issue_id'=>$issue_id,
+                      'issue_no'=>$model->journal_no,
+                      'issue_data' => $model->trans_date,
+                      'route_name' => \backend\models\Deliveryroute::findName($model->delivery_route_id),
+                      'issue_line_id' => $val2->id,
+                      'product_id' => $val2->product_id,
+                      'product_code' => \backend\models\Product::findCode($val2->product_id),
+                      'product_name' => \backend\models\Product::findName($val2->product_id),
+                      'issue_qty' => $val2->qty,
+                  ]);
             }
         }
         return ['status' => $status, 'data' => $data];
