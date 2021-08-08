@@ -1669,7 +1669,7 @@ function line_cal(e){
           line_total = parseFloat(qty) * parseFloat(price);
         //  alert(price);
    // });
-    e.closest('tr').find('.cart-total-price').val(parseFloat(line_total).toFixed(2));
+    e.closest('tr').find('.cart-total-price').val(parseFloat(line_total));
     e.closest('tr').find('td:eq(5)').html(addCommas(parseFloat(line_total).toFixed(2)));
     calall();
 }
