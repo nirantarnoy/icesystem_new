@@ -21,6 +21,7 @@ class JournalissueController extends Controller
                     'checkopen' => ['POST'],
                     'issueconfirm' => ['POST'],
                     'issueqrscan' => ['POST'],
+                    'issueqrscanupdate' => ['POST'],
                     'issueconfirm2' => ['POST'],
                 ],
             ],
@@ -447,6 +448,7 @@ class JournalissueController extends Controller
             $model = \common\models\JournalIssue::find()->where(['id' => $issue_id])->one();
             $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
             foreach ($model_issue_line as $val2) {
+                $status = 1;
                   array_push($data,[
                       'issue_id'=>$issue_id,
                       'issue_no'=>$model->journal_no,
@@ -462,4 +464,33 @@ class JournalissueController extends Controller
         }
         return ['status' => $status, 'data' => $data];
     }
+
+    public function actionIssueqrscanupdate()
+    {
+        $issue_id = null;
+        $status = 0;
+        $issue_line_id = null;
+        $product_id = null;
+        $qty = 0;
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        //$route_id = $req_data['route_id'];
+        $issue_id = $req_data['issue_id'];
+        $product_id = $req_data['product_id'];
+        $qty = $req_data['qty'];
+
+
+        $data = [];
+        if ($issue_id != null) {
+
+            $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
+            foreach ($model_issue_line as $val2) {
+                $status = 1;
+
+            }
+        }
+        return ['status' => $status, 'data' => $data];
+    }
+
 }
