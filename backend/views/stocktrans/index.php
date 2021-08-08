@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="stocktrans-index">
     <?php Pjax::begin(); ?>
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel,'f_date'=>null,'t_date'=>null]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

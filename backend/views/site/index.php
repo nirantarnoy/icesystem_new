@@ -20,7 +20,6 @@ if ($f_date != null && $t_date != null) {
                 <div class="small-box bg-info">
                     <div class="inner">
                         <h3><?= number_format($prod_cnt) ?></h3>
-
                         <p>จำนวนสินค้าทั้งหมด</p>
                     </div>
                     <div class="icon">

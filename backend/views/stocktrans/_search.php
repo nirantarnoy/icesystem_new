@@ -12,6 +12,12 @@ if (!empty(\Yii::$app->user->identity->company_id)) {
 if (!empty(\Yii::$app->user->identity->branch_id)) {
     $branch_id= \Yii::$app->user->identity->branch_id;
 }
+
+$dash_date = null;
+if ($f_date != null && $t_date != null) {
+    $dash_date = date('d/m/Y', strtotime($f_date)) . ' - ' . date('d/m/Y', strtotime($t_date));
+}
+
 ?>
 
 <div class="stocktrans-search">
@@ -39,7 +45,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 'width'=> '300px',
             ]
         ])->label(false) ?>
-        <span style="margin-left: 5px;"></span>
+        <span style="margin-left: 2px;"></span>
         <?= $form->field($model, 'product_id')->widget(\kartik\select2\Select2::className(), [
             'data' => \yii\helpers\ArrayHelper::map(\backend\models\Product::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', function ($data) {
                 return $data->code . ' ' . $data->name;
@@ -53,7 +59,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 'width'=> '300px',
             ]
         ])->label(false) ?>
-        <span style="margin-left: 5px;"></span>
+        <span style="margin-left: 2px;"></span>
         <?= $form->field($model, 'activity_type_id')->widget(\kartik\select2\Select2::className(), [
             'data' => \yii\helpers\ArrayHelper::map(\backend\helpers\RunnoTitle::asArrayObject(),'id','name'),
             'options' => [
@@ -65,7 +71,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 'width'=> '300px',
             ]
         ])->label(false) ?>
-        <span style="margin-left: 5px;"></span>
+        <span style="margin-left: 2px;"></span>
         <?= $form->field($model, 'created_by')->widget(\kartik\select2\Select2::className(), [
             'data' => \yii\helpers\ArrayHelper::map(\backend\models\User::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', function ($data) {
                 return $data->username;
@@ -79,6 +85,28 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 'width'=> '300px',
             ]
         ])->label(false) ?>
+        <span style="margin-left: 2px;"></span>
+        <?php
+        echo \kartik\daterange\DateRangePicker::widget(['model' => $model,
+            'attribute' => 'trans_date',
+            //'name' => 'stock_trans_date',
+            'value' => $dash_date,
+            'convertFormat'=>true,
+            'pluginOptions' => [
+                'timePicker'=>true,
+                //'format' => 'DD/MM/YYYY H:i',
+                'locale' => [
+                    'locale'=>['format'=>'d-m-Y h:i A']
+                   // 'format' => 'DD/MM/YYYY H:i'
+                ],
+            ],
+            'presetDropdown' => true,
+            'options' => [
+                'class' => 'form-control',
+                'onchange' => 'this.form.submit();'
+            ]
+        ]);
+        ?>
     </div>
     <?php ActiveForm::end(); ?>
 

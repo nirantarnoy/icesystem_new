@@ -61,7 +61,7 @@ class StocktransSearch extends Stocktrans
             'id' => $this->id,
             'company_id' => $this->company_id,
             'branch_id' => $this->branch_id,
-            'trans_date' => $this->trans_date,
+           // 'trans_date' => $this->trans_date,
             'product_id' => $this->product_id,
             'warehouse_id' => $this->warehouse_id,
             'location_id' => $this->location_id,
