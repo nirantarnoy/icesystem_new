@@ -117,7 +117,7 @@ class StocktransSearch extends Stocktrans
                     $nn_date = $n_date[2] . '/' . $n_date[1] . '/' . $n_date[0];
                 }
                 $to_date_time = date('Y-m-d H:i',strtotime($nn_date.' '.$t_time));
-                $query->andFilterWhere(['<=','trans_date',$to_date_time]);
+                $query->andFilterWhere(['<=','trans_dates',$to_date_time]);
             }
 
         }
