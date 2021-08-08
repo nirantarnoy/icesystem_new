@@ -435,24 +435,28 @@ class JournalissueController extends Controller
     public function actionIssueqrscan()
     {
         $issue_no = null;
+        $company_id = 1;
+        $branch_id = 1;
         $status = 0;
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         //$route_id = $req_data['route_id'];
         $issue_no = $req_data['issue_no'];
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
 
 
         $data = [];
         if ($issue_no != null) {
             //$data = ['issue_id'=> $issue_id,'user_id'=>$user_id];
-            $model = \common\models\JournalIssue::find()->where(['journal_no' => $issue_no])->one();
+            $model = \common\models\JournalIssue::find()->where(['journal_no' => $issue_no,'company_id'=>$company_id,'branch_id'=>$branch_id])->one();
             $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $model->id])->all();
             foreach ($model_issue_line as $val2) {
                 $status = 1;
                   array_push($data,[
                       'issue_id'=>$model->id,
                       'issue_no'=>$model->journal_no,
-                      'issue_data' => $model->trans_date,
+                      'issue_date' => $model->trans_date,
                       'route_name' => \backend\models\Deliveryroute::findName($model->delivery_route_id),
                       'issue_line_id' => $val2->id,
                       'product_id' => $val2->product_id,

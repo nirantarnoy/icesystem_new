@@ -11,14 +11,12 @@ use backend\models\Stocktrans;
  */
 class StocktransSearch extends Stocktrans
 {
-    /**
-     * {@inheritdoc}
-     */
+   public $from_date,$to_date;
     public function rules()
     {
         return [
             [['id', 'company_id', 'branch_id', 'product_id', 'warehouse_id', 'location_id', 'qty', 'created_at'], 'integer'],
-            [['journal_no', 'trans_date', 'lot_no','activity_type_id', 'created_by'], 'safe'],
+            [['journal_no', 'trans_date', 'lot_no','activity_type_id', 'created_by','from_date','to_date'], 'safe'],
         ];
     }
 

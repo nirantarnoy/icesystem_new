@@ -1,5 +1,6 @@
 <?php
 
+use kartik\daterange\DateRangePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -13,9 +14,9 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
     $branch_id= \Yii::$app->user->identity->branch_id;
 }
 
-$dash_date = null;
+$dash_date = date('d/m/Y H:i').'-'.date('d/m/Y H:i');
 if ($f_date != null && $t_date != null) {
-    $dash_date = date('d/m/Y', strtotime($f_date)) . ' - ' . date('d/m/Y', strtotime($t_date));
+    $dash_date = date('d/m/Y H:i', strtotime($f_date)) . ' - ' . date('d/m/Y H:i', strtotime($t_date));
 }
 
 ?>
@@ -87,25 +88,39 @@ if ($f_date != null && $t_date != null) {
         ])->label(false) ?>
         <span style="margin-left: 2px;"></span>
         <?php
-        echo \kartik\daterange\DateRangePicker::widget(['model' => $model,
-            'attribute' => 'trans_date',
-            //'name' => 'stock_trans_date',
-            'value' => $dash_date,
+        echo DateRangePicker::widget([
+                'model' => $model,
+                'attribute' => 'from_date',
+                //'name'=>'date_range_5',
+                'value'=>'2015-10-19 12:00 AM',
+            //    'useWithAddon'=>true,
+                'convertFormat'=>true,
+                'pluginOptions'=>[
+                    'timePicker'=>true,
+                    'timePickerIncrement'=>15,
+                    'locale'=>['format' => 'Y-m-d h:i A'],
+                    'singleDatePicker'=>true,
+                    'showDropdowns'=>true
+                ]
+            ]) ;
+        ?>
+        <span style="margin-left: 2px;"></span>
+        <?php
+        echo DateRangePicker::widget([
+            'model' => $model,
+            'attribute' => 'to_date',
+            //'name'=>'date_range_5',
+            'value'=>'2015-10-19 12:00 AM',
+            //    'useWithAddon'=>true,
             'convertFormat'=>true,
-            'pluginOptions' => [
+            'pluginOptions'=>[
                 'timePicker'=>true,
-                //'format' => 'DD/MM/YYYY H:i',
-                'locale' => [
-                    'locale'=>['format'=>'d-m-Y h:i A']
-                   // 'format' => 'DD/MM/YYYY H:i'
-                ],
-            ],
-            'presetDropdown' => true,
-            'options' => [
-                'class' => 'form-control',
-                'onchange' => 'this.form.submit();'
+                'timePickerIncrement'=>15,
+                'locale'=>['format' => 'Y-m-d h:i A'],
+                'singleDatePicker'=>true,
+                'showDropdowns'=>true
             ]
-        ]);
+        ]) ;
         ?>
     </div>
     <?php ActiveForm::end(); ?>
