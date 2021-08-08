@@ -465,6 +465,7 @@ class JournalissueController extends Controller
                         'product_code' => \backend\models\Product::findCode($val2->product_id),
                         'product_name' => \backend\models\Product::findName($val2->product_id),
                         'issue_qty' => $val2->qty,
+                        'reserve_qty' => $this->findIssuereserve($model->id,$val2->product_id),
                     ]);
                 }
             }else{
@@ -473,6 +474,12 @@ class JournalissueController extends Controller
 
         }
         return ['status' => $status, 'data' => $data];
+    }
+
+    public function findIssuereserve($issue_id, $product_id){
+        if($issue_id != null && $product_id != null){
+            $model = \common\models\IssueStockTemp::find()->where(['issue_id'=>$issue_id,'prodrec_id'=>$product_id])->sum();
+        }
     }
 
     public function actionIssueqrscanupdate()
