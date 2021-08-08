@@ -434,23 +434,23 @@ class JournalissueController extends Controller
 
     public function actionIssueqrscan()
     {
-        $issue_id = null;
+        $issue_no = null;
         $status = 0;
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
         //$route_id = $req_data['route_id'];
-        $issue_id = $req_data['issue_id'];
+        $issue_no = $req_data['issue_no'];
 
 
         $data = [];
-        if ($issue_id != null) {
+        if ($issue_no != null) {
             //$data = ['issue_id'=> $issue_id,'user_id'=>$user_id];
-            $model = \common\models\JournalIssue::find()->where(['id' => $issue_id])->one();
-            $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
+            $model = \common\models\JournalIssue::find()->where(['journal_no' => $issue_no])->one();
+            $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $model->id])->all();
             foreach ($model_issue_line as $val2) {
                 $status = 1;
                   array_push($data,[
-                      'issue_id'=>$issue_id,
+                      'issue_id'=>$model->id,
                       'issue_no'=>$model->journal_no,
                       'issue_data' => $model->trans_date,
                       'route_name' => \backend\models\Deliveryroute::findName($model->delivery_route_id),
