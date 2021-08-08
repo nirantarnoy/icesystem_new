@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
-                    return number_format($data->qty,2);
+                    return $data->qty;
                 },
                 'format' => ['decimal', 2],
                 'hAlign' => 'right',
@@ -87,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
-                   // return \backend\models\User::findName($data->created_by);
+                    return \backend\models\User::findName($data->created_by);
                 }
             ],
 
