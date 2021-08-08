@@ -101,7 +101,7 @@ class StocktransSearch extends Stocktrans
                 $x_date = explode('-', $f_date);
                 $xx_date = date('Y-m-d');
                 if (count($x_date) > 1) {
-                    $xx_date = $x_date[2] . '/' . $x_date[0] . '/' . $x_date[1];
+                    $xx_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
                 }
                 $from_date_time = date('Y-m-d H:i',strtotime($xx_date.' '.$f_time));
                 $query->andFilterWhere(['>=','trans_date',$from_date_time]);
@@ -114,7 +114,7 @@ class StocktransSearch extends Stocktrans
                 $n_date = explode('-', $t_date);
                 $nn_date = date('Y-m-d');
                 if (count($n_date) > 1) {
-                    $nn_date = $n_date[2] . '/' . $n_date[0] . '/' . $n_date[1];
+                    $nn_date = $n_date[2] . '/' . $n_date[1] . '/' . $n_date[0];
                 }
                 $to_date_time = date('Y-m-d H:i',strtotime($nn_date.' '.$t_time));
                 $query->andFilterWhere(['<=','trans_dates',$to_date_time]);
