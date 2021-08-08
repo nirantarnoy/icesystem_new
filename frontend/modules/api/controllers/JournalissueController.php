@@ -21,6 +21,7 @@ class JournalissueController extends Controller
                     'checkopen' => ['POST'],
                     'issueconfirm' => ['POST'],
                     'issueqrscan' => ['POST'],
+                    'issueqrscan2' => ['POST'],
                     'issueqrscanupdate' => ['POST'],
                     'issueconfirm2' => ['POST'],
                     'issuetempcreate' => ['POST'],
@@ -443,6 +444,51 @@ class JournalissueController extends Controller
         $req_data = \Yii::$app->request->getBodyParams();
         //$route_id = $req_data['route_id'];
         $issue_no = $req_data['issue_no'];
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
+
+
+        $data = [];
+        if ($issue_no != null) {
+            //$data = ['issue_id'=> $issue_id,'user_id'=>$user_id];
+            $model = \common\models\JournalIssue::find()->where(['journal_no' => $issue_no,'company_id'=>$company_id,'branch_id'=>$branch_id])->one();
+            if($model){
+                $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $model->id])->all();
+                foreach ($model_issue_line as $val2) {
+                    $status = 1;
+                    array_push($data,[
+                        'issue_id'=>$model->id,
+                        'issue_no'=>$model->journal_no,
+                        'issue_date' => date('d/m/Y', strtotime($model->trans_date)),
+                        'route_name' => \backend\models\Deliveryroute::findName($model->delivery_route_id),
+                        'issue_line_id' => $val2->id,
+                        'product_id' => $val2->product_id,
+                        'product_code' => \backend\models\Product::findCode($val2->product_id),
+                        'product_name' => \backend\models\Product::findName($val2->product_id),
+                        'issue_qty' => $val2->qty,
+                        'reserve_qty' => $this->findIssuereserve($model->id,$val2->product_id),
+                    ]);
+                }
+            }else{
+                $status = 0;
+            }
+
+        }
+        return ['status' => $status, 'data' => $data];
+    }
+
+    public function actionIssueqrscan2()
+    {
+        $issue_no = null;
+        $company_id = 1;
+        $branch_id = 1;
+        $status = 0;
+        $issue_line_id = 0;
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        //$route_id = $req_data['route_id'];
+        $issue_no = $req_data['issue_no'];
+        $issue_line_id = $req_data['issue_line_id'];
         $company_id = $req_data['company_id'];
         $branch_id = $req_data['branch_id'];
 
