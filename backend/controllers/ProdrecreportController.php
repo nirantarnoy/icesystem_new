@@ -2,10 +2,9 @@
 
 namespace backend\controllers;
 
-use backend\models\StocktransSearch;
+use backend\models\ProdrecSearch;
 use Yii;
 use backend\models\Stocksum;
-use backend\models\StocksumSearch;
 use yii\base\BaseObject;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -37,7 +36,7 @@ class ProdrecreportController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new StocktransSearch();
+        $searchModel = new ProdrecSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andFilterWhere(['activity_type_id'=>15]);
        // $dataProvider->query->groupby('product_id');

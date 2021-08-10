@@ -89,15 +89,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'pageSummary' => true,
                 'pageSummaryFunc' => GridView::F_SUM
             ],
-            [
-                'attribute' => 'created_by',
-                'label'=>'พนักงาน',
-                'headerOptions' => ['style' => 'text-align: center'],
-                'contentOptions' => ['style' => 'text-align: center'],
-                'value' => function ($data) {
-                    return \backend\models\User::findName($data->created_by);
-                }
-            ],
 
         ],
     ]); ?>
