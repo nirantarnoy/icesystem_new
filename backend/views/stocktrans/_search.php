@@ -95,6 +95,12 @@ if ($f_date != null && $t_date != null) {
                 'value'=>'2015-10-19 12:00 AM',
             //    'useWithAddon'=>true,
                 'convertFormat'=>true,
+            'options' => [
+                'class' => 'form-control',
+                'placeholder'=>'ตั้งแต่วันที่',
+                'onchange' => 'this.form.submit();',
+                'autocomplete' => 'off',
+            ],
                 'pluginOptions'=>[
                     'timePicker'=>true,
                     'timePickerIncrement'=>1,
@@ -115,7 +121,9 @@ if ($f_date != null && $t_date != null) {
             'convertFormat'=>true,
             'options' => [
                     'class' => 'form-control',
-                    'onchange' => 'this.form.submit();'
+                    'onchange' => 'this.form.submit();',
+                'placeholder'=>'ถึงวันที่',
+                'autocomplete' => 'off',
             ],
             'pluginOptions'=>[
                 'timePicker'=>true,

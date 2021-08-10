@@ -87,6 +87,7 @@ if ($f_date != null && $t_date != null) {
                      'options' => [
                          'class' => 'form-control',
                          'placeholder'=>'ตั้งแต่วันที่',
+                         'onchange' => 'this.form.submit();',
                          'autocomplete' => 'off',
                         ],
                      'pluginOptions'=>[
