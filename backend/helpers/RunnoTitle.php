@@ -51,7 +51,7 @@ class RunnoTitle
         ['id' => 2, 'name' => 'สั่งซื้อ', 'prefix' => 'PO'],
         ['id' => 3, 'name' => 'เสนอราคา', 'prefix' => 'QUO'],
         ['id' => 4, 'name' => 'ขาย', 'prefix' => 'SO'],
-        ['id' => 5, 'name' => 'ย้าย', 'prefix' => 'TF'],
+        ['id' => 5, 'name' => 'ขาย pos', 'prefix' => 'TF'],
         ['id' => 6, 'name' => 'เบิกขึ้นรถ', 'prefix' => 'IS'],
         ['id' => 7, 'name' => 'คืนขายหน่วยรถ', 'prefix' => 'RT'],
         ['id' => 8, 'name' => 'คืนขาย', 'prefix' => 'SRT'],

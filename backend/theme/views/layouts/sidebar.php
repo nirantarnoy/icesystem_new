@@ -164,6 +164,15 @@
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="index.php?r=prodrecreport" class="nav-link prodrecreport">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>
+                                    รายงานรับเข้าผลิต
+                                    <!--                                <span class="right badge badge-danger">New</span>-->
+                                </p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item has-treeview has-sub">
