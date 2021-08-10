@@ -189,8 +189,8 @@ $mpdf->AddPageByArray([
         ?>
         <tr>
             <td><?= \backend\models\Product::findName($value->product_id); ?></td>
-            <td style="text-align: center"><?= $value->qty ?></td>
-            <td style="text-align: center"><?= number_format($value->price) ?></td>
+            <td style="text-align: center"><?= number_format($value->qty,1) ?></td>
+            <td style="text-align: center"><?= number_format($value->price,2) ?></td>
             <td style="text-align: right"><?= number_format($value->qty * $value->price, 2); ?></td>
         </tr>
     <?php endforeach; ?>

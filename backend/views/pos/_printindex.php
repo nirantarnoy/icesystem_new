@@ -162,36 +162,36 @@ $mpdf->AddPageByArray([
             ?>
             <tr>
                 <td><?= \backend\models\Product::findName($value->product_id); ?></td>
-                <td style="text-align: center"><?= $value->qty ?></td>
-                <td style="text-align: center"><?= number_format($value->price) ?></td>
-                <td style="text-align: right"><?= number_format($value->qty * $value->price); ?></td>
+                <td style="text-align: center"><?= number_format($value->qty,1) ?></td>
+                <td style="text-align: center"><?= number_format($value->price,2) ?></td>
+                <td style="text-align: right"><?= number_format($value->qty * $value->price,2); ?></td>
             </tr>
 
         <?php endforeach; ?>
         <tfoot>
         <tr>
             <td style="font-size: 16px;border-top: 1px dotted gray">จำนวนรายการ</td>
-            <td style="font-size: 16px;border-top: 1px dotted gray;text-align: center"><?= number_format($total_qty) ?></td>
+            <td style="font-size: 16px;border-top: 1px dotted gray;text-align: center"><?= number_format($total_qty,1) ?></td>
             <td style="font-size: 16px;border-top: 1px dotted gray;text-align: center"></td>
-            <td style="font-size: 16px;border-top: 1px dotted gray;text-align: right"><?= number_format($total_amt) ?></td>
+            <td style="font-size: 16px;border-top: 1px dotted gray;text-align: right"><?= number_format($total_amt,1) ?></td>
         </tr>
         <tr>
             <td style="font-size: 16px;">ส่วนลด</td>
             <td></td>
             <td></td>
-            <td style="font-size: 16px;text-align: right"><?= number_format($discount) ?></td>
+            <td style="font-size: 16px;text-align: right"><?= number_format($discount,2) ?></td>
         </tr>
         <tr>
             <td style="font-size: 16px;">จำนวนสุทธิ</td>
             <td></td>
             <td></td>
-            <td style="font-size: 16px;text-align: right"> <?= number_format($total_amt - $discount) ?></td>
+            <td style="font-size: 16px;text-align: right"> <?= number_format($total_amt - $discount,2) ?></td>
         </tr>
         <tr>
             <td style="font-size: 16px;">ทอนเงิน</td>
             <td></td>
             <td></td>
-            <td style="font-size: 16px;text-align: right"> <?= number_format($change) ?></td>
+            <td style="font-size: 16px;text-align: right"> <?= number_format($change,2) ?></td>
         </tr>
         </tfoot>
     </table>

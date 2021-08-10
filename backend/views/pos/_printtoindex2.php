@@ -171,7 +171,7 @@ $mpdf->AddPageByArray([
     <tfoot>
     <tr>
         <td style="font-size: 18px;border-top: 1px dotted gray">จำนวนรายการ</td>
-        <td style="font-size: 18px;border-top: 1px dotted gray;text-align: center"><?= number_format($total_qty, 2) ?></td>
+        <td style="font-size: 18px;border-top: 1px dotted gray;text-align: center"><?= number_format($total_qty, 1) ?></td>
         <td style="font-size: 18px;border-top: 1px dotted gray;text-align: center"></td>
         <td style="font-size: 18px;border-top: 1px dotted gray;text-align: right"><?= number_format($total_amt,2) ?></td>
     </tr>
