@@ -93,9 +93,10 @@ if ($f_date != null && $t_date != null) {
                      'pluginOptions'=>[
                          'timePicker'=>true,
                          'timePickerIncrement'=>1,
-                         'locale'=>['format' => 'Y-m-d h:i A'],
+                         'locale'=>['format' => 'Y-m-d H:i'],
                          'singleDatePicker'=>true,
-                         'showDropdowns'=>true
+                         'showDropdowns'=>true,
+                         'timePicker24Hour'=>true
                      ]
                  ]) ;
                  ?>
@@ -117,9 +118,10 @@ if ($f_date != null && $t_date != null) {
                      'pluginOptions'=>[
                          'timePicker'=>true,
                          'timePickerIncrement'=>1,
-                         'locale'=>['format' => 'Y-m-d H:i A'],
+                         'locale'=>['format' => 'Y-m-d H:i'],
                          'singleDatePicker'=>true,
-                         'showDropdowns'=>true
+                         'showDropdowns'=>true,
+                         'timePicker24Hour'=>true
                      ]
                  ]) ;
                  ?>
