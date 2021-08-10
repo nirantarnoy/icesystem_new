@@ -39,7 +39,7 @@ class ProdrecreportController extends Controller
         $searchModel = new ProdrecSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andFilterWhere(['activity_type_id'=>15]);
-       // $dataProvider->query->groupby('product_id');
+        $dataProvider->setSort( ['defaultOrder' => ['product_id' => SORT_ASC]]);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
