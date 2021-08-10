@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return [
                         'mergeColumns' => [[0, 1]], // columns to merge in summary
                         'content' => [             // content to show in each summary cell
-                            1 => 'ชื่อสินค้า (' . backend\models\Product::findName($model->product_id) . ')',
+                            1 =>  backend\models\Product::findName($model->product_id),
                             3 => GridView::F_SUM,
                            // 8 => GridView::F_SUM,
 //                        7 => GridView::F_SUM,
