@@ -96,7 +96,7 @@ $prod_status = \backend\helpers\ProductStatus::asArrayObject();
                                                        name="line_prod_name[]" value="" disabled>
                                             </td>
                                             <td><input type="number" class="form-control line-price" name="line_price[]"
-                                                       style="text-align: right" value="0" min="0" step=".05"></td>
+                                                       style="text-align: right" value="0" min="0" step="0.01"></td>
                                             <td style="text-align: center">
                                                 <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
                                                             class="fa fa-trash"></i></div>
@@ -129,7 +129,7 @@ $prod_status = \backend\helpers\ProductStatus::asArrayObject();
                                                                name="line_price[]"
                                                                style="text-align: right"
                                                                value="<?= $value->sale_price ?>"
-                                                               min="0" step=".05"></td>
+                                                               min="0" step="0.01"></td>
                                                     <td style="text-align: center">
                                                         <div class="btn btn-danger btn-sm"
                                                              onclick="removeline($(this))"><i
@@ -153,7 +153,7 @@ $prod_status = \backend\helpers\ProductStatus::asArrayObject();
                                                 </td>
                                                 <td><input type="number" class="form-control line-price"
                                                            name="line_price[]"
-                                                           style="text-align: right" value="0" min="0" step=".05"></td>
+                                                           style="text-align: right" value="0" min="0" step="0.01"></td>
                                                 <td style="text-align: center">
                                                     <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
                                                                 class="fa fa-trash"></i></div>
