@@ -75,16 +75,8 @@ $this->params['breadcrumbs'][] = $this->title;
                // 'group' => true,
                 //'subGroupOf' => 0
             ],
-            'journal_no',
+         //   'journal_no',
 
-//            [
-//                'attribute' => 'warehouse_id',
-//                'value' => function ($data) {
-//                    return \backend\models\Warehouse::findName($data->warehouse_id);
-//                }
-//            ],
-            //'location_id',
-            //'lot_no',
             [
                 'attribute' => 'qty',
                 'headerOptions' => ['style' => 'text-align: right'],
