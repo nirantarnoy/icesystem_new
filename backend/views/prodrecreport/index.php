@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                // 'group' => true,
                 //'subGroupOf' => 0
             ],
-         //   'journal_no',
+            'journal_no',
 
             [
                 'attribute' => 'qty',
