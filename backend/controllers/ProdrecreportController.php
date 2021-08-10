@@ -40,6 +40,7 @@ class ProdrecreportController extends Controller
         $searchModel = new StocktransSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andFilterWhere(['activity_type_id'=>15]);
+        $dataProvider->query->groupby('product_id');
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
