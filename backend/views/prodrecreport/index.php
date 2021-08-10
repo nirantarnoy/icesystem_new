@@ -66,13 +66,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     ];
                 },
             ],
-            'journal_no',
+
             [
                 'attribute' => 'trans_date',
                 'value' => function ($data) {
                     return date('d/m/Y H:i:s', strtotime($data->trans_date));
-                }
+                },
+                'group' => true,
             ],
+            'journal_no',
 
 //            [
 //                'attribute' => 'warehouse_id',
