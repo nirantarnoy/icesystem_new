@@ -72,8 +72,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($data) {
                     return date('d/m/Y H:i:s', strtotime($data->trans_date));
                 },
-                'group' => true,
-                'subGroupOf' => 0
+               // 'group' => true,
+                //'subGroupOf' => 0
             ],
             'journal_no',
 
