@@ -11,14 +11,15 @@ use yii\web\Session;
 
 class PlansummarySearch extends QueryPlan
 {
-    public $globalSearch;
+    public $globalSearch, $from_date, $to_date;
+
 
     public function rules()
     {
         return [
-            [['id', 'customer_id',], 'integer'],
-            [['journal_no', 'trans_date'], 'safe'],
-            [['globalSearch'], 'string']
+            [['company_id', 'branch_id',], 'integer'],
+            [['trans_date','from_date','to_date'], 'safe'],
+            [['globalSearch','code','name'], 'string']
         ];
     }
 
@@ -33,7 +34,7 @@ class PlansummarySearch extends QueryPlan
 
     public function search($params)
     {
-        $query = QueryPlan::find();
+        $query = QueryPlan::find()->select(['code','name','SUM(qty) as qty']);
 
         // add conditions that should always apply here
 
@@ -71,12 +72,50 @@ class PlansummarySearch extends QueryPlan
 //            $this->trans_date = date('Y-m-d');
 //            $query->andFilterWhere(['date(trans_date)' => date('Y-m-d')]);
 //        }
+        if($this->from_date != null && $this->to_date != null){
+
+            $f_date = null;
+            $f_time = null;
+            $t_date = null;
+            $t_time = null;
+
+            $from_date_time = null;
+            $to_date_time = null;
+
+            if($this->from_date != null){
+                $f_date = $this->from_date;
+                // $f_time = $fx_datetime[1];
+
+                $x_date = explode('-', $f_date);
+                $xx_date = date('Y-m-d');
+                if (count($x_date) > 1) {
+                    $xx_date = trim($x_date[1]) . '/' . trim($x_date[2]) . '/' . trim($x_date[0]);
+                }
+                //$from_date_time = date('Y-m-d H:i:s',strtotime($xx_date.' '.$f_time));
+                $from_date_time = date('Y-m-d',strtotime($xx_date));
+                $query->andFilterWhere(['>=','date(trans_date)', $from_date_time]);
+            }
+
+            if($this->to_date != null){
+                $t_date = $this->to_date;
+                // $t_time = $tx_datetime[1];
+
+                $n_date = explode('-', $t_date);
+                $nn_date = date('Y-m-d');
+                if (count($n_date) > 1) {
+                    $nn_date = trim($n_date[1]) . '/' . trim($n_date[2]) . '/' . trim($n_date[0]);
+                }
+                // $to_date_time = date('Y-m-d H:i:s',strtotime($nn_date.' '.$t_time));
+                $to_date_time = date('Y-m-d',strtotime($nn_date));
+                $query->andFilterWhere(['<=','date(trans_date)',$to_date_time]);
+            }
+
+        }
 
         if ($this->globalSearch != '') {
             $query
                 ->orFilterWhere(['like', 'code', $this->globalSearch])
-                ->orFilterWhere(['like', 'customer_name', $this->globalSearch])
-                ->orFilterWhere(['like', 'customer_code', $this->globalSearch]);
+                ->orFilterWhere(['like', 'name', $this->globalSearch]);
         }
 
 

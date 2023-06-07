@@ -1,5 +1,7 @@
 <?php
 date_default_timezone_set('Asia/Bangkok');
+use chillerlan\QRCode\QRCode;
+use yii\web\Response;
 
 //require_once __DIR__ . '/vendor/autoload.php';
 //require_once 'vendor/autoload.php';
@@ -109,18 +111,46 @@ $mpdf->AddPageByArray([
 <table class="table-header" style="width: 100%;font-size: 18px;" border="0">
 
 </table>
-<table class="table-header" width="100%">
+<!--<table class="table-header" width="100%">-->
+<!--    <tr>-->
+<!--        <td style="font-size: 20px;text-align: center;vertical-align: bottom">-->
+<!--            <h5>น้ำแข็ง</h5>-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--        <td style="font-size: 20px;text-align: center;vertical-align: top">-->
+<!--            <h5>ใบสั่งจ่าย</h5>-->
+<!--        </td>-->
+<!--    </tr>-->
+<!---->
+<!--</table>-->
+<table class="table-header" style="width: 100%">
     <tr>
-        <td style="font-size: 20px;text-align: center;vertical-align: bottom">
-            <h5>น้ำแข็ง</h5>
+        <td style="width: 2%">
+            <div style="height: 20px;width: 20px;">
+                <?php
+                \Yii::$app->response->format = Response::FORMAT_HTML;
+                $data = $model->order_no;
+                $qr = new QRCode();
+                echo '<img src="' . $qr->render($data) . '" />';
+                ?>
+            </div>
+        </td>
+        <td style="width: 98%">
+            <table class="table-header" width="100%">
+                <tr>
+                    <td style="font-size: 20px;text-align: center;vertical-align: bottom">
+                        <h2>น้ำแข็ง</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: 20px;text-align: center;vertical-align: top">
+                        <h2>ใบสั่งจ่าย</h2>
+                    </td>
+                </tr>
+            </table>
         </td>
     </tr>
-    <tr>
-        <td style="font-size: 20px;text-align: center;vertical-align: top">
-            <h5>ใบสั่งจ่าย</h5>
-        </td>
-    </tr>
-
 </table>
 <table class="table-header" width="100%">
     <tr>
@@ -212,6 +242,12 @@ $mpdf->AddPageByArray([
 <!--   window.print();-->
 <!--</script>-->
 <?php
+$slip_path = '';
+if($model->branch_id == 1){
+    $slip_path = '../web/uploads/company1/slip/slip.pdf';
+}else if($model->branch_id == 2){
+    $slip_path = '../web/uploads/company2/slip/slip.pdf';
+}
 //echo '<script src="../web/plugins/jquery/jquery.min.js"></script>';
 //echo '<script type="text/javascript">alert();</script>';
 ?>
@@ -228,7 +264,8 @@ $mpdf->WriteHTML($html); // ทำการสร้าง PDF ไฟล์
 ob_clean();
 //$mpdf->SetJS('this.print();');
 $mpdf->SetJS('this.print();');
-$mpdf->Output('../web/uploads/slip/slip.pdf', 'F');
+//$mpdf->Output('../web/uploads/slip/slip.pdf', 'F');
+$mpdf->Output($slip_path, 'F');
 ob_end_flush();
 
 //header("location: system_stock/report_pdf/Packing.pdf");

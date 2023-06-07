@@ -34,6 +34,27 @@ use yii\widgets\ActiveForm;
         <div class="col-lg-1"></div>
     </div>
     <div class="row">
+        <div class="col-lg-1">
+        </div>
+        <div class="col-lg-10">
+            <?= $form->field($model, 'type_id')->Widget(\kartik\select2\Select2::className(), [
+                'data' => \yii\helpers\ArrayHelper::map(\backend\helpers\DeliveryrouteType::asArrayObject(), 'id', 'name'),
+            ]) ?>
+        </div>
+        <div class="col-lg-1">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10">
+
+            <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label() ?>
+
+
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+    <div class="row">
         <div class="col-lg-1"></div>
         <div class="col-lg-10">
             <div class="form-group">

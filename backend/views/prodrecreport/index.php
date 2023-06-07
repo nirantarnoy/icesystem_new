@@ -13,8 +13,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="stocktrans-index">
     <?php Pjax::begin(); ?>
-    <?php echo $this->render('_search', ['model' => $searchModel,'f_date'=>null,'t_date'=>null]); ?>
-    <br />
+    <?php echo $this->render('_search', ['model' => $searchModel, 'f_date' => null, 't_date' => null]); ?>
+    <br/>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
@@ -22,7 +22,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'toolbar' => [
             '{toggleData}',
             '{export}',
-
         ],
         'panel' => ['type' => 'info', 'heading' => 'รายงานยอดรับเข้าผลิต'],
         'toggleDataContainer' => ['class' => 'btn-group mr-2'],
@@ -43,22 +42,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     return [
                         'mergeColumns' => [[0, 1]], // columns to merge in summary
                         'content' => [             // content to show in each summary cell
-                            1 =>  backend\models\Product::findName($model->product_id),
-                            3 => GridView::F_SUM,
-                           // 8 => GridView::F_SUM,
+                            1 => backend\models\Product::findName($model->product_id),
+                            5 => GridView::F_SUM,
+                            // 8 => GridView::F_SUM,
 //                        7 => GridView::F_SUM,
                         ],
                         'contentFormats' => [      // content reformatting for each summary cell
                             //4 => ['format' => 'number', 'decimals' => 0],
-                            3 => ['format' => 'number', 'decimals' => 2],
+                            5 => ['format' => 'number', 'decimals' => 2],
                             //8 => ['format' => 'number', 'decimals' => 0],
 //                        7 => ['format' => 'number', 'decimals' => 0],
                         ],
                         'contentOptions' => [      // content html attributes for each summary cell
                             1 => ['style' => 'font-variant:small-caps'],
                             //4 => ['style' => 'text-align:right'],
-                            3 => ['style' => 'text-align:right'],
-                           // 8 => ['style' => 'text-align:right'],
+                            5 => ['style' => 'text-align:right'],
+                            // 8 => ['style' => 'text-align:right'],
 //                        7 => ['style' => 'text-align:right'],
                         ],
                         // html attributes for group summary row
@@ -72,10 +71,30 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($data) {
                     return date('d/m/Y H:i:s', strtotime($data->trans_date));
                 },
-               // 'group' => true,
+                // 'group' => true,
                 //'subGroupOf' => 0
             ],
             'journal_no',
+            [
+                'attribute' => 'production_loc_id',
+                'value' => function ($data) {
+                    return \backend\models\Machine::findLocname($data->production_loc_id);
+                }
+            ],
+            [
+                'attribute' => 'status',
+                'label' => 'สถานะ',
+                'format' => 'raw',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
+                'value' => function ($data) {
+                    if ($data->status == 3) {
+                        return '<div class="badge badge-warning">Cencel</div>';
+                    } else {
+                        return '';
+                    }
+                }
+            ],
 
             [
                 'attribute' => 'qty',
@@ -95,4 +114,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php Pjax::end(); ?>
 
+</div>
+<div class="row">
+    <div class="col-lg-12" style="text-align: right;">
+        FM-WAT-02 แก้ไขครั้งที่: 01 <br />
+        ประกาศใช้วันที่: 01/01/2565
+    </div>
 </div>

@@ -36,7 +36,7 @@ class JournalIssueLine extends \yii\db\ActiveRecord
     {
         return [
             [['issue_id', 'product_id', 'warehouse_id', 'location_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['qty','avl_qty'], 'number'],
+            [['qty','avl_qty','origin_qty'], 'number'],
             [['sale_price'], 'number'],
         ];
     }

@@ -9,7 +9,7 @@ class ProductStatus
 
     private static $data = [
         '1' => 'ใช้งาน',
-        '2' => 'ไม่ใช้งาน'
+        '0' => 'ไม่ใช้งาน'
     ];
 
     /**
@@ -17,7 +17,7 @@ class ProductStatus
      */
     private static $dataobj = array(
         array('id'=>'1','name' => 'ใช้งาน'),
-        array('id'=>'2','name' => 'ไม่ใช้งาน')
+        array('id'=>'0','name' => 'ไม่ใช้งาน')
     );
     public static function asArray()
     {

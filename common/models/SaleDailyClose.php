@@ -35,7 +35,7 @@ class SaleDailyClose extends \yii\db\ActiveRecord
     {
         return [
             [['trans_date'], 'safe'],
-            [['user_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['user_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by','order_shift'], 'integer'],
         ];
     }
 

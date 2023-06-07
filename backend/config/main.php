@@ -25,6 +25,9 @@ return [
 //    'aliases'=>[
 //        '@adminlte3' => '@backend/theme/AdminLTE-3.0.1',
 //    ],
+    'aliases'=>[
+        '@frontendWeb'=>'@frontend/web',
+    ],
     'components' => [
         'view' => [
             'theme' => [
@@ -74,8 +77,16 @@ return [
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend
+
+//            'name' => 'advanced-backend',
+//            'timeout' => 60*60*24*30,
+
+            'class'=> 'yii\web\Session',
             'name' => 'advanced-backend',
-            'timeout' => 60*60*24*14,
+            'cookieParams' => ['lifetime' => 7 * 24 *60 * 60],
+           // 'cookieParams' => ['httpOnly'=>true],
+            'timeout' => 60*60*24*30,
+            'useCookies' => true,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -87,7 +98,18 @@ return [
             ],
         ],
         'errorHandler' => [
-            'errorAction' => 'site_/error',
+            'errorAction' => 'site/error',
+        ],
+        'urlManagerFrontend' => [
+            'class' => 'yii\web\urlManager',
+            'baseUrl' => '/icesystem/frontend/web',
+            'scriptUrl'=>'/icesystem/frontend/web/index.php',
+//            'baseUrl' => 'http://app.sst.ac.th',
+//            'scriptUrl' => 'http://app.sst.ac.th/index.php',
+//            'baseUrl' => 'http://app.sst.ac.th',
+//            'scriptUrl' => 'http://app.sst.ac.th/index.php',
+            'enablePrettyUrl' => false,
+            'showScriptName' => true,
         ],
         /*
         'urlManager' => [

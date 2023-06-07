@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+
 $company_id = 1;
 $branch_id = 1;
 if (!empty(\Yii::$app->user->identity->company_id)) {
@@ -11,6 +12,13 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
     $branch_id = \Yii::$app->user->identity->branch_id;
 }
 $t_date = date('d/m/Y');
+
+$is_admin = \backend\models\User::checkIsAdmin(\Yii::$app->user->id);
+$date_enable = true;
+if ($is_admin == 1) {
+    $date_enable = false;
+}
+
 ?>
 
 <div class="paymentreceive-form">
@@ -18,38 +26,61 @@ $t_date = date('d/m/Y');
     <?php $form = ActiveForm::begin(['options' => ['id' => 'form-receive', 'enctype' => 'multipart/form-data']]); ?>
     <input type="hidden" name="removelist" class="remove-list" value="">
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-3">
             <?= $form->field($model, 'journal_no')->textInput(['maxlength' => true, 'readonly' => 'readonly']) ?>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-3">
             <?php $model->trans_date = $model->isNewRecord ? $t_date : date('d/m/Y', strtotime($model->trans_date)); ?>
             <?= $form->field($model, 'trans_date')->widget(\kartik\date\DatePicker::className(), [
+                'disabled' => $date_enable,
+                'options' => [
+
+                ],
                 'pluginOptions' => [
                     'format' => 'dd/mm/yyyy',
                     'todayHighlight' => true
                 ]
             ]) ?>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-3">
             <?php
             $disabled = false;
-            if(!$model->isNewRecord){
+            if (!$model->isNewRecord) {
 
             }
             ?>
 
             <?= $form->field($model, 'customer_id')->widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customer::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', function ($data) {
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id, 'is_show_pos' => 1])->all(), 'id', function ($data) {
                     return $data->code . ' ' . $data->name;
                 }),
                 'options' => [
-                    'placeholder' => '--เลือกลูกค้า--',
+                    'placeholder' => '--เลือกลูกค้าหน้าบ้าน--',
                     'onchange' => 'getpaymentrec($(this));'
                 ],
                 'pluginOptions' => [
                     'allowClear' => true,
                 ]
             ]) ?>
+        </div>
+        <div class="col-lg-3">
+            <label for="">ลูกค้าสายรถ</label>
+            <?php
+
+            echo \kartik\select2\Select2::widget([
+                'name' => 'customer_car_id',
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id, 'is_show_pos' => 0])->all(), 'id', function ($data) {
+                    return $data->code . ' ' . $data->name;
+                }),
+                'options' => [
+                    'placeholder' => '--เลือกลูกค้า--',
+                    'onchange' => 'getpaymentrecfromcar($(this));'
+                ],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                ]
+            ])
+            ?>
         </div>
     </div>
     <hr>
@@ -79,6 +110,7 @@ $t_date = date('d/m/Y');
                     <?php $i = 0; ?>
                     <?php foreach ($model_line as $value): ?>
                         <?php
+                        if ($value->remain_amount <= 0) continue;
                         $i += 1;
                         $order_date = \backend\models\Orders::getOrderdate($value->order_id);
                         ?>
@@ -89,8 +121,8 @@ $t_date = date('d/m/Y');
                             <td>
                                 <select name="line_pay_type[]" id="" class="form-control"
                                         onchange="checkpaytype($(this))">
-                                    <option value="0">เงินสด</option>
-                                    <option value="1">โอนธนาคาร</option>
+                                    <option value="1">เงินสด</option>
+                                    <option value="2">โอนธนาคาร</option>
                                 </select>
                                 <input type="file" class="line-doc" name="line_doc[]" style="display: none">
                                 <input type="hidden" class="line-order-id" name="line_order_id[]"
@@ -102,10 +134,12 @@ $t_date = date('d/m/Y');
                                 <input type="text" class="form-control line-remain" style="text-align: right"
                                        name="line_remain[]" value="<?= number_format($value->remain_amount, 2) ?>"
                                        readonly>
-                                <input type="hidden" class="line-remain-qty" value="<?= $value->remain_amount?>">
+                                <input type="hidden" class="line-remain-qty"
+                                       value="<?= number_format($value->remain_amount, 2) ?>">
                             </td>
                             <td>
-                                <input type="number" class="form-control line-pay" name="line_pay[]" value="<?=$value->payment_amount?>>" min="0"
+                                <input type="number" class="form-control line-pay" name="line_pay[]"
+                                       value="<?= $value->payment_amount ?>>" min="0" step="any"
                                        onchange="linepaychange($(this))">
                             </td>
                         </tr>
@@ -113,11 +147,11 @@ $t_date = date('d/m/Y');
                 <?php endif; ?>
                 </tbody>
                 <tfoot>
-                     <tr>
-                         <td colspan="4" style="text-align: right">รวม</td>
-                         <td style="text-align: right;font-weight: bold"><span class="line-pay-remain">0</span></td>
-                         <td style="text-align: right;font-weight: bold"><span class="line-pay-total">0</span></td>
-                     </tr>
+                <tr>
+                    <td colspan="4" style="text-align: right">รวม</td>
+                    <td style="text-align: right;font-weight: bold"><span class="line-pay-remain">0</span></td>
+                    <td style="text-align: right;font-weight: bold"><span class="line-pay-total">0</span></td>
+                </tr>
                 </tfoot>
             </table>
         </div>
@@ -134,6 +168,8 @@ $t_date = date('d/m/Y');
 
 <?php
 $url_to_get_receive = \yii\helpers\Url::to(['paymentreceive/getitem'], true);
+$url_to_get_receive_new = \yii\helpers\Url::to(['paymentreceive/getitemnew'], true);
+$url_to_get_receive_new_car = \yii\helpers\Url::to(['paymentreceive/getitemnewcar'], true);
 $js = <<<JS
 var removelist = [];
 var selecteditem = [];
@@ -145,13 +181,14 @@ function linepaychange(e){
    // alert();
     var remain_amount = e.closest('tr').find('.line-remain-qty').val();
     var pay = e.val();
-    
-    if( parseFloat(pay) > parseFloat(remain_amount)){
-        alert('ชำระเงินมากกว่ายอดค้างชำระ');
-        e.val(remain_amount);
-        e.focus();
-        return false;
-    }
+    //alert(e.val());
+   // e.val(100);
+    // if( parseFloat(pay).toFixed(2) > parseFloat(remain_amount).toFixed(2)){
+    //     alert('ชำระเงินมากกว่ายอดค้างชำระ');
+    //     e.val(parseFloat(remain_amount).toFixed(2));
+    //     e.focus();
+    //     return false;
+    // }
    calpayment();
 }
 
@@ -180,6 +217,50 @@ function getpaymentrec(e){
               'type':'post',
               'dataType': 'html',
               'async': false,
+              'url': "$url_to_get_receive_new",
+              'data': {'customer_id': ids},
+              'success': function(data) {
+                  //  alert(data);
+                   if(data != ''){
+                       $(".show-save").show();
+                   }else{
+                       $(".show-save").hide();
+                   }
+                   $(".table-list tbody").html(data);
+                 }
+              });
+    }
+    calpayment();
+}
+function getpaymentrecfromcar(e){
+    var ids = e.val();
+    if(ids){
+        $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_get_receive_new_car",
+              'data': {'customer_id': ids},
+              'success': function(data) {
+                  //  alert(data);
+                   if(data != ''){
+                       $(".show-save").show();
+                   }else{
+                       $(".show-save").hide();
+                   }
+                   $(".table-list tbody").html(data);
+                 }
+              });
+    }
+    calpayment();
+}
+function getpaymentrecold(e){
+    var ids = e.val();
+    if(ids){
+        $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
               'url': "$url_to_get_receive",
               'data': {'customer_id': ids},
               'success': function(data) {
@@ -197,7 +278,8 @@ function getpaymentrec(e){
 }
 function checkpaytype(e){
     var type_ = e.val();
-    if(type_ == 1){
+  //  alert(type_);
+    if(type_ == 2){
          e.closest('tr').find('.line-doc').trigger('click');
     }
    

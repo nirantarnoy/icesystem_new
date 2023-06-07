@@ -6,7 +6,9 @@ use backend\models\StreamAssignSearch;
 use Yii;
 use backend\models\Cardaily;
 use backend\models\CardailySearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -23,6 +25,24 @@ class CardailyController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                 ],
+            ],
+            'access'=>[
+                'class'=>AccessControl::className(),
+                'denyCallback' => function ($rule, $action) {
+                    throw new ForbiddenHttpException('คุณไม่ได้รับอนุญาติให้เข้าใช้งาน!');
+                },
+                'rules'=>[
+                    [
+                        'allow'=>true,
+                        'roles'=>['@'],
+                        'matchCallback'=>function($rule,$action){
+                            $currentRoute = \Yii::$app->controller->getRoute();
+                            if(\Yii::$app->user->can($currentRoute)){
+                                return true;
+                            }
+                        }
+                    ]
+                ]
             ],
         ];
     }
@@ -101,12 +121,13 @@ class CardailyController extends Controller
 //            $searchModel->trans_date = $trans_date;
 //            $dataProvider->query->andFilterWhere(['date(car_daily.trans_date)' => $trans_date])->all();
 //        }
+
         $dataProvider->pagination->pageSize = 100;
 
         //echo $dataProvider->
 
         //  echo $route_type_id;return;
-        $query = \common\models\QueryCarRoute::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id]);
+        $query = \common\models\QueryCarRoute::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->orderBy(['route_code'=>SORT_ASC]);
         if ($route_type_id != null) {
             $query = $query->andFilterWhere(['delivery_route_id' => $route_type_id]);
         }

@@ -88,10 +88,10 @@ class Plan extends \common\models\Plan
     }
 
 
-//    public function findUnitname($id){
-//        $model = Unit::find()->where(['id'=>$id])->one();
-//        return count($model)>0?$model->name:'';
-//    }
+    public function findNo($id){
+        $model = Plan::find()->where(['id'=>$id])->one();
+        return count($model)>0?$model->journal_no:'';
+    }
 //    public static function findName($id)
 //    {
 //        $model = Car::find()->select('name')->where(['id' => $id])->one();

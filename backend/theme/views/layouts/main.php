@@ -3,6 +3,9 @@
 use yii\helpers\Html;
 
 use backend\assets\AppAsset;
+use yii\web\Session;
+
+$session = \Yii::$app->session;
 
 AppAsset::register($this);
 
@@ -13,6 +16,8 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/admi
 $cururl = Yii::$app->controller->id;
 
 $has_group = '';
+$has_second_user = '';
+$is_pos_user = 0;
 //if(isset($_SESSION['user_group_id'])){
 //    $has_group = $_SESSION['user_group_id'];
 //}
@@ -20,6 +25,29 @@ $has_group = '';
 if (!empty(\Yii::$app->user->identity->group_id)) {
     $has_group = \Yii::$app->user->identity->group_id;
 }
+
+
+if (empty($session['user_second_id'])) {
+    if (\backend\models\Employee::isPosUser(\Yii::$app->user->id)) {
+        $is_pos_user = 1;
+        $model_second_user = \common\models\LoginLogCal::find()->select(['id'])->where(['user_id' => \Yii::$app->user->id])->orderBy(['id' => SORT_DESC])->one();
+        if ($model_second_user) {
+            $model_user_ref = \common\models\LoginUserRef::find()->where(['login_log_cal_id' => $model_second_user->id])->one();
+            if ($model_user_ref != null) {
+                $has_second_user = 1;
+
+                $session['user_second_id'] = 1;
+            }
+//        if($model_second_user->second_user_id != null || $model_second_user->second_user_id != ''){
+//            $has_second_user = 1;
+//            $session['user_second_id'] =1;
+//        }
+        }
+    }
+} else {
+    $has_second_user = $session['user_second_id'];
+}
+
 
 ?>
 <?php $this->beginPage() ?>
@@ -83,18 +111,21 @@ if (!empty(\Yii::$app->user->identity->group_id)) {
         .my-br {
             margin-top: 10px;
         }
-        .product-items:hover{
+
+        .product-items:hover {
             -webkit-transform: scale(1.1);
             transform: scale(1.1);
         }
     </style>
 </head>
 <body class="hold-transition sidebar-mini">
-<input type="hidden" id="has-group" value="<?=$has_group?>">
+<input type="hidden" id="has-group" value="<?= $has_group ?>">
+<input type="hidden" id="is-pos-user" value="<?= $is_pos_user ?>">
+<input type="hidden" id="has-second-user" value="<?= $has_second_user ?>">
 <input type="hidden" id="current-url" value="<?= $cururl ?>">
 
 <?php $this->beginBody() ?>
-<a id="goto-login" href="<?=\yii\helpers\Url::to(['site/login'],true)?>"></a>
+<a id="goto-login" href="<?= \yii\helpers\Url::to(['site/login'], true) ?>"></a>
 <div class="wrapper">
     <!-- Navbar -->
     <?= $this->render('navbar', ['assetDir' => $assetDir]) ?>
@@ -145,16 +176,22 @@ if (!empty(\Yii::$app->user->identity->group_id)) {
     $(function () {
 
         var has_group = $("#has-group").val();
+        var is_pos_user = $("#is-pos-user").val();
+        var has_second_user = $("#has-second-user").val();
 
-        if(has_group == ''){
+        if (has_group == '') {
             $("#goto-login").trigger('click');
         }
+        if (is_pos_user ==1 && has_second_user == '' ) {
+            $("#secondLoginModal").modal("show");
+        }
+
         //---- active menu
         $("#perpage").change(function () {
             $("#form-perpage").submit();
         });
 
-        if(cururl == 'pos' || cururl == 'orders' || cururl == 'salereport' || cururl == 'salereportemp'){
+        if (cururl == 'pos' || cururl == 'orders' || cururl == 'salereport' || cururl == 'salereportemp') {
             $(".sidebar-mini").removeClass('layout-fixed');
             $(".sidebar-mini").addClass('sidebar-collapse');
         }
@@ -185,9 +222,9 @@ if (!empty(\Yii::$app->user->identity->group_id)) {
         $("#btn-show-alert").click(function () {
             var msg = $(".alert-msg").val();
             var msg_error = $(".alert-msg-error").val();
-             //alert(msg);
+            //alert(msg);
             if (msg != '' && typeof (msg) !== "undefined") {
-               //alert(msg);
+                //alert(msg);
                 Toast.fire({
                     type: 'success',
                     title: msg

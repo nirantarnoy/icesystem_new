@@ -59,6 +59,45 @@ $this->params['breadcrumbs'][] = $this->title;
             'description',
             // 'photo',
             [
+                'attribute' => 'is_primary',
+                'format' => 'raw',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
+                'value' => function($data){
+                    if($data->is_primary == 1){
+                        return '<div class="badge badge-success">YES</div>';
+                    }else{
+                        return '<div class="badge badge-dark">NO</div>';
+                    }
+                }
+            ],
+            [
+                'attribute' => 'is_reprocess',
+                'format' => 'raw',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
+                'value' => function($data){
+                    if($data->is_reprocess == 1){
+                        return '<div class="badge badge-success">YES</div>';
+                    }else{
+                        return '<div class="badge badge-dark">NO</div>';
+                    }
+                }
+            ],
+            [
+                'attribute' => 'is_warehouse_car',
+                'format' => 'raw',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
+                'value' => function($data){
+                    if($data->is_warehouse_car == 1){
+                        return '<div class="badge badge-success">YES</div>';
+                    }else{
+                        return '<div class="badge badge-dark">NO</div>';
+                    }
+                }
+            ],
+            [
                 'attribute' => 'status',
                 'format' => 'raw',
                 'headerOptions' => ['style' => 'text-align: center'],

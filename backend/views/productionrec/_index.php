@@ -6,15 +6,14 @@ $is_print_do = "";
 
 $company_id = 1;
 $branch_id = 1;
+$default_warehouse = 0; // 6
 if (!empty(\Yii::$app->user->identity->company_id)) {
     $company_id = \Yii::$app->user->identity->company_id;
 }
 if (!empty(\Yii::$app->user->identity->branch_id)) {
     $branch_id = \Yii::$app->user->identity->branch_id;
-}
-$default_warehouse = 6;
-if($company_id==1 && $branch_id==2){
-    $default_warehouse = 5;
+    $warehouse_primary = \backend\models\Warehouse::findPrimary($company_id, $branch_id);
+    $default_warehouse = $warehouse_primary;
 }
 
 $prod_data = \backend\models\Product::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();

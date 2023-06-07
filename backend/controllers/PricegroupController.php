@@ -3,10 +3,13 @@
 namespace backend\controllers;
 
 use backend\models\CustomerSearch;
+use backend\models\UserSearch;
 use Yii;
 use backend\models\Pricegroup;
 use backend\models\PricegroupSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -27,15 +30,46 @@ class PricegroupController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access'=>[
+                'class'=>AccessControl::className(),
+                'denyCallback' => function ($rule, $action) {
+                    throw new ForbiddenHttpException('คุณไม่ได้รับอนุญาติให้เข้าใช้งาน!');
+                },
+                'rules'=>[
+                    [
+                        'allow'=>true,
+                        'roles'=>['@'],
+                        'matchCallback'=>function($rule,$action){
+                            $currentRoute = Yii::$app->controller->getRoute();
+                            if(Yii::$app->user->can($currentRoute)){
+                                return true;
+                            }
+                        }
+                    ]
+                ]
+            ],
         ];
     }
 
     public function actionIndex()
     {
         $pageSize = 50;
+        $viewstatus = 1;
+
+        if(\Yii::$app->request->get('viewstatus')!=null){
+            $viewstatus = \Yii::$app->request->get('viewstatus');
+        }
+
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new PricegroupSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if($viewstatus ==1){
+            $dataProvider->query->andFilterWhere(['status'=>$viewstatus]);
+        }
+        if($viewstatus == 2){
+            $dataProvider->query->andFilterWhere(['status'=>0]);
+        }
+
         $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
         $dataProvider->pagination->pageSize = $pageSize;
 
@@ -43,6 +77,7 @@ class PricegroupController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'perpage' => $pageSize,
+            'viewstatus'=>$viewstatus,
         ]);
     }
 
@@ -105,6 +140,7 @@ class PricegroupController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $recid = \Yii::$app->request->post('line_rec_id');
+            $status = \Yii::$app->request->post('status');
             $prod_id = \Yii::$app->request->post('line_prod_id');
             $prod_price = \Yii::$app->request->post('line_price');
             $removelist = \Yii::$app->request->post('removelist');
@@ -114,7 +150,7 @@ class PricegroupController extends Controller
             $removelist2 = \Yii::$app->request->post('removelist2');
 
             // print_r($removelist2);return;
-
+            $model->status = $status;
             if ($model->save()) {
                 if (count($prod_id) > 0) {
                     for ($i = 0; $i <= count($prod_id) - 1; $i++) {
@@ -206,8 +242,8 @@ class PricegroupController extends Controller
 
     public function actionProductdata()
     {
-        $company_id = 1;
-        $branch_id = 1;
+        $company_id = 0;
+        $branch_id = 0;
         if (!empty(\Yii::$app->user->identity->company_id)) {
             $company_id = \Yii::$app->user->identity->company_id;
         }
@@ -219,9 +255,9 @@ class PricegroupController extends Controller
         $html = '';
         $model = null;
         if ($txt != '') {
-            $model = \backend\models\Product::find()->where(['OR', ['LIKE', 'code', $txt], ['LIKE', 'name', $txt]])->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
+            $model = \backend\models\Product::find()->where(['OR', ['LIKE', 'code', $txt], ['LIKE', 'name', $txt]])->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id,'status'=>1])->all();
         } else {
-            $model = \backend\models\Product::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
+            $model = \backend\models\Product::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id, 'status'=>1])->all();
         }
         foreach ($model as $value) {
             $prod_stock = $this->getStock($value->id);
@@ -245,8 +281,8 @@ class PricegroupController extends Controller
 
     public function actionProductdata2()
     {
-        $company_id = 1;
-        $branch_id = 1;
+        $company_id = 0;
+        $branch_id = 0;
         if (!empty(\Yii::$app->user->identity->company_id)) {
             $company_id = \Yii::$app->user->identity->company_id;
         }

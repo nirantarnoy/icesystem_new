@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="stocktrans-index">
     <?php Pjax::begin(); ?>
-    <?php echo $this->render('_search', ['model' => $searchModel,'f_date'=>null,'t_date'=>null]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel, 'f_date' => null, 't_date' => null]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -60,6 +60,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'pageSummaryFunc' => GridView::F_SUM
             ],
             [
+               'label' => 'เลขที่อ้างอิง',
+                'value'=> function($data){
+                     if($data->activity_type_id  == 20){
+                 //        return \backend\models\Transformreserv::findNum($data->trans_ref_id);
+                         return \backend\models\Stocktrans::findProdrecNo($data->prodrec_id, $data->company_id, $data->branch_id);
+                     }else{
+                         return '';
+                     }
+                }
+            ],
+            [
                 'attribute' => 'stock_type',
                 'format' => 'html',
                 'headerOptions' => ['style' => 'text-align: center'],
@@ -76,14 +87,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'activity_type_id',
                 'headerOptions' => ['style' => 'text-align: left'],
                 'contentOptions' => ['style' => 'text-align: left'],
+                'format' => 'html',
                 'value' => function ($data) {
-                   // return \backend\helpers\ActivityType::getTypeById($data->activity_type_id);
-                    return \backend\helpers\RunnoTitle::getTypeById($data->activity_type_id);
+                    $font_color = '';
+                    if ($data->activity_type_id == 28) {
+                        $font_color = 'text-warning';
+                    }
+                    // return \backend\helpers\ActivityType::getTypeById($data->activity_type_id);
+                    return '<div class="' . $font_color . '">' . \backend\helpers\RunnoTitle::getTypeById($data->activity_type_id) . '</div>';
                 }
             ],
             [
                 'attribute' => 'created_by',
-                'label'=>'พนักงาน',
+                'label' => 'พนักงาน',
                 'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {

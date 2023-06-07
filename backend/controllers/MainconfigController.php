@@ -113,7 +113,7 @@ class MainconfigController extends Controller
                 //  echo "okk";return;
                 // $myfile = Yii::$app->request->baseUrl . '/uploads/files/' . $upfiles;
                 $myfile = '../web/uploads/files/customers/' . $upfiles;
-                $file = fopen($myfile, "r");
+                $file = fopen($myfile, "r+");
                 fwrite($file, "\xEF\xBB\xBF");
 
                 setlocale(LC_ALL, 'th_TH.TIS-620');
@@ -126,41 +126,64 @@ class MainconfigController extends Controller
                     $qty = 0;
                     $price = 0;
                     $cost = 0;
-                    if ($rowData[1] == '' || $i == 0) {
+                    if ($rowData[2] == '' || $i == 0) {
                         continue;
                     }
 
-                    $model_dup = \backend\models\Customer::find()->where(['name' => trim($rowData[1]), 'company_id' => 1, 'branch_id' => 2])->one();
-                    if ($model_dup != null) {
-                        continue;
-                    }
+//                    $model_dup = \backend\models\Customer::find()->where(['name' => trim($rowData[2]), 'company_id' => 1, 'branch_id' => 1])->one();
+//                    if ($model_dup != null) {
+//                        continue;
+//                    }
 
                     $route_id = $this->checkRoute($rowData[3]);
-                    $group_id = $this->checkCustomergroup($rowData[4]);
-                    $type_id = $this->checkCustomertype($rowData[5]);
-                    $payment_method = $this->checkPaymethod($rowData[12]);
-                    $payment_term = $this->checkPayterm($rowData[14]);
+                    $group_id = $this->checkCustomergroup($rowData[5]);
+                    $type_id = $this->checkCustomertype($rowData[6]);
+                    $payment_method = $this->checkPaymethod($rowData[14]);
+                    $payment_term = $this->checkPayterm($rowData[15]);
 
                     $modelx = new \backend\models\Customer();
                     // $modelx->code = $rowData[0];
-                    $modelx->code = $modelx->getLastNo(1, 2);
-                    $modelx->name = $rowData[1];
-                    $modelx->description = $rowData[11];
-                    $modelx->contact_name = $rowData[9];
+                    $modelx->code = $rowData[0];//$modelx->getLastNo(1, 2);
+                    $modelx->name = $rowData[2];
+                    $modelx->description = '';//$rowData[11];
+                    $modelx->contact_name = ''; //$rowData[9];
                     $modelx->branch_no = $rowData[2];
                     $modelx->location_info = '';//$rowData[10];
                     $modelx->customer_group_id = $group_id;
                     $modelx->customer_type_id = $type_id;
                     $modelx->delivery_route_id = $route_id;
-                    $modelx->address = $rowData[7];
-                    $modelx->address2 = $rowData[8];
-                    $modelx->phone = $rowData[10];
-                    $modelx->sort_name = $rowData[16];
+                    $modelx->address = ''; //$rowData[7];
+                    $modelx->address2 = ''; //$rowData[8];
+                    $modelx->phone = '';// $rowData[10];
+                    $modelx->branch_no = $rowData[3];
+                    $modelx->sort_name = $rowData[1];
                     $modelx->payment_method_id = $payment_method;
                     $modelx->payment_term_id = $payment_term;
                     $modelx->status = 1;
                     $modelx->company_id = 1;
-                    $modelx->branch_id = 2;
+                    $modelx->branch_id = 1;
+
+                    // original
+
+//                    $modelx->code = $modelx->getLastNo(1, 2);
+//                    $modelx->name = $rowData[1];
+//                    $modelx->description = $rowData[11];
+//                    $modelx->contact_name = $rowData[9];
+//                    $modelx->branch_no = $rowData[2];
+//                    $modelx->location_info = '';//$rowData[10];
+//                    $modelx->customer_group_id = $group_id;
+//                    $modelx->customer_type_id = $type_id;
+//                    $modelx->delivery_route_id = $route_id;
+//                    $modelx->address = $rowData[7];
+//                    $modelx->address2 = $rowData[8];
+//                    $modelx->phone = $rowData[10];
+//                    $modelx->sort_name = $rowData[16];
+//                    $modelx->payment_method_id = $payment_method;
+//                    $modelx->payment_term_id = $payment_term;
+//                    $modelx->status = 1;
+//                    $modelx->company_id = 1;
+//                    $modelx->branch_id = 1;
+                    //
                     if ($modelx->save(false)) {
                         $sale_price_group = $this->checkPricegroup($rowData[5], $rowData[6], $type_id);
                         $res += 1;
@@ -209,7 +232,7 @@ class MainconfigController extends Controller
                     $qty = 0;
                     $price = 0;
                     $cost = 0;
-                    if ($rowData[1] == '' || $i == 0) {
+                    if ($rowData[2] == '' || $i == 0) {
                         continue;
                     }
 
@@ -251,7 +274,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($name != '') {
-            $model = \backend\models\Deliveryroute::find()->where(['code' => $name, 'company_id' => 1, 'branch_id' => 2])->one();
+            $model = \backend\models\Deliveryroute::find()->where(['code' => $name, 'company_id' => 1, 'branch_id' => 1])->one();
             if ($model) {
                 $id = $model->id;
             } else {
@@ -260,7 +283,7 @@ class MainconfigController extends Controller
                 $model_new->name = $name;
                 $model_new->description = $name;
                 $model_new->company_id = 1;
-                $model_new->branch_id = 2;
+                $model_new->branch_id = 1;
                 // $model_new->status = 1;
                 if ($model_new->save(false)) {
                     $id = $model_new->id;
@@ -274,7 +297,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($name != '') {
-            $model = \backend\models\Customergroup::find()->where(['name' => $name, 'company_id' => 1, 'branch_id' => 2])->one();
+            $model = \backend\models\Customergroup::find()->where(['name' => $name, 'company_id' => 1, 'branch_id' => 1])->one();
             if ($model) {
                 $id = $model->id;
             } else {
@@ -284,7 +307,7 @@ class MainconfigController extends Controller
                 $model_new->description = $name;
                 $model_new->status = 1;
                 $model_new->company_id = 1;
-                $model_new->branch_id = 2;
+                $model_new->branch_id = 1;
                 if ($model_new->save()) {
                     $id = $model_new->id;
                 }
@@ -297,7 +320,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($name != '') {
-            $model = \backend\models\Customertype::find()->where(['code' => $name, 'company_id' => 1, 'branch_id' => 2])->one();
+            $model = \backend\models\Customertype::find()->where(['code' => $name, 'company_id' => 1, 'branch_id' => 1])->one();
             if ($model) {
                 $id = $model->id;
             } else {
@@ -307,7 +330,7 @@ class MainconfigController extends Controller
                 $model_new->description = $name;
                 $model_new->status = 1;
                 $model_new->company_id = 1;
-                $model_new->branch_id = 2;
+                $model_new->branch_id = 1;
                 if ($model_new->save(false)) {
                     $id = $model_new->id;
                 }
@@ -320,7 +343,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($name != '') {
-            $model = \backend\models\Paymentmethod::find()->where(['code' => trim($name), 'company_id' => 1, 'branch_id' => 2])->one();
+            $model = \backend\models\Paymentmethod::find()->where(['code' => trim($name), 'company_id' => 1, 'branch_id' => 1])->one();
             if ($model) {
                 $id = $model->id;
             } else {
@@ -330,7 +353,7 @@ class MainconfigController extends Controller
                 $model_new->note = $name;
                 $model_new->status = 1;
                 $model_new->company_id = 1;
-                $model_new->branch_id = 2;
+                $model_new->branch_id = 1;
                 if ($model_new->save()) {
                     $id = $model_new->id;
                 }
@@ -343,7 +366,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($name != '') {
-            $model = \backend\models\Paymentterm::find()->where(['code' => $name, 'company_id' => 1, 'branch_id' => 2])->one();
+            $model = \backend\models\Paymentterm::find()->where(['code' => $name, 'company_id' => 1, 'branch_id' => 1])->one();
             if ($model) {
                 $id = $model->id;
             } else {
@@ -353,7 +376,7 @@ class MainconfigController extends Controller
                 $model_new->description = $name;
                 $model_new->status = 1;
                 $model_new->company_id = 1;
-                $model_new->branch_id = 2;
+                $model_new->branch_id = 1;
                 if ($model_new->save()) {
                     $id = $model_new->id;
                 }
@@ -366,7 +389,7 @@ class MainconfigController extends Controller
     {
         $id = 0;
         if ($code != '') {
-            $model = \backend\models\Pricegroup::find()->where(['code' => $code, 'company_id' => 1, 'branch_id' => 2])->one();
+            $model = \backend\models\Pricegroup::find()->where(['code' => $code, 'company_id' => 1, 'branch_id' => 1])->one();
             if ($model) {
                 $model_add_type = \common\models\PriceCustomerType::find()->where(['price_group_id' => $model->id, 'customer_type_id' => $type_id])->one();
                 if (!$model_add_type) {
@@ -375,7 +398,7 @@ class MainconfigController extends Controller
                     $add_model->customer_type_id = $type_id;
                     $add_model->status = 1;
                     $add_model->company_id = 1;
-                    $add_model->branch_id = 2;
+                    $add_model->branch_id = 1;
                     $add_model->save();
                 }
             } else {
@@ -387,14 +410,14 @@ class MainconfigController extends Controller
                 $model_new->company_id = 1;
                 $model_new->branch_id = 2;
                 if ($model_new->save()) {
-                    $model_add_type = \common\models\PriceCustomerType::find()->where(['price_group_id' => $model_new->id, 'customer_type_id' => $type_id, 'company_id' => 1, 'branch_id' => 2])->one();
+                    $model_add_type = \common\models\PriceCustomerType::find()->where(['price_group_id' => $model_new->id, 'customer_type_id' => $type_id, 'company_id' => 1, 'branch_id' => 1])->one();
                     if (!$model_add_type) {
                         $add_model = new \common\models\PriceCustomerType();
                         $add_model->price_group_id = $model_new->id;
                         $add_model->customer_type_id = $type_id;
                         $add_model->status = 1;
                         $add_model->company_id = 1;
-                        $add_model->branch_id = 2;
+                        $add_model->branch_id = 1;
                         $add_model->save();
                     }
                 }
@@ -414,7 +437,7 @@ class MainconfigController extends Controller
             $modelnew->name = $value->name;
             $modelnew->status = $value->status;
             $modelnew->company_id = 1;
-            $modelnew->branch_id = 2;
+            $modelnew->branch_id = 1;
             $modelnew->save(false);
         }
     }
@@ -429,7 +452,7 @@ class MainconfigController extends Controller
             $modelnew->name = $value->name;
             $modelnew->status = $value->status;
             $modelnew->company_id = 1;
-            $modelnew->branch_id = 2;
+            $modelnew->branch_id = 1;
             $modelnew->save(false);
         }
     }
@@ -444,7 +467,7 @@ class MainconfigController extends Controller
             $modelnew->name = $value->name;
             $modelnew->status = $value->status;
             $modelnew->company_id = 1;
-            $modelnew->branch_id = 2;
+            $modelnew->branch_id = 1;
             $modelnew->save(false);
         }
     }
@@ -459,7 +482,7 @@ class MainconfigController extends Controller
             $modelnew->name = $value->name;
             $modelnew->status = $value->status;
             $modelnew->company_id = 1;
-            $modelnew->branch_id = 2;
+            $modelnew->branch_id = 1;
             $modelnew->save(false);
         }
     }
@@ -479,7 +502,7 @@ class MainconfigController extends Controller
             $modelnew->std_cost = $value->std_cost;
             $modelnew->status = $value->status;
             $modelnew->company_id = 1;
-            $modelnew->branch_id = 2;
+            $modelnew->branch_id = 1;
             $modelnew->nw = $value->nw;
             $modelnew->sale_status = $value->sale_status;
             $modelnew->stock_type = $value->stock_type;
@@ -507,8 +530,65 @@ class MainconfigController extends Controller
             $model_new->currentnum = $value->currentnum;
             $model_new->status = $value->status;
             $model_new->company_id = 1;
-            $model_new->branch_id = 2;
+            $model_new->branch_id = 1;
             $model_new->save();
+        }
+    }
+
+    public function actionImportupdateorderpay()
+    {
+        $from_no = \Yii::$app->request->post('form_no');
+        $to_no = \Yii::$app->request->post('to_no');
+        $uploaded = UploadedFile::getInstanceByName('file_order_pay');
+        if (!empty($uploaded)) {
+            //echo "ok";return;
+            $upfiles = time() . "." . $uploaded->getExtension();
+            // if ($uploaded->saveAs(Yii::$app->request->baseUrl . '/uploads/files/' . $upfiles)) {
+            if ($uploaded->saveAs('../web/uploads/files/customers/' . $upfiles)) {
+                //  echo "okk";return;
+                // $myfile = Yii::$app->request->baseUrl . '/uploads/files/' . $upfiles;
+                $myfile = '../web/uploads/files/customers/' . $upfiles;
+                $file = fopen($myfile, "r+");
+                fwrite($file, "\xEF\xBB\xBF");
+
+                setlocale(LC_ALL, 'th_TH.TIS-620');
+                $i = -1;
+                $res = 0;
+
+                while (($rowData = fgetcsv($file, 10000, ",")) !== FALSE) {
+                    $i += 1;
+                    if ($i == 0) {
+                        continue;
+                    }
+                    if($i>=$from_no && $i <= $to_no){
+                        $order_id = $rowData[2];
+                        echo $order_id.'<br />';
+                         \common\models\Orders::updateAll(['payment_status'=>1],['id'=>$order_id]);
+                        $res += 1;
+                    }else{
+                        echo "finished";
+                        return;
+                    }
+
+
+                    //if($res == 5000)return;
+                }
+                //    print_r($qty_text);return;
+
+                if ($res > 0) {
+                    $session = Yii::$app->session;
+                    $session->setFlash('msg', 'นำเข้าข้อมูลเรียบร้อย');
+                    return $this->redirect(['index']);
+                } else {
+                    $session = Yii::$app->session;
+                    $session->setFlash('msg-error', 'พบข้อมผิดพลาดนะ');
+                    return $this->redirect(['index']);
+                }
+                // }
+                fclose($file);
+//            }
+//        }
+            }
         }
     }
 

@@ -35,7 +35,7 @@ echo GridView::widget([
         '{export}',
 
     ],
-    'panel' => ['type' => 'info', 'heading' => 'รายงานแสดงยอดขายแยกตามสายส่ง'],
+    'panel' => ['type' => 'info', 'heading' => 'รายงานแสดงยอดขายแยกตามสายส่งเดิม'],
     'toggleDataContainer' => ['class' => 'btn-group mr-2'],
     'columns' => [
         ['class' => 'kartik\grid\SerialColumn'],
@@ -76,7 +76,7 @@ echo GridView::widget([
                     'contentFormats' => [      // content reformatting for each summary cell
                         //4 => ['format' => 'number', 'decimals' => 0],
                         6 => ['format' => 'number', 'decimals' => 0],
-                        8 => ['format' => 'number', 'decimals' => 0],
+                        8 => ['format' => 'number', 'decimals' => 2],
 //                        7 => ['format' => 'number', 'decimals' => 0],
                     ],
                     'contentOptions' => [      // content html attributes for each summary cell
@@ -141,7 +141,7 @@ echo GridView::widget([
                 return \backend\models\Customer::findName($model->customer_id);
             },
             'filterType' => GridView::FILTER_SELECT2,
-            'filter' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id'=>\Yii::$app->user->identity->company_id,'branch_id'=>\Yii::$app->user->identity->branch_id])->orderBy('name')->asArray()->all(), 'id', 'name'),
+            'filter' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id'=>\Yii::$app->user->identity->company_id,'branch_id'=>\Yii::$app->user->identity->branch_id,'status'=>1])->orderBy('name')->asArray()->all(), 'id', 'name'),
             'filterWidgetOptions' => [
                 'pluginOptions' => ['allowClear' => true],
             ],
@@ -206,7 +206,7 @@ echo GridView::widget([
             },
             'width' => '150px',
             'hAlign' => 'right',
-            'format' => ['decimal', 0],
+            'format' => ['decimal', 2],
             'pageSummary' => true,
             'pageSummaryFunc' => GridView::F_SUM
         ],

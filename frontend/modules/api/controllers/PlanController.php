@@ -57,7 +57,7 @@ class PlanController extends Controller
 
         $data = [];
 
-        if ($customer_id && $route_id && $car_id && $company_id && $branch_id) {
+        if ($route_id && $car_id && $company_id && $branch_id) {
             //  $sale_date = date('Y/m/d');
             $sale_date = date('Y/m/d');
 
@@ -116,12 +116,52 @@ class PlanController extends Controller
                             }
                         }
                     }
+                    $this->createIssue($model->id, $datalist, $company_id, $branch_id, $user_id, $route_id);
                 }
             }
         }
         //  array_push($data,['data'=>$req_data]);
 
         return ['status' => $status, 'data' => $data];
+    }
+
+    public function createIssue($plan_id, $datalist, $company_id, $branch_id, $user_id, $route_id){
+        $res = 0;
+        if (count($datalist) > 0 && $plan_id) {
+            $sale_date = date('Y-m-d', strtotime("+1 day"));
+            $c_time = date('H:i:s');
+
+            $model = new \backend\models\Journalissue();
+            $model->journal_no = $model->getLastNo($sale_date, $company_id, $branch_id);
+            $model->trans_date = date('Y-m-d H:i:s', strtotime($sale_date.' '.$c_time));
+            $model->status = 1;
+            $model->reason_id = 1;
+            $model->company_id = $company_id;
+            $model->branch_id = $branch_id;
+            $model->created_by = $user_id;
+            $model->delivery_route_id = $route_id;
+            $model->plan_id = $plan_id;
+            if ($model->save(false)) {
+                if (count($datalist) > 0) {
+                    for ($i = 0; $i <= count($datalist) - 1; $i++) {
+                        if ($datalist[$i]['qty'] <= 0) continue;
+                        $model_line = new \backend\models\Journalissueline();
+                        $model_line->issue_id = $model->id;
+                        $model_line->product_id = $datalist[$i]['product_id'];
+                        $model_line->qty = $datalist[$i]['qty'];
+                        $model_line->avl_qty = $datalist[$i]['qty'];
+                        $model_line->sale_price = 0;
+                        $model_line->status = 1;
+                        if ($model_line->save()) {
+                            $res +=1;
+
+                        }
+                    }
+                }
+            }
+
+        }
+        return $res;
     }
 
     public function hasPlan($order_date, $route_id, $car_id)
@@ -246,10 +286,24 @@ class PlanController extends Controller
         $data = [];
         if ($plan_id != null) {
             if (\backend\models\Planline::deleteAll(['plan_id' => $plan_id])) {
-                Plan::deleteAll(['id' => $plan_id]);
+                if(Plan::deleteAll(['id' => $plan_id])){
+                    $issue_id = \backend\models\Journalissue::find()->where(['plan_id'=> $plan_id])->one();
+                    if($issue_id){
+                        \backend\models\Journalissueline::deleteAll(['issue_id'=>$issue_id->id]);
+                        \backend\models\Journalissue::deleteAll(['plan_id'=> $plan_id]);
+                    }
+                }
                 $status = true;
             }else{
-                Plan::deleteAll(['id' => $plan_id]);
+                if(Plan::deleteAll(['id' => $plan_id])){
+                    $issue_id = \backend\models\Journalissue::find()->where(['plan_id'=> $plan_id])->one();
+                    if($issue_id){
+                        \backend\models\Journalissueline::deleteAll(['issue_id'=>$issue_id->id]);
+                        \backend\models\Journalissue::deleteAll(['plan_id'=> $plan_id]);
+                    }
+
+                }
+
                 $status = true;
             }
 

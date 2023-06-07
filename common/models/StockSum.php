@@ -33,7 +33,7 @@ class StockSum extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['company_id', 'branch_id', 'warehouse_id', 'location_id', 'product_id', 'qty', 'updated_at','created_at'], 'integer'],
+            [['company_id', 'branch_id', 'warehouse_id', 'location_id', 'product_id', 'qty', 'updated_at','created_at','route_id'], 'integer'],
             [['lot_no'], 'string', 'max' => 255],
         ];
     }
@@ -52,6 +52,7 @@ class StockSum extends \yii\db\ActiveRecord
             'lot_no' => 'Lot No',
             'product_id' => 'สินค้า',
             'qty' => 'จำนวน',
+            'route_id'=>'สายส่ง',
             'created_at' => 'Created At',
             'updated_at' => 'อัพเดทล่าสุด',
         ];

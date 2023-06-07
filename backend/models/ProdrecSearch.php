@@ -64,7 +64,7 @@ class ProdrecSearch extends Stocktrans
             'location_id' => $this->location_id,
             'qty' => $this->qty,
             'created_at' => $this->created_at,
-            'created_by' => $this->created_by,
+          //  'created_by' => $this->created_by,
         ]);
 
         if (!empty(\Yii::$app->user->identity->company_id)) {
@@ -100,10 +100,11 @@ class ProdrecSearch extends Stocktrans
                 $x_date = explode('-', $f_date);
                 $xx_date = date('Y-m-d');
                 if (count($x_date) > 1) {
-                    $xx_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
+                    $xx_date = trim($x_date[1]) . '/' . trim($x_date[2]) . '/' . trim($x_date[0]);
                 }
-                $from_date_time = date('Y-d-m H:i:s',strtotime($xx_date.' '.$f_time));
-                $query->andFilterWhere(['>=','trans_date',$from_date_time]);
+                $from_date_time = date('Y-m-d H:i:s',strtotime($xx_date.' '.$f_time));
+                //$from_date_time = date('Y-m-d',strtotime($xx_date));
+                $query->andFilterWhere(['>=','trans_date', $from_date_time]);
             }
 
             if(count($tx_datetime) > 0){
@@ -113,12 +114,15 @@ class ProdrecSearch extends Stocktrans
                 $n_date = explode('-', $t_date);
                 $nn_date = date('Y-m-d');
                 if (count($n_date) > 1) {
-                    $nn_date = $n_date[2] . '/' . $n_date[1] . '/' . $n_date[0];
+                    $nn_date = trim($n_date[1]) . '/' . trim($n_date[2]) . '/' . trim($n_date[0]);
                 }
-                $to_date_time = date('Y-d-m H:i:s',strtotime($nn_date.' '.$t_time));
+                $to_date_time = date('Y-m-d H:i:s',strtotime($nn_date.' '.$t_time));
                 $query->andFilterWhere(['<=','trans_date',$to_date_time]);
             }
 
+        }else{
+            $query->andFilterWhere(['>=','date(trans_date)', date('Y-m-d')]);
+            $query->andFilterWhere(['<=','date(trans_date)',date('Y-m-d')]);
         }
 
 

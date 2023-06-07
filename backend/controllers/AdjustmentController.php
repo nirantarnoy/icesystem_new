@@ -6,7 +6,9 @@ use backend\models\BranchSearch;
 use Yii;
 use backend\models\Adjustment;
 use backend\models\AdjustmentSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -15,9 +17,7 @@ use yii\filters\VerbFilter;
  */
 class AdjustmentController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
+    public $enableCsrfValidation = false;
     public function behaviors()
     {
         return [
@@ -27,6 +27,24 @@ class AdjustmentController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+//            'access'=>[
+//                'class'=>AccessControl::className(),
+//                'denyCallback' => function ($rule, $action) {
+//                    throw new ForbiddenHttpException('คุณไม่ได้รับอนุญาติให้เข้าใช้งาน!');
+//                },
+//                'rules'=>[
+//                    [
+//                        'allow'=>true,
+//                        'roles'=>['@'],
+//                        'matchCallback'=>function($rule,$action){
+//                            $currentRoute = Yii::$app->controller->getRoute();
+//                            if(Yii::$app->user->can($currentRoute)){
+//                                return true;
+//                            }
+//                        }
+//                    ]
+//                ]
+//            ],
         ];
     }
 
@@ -183,4 +201,104 @@ class AdjustmentController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionRoutestock(){
+        return $this->render('_routestock');
+    }
+    public function actionUpdatestock(){
+        $id = \Yii::$app->request->post('line_id');
+        $company_id = \Yii::$app->request->post('line_company_id');
+        $branch_id = \Yii::$app->request->post('line_branch_id');
+        $route_id = \Yii::$app->request->post('line_route_id');
+        $product_id = \Yii::$app->request->post('line_product_id');
+        $qty = \Yii::$app->request->post('line_qty');
+        if($product_id){
+            for($ix=0;$ix<=count($product_id)-1;$ix++){
+                \common\models\OrderStock::updateAll(['qty'=>0,'avl_qty'=>0],['product_id'=>$product_id[$ix],'route_id'=>$route_id[$ix]]);
+//                $model = \common\models\OrderStock::find()->where(['product_id'=>$product_id[$ix],'route_id'=>$route_id[$ix]])->one();
+//                if($model){
+//                    $model->qty = 0;
+//                    $model->avl_qty = 0;
+//                    $model->save(false);
+//                }
+            }
+            for($i=0;$i<=count($product_id)-1;$i++){
+                $model = new \common\models\OrderStock();
+                $model->product_id = $product_id[$i];
+                $model->route_id = $route_id[$i];
+                $model->trans_date = date('Y-m-d H:i:s');
+                $model->company_id = $company_id[$i];
+                $model->branch_id = $branch_id[$i];
+                $model->qty = $qty[$i];
+                $model->avl_qty = $qty[$i];
+                $model->save(false);
+            }
+        }
+        return $this->redirect(['adjustment/routestock']);
+    }
+    public function actionGetstockitemOld(){
+        $pre_date = date('Y-m-d', strtotime(date('Y-m-d') . " -1 day"));
+        $html ='';
+        $id = \Yii::$app->request->post('route_id');
+        if($id){
+            $model = \common\models\Product::find()->where(['route_id'=>$id,'date(trans_date)'=>date('Y-m-d')])->groupBy(['product_id'])->all();
+            if($model){
+                $i = 0;
+                foreach ($model as $value){
+                    $i+=1;
+                    $html.='<tr>';
+                    $html.='<td style="text-align: center;">'.$i.'</td>';
+                    $html.='<td>'.\backend\models\Product::findName($value->product_id).'</td>';
+                    $html.='<td><input type="hidden" class="line-id" name="line_id[]" value="'.$value->id.'" /><input type="hidden" class="line-route-id" name="line_route_id[]" value="'.$value->route_id.'" /><input type="hidden" class="line-company-id" name="line_company_id[]" value="'.$value->company_id.'" /><input type="hidden" class="line-branch-id" name="line_branch_id[]" value="'.$value->branch_id.'" /><input type="hidden" class="line-product-id" name="line_product_id[]" value="'.$value->product_id.'" /><input type="text" class="form-control" name="line_qty[]" value="0" /> </td>';
+                    $html.='</tr>';
+                }
+            }else{
+                $model = \common\models\OrderStock::find()->where(['route_id'=>$id,'date(trans_date)'=>$pre_date])->groupBy(['product_id'])->all();
+                if($model){
+                    $i = 0;
+                    foreach ($model as $value){
+                        $i+=1;
+                        $html.='<tr>';
+                        $html.='<td style="text-align: center;">'.$i.'</td>';
+                        $html.='<td>'.\backend\models\Product::findName($value->product_id).'</td>';
+                        $html.='<td><input type="hidden" class="line-id" name="line_id[]" value="'.$value->id.'" /><input type="hidden" class="line-route-id" name="line_route_id[]" value="'.$value->route_id.'" /><input type="hidden" class="line-company-id" name="line_company_id[]" value="'.$value->company_id.'" /><input type="hidden" class="line-branch-id" name="line_branch_id[]" value="'.$value->branch_id.'" /><input type="hidden" class="line-product-id" name="line_product_id[]" value="'.$value->product_id.'" /><input type="text" class="form-control" name="line_qty[]" value="0" /> </td>';
+                        $html.='</tr>';
+                    }
+                }
+            }
+        }
+
+        return $html;
+    }
+    public function actionGetstockitem(){
+        $company_id = 0;
+        $branch_id = 0;
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+       // $pre_date = date('Y-m-d', strtotime(date('Y-m-d') . " -1 day"));
+        $html ='';
+        $id = \Yii::$app->request->post('route_id');
+        if($id){
+            $model = \common\models\Product::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id,'status'=>1])->orderBy(['item_pos_seq'=>SORT_ASC])->all();
+            if($model){
+                $i = 0;
+                foreach ($model as $value){
+                    $i+=1;
+                    $html.='<tr>';
+                    $html.='<td style="text-align: center;">'.$i.'</td>';
+                    $html.='<td>'.$value->name.'</td>';
+                    $html.='<td><input type="hidden" class="line-id" name="line_id[]" value="'.$value->id.'" /><input type="hidden" class="line-route-id" name="line_route_id[]" value="'.$id.'" /><input type="hidden" class="line-company-id" name="line_company_id[]" value="'.$value->company_id.'" /><input type="hidden" class="line-branch-id" name="line_branch_id[]" value="'.$value->branch_id.'" /><input type="hidden" class="line-product-id" name="line_product_id[]" value="'.$value->id.'" /><input type="text" class="form-control" name="line_qty[]" value="0" /> </td>';
+                    $html.='</tr>';
+                }
+            }
+        }
+
+        return $html;
+    }
+
+
 }

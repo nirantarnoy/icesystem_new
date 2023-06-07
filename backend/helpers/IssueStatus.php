@@ -7,12 +7,14 @@ class IssueStatus
     private static $data = [
         '1' => 'Open',
         '2' => 'Close',
+        '150' => 'Confirmed',
         '200' => 'Cancel'
     ];
 
     private static $dataobj = [
         ['id'=>'1','name' => 'Open'],
         ['id'=>'2','name' => 'Close'],
+        ['id'=>'150','name' => 'Confirmed'],
         ['id'=>'200','name' => 'Cancel']
     ];
     public static function asArray()

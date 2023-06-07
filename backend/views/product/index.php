@@ -78,7 +78,7 @@ if(isset($_SESSION['user_branch_id'])){
             //  'id',
             'code',
             'name',
-            //  'description',
+              'description',
             [
                 'attribute' => 'product_type_id',
                 'headerOptions' => ['style' => 'text-align: center'],

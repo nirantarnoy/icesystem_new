@@ -4,27 +4,37 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
 
-$company_id = 1;
-$branch_id = 1;
-if (isset($_SESSION['user_company_id'])) {
-    $company_id = $_SESSION['user_company_id'];
-}
-if (isset($_SESSION['user_branch_id'])) {
-    $branch_id = $_SESSION['user_branch_id'];
-}
+$company_id = 0;
+$branch_id = 0;
 
-$default_warehouse = 6;
-if ($company_id == 1 && $branch_id == 2) {
-    $default_warehouse = 5;
-}
+//if (isset($_SESSION['user_company_id'])) {
+//    $company_id = $_SESSION['user_company_id'];
+//}
+//if (isset($_SESSION['user_branch_id'])) {
+//    $branch_id = $_SESSION['user_branch_id'];
+//}
+//
+$default_warehouse = 0;
+//if ($company_id == 1 && $branch_id == 2) {
+//    $default_warehouse = 5;
+//}
 
+
+if (!empty(\Yii::$app->user->identity->company_id)) {
+    $company_id = \Yii::$app->user->identity->company_id;
+}
+if (!empty(\Yii::$app->user->identity->branch_id)) {
+    $branch_id = \Yii::$app->user->identity->branch_id;
+    $warehouse_primary = \backend\models\Warehouse::findPrimary($company_id, $branch_id);
+    $default_warehouse = $warehouse_primary;
+}
 
 $prod_data = \backend\models\Product::find()->all();
-function getStock($prod_id, $warehouse)
+function getStock($prod_id, $warehouse,$company_id,$branch_id)
 {
     $qty = 0;
     if ($prod_id != null) {
-        $model = \backend\models\Stocksum::find()->where(['product_id' => $prod_id, 'warehouse_id' => $warehouse])->one();
+        $model = \backend\models\Stocksum::find()->where(['product_id' => $prod_id, 'warehouse_id' => $warehouse, 'company_id'=>$company_id,'branch_id'=>$branch_id])->one();
         if ($model) {
             $qty = $model->qty;
         }
@@ -54,8 +64,9 @@ function getStock($prod_id, $warehouse)
         </div>
         <div class="col-lg-3">
             <?= $form->field($model, 'delivery_route_id')->widget(Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'name'),
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id,'status'=>1])->all(), 'id', 'name'),
                 'options' => [
+                        'id'=>'route-search',
                     'placeholder' => '--เลือกสายส่ง--',
                     'onchange' => 'route_change($(this))'
                 ]
@@ -63,6 +74,12 @@ function getStock($prod_id, $warehouse)
         </div>
         <div class="col-lg-3">
             <?= $form->field($model, 'status')->textInput(['readonly' => 'readonly', 'value' => $model->isNewRecord ? 'Open' : \backend\helpers\IssueStatus::getTypeById($model->status)]) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <label for="">ใบเบิกของวันถัดไป</label>
+            <?php echo $form->field($model, 'is_for_next_date')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label(false) ?>
         </div>
     </div>
     <br>
@@ -118,7 +135,7 @@ function getStock($prod_id, $warehouse)
                         <?php foreach ($model_line as $value2): ?>
                             <?php
                             $i += 1;
-                            $prod_stock = getStock($value2->product_id, $default_warehouse);
+                            $prod_stock = getStock($value2->product_id, $default_warehouse,$company_id,$branch_id);
                             ?>
                             <tr data-var="<?= $value2->id ?>">
                                 <td style="text-align: center;"> <?= $i ?></td>

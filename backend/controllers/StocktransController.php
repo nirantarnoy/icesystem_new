@@ -5,7 +5,9 @@ namespace backend\controllers;
 use Yii;
 use backend\models\Stocktrans;
 use backend\models\StocktransSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -24,6 +26,24 @@ class StocktransController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access'=>[
+                'class'=>AccessControl::className(),
+                'denyCallback' => function ($rule, $action) {
+                    throw new ForbiddenHttpException('คุณไม่ได้รับอนุญาติให้เข้าใช้งาน!');
+                },
+                'rules'=>[
+                    [
+                        'allow'=>true,
+                        'roles'=>['@'],
+                        'matchCallback'=>function($rule,$action){
+                            $currentRoute = \Yii::$app->controller->getRoute();
+                            if(\Yii::$app->user->can($currentRoute)){
+                                return true;
+                            }
+                        }
+                    ]
+                ]
+            ],
         ];
     }
 
@@ -35,6 +55,7 @@ class StocktransController extends Controller
     {
         $searchModel = new StocktransSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->pagination->pageSize = 100;
         $dataProvider->setSort(['defaultOrder'=>['id'=>SORT_DESC]]);
 
         return $this->render('index', [
@@ -78,14 +99,15 @@ class StocktransController extends Controller
         $prodid = \Yii::$app->request->post('line_item_id');
         $qty = \Yii::$app->request->post('line_qty');
 
-       // print_r($prodid);return;
+        //($wh_id);return;
 
         if($wh_id != null){
             $model_journal = new \backend\models\Stockjournal();
-            $model_journal->journal_no = $model_journal->getLastNo($company_id,$branch_id);
-            $model_journal->trans_date = date('Y-m-d');
+            $model_journal->journal_no = $model_journal->getLastNoBackend($company_id,$branch_id);
+            $model_journal->trans_date = date('Y-m-d H:i:s');
             $model_journal->company_id = $company_id;
             $model_journal->branch_id = $branch_id;
+            $model_journal->production_type = 15;
             if($model_journal->save(false)){
                 for($i=0;$i<=count($wh_id)-1;$i++){
                     $model = new \backend\models\Stocktrans();
@@ -101,10 +123,11 @@ class StocktransController extends Controller
                     $model->branch_id = $branch_id;
                     $model->created_by = \Yii::$app->user->id;
                     if($model->save()){
-                        $this->updateSummary($prodid[$i],$wh_id[$i],$qty[$i]);
+                        $this->updateSummary($prodid[$i],$wh_id[$i],$qty[$i],$company_id,$branch_id);
                     }
                 }
             }
+
             $model = \backend\models\Stockjournal::find()->where(['id' => $model_journal->id])->one();
             $model_line = \backend\models\Stocktrans::find()->where(['journal_id' => $model_journal->id])->all();
 
@@ -120,7 +143,7 @@ class StocktransController extends Controller
         return $this->redirect(['productionrec/index']);
     }
 
-    public function updateSummary($product_id, $wh_id, $qty){
+    public function updateSummary($product_id, $wh_id, $qty,$company_id,$branch_id){
         if($wh_id != null && $product_id != null && $qty > 0){
             $model = \backend\models\Stocksum::find()->where(['warehouse_id'=>$wh_id,'product_id'=>$product_id])->one();
             if($model){
@@ -130,6 +153,8 @@ class StocktransController extends Controller
                 $model_new = new \backend\models\Stocksum();
                 $model_new->warehouse_id = $wh_id;
                 $model_new->product_id = $product_id;
+                $model_new->company_id = $company_id;
+                $model_new->branch_id = $branch_id;
                 $model_new->qty = $qty;
                 $model_new->save(false);
             }

@@ -30,7 +30,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
         </div>
         <div class="col-lg-3">
             <?= $form->field($model, 'customer_group_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customergroup::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', function ($data) {
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customergroup::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id,'status'=>1])->all(), 'id', function ($data) {
                     return $data->code . ' ' . $data->name;
                 }),
                 'options' => [
@@ -42,7 +42,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
     <div class="row">
         <div class="col-lg-4">
             <?= $form->field($model, 'delivery_route_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', function ($data) {
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id,'status'=>1])->all(), 'id', function ($data) {
                     return $data->code . ' ' . $data->name;
                 }),
                 'options' => [
@@ -52,7 +52,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
         </div>
         <div class="col-lg-4">
             <?= $form->field($model, 'customer_type_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customertype::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', function ($data) {
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customertype::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id,'status'=>1])->all(), 'id', function ($data) {
                     return $data->code . ' ' . $data->name;
                 }),
                 'options' => [
@@ -224,38 +224,83 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                     </td>
                 </tr>
             <?php else: ?>
-                <?php if (count($model_asset_list) > 0): ?>
-                    <?php $i = 0; ?>
-                    <?php foreach ($model_asset_list as $value): ?>
-                        <?php $i += 1; ?>
-                        <tr data-var="<?=$value->id?>">
+                <?php if ($model_asset_list != null): ?>
+                    <?php if (count($model_asset_list) > 0): ?>
+                        <?php $i = 0; ?>
+                        <?php foreach ($model_asset_list as $value): ?>
+                            <?php $i += 1; ?>
+                            <tr data-var="<?= $value->id ?>">
+                                <td style="text-align: center">
+                                    <?= $i ?>
+                                </td>
+                                <td>
+                                    <input type="hidden"
+                                           name="line_product_id[]"
+                                           class="line-product-id" value="<?= $value->product_id ?>">
+                                    <input type="text"
+                                           class="form-control line-product-code"
+                                           name="line_product_code[]"
+                                           value="<?= \backend\models\Assetsitem::findCode($value->product_id) ?>"
+                                           readonly>
+                                </td>
+                                <td>
+                                    <input type="text"
+                                           class="form-control line-prod-name"
+                                           name="line_product_name[]"
+                                           value="<?= \backend\models\Assetsitem::findName($value->product_id) ?>"
+                                           readonly>
+                                </td>
+                                <td>
+                                    <input type="number" min="0"
+                                           class="form-control line-qty"
+                                           name="line_qty[]" value="<?= $value->qty ?>">
+                                </td>
+                                <td>
+                                    <input type="text"
+                                           class="form-control line-start-date"
+                                           name="line_start_date[]" value="<?= $value->start_date ?>">
+                                </td>
+                                <td>
+                                    <div class="btn btn-info" data-var="<?=$value->product_id?>" onclick="showPhoto($(this))">
+                                        รายละเอียด
+                                    </div>
+                                </td>
+                                <td style="text-align: center">
+                                    <div class="btn btn-danger btn-sm"
+                                         onclick="removeline($(this))">
+                                        <i class="fa fa-trash"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
                             <td style="text-align: center">
-                                <?= $i ?>
+
                             </td>
                             <td>
                                 <input type="hidden"
                                        name="line_product_id[]"
-                                       class="line-product-id" value="<?=$value->product_id?>">
+                                       class="line-product-id">
                                 <input type="text"
                                        class="form-control line-product-code"
-                                       name="line_product_code[]" value="<?=\backend\models\Product::findCode($value->product_id)?>"
+                                       name="line_product_code[]"
                                        readonly>
                             </td>
                             <td>
                                 <input type="text"
                                        class="form-control line-prod-name"
-                                       name="line_product_name[]" value="<?=\backend\models\Product::findName($value->product_id)?>"
-                                       readonly>
+                                       name="line_product_name[]" readonly>
                             </td>
                             <td>
                                 <input type="number" min="0"
                                        class="form-control line-qty"
-                                       name="line_qty[]" value="<?=$value->qty?>">
+                                       name="line_qty[]">
                             </td>
                             <td>
                                 <input type="text"
                                        class="form-control line-start-date"
-                                       name="line_start_date[]" value="<?=$value->start_date?>">
+                                       name="line_start_date[]">
                             </td>
                             <td>
                                 <div class="btn btn-info">
@@ -269,48 +314,49 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                                 </div>
                             </td>
                         </tr>
-                    <?php endforeach; ?>
+                    <?php endif; ?>
                 <?php else: ?>
-                    <tr>
-                        <td style="text-align: center">
+                        <tr>
+                            <td style="text-align: center">
 
-                        </td>
-                        <td>
-                            <input type="hidden"
-                                   name="line_product_id[]"
-                                   class="line-product-id">
-                            <input type="text"
-                                   class="form-control line-product-code"
-                                   name="line_product_code[]"
-                                   readonly>
-                        </td>
-                        <td>
-                            <input type="text"
-                                   class="form-control line-prod-name"
-                                   name="line_product_name[]" readonly>
-                        </td>
-                        <td>
-                            <input type="number" min="0"
-                                   class="form-control line-qty"
-                                   name="line_qty[]">
-                        </td>
-                        <td>
-                            <input type="text"
-                                   class="form-control line-start-date"
-                                   name="line_start_date[]">
-                        </td>
-                        <td>
-                            <div class="btn btn-info">
-                                รายละเอียด
-                            </div>
-                        </td>
-                        <td style="text-align: center">
-                            <div class="btn btn-danger btn-sm"
-                                 onclick="removeline($(this))">
-                                <i class="fa fa-trash"></i>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                            <td>
+                                <input type="hidden"
+                                       name="line_product_id[]"
+                                       class="line-product-id">
+                                <input type="text"
+                                       class="form-control line-product-code"
+                                       name="line_product_code[]"
+                                       readonly>
+                            </td>
+                            <td>
+                                <input type="text"
+                                       class="form-control line-prod-name"
+                                       name="line_product_name[]" readonly>
+                            </td>
+                            <td>
+                                <input type="number" min="0"
+                                       class="form-control line-qty"
+                                       name="line_qty[]">
+                            </td>
+                            <td>
+                                <input type="text"
+                                       class="form-control line-start-date"
+                                       name="line_start_date[]">
+                            </td>
+                            <td>
+                                <div class="btn btn-info">
+                                    รายละเอียด
+                                </div>
+                            </td>
+                            <td style="text-align: center">
+                                <div class="btn btn-danger btn-sm"
+                                     onclick="removeline($(this))">
+                                    <i class="fa fa-trash"></i>
+                                </div>
+                            </td>
+                        </tr>
+
                 <?php endif; ?>
             <?php endif; ?>
             </tbody>
@@ -318,7 +364,7 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
             <tr>
                 <td>
                     <div class="btn btn-primary" onclick="showfind($(this))">
-                        <i class="fa fa-plus-circle" ></i>
+                        <i class="fa fa-plus-circle"></i>
                     </div>
                 </td>
             </tr>
@@ -442,10 +488,41 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
     </div>
 </div>
 
+<div id="photoModal"
+     class="modal fade"
+     role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>รูปภาพ</h4>
+            </div>
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+
+            <div class="modal-body">
+              <div class="show-asset-photo"></div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-default"
+                        data-dismiss="modal">
+                    <i
+                            class="fa fa-close text-danger"></i>
+                    ปิดหน้าต่าง
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <?php
-$url_to_find_item = \yii\helpers\Url::to(['pricegroup/productdata'], true);
+$url_to_find_item = \yii\helpers\Url::to(['assetsitem/get-item'], true);
 $url_to_get_price_group = \yii\helpers\Url::to(['journalissue/find-pricegroup'], true);
 $url_to_get_standard_qty = \yii\helpers\Url::to(['journalissue/standardcal'], true);
+$url_to_find_asset_photo = \yii\helpers\Url::to(['assetsitem/getassetphoto'], true);
 $js = <<<JS
   var removelist = [];
   var selecteditem = [];
@@ -466,7 +543,10 @@ $(".btn-delete-photo").click(function (){
                   $("#form-delete-photo").submit();
          });
      });
-
+$(".btn-search-submit").click(function (){
+    var txt = $(".search-item").val();
+    showfindwithsearch(txt);
+});
 });
 function showfind(e){
    
@@ -475,7 +555,7 @@ function showfind(e){
               'dataType': 'html',
               'async': false,
               'url': "$url_to_find_item",
-              'data': {},
+              'data': {'txt':''},
               'success': function(data) {
                   // alert(data);
                    $(".table-find-list tbody").html(data);
@@ -484,12 +564,29 @@ function showfind(e){
               });
       
   }
+function showfindwithsearch(txt){
+   
+      $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_find_item",
+              'data': {'txt': txt},
+              'success': function(data) {
+                  // alert(data);
+                   $(".table-find-list tbody").html(data);
+                   $("#findModal").modal("show");
+                 }
+              });
+      
+}  
   function addselecteditem(e) {
         var id = e.attr('data-var');
         var code = e.closest('tr').find('.line-find-code').val();
         var name = e.closest('tr').find('.line-find-name').val();
         var price = e.closest('tr').find('.line-find-price').val();
         if (id) {
+           // alert(id);
             if (e.hasClass('btn-outline-success')) {
                 var obj = {};
                 obj['id'] = id;
@@ -541,6 +638,7 @@ function showfind(e){
                  //        return false;
                  //    }
                 
+              //  alert(line_prod_id);
                 var tr = $("#table-list tbody tr:last");
                 
                 if (tr.closest("tr").find(".line-product-code").val() == "") {
@@ -633,6 +731,23 @@ function showfind(e){
           }
       });
       return _has;
+    }
+    
+    
+    function showPhoto(e){
+        var id = e.attr("data-var");
+         $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_find_asset_photo",
+              'data': {'id': id},
+              'success': function(data) {
+                  // alert(data);
+                   $(".show-asset-photo").html(data);
+                   $("#photoModal").modal("show");
+                 }
+              });
     }
 JS;
 

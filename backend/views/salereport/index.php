@@ -76,7 +76,7 @@ echo GridView::widget([
                     'contentFormats' => [      // content reformatting for each summary cell
                         //4 => ['format' => 'number', 'decimals' => 0],
                         6 => ['format' => 'number', 'decimals' => 0],
-                        8 => ['format' => 'number', 'decimals' => 0],
+                        8 => ['format' => 'number', 'decimals' => 2],
 //                        7 => ['format' => 'number', 'decimals' => 0],
                     ],
                     'contentOptions' => [      // content html attributes for each summary cell
@@ -206,7 +206,7 @@ echo GridView::widget([
             },
             'width' => '150px',
             'hAlign' => 'right',
-            'format' => ['decimal', 0],
+            'format' => ['decimal', 2],
             'pageSummary' => true,
             'pageSummaryFunc' => GridView::F_SUM
         ],

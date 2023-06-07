@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-lg-10">
             <p>
-                <?= Html::a(Yii::t('app', '<i class="fa fa-plus"></i> สร้างใหม่'), ['create'], ['class' => 'btn btn-success']) ?>
+                <?php //echo Html::a(Yii::t('app', '<i class="fa fa-plus"></i> สร้างใหม่'), ['create'], ['class' => 'btn btn-success']) ?>
             </p>
         </div>
         <div class="col-lg-2" style="text-align: right">
@@ -157,7 +157,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align:center;', 'class' => 'activity-view-link',],
                 'class' => 'yii\grid\ActionColumn',
                 'contentOptions' => ['style' => 'text-align: center'],
-                'template' => '{view} {update}{delete}',
+                'template' => '{view}{delete}',
                 'buttons' => [
                     'view' => function ($url, $data, $index) {
                         $options = [
@@ -168,23 +168,23 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a(
                             '<span class="fas fa-eye btn btn-xs btn-default"></span>', $url, $options);
                     },
-                    'update' => function ($url, $data, $index) {
-                        $options = array_merge([
-                            'title' => Yii::t('yii', 'Update'),
-                            'aria-label' => Yii::t('yii', 'Update'),
-                            'data-pjax' => '0',
-                            'id' => 'modaledit',
-                        ]);
-                        return Html::a(
-                            '<span class="fas fa-edit btn btn-xs btn-default"></span>', $url, [
-                            'id' => 'activity-view-link',
-                            //'data-toggle' => 'modal',
-                            // 'data-target' => '#modal',
-                            'data-id' => $index,
-                            'data-pjax' => '0',
-                            // 'style'=>['float'=>'rigth'],
-                        ]);
-                    },
+//                    'update' => function ($url, $data, $index) {
+//                        $options = array_merge([
+//                            'title' => Yii::t('yii', 'Update'),
+//                            'aria-label' => Yii::t('yii', 'Update'),
+//                            'data-pjax' => '0',
+//                            'id' => 'modaledit',
+//                        ]);
+//                        return Html::a(
+//                            '<span class="fas fa-edit btn btn-xs btn-default"></span>', $url, [
+//                            'id' => 'activity-view-link',
+//                            //'data-toggle' => 'modal',
+//                            // 'data-target' => '#modal',
+//                            'data-id' => $index,
+//                            'data-pjax' => '0',
+//                            // 'style'=>['float'=>'rigth'],
+//                        ]);
+//                    },
                     'delete' => function ($url, $data, $index) {
                         $options = array_merge([
                             'title' => Yii::t('yii', 'Delete'),

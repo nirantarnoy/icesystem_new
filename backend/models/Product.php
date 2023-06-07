@@ -61,6 +61,11 @@ class Product extends \common\models\Product
         ];
     }
 
+    public static function findProductId($code, $company_id, $branch_id){
+        $model = Product::find()->select('id')->where(['code'=>trim($code),'company_id'=>$company_id,'branch_id'=>$branch_id])->one();
+        return $model != null?$model->id:0;
+    }
+
     public static function findCode($id){
         $model = Product::find()->select('code')->where(['id'=>$id])->one();
         return $model != null?$model->code:'';
@@ -68,6 +73,10 @@ class Product extends \common\models\Product
     public static function findName($id){
         $model = Product::find()->select('name')->where(['id'=>$id])->one();
         return $model !=null?$model->name:'';
+    }
+    public static function findDescription($id){
+        $model = Product::find()->select('description')->where(['id'=>$id])->one();
+        return $model !=null?$model->description:'';
     }
     public static function findPhoto($id){
         $model = Product::find()->where(['id'=>$id])->one();
@@ -77,9 +86,14 @@ class Product extends \common\models\Product
         $model = Product::find()->where(['id'=>$id])->one();
         return $model !=null?$model : null;
     }
-//    public function findUnitid($code){
-//        $model = Unit::find()->where(['name'=>$code])->one();
-//        return count($model)>0?$model->id:0;
-//    }
+    public function findUnitname($product_id){
+        $model = Product::find()->where(['id'=>$product_id])->one();
+        if($model){
+            $model_unit = \backend\models\Unit::find()->where(['id'=>$model->unit_id])->one();
+            return $model_unit !=null?$model_unit->name:'';
+        }else{
+            return '';
+        }
+    }
 
 }

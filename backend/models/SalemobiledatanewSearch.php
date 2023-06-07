@@ -13,12 +13,12 @@ use yii\data\ActiveDataProvider;
  */
 class SalemobiledatanewSearch extends QuerySaleMobileDataNew
 {
-    public $globalSearch;
+    public $globalSearch, $post_date, $route_id, $employee_id;
 
     public function rules()
     {
         return [
-            [['code', 'name', 'line_total'], 'safe'],
+            [['code', 'name', 'line_total','post_date','route_id','employee_id'], 'safe'],
             [['globalSearch'], 'string']
         ];
     }

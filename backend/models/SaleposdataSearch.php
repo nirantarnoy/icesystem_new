@@ -11,12 +11,12 @@ use yii\data\ActiveDataProvider;
  */
 class SaleposdataSearch extends QuerySalePosData
 {
-    public $globalSearch;
+    public $globalSearch, $from_date , $to_date, $emp_id;
 
     public function rules()
     {
         return [
-            [['code', 'name', 'line_total'], 'safe'],
+            [['code', 'name', 'line_total','from_date','to_date','emp_id','product_id'], 'safe'],
             [['globalSearch'], 'string']
         ];
     }

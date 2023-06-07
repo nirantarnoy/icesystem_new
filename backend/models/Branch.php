@@ -55,6 +55,10 @@ class Branch extends \common\models\Branch
         $model = Branch::find()->where(['id'=>$id])->one();
         return $model != null?$model->name:'';
     }
+    public static function findLintoken($company_id,$id){
+        $model = Branch::find()->where(['id'=>$id,'company_id'=>$company_id])->one();
+        return $model != null?$model->line_token:'';
+    }
 //    public function findUnitid($code){
 //        $model = Unit::find()->where(['name'=>$code])->one();
 //        return count($model)>0?$model->id:0;

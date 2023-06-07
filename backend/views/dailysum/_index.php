@@ -20,58 +20,63 @@ if ($show_pos_date != null) {
 }
 $route_id = $selected_route_id;
 ?>
-<form action="<?= \yii\helpers\Url::to(['dailysum/index'], true) ?>"
-      method="post">
-    <div class="row">
-
-        <div class="col-lg-3">
-            <div class="label">
-                เลือกดูตามวันที่
-            </div>
-            <div class="input-group">
-                <?php
-                echo \kartik\date\DatePicker::widget([
-                    'name' => 'pos_date',
-                    'value' => $pos_date,
-                    'pluginOptions' => [
-                        'format' => 'dd/mm/yyyy',
-                        'todayHighlight' => true
-                    ]
-                ]);
-                ?>
-            </div>
-
-        </div>
-        <div class="col-lg-3">
-            <div class="label">
-                สายส่ง
-            </div>
-            <div class="input-group">
-                <?php
-                echo \kartik\select2\Select2::widget([
-                    'name' => 'route_id',
-                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(),'id','name'),
-                    'value' => $route_id,
-                    'options' => [
-                       'placeholder'=>'เลือกสายส่ง'
-                    ]
-                ]);
-                ?>
-            </div>
-
-        </div>
-        <div class="col-lg-2">
-            <div class="label"
-                 style="color: white">
-                ค้นหา
-            </div>
-            <input type="submit"
-                   class="btn btn-primary"
-                   value="ค้นหา"></input>
-        </div>
-
+<!--<form action="--><?//= \yii\helpers\Url::to(['dailysum/index'], true) ?><!--"-->
+<!--      method="post">-->
+<!--    <div class="row">-->
+<!---->
+<!--        <div class="col-lg-3">-->
+<!--            <div class="label">-->
+<!--                เลือกดูตามวันที่-->
+<!--            </div>-->
+<!--            <div class="input-group">-->
+<!--                --><?php
+//                echo \kartik\date\DatePicker::widget([
+//                    'name' => 'pos_date',
+//                    'value' => $pos_date,
+//                    'pluginOptions' => [
+//                        'format' => 'dd/mm/yyyy',
+//                        'todayHighlight' => true
+//                    ]
+//                ]);
+//                ?>
+<!--            </div>-->
+<!---->
+<!--        </div>-->
+<!--        <div class="col-lg-3">-->
+<!--            <div class="label">-->
+<!--                สายส่ง-->
+<!--            </div>-->
+<!--            <div class="input-group">-->
+<!--                --><?php
+//                echo \kartik\select2\Select2::widget([
+//                    'name' => 'route_id',
+//                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(),'id','name'),
+//                    'value' => $route_id,
+//                    'options' => [
+//                       'placeholder'=>'เลือกสายส่ง'
+//                    ]
+//                ]);
+//                ?>
+<!--            </div>-->
+<!---->
+<!--        </div>-->
+<!--        <div class="col-lg-2">-->
+<!--            <div class="label"-->
+<!--                 style="color: white">-->
+<!--                ค้นหา-->
+<!--            </div>-->
+<!--            <input type="submit"-->
+<!--                   class="btn btn-primary"-->
+<!--                   value="ค้นหา"></input>-->
+<!--        </div>-->
+<!---->
+<!--    </div>-->
+<!--</form>-->
+<div class="row">
+    <div class="col-lg-12">
+        <?php echo $this->render('_search', ['model' => $searchModel,'company_id'=>$company_id,'branch_id'=>$branch_id]); ?>
     </div>
-</form>
+</div>
 <br/>
 <div class="row">
     <div class="col-lg-12">

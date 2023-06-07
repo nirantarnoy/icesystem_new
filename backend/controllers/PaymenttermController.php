@@ -3,10 +3,13 @@
 namespace backend\controllers;
 
 use backend\models\SalecomSearch;
+use backend\models\SalegroupSearch;
 use Yii;
 use backend\models\Paymentterm;
 use backend\models\PaymenttermSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -27,6 +30,24 @@ class PaymenttermController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access'=>[
+                'class'=>AccessControl::className(),
+                'denyCallback' => function ($rule, $action) {
+                    throw new ForbiddenHttpException('คุณไม่ได้รับอนุญาติให้เข้าใช้งาน!');
+                },
+                'rules'=>[
+                    [
+                        'allow'=>true,
+                        'roles'=>['@'],
+                        'matchCallback'=>function($rule,$action){
+                            $currentRoute = Yii::$app->controller->getRoute();
+                            if(Yii::$app->user->can($currentRoute)){
+                                return true;
+                            }
+                        }
+                    ]
+                ]
+            ],
         ];
     }
 
@@ -36,9 +57,22 @@ class PaymenttermController extends Controller
      */
     public function actionIndex()
     {
+        $viewstatus = 1;
+
+        if(\Yii::$app->request->get('viewstatus')!=null){
+            $viewstatus = \Yii::$app->request->get('viewstatus');
+        }
+
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new PaymenttermSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if($viewstatus ==1){
+            $dataProvider->query->andFilterWhere(['status'=>$viewstatus]);
+        }
+        if($viewstatus == 2){
+            $dataProvider->query->andFilterWhere(['status'=>0]);
+        }
+
         $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
         $dataProvider->pagination->pageSize = $pageSize;
 
@@ -46,6 +80,7 @@ class PaymenttermController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'perpage' => $pageSize,
+            'viewstatus'=>$viewstatus,
         ]);
     }
 

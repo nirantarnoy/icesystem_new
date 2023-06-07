@@ -48,7 +48,7 @@ class Branch extends \yii\db\ActiveRecord
         return [
             [['code'],'unique'],
             [['company_id', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['code', 'name', 'description', 'logo','address'], 'string', 'max' => 255],
+            [['code', 'name', 'description', 'logo','address','line_token','line_token_2'], 'string', 'max' => 255],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'id']],
         ];
     }
@@ -66,6 +66,7 @@ class Branch extends \yii\db\ActiveRecord
             'description' => Yii::t('app', 'รายละเอียด'),
             'logo' => Yii::t('app', 'Logo'),
             'status' => Yii::t('app', 'สถานะ'),
+            'line_token' => Yii::t('app', 'Line Token'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'created_by' => Yii::t('app', 'Created By'),

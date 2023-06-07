@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\Orders;
 use yii\helpers\Url;
 use miloschuman\highcharts\Highcharts;
 
@@ -8,6 +9,35 @@ $dash_date = null;
 if ($f_date != null && $t_date != null) {
     $dash_date = date('d/m/Y', strtotime($f_date)) . ' - ' . date('d/m/Y', strtotime($t_date));
 }
+
+//echo \backend\models\Stockjournal::getLastNo(1,1);
+
+//$start_time = microtime(true);
+//$current_date = date('Y-m-d');
+////   $model = Orders::find()->MAX('order_no');
+////    $model = Orders::find()->where(['date(order_date)' => date('Y-m-d', strtotime($date))])->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])->MAX('order_no');
+//$model = Orders::find()->where(['date(order_date)' => $current_date])->andFilterWhere(['company_id' => 1, 'branch_id' => 1])->MAX('order_no');
+////$model = Orders::find()->select(['order_no'])->where(['date(order_date)' => $current_date])->andFilterWhere(['company_id' => 1, 'branch_id' => 1])->orderBy(['id'=>SORT_DESC])->one();
+//
+//$pre = "SO";
+//if ($model != null) {
+//    $prefix = $pre . '-' . substr(date("Y"), 2, 2) . date('m') . date('d') . '-';
+//    $cnum = substr((string)$model, 10, 4);
+//    $len = strlen($cnum);
+//    $clen = strlen($cnum + 1);
+//    $loop = $len - $clen;
+//    for ($i = 1; $i <= $loop; $i++) {
+//        $prefix .= "0";
+//    }
+//    $prefix .= $cnum + 1;
+//    echo $prefix;
+//} else {
+//    $prefix = $pre . '-' . substr(date("Y"), 2, 2) . date('m') . date('d') . '-';
+//    echo $prefix . '0001';
+//}
+//$end_time = microtime(true);
+//
+//echo "time used is ". ($end_time - $start_time);
 
 ?>
 <br/>
@@ -352,13 +382,62 @@ if ($f_date != null && $t_date != null) {
     </div>
 </div>
 <br/>
-
+<!--<div class="row">-->
+<!--    <div class="col-lg-12">-->
+<!--        <form action="--><?//=Url::to(['site/getcominfo'],true)?><!--">-->
+<!--            <button class="btn btn-success">Get Mac</button>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<button onclick="takeshot()">-->
+<!--    Take Screenshot-->
+<!--</button>-->
+<!--<div id="div1">-->
+<!--    niran tarlek-->
+<!--    <table class="table">-->
+<!--        <tr>-->
+<!--            <td>dfdfd</td>-->
+<!--            <td>fdfd</td>-->
+<!--            <td>fdfdfd</td>-->
+<!--        </tr>-->
+<!--    </table>-->
+<!--</div>-->
 <?php
+$this->registerJsFile(\Yii::$app->request->baseUrl . '/js/jquery.html2canvas.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
+$url_to_save_screenshort = \yii\helpers\Url::to(['site/createscreenshort'],true);
 $js = <<<JS
 $(function(){
     //aleret();
-})
+   
+});
+function takeshot() {
+    const input = document.getElementById('div1');
+    const area = input.getBoundingClientRect()
+      html2canvas(input,{
+          useCORS: true,
+          scrollX: 0,
+          scrollY: 0,
+          width: area.width,
+          height: area.height
+      }).then((canvas) => {
+            console.log("done ... ");
+            var img = canvas.toDataURL("image/png");//here set the image extension and now image data is in var img that will send by our ajax call to our api or server site page
+              $.ajax({
+                    type: 'POST',
+                    url: "$url_to_save_screenshort",//path to send this image data to the server site api or file where we will get this data and convert it into a file by base64
+                    data:{
+                      "img":img
+                    },
+                    success:function(data){
+                        
+                    alert(data);
+                    //$("#dis").html(data);
+                    }
+              });
+        });
+        
+     }
 JS;
 
 $this->registerJs($js, static::POS_END);

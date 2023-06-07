@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <p>
                 <?= Html::a(Yii::t('app', '<i class="fa fa-plus"></i> สร้างใหม่'), ['create'], ['class' => 'btn btn-success']) ?>
                 <?= Html::a(Yii::t('app', '<i class="fa fa-calculator"></i> สรุปแผนผลิต'), ['plan/calsummary'], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a(Yii::t('app', '<i class="fa fa-calculator"></i> สรุปยอดสั่งแยกสาย'), ['plan/routesummary'], ['class' => 'btn btn-info']) ?>
             </p>
         </div>
         <div class="col-lg-2"
@@ -74,13 +75,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     return \backend\models\Deliveryroute::findName($data->route_id);
                 }
             ],
+//            [
+//                'attribute' => 'customer_id',
+//                'value' => function ($data) {
+//                   return \backend\models\Customer::findName($data->customer_id);
+//                }
+//            ],
+            //'description',
             [
-                'attribute' => 'customer_id',
+                'label' => 'เลขที่ใบเบิก',
                 'value' => function ($data) {
-                   return \backend\models\Customer::findName($data->customer_id);
+                    return \backend\models\Journalissue::findPlan($data->id);
                 }
             ],
-            //'description',
             [
                 'attribute' => 'status',
                 'value' => function ($data) {

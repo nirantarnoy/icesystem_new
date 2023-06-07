@@ -32,6 +32,7 @@ class TransferController extends Controller
     {
         $status = false;
         $data = [];
+        $data_list = null;
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $req_data = \Yii::$app->request->getBodyParams();
@@ -67,23 +68,25 @@ class TransferController extends Controller
                 $model->branch_id = $branch_id;
                 $model->status = 1;
                 if ($model->save(false)) {
-                    if (count($data_list) > 0) {
-                        for ($i = 0; $i <= count($data_list) - 1; $i++) {
-                            if ($data_list[$i]['qty'] <= 0) continue;
-
-                            $model_line = new \backend\models\Transferline();
-                            $model_line->transfer_id = $model->id;
-                            $model_line->product_id = $data_list[$i]['product_id'];
-                            $model_line->sale_price = $data_list[$i]['price'];
-                            $model_line->qty = $data_list[$i]['qty'];
-                            $model_line->avl_qty = $data_list[$i]['qty'];
-                            $model_line->status = 1;
-                            if ($model_line->save(false)) {
-                                //$this->updateIssue($data_list[$i]['issue_id'], $data_list[$i]['product_id'], $data_list[$i]['qty']);
-                                $status = true;
+                    if($data_list != null){
+                        if (count($data_list) > 0) {
+                            for ($i = 0; $i <= count($data_list) - 1; $i++) {
+                                if ($data_list[$i]['qty'] <= 0) continue;
+                                $model_line = new \backend\models\Transferline();
+                                $model_line->transfer_id = $model->id;
+                                $model_line->product_id = $data_list[$i]['product_id'];
+                                $model_line->sale_price = $data_list[$i]['price'];
+                                $model_line->qty = $data_list[$i]['qty'];
+                                $model_line->avl_qty = $data_list[$i]['qty'];
+                                $model_line->status = 1;
+                                if ($model_line->save(false)) {
+                                    // $this->updateIssue($data_list[$i]['issue_id'], $data_list[$i]['product_id'], $data_list[$i]['qty']);
+                                    $status = true;
+                                }
                             }
                         }
                     }
+
                 }
             }
 

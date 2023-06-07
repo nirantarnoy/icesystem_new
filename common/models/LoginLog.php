@@ -30,6 +30,7 @@ class LoginLog extends \yii\db\ActiveRecord
         return [
             [['user_id','status'], 'integer'],
             [['login_date', 'logout_date'], 'safe'],
+            [['ip'],'string']
         ];
     }
 
@@ -42,6 +43,7 @@ class LoginLog extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_id' => 'User ID',
             'status' => 'Status',
+            'ip' => 'IP',
             'login_date' => 'Login Date',
             'logout_date' => 'Logout Date',
         ];

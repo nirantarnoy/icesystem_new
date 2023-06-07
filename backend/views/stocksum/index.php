@@ -50,7 +50,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     return number_format($data->qty, 1);
                 }
             ],
-            //'location_id',
+            [
+                'attribute' => 'route_id',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
+                'value' => function ($data) {
+                    return \backend\models\Deliveryroute::findName($data->route_id);
+                }
+            ],
             //'lot_no',
             [
                 'attribute' => 'updated_at',

@@ -82,16 +82,22 @@ use yii\widgets\ActiveForm;
     </div>
     <br>
     <div class="row">
-        <div class="col-lg-1">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-3">
+            <label for=""><?= $model->getAttributeLabel('is_primary') ?></label>
+            <?php echo $form->field($model, 'is_primary')->widget(\toxor88\switchery\Switchery::className(),['options'=>['label'=>'','class'=>'form-control']])->label(false) ?>
         </div>
         <div class="col-lg-3">
             <label for=""><?= $model->getAttributeLabel('is_reprocess') ?></label>
             <?php echo $form->field($model, 'is_reprocess')->widget(\toxor88\switchery\Switchery::className(),['options'=>['label'=>'','class'=>'form-control']])->label(false) ?>
         </div>
-        <div class="col-lg-8">
+        <div class="col-lg-3">
+            <label for=""><?= $model->getAttributeLabel('is_warehouse_car') ?></label>
+            <?php echo $form->field($model, 'is_warehouse_car')->widget(\toxor88\switchery\Switchery::className(),['options'=>['label'=>'','class'=>'form-control']])->label(false) ?>
         </div>
     </div>
     <br>
+
     <div class="row">
         <div class="col-lg-1"></div>
         <div class="col-lg-10">

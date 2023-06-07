@@ -1,49 +1,38 @@
 <?php
 
+use kartik\daterange\DateRangePicker;
 use kartik\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
 
 $this->title = 'สรุปยอดขายประจำวัน';
 $pos_date = date('d/m/Y');
-if ($show_pos_date != null) {
-    $pos_date = date('d/m/Y', strtotime($show_pos_date));
+$emp_value = 0;
+if($emp_id != null){
+    $emp_value = $emp_id;
 }
+
+
+$company_id = 1;
+$branch_id = 1;
+if (!empty(\Yii::$app->user->identity->company_id)) {
+    $company_id = \Yii::$app->user->identity->company_id;
+}
+if (!empty(\Yii::$app->user->identity->branch_id)) {
+    $branch_id = \Yii::$app->user->identity->branch_id;
+}
+
+//echo $from_date_time;
+//if ($show_pos_date != null) {
+//    $pos_date = date('d/m/Y', strtotime($show_pos_date));
+//}
 ?>
-<form action="<?= \yii\helpers\Url::to(['pos/dailysum'], true) ?>"
-      method="post">
-    <div class="row">
+<!--<form action="--><?//= \yii\helpers\Url::to(['pos/dailysum'], true) ?><!--"-->
+<!--      method="post">-->
+<!--    -->
+<!--</form>-->
 
-        <div class="col-lg-3">
-            <div class="label">
-                เลือกดูตามวันที่
-            </div>
-            <div class="input-group">
-                <?php
-                echo \kartik\date\DatePicker::widget([
-                    'name' => 'pos_date',
-                    'value' => $pos_date,
-                    'pluginOptions' => [
-                        'format' => 'dd/mm/yyyy',
-                        'todayHighlight' => true
-                    ]
-                ]);
-                ?>
-            </div>
-
-        </div>
-        <div class="col-lg-2">
-            <div class="label"
-                 style="color: white">
-                ค้นหา
-            </div>
-            <input type="submit"
-                   class="btn btn-primary"
-                   value="ค้นหา"></input>
-        </div>
-
-    </div>
-</form>
+<?php echo $this->render('_searchdailysum', ['model' => $searchModel]); ?>
 <br/>
 <div class="row">
     <div class="col-lg-12">
@@ -137,7 +126,11 @@ if ($show_pos_date != null) {
                     'attribute' => 'line_qty_cash',
                     'label' => 'จำนวน(สด)',
                     'headerOptions' => ['style' => 'text-align: right'],
-                    'contentOptions' => ['style' => 'text-align: right'],
+                   // 'contentOptions' => ['style' => 'text-align: right'],
+                    'contentOptions' => function($data){
+                         $x = $data->line_qty_cash==0?'transparent':'black';
+                         return ['style'=> 'text-align: right;color:'.$x];
+                    },
                     'value' => function ($data) {
                         return $data->line_qty_cash;
                     },
@@ -150,7 +143,10 @@ if ($show_pos_date != null) {
                     'attribute' => 'line_qty_credit',
                     'label' => 'จำนวน(เชื่อ)',
                     'headerOptions' => ['style' => 'text-align: right'],
-                    'contentOptions' => ['style' => 'text-align: right'],
+                    'contentOptions' => function($data){
+                        $x = $data->line_qty_credit==0?'transparent':'black';
+                        return ['style'=> 'text-align: right;color:'.$x];
+                    },
                     'value' => function ($data) {
                         return $data->line_qty_credit;
                     },
@@ -176,7 +172,10 @@ if ($show_pos_date != null) {
                     'attribute' => 'line_total_cash',
                     'label' => 'สด',
                     'headerOptions' => ['style' => 'text-align: right'],
-                    'contentOptions' => ['style' => 'text-align: right'],
+                    'contentOptions' => function($data){
+                        $x = $data->line_total_cash==0?'transparent':'black';
+                        return ['style'=> 'text-align: right;color:'.$x];
+                    },
                     'value' => function ($data) {
                         return $data->line_total_cash;
                     },
@@ -189,7 +188,10 @@ if ($show_pos_date != null) {
                     'attribute' => 'line_total_credit',
                     'label' => 'เชื่อ',
                     'headerOptions' => ['style' => 'text-align: right'],
-                    'contentOptions' => ['style' => 'text-align: right'],
+                    'contentOptions' => function($data){
+                        $x = $data->line_total_credit==0?'transparent':'black';
+                        return ['style'=> 'text-align: right;color:'.$x];
+                    },
                     'value' => function ($data) {
                         return $data->line_total_credit;
                     },
@@ -198,7 +200,6 @@ if ($show_pos_date != null) {
                     'pageSummaryFunc' => GridView::F_SUM,
                     'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
                 ],
-
                 [
                     'attribute' => 'line_total',
                     'label' => 'ยอดขายรวม',
@@ -220,65 +221,65 @@ if ($show_pos_date != null) {
 </div>
 
 <br>
+<!--<div class="row">-->
+<!--    <div class="col-lg-12">-->
+<!--        <h4 class="text-success">-->
+<!--            ประเภทชำระเงิน</h4>-->
+<!--    </div>-->
+<!--</div>-->
 <div class="row">
-    <div class="col-lg-12">
-        <h4 class="text-success">
-            ประเภทชำระเงิน</h4>
-    </div>
-</div>
-<div class="row">
-    <div class="col-lg-4">
-        <?= GridView::widget([
-            'dataProvider' => $dataProvider2,
-            // 'filterModel' => $searchModel,
-            'showPageSummary' => true,
-            'emptyCell' => '-',
-            'layout' => "{items}\n{summary}\n<div class='text-center'>{pager}</div>",
-            'summary' => "แสดง {begin} - {end} ของทั้งหมด {totalCount} รายการ",
-            'showOnEmpty' => false,
-            //    'bordered' => true,
-            //     'striped' => false,
-            //    'hover' => true,
-            'id' => 'pos-pay',
-            //'tableOptions' => ['class' => 'table table-hover'],
-            'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b></div>',
-            'columns' => [
-                [
-                    'class' => 'yii\grid\SerialColumn',
-                    'headerOptions' => ['style' => 'text-align: center'],
-                    'contentOptions' => ['style' => 'text-align: center;'],
-                    'footerOptions' => ['style' => 'background: white'],
-                ],
-                [
-                    'attribute' => 'code',
-                    'label' => 'รหัส',
-                    'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: '],
-                ],
-                [
-                    'attribute' => 'name',
-                    'label' => 'ประเภทชำระเงิน',
-                    'pageSummary' => false,
-                    'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: '],
-                ],
-                [
-                    'attribute' => 'payment_amount',
-                    'label' => 'ยอดขายรวม',
-                    'headerOptions' => ['style' => 'text-align: right'],
-                    'contentOptions' => ['style' => 'text-align: right'],
-                    'value' => function ($data) {
-                        return $data->payment_amount;
-                    },
-                    'format' => ['decimal', 2],
-                    'pageSummary' => true,
-                    'pageSummaryFunc' => GridView::F_SUM,
-                    'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
-                ]
-            ],
-            'pager' => ['class' => LinkPager::className()],
-        ]); ?>
-    </div>
-    <div class="col-lg-2"></div>
+<!--    <div class="col-lg-4">-->
+<!--        --><?php //echo GridView::widget([
+//            'dataProvider' => $dataProvider2,
+//            // 'filterModel' => $searchModel,
+//            'showPageSummary' => true,
+//            'emptyCell' => '-',
+//            'layout' => "{items}\n{summary}\n<div class='text-center'>{pager}</div>",
+//            'summary' => "แสดง {begin} - {end} ของทั้งหมด {totalCount} รายการ",
+//            'showOnEmpty' => false,
+//            //    'bordered' => true,
+//            //     'striped' => false,
+//            //    'hover' => true,
+//            'id' => 'pos-pay',
+//            //'tableOptions' => ['class' => 'table table-hover'],
+//            'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b></div>',
+//            'columns' => [
+//                [
+//                    'class' => 'yii\grid\SerialColumn',
+//                    'headerOptions' => ['style' => 'text-align: center'],
+//                    'contentOptions' => ['style' => 'text-align: center;'],
+//                    'footerOptions' => ['style' => 'background: white'],
+//                ],
+//                [
+//                    'attribute' => 'code',
+//                    'label' => 'รหัส',
+//                    'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: '],
+//                ],
+//                [
+//                    'attribute' => 'name',
+//                    'label' => 'ประเภทชำระเงิน',
+//                    'pageSummary' => false,
+//                    'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: '],
+//                ],
+//                [
+//                    'attribute' => 'payment_amount',
+//                    'label' => 'ยอดขายรวม',
+//                    'headerOptions' => ['style' => 'text-align: right'],
+//                    'contentOptions' => ['style' => 'text-align: right'],
+//                    'value' => function ($data) {
+//                        return $data->payment_amount;
+//                    },
+//                    'format' => ['decimal', 2],
+//                    'pageSummary' => true,
+//                    'pageSummaryFunc' => GridView::F_SUM,
+//                    'pageSummaryOptions' => ['class' => 'text-right', 'style' => 'background-color: #6699FF'],
+//                ]
+//            ],
+//            'pager' => ['class' => LinkPager::className()],
+//        ]); ?>
+<!--    </div>-->
     <div class="col-lg-6">
+        <?php if($dataProvider->getModels() != null):?>
         <a href="<?= \yii\helpers\Url::to(['pos/posttrans'], true) ?>"
            class="btn btn-success"><i
                     class="fa fa-check"></i>
@@ -287,5 +288,6 @@ if ($show_pos_date != null) {
             <small>หมายเหตุ: </small><small
                     class="text-danger">กรุณาตรวจสอบข้อมูลให้ครบถ้วนก่อนการยืนยันยอดการทำรายการก่อนส่งยอด</small>
         </p>
+        <?php endif;?>
     </div>
 </div>

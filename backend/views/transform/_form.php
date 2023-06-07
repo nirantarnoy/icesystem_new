@@ -13,12 +13,12 @@ if (isset($_SESSION['user_branch_id'])) {
     $branch_id = $_SESSION['user_branch_id'];
 }
 
-$default_warehouse = 6;
-if ($company_id == 1 && $branch_id == 2) {
-    $default_warehouse = 5;
+$default_warehouse = 0;
+if ($company_id != null && $branch_id != null) {
+    $default_warehouse = \backend\models\Warehouse::findPrimary($company_id, $branch_id);
 }
 
-$prod_data = \backend\models\Product::find()->where(['status' => 1])->andFilterWhere(['company_id'=>$company_id,'branch_id'=>$branch_id])->all();
+$prod_data = \backend\models\Product::find()->where(['status' => 1])->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
 function getStock($prod_id, $warehouse)
 {
     $qty = 0;
@@ -65,7 +65,8 @@ function getStock($prod_id, $warehouse)
             </select>
         </div>
         <div class="col-lg-3">
-            <input type="number" class="form-control line-from-qty" name="line_from_qty" min="0">
+            <input type="number" class="form-control line-from-qty" name="line_from_qty" step=".01"
+                   novalidate="novalidate" min="-1">
         </div>
     </div>
     <br>
@@ -83,39 +84,76 @@ function getStock($prod_id, $warehouse)
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td style="text-align: center;width: 5%">#</td>
-                    <td>
-                        <select name="line_to_product[]" class="form-control line-to-product" id="">
-                            <option value="-1">--เลือกสินค้า--</option>
-                            <?php foreach ($prod_data as $val): ?>
-                                <option value="<?= $val->id ?>"><?= $val->code . ' ' . $val->name ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </td>
-                    <td style="text-align: right">
-                        <input type="number" class="form-control line-to-qty" name="line_to_qty[]" min="0">
-                    </td>
-                    <td>
-                        <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
-                                    class="fa fa-trash"></i></div>
-                    </td>
-                </tr>
+                <?php if ($model_line != null): ?>
+                    <?php $i = 0; ?>
+                    <?php foreach ($model_line as $value): ?>
+                        <?php $i += 1; ?>
+                        <tr>
+                            <td style="text-align: center;width: 5%"><?= $i ?></td>
+                            <td>
+                                <select name="line_to_product[]" class="form-control line-to-product" id="">
+                                    <option value="-1">--เลือกสินค้า--</option>
+                                    <?php foreach ($prod_data as $val): ?>
+                                        <?php
+                                        $selected = '';
+                                        if ($val->id == $value->product_id) {
+                                            $selected = "selected";
+                                        }
+                                        ?>
+                                        <option value="<?= $val->id ?>" <?=$selected?>><?= $val->code . ' ' . $val->name ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </td>
+                            <td style="text-align: right">
+                                <input type="number" class="form-control line-to-qty" name="line_to_qty[]" step=".01"
+                                       novalidate="novalidate" min="-1" value="<?=$value->qty?>">
+                            </td>
+                            <td>
+                                <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
+                                            class="fa fa-trash"></i></div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td style="text-align: center;width: 5%">#</td>
+                        <td>
+                            <select name="line_to_product[]" class="form-control line-to-product" id="">
+                                <option value="-1">--เลือกสินค้า--</option>
+                                <?php foreach ($prod_data as $val): ?>
+                                    <option value="<?= $val->id ?>"><?= $val->code . ' ' . $val->name ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                        <td style="text-align: right">
+                            <input type="number" class="form-control line-to-qty" name="line_to_qty[]" step=".01"
+                                   novalidate="novalidate" min="-1">
+                        </td>
+                        <td>
+                            <div class="btn btn-danger btn-sm" onclick="removeline($(this))"><i
+                                        class="fa fa-trash"></i></div>
+                        </td>
+                    </tr>
+                <?php endif; ?>
                 </tbody>
                 <tfoot>
+                <?php if($model->isNewRecord):?>
                 <tr>
                     <td>
                         <div class="btn btn-primary" onclick="addline($(this))"><i
                                     class="fa fa-plus-circle"></i></div>
                     </td>
                 </tr>
+                <?php endif;?>
                 </tfoot>
             </table>
         </div>
     </div>
     <br>
     <div class="form-group">
+        <?php if($model->isNewRecord):?>
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?php endif;?>
     </div>
 
     <?php ActiveForm::end(); ?>

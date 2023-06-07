@@ -2,16 +2,38 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use yii\helpers\Url;
 
 $this->title = 'ประวัติการขาย POS';
+
+$company_id = 1;
+$branch_id = 1;
+$default_warehouse = 0; // 6
+if (!empty(\Yii::$app->user->identity->company_id)) {
+    $company_id = \Yii::$app->user->identity->company_id;
+}
+if (!empty(\Yii::$app->user->identity->branch_id)) {
+    $branch_id = \Yii::$app->user->identity->branch_id;
+    $warehouse_primary = \backend\models\Warehouse::findPrimary($company_id, $branch_id);
+    $default_warehouse = $warehouse_primary;
+}
 
 $filename = "empty";
 
 if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->session->getFlash('after-print'))) {
     $f_name = \Yii::$app->session->getFlash('msg-index');
-    echo $f_name;
-    if (file_exists('../web/uploads/slip/' . $f_name)) {
-        $filename = "../web/uploads/slip/" . $f_name;
+//    echo $f_name;
+//    if (file_exists('../web/uploads/slip/' . $f_name)) {
+//        $filename = "../web/uploads/slip/" . $f_name;
+//    }
+    if ($branch_id == 1) {
+        if (file_exists('../web/uploads/company1/slip/' . $f_name)) {
+            $filename = "../web/uploads/company1/slip/" . $f_name;
+        }
+    } else if ($branch_id == 2) {
+        if (file_exists('../web/uploads/company2/slip/' . $f_name)) {
+            $filename = "../web/uploads/company2/slip/" . $f_name;
+        }
     }
 }
 //unlink('../web/uploads/slip/slip.pdf');
@@ -47,17 +69,29 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                     'headerOptions' => ['style' => 'text-align: center'],
                     'contentOptions' => ['style' => 'text-align: center'],
                 ],
-                'order_no',
+                [
+                    'attribute' => 'order_no',
+                    'format' => 'raw',
+                    'value' => function ($data) {
+                       return '<div onclick="showdetail('.$data->id.')">'.$data->order_no.'</div>';
+                    }
+                ],
                 [
                     'attribute' => 'order_date',
                     'value' => function ($data) {
-                        return date('d/m/Y', strtotime($data->order_date));
+                        return date('d/m/Y H:i:s', strtotime($data->order_date));
                     }
                 ],
                 [
                     'attribute' => 'customer_id',
                     'value' => function ($data) {
-                        return \backend\models\Customer::findName($data->customer_id);
+                        $cus_name = '';
+                        if ($data->customer_id != null) {
+                            $cus_name = \backend\models\Customer::findName($data->customer_id);
+                        } else {
+                            $cus_name = \backend\models\Deliveryroute::findName($data->order_channel_id);
+                        }
+                        return $cus_name;
                     }
                 ],
 //            'customer_type',
@@ -73,10 +107,10 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
                     'value' => function ($data) {
-                       // return number_format(\backend\models\Orders::findordercredit($data->id));
-                        if($data->payment_method_id == 2){
-                            return number_format(\backend\models\Orders::getlinesum($data->id),2);
-                        }else{
+                        // return number_format(\backend\models\Orders::findordercredit($data->id));
+                        if ($data->payment_method_id == 2) {
+                            return number_format(\backend\models\Orders::getlinesum($data->id), 2);
+                        } else {
                             return 0;
                         }
                     }
@@ -86,9 +120,9 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
                     'value' => function ($data) {
-                        if($data->payment_method_id == 1){
-                            return number_format(\backend\models\Orders::getlinesum($data->id),2);
-                        }else{
+                        if ($data->payment_method_id == 1) {
+                            return number_format(\backend\models\Orders::getlinesum($data->id), 2);
+                        } else {
                             return 0;
                         }
 
@@ -99,7 +133,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                     'headerOptions' => ['style' => 'text-align: right'],
                     'contentOptions' => ['style' => 'text-align: right'],
                     'value' => function ($data) {
-                        return number_format($data->order_total_amt,2);
+                        return number_format($data->order_total_amt, 2);
                     }
                 ],
                 //'vat_per',
@@ -115,6 +149,8 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                     'value' => function ($data) {
                         if ($data->status == 1) {
                             return '<div class="badge badge-success">Open</div>';
+                        } else if ($data->status == 3) {
+                            return '<div class="badge badge-warning">Cencel</div>';
                         } else {
                             return '<div class="badge badge-secondary">Closed</div>';
                         }
@@ -139,7 +175,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                     'headerOptions' => ['style' => 'text-align:center;', 'class' => 'activity-view-link',],
                     'class' => 'yii\grid\ActionColumn',
                     'contentOptions' => ['style' => 'text-align: center'],
-                    'template' => '{print}{update}{delete}',
+                    'template' => '{print}{cancelorder}',
                     'buttons' => [
                         'print' => function ($url, $data, $index) {
                             $options = [
@@ -152,37 +188,48 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
                             return Html::a(
                                 '<span class="fas fa-list-alt btn btn-xs btn-default"></span>', $url, $options);
                         },
-                        'update' => function ($url, $data, $index) {
-                            $options = array_merge([
-                                'title' => Yii::t('yii', 'Update'),
-                                'aria-label' => Yii::t('yii', 'Update'),
+//                        'update' => function ($url, $data, $index) {
+//                            $options = array_merge([
+//                                'title' => Yii::t('yii', 'Update'),
+//                                'aria-label' => Yii::t('yii', 'Update'),
+//                                'data-pjax' => '0',
+//                                'id' => 'modaledit',
+//                            ]);
+//                            return Html::a(
+//                                '<span class="fas fa-edit btn btn-xs btn-default"></span>', null, [
+//                                'id' => 'activity-view-link',
+//                                //'data-toggle' => 'modal',
+//                                // 'data-target' => '#modal',
+//                                'data-id' => $data->id,
+//                                'data-pjax' => '0',
+//                                'onclick' => 'showorderedit($(this))'
+//                                // 'style'=>['float'=>'rigth'],
+//                            ]);
+//                        },
+                        'cancelorder' => function ($url, $data, $index) {
+                            $options = [
+                                'title' => Yii::t('yii', 'Cancel'),
+                                'aria-label' => Yii::t('yii', 'Cancel'),
                                 'data-pjax' => '0',
-                                'id' => 'modaledit',
-                            ]);
-                            return Html::a(
-                                '<span class="fas fa-edit btn btn-xs btn-default"></span>', null, [
-                                'id' => 'activity-view-link',
-                                //'data-toggle' => 'modal',
-                                // 'data-target' => '#modal',
                                 'data-id' => $data->id,
-                                'data-pjax' => '0',
-                                'onclick' => 'showorderedit($(this))'
-                                // 'style'=>['float'=>'rigth'],
-                            ]);
+//                                'target' => '_blank',
+                            ];
+                            return Html::a(
+                                '<span class="fas fa-trash-alt btn btn-xs btn-default"></span>', $url, $options);
                         },
-                        'delete' => function ($url, $data, $index) {
-                            $options = array_merge([
-                                'title' => Yii::t('yii', 'Delete'),
-                                'aria-label' => Yii::t('yii', 'Delete'),
-                                //'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
-                                //'data-method' => 'post',
-                                //'data-pjax' => '0',
-                                'data-url' => $url,
-                                'data-var' => $data->id,
-                                'onclick' => 'recDelete($(this));'
-                            ]);
-                            return Html::a('<span class="fas fa-trash-alt btn btn-xs btn-default"></span>', 'javascript:void(0)', $options);
-                        }
+//                        'delete' => function ($url, $data, $index) {
+//                            $options = array_merge([
+//                                'title' => Yii::t('yii', 'Delete'),
+//                                'aria-label' => Yii::t('yii', 'Delete'),
+//                                //'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+//                                //'data-method' => 'post',
+//                                //'data-pjax' => '0',
+//                                'data-url' => $url,
+//                                'data-var' => $data->id,
+//                                'onclick' => 'recDelete($(this));'
+//                            ]);
+//                            return Html::a('<span class="fas fa-trash-alt btn btn-xs btn-default"></span>', 'javascript:void(0)', $options);
+//                        }
                     ]
                 ],
             ],
@@ -270,9 +317,47 @@ if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->ses
         </div>
     </div>
 </div>
+
+<div id="findModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>รายละเอียดคำสั่งซื้อ</h4>
+            </div>
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+
+            <div class="modal-body">
+                <input type="hidden" name="line_qc_product" class="line_qc_product" value="">
+                <table class="table table-bordered table-striped table-find-list" width="100%">
+                    <thead>
+                    <tr>
+                        <th>สินค้า</th>
+                        <th style="text-align: right">จำนวน</th>
+                        <th style="text-align: right">ราคา</th>
+                        <th style="text-align: right">รวม</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                            class="fa fa-close text-danger"></i> ปิดหน้าต่าง
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
 <iframe id="iFramePdf" src="<?= $filename ?>" style="display:none;"></iframe>
 <?php
 $url_to_find_item = \yii\helpers\Url::to(['pos/orderedit'], true);
+$url_to_find_order_detail = Url::to(['orders/getorderdetail'], true);
 $js = <<<JS
  $(function(){
       //$(".btn-find-data").trigger('click');
@@ -354,6 +439,25 @@ function addCommas(nStr) {
         }
         return x1 + x2;
  }
+ function showdetail(e){
+    var order_id = e
+    //alert(order_id);
+    if(order_id!=null){
+        $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_find_order_detail",
+              'data': {'id': order_id},
+              'success': function(data) {
+                    //alert(data);
+                   $(".table-find-list tbody").html(data);
+                   $("#findModal").modal("show");
+                 }
+              });   
+    }
+    
+}     
 JS;
 $this->registerJs($js, static::POS_END);
 ?>

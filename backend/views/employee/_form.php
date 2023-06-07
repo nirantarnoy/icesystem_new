@@ -66,6 +66,13 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
         <div class="col-lg-4">
             <?php echo $form->field($model, 'is_com_cal')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label() ?>
         </div>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <?php echo $form->field($model, 'is_sale_operator')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label() ?>
+
+        </div>
         <div class="col-lg-4">
             <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label() ?>
 

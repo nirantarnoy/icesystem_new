@@ -8,14 +8,17 @@ use backend\models\Orderline;
 
 //use backend\models\WarehouseSearch;
 use backend\models\Pricegroup;
+use backend\models\QuerySaleorderByRouteSearch;
 use common\models\OrderLineTrans;
 use common\models\PriceCustomerType;
 use Yii;
 use backend\models\Orders;
 use backend\models\OrdersSearch;
+use yii\filters\AccessControl;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use kartik\date\DatePicker;
@@ -35,6 +38,24 @@ class OrdersController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+//            'access'=>[
+//                'class'=>AccessControl::className(),
+//                'denyCallback' => function ($rule, $action) {
+//                    throw new ForbiddenHttpException('คุณไม่ได้รับอนุญาติให้เข้าใช้งาน!');
+//                },
+//                'rules'=>[
+//                    [
+//                        'allow'=>true,
+//                        'roles'=>['@'],
+//                        'matchCallback'=>function($rule,$action){
+//                            $currentRoute = Yii::$app->controller->getRoute();
+//                            if(Yii::$app->user->can($currentRoute)){
+//                                return true;
+//                            }
+//                        }
+//                    ]
+//                ]
+//            ],
         ];
     }
 
@@ -64,6 +85,32 @@ class OrdersController extends Controller
         ]);
     }
 
+    public function actionIndex2()
+    {
+
+//        $model = \common\models\PaymentReceiveLine::find()->select([
+//            'payment_receive.trans_date',
+//            'payment_receive_line.id',
+//            'payment_receive_line.payment_amount',
+//            'payment_receive_line.payment_method_id',
+//
+//            ])->join('inner join','payment_receive','payment_receive_line.payment_receive_id=payment_receive.id')->where(['payment_receive_line.order_id' => 1, 'payment_receive.customer_id' => 1])->all();
+
+        $pageSize = \Yii::$app->request->post("perpage");
+        $searchModel = new QuerySaleorderByRouteSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->limit(300);
+        $dataProvider->setSort(['defaultOrder' => ['order_date' => SORT_DESC, 'route_code' => SORT_ASC]]);
+        $dataProvider->pagination->defaultPageSize = 50;
+        $dataProvider->pagination->pageSize = $pageSize;
+
+        return $this->render('index_new', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'perpage' => $pageSize,
+        ]);
+    }
+
 
     public function actionView($id)
     {
@@ -83,8 +130,8 @@ class OrdersController extends Controller
         if (!empty(\Yii::$app->user->identity->branch_id)) {
             $branch_id = \Yii::$app->user->identity->branch_id;
         }
-        if($branch_id == 2){
-            $default_warehouse= 5;
+        if ($branch_id == 2) {
+            $default_warehouse = 5;
         }
 
         $model = new Orders();
@@ -111,7 +158,6 @@ class OrdersController extends Controller
             //  echo $model->issue_id;return;
 
 
-
             $x_date = explode('/', $model->order_date);
             $sale_date = date('Y-m-d');
             if (count($x_date) > 1) {
@@ -121,16 +167,15 @@ class OrdersController extends Controller
 
             $emp_1 = 0;
             $emp_2 = 0;
-            if($emp_count != null){
-                $xx=0;
-                foreach($emp_count as $value_emp){
-                    if($xx == 0){
+            if ($emp_count != null) {
+                $xx = 0;
+                foreach ($emp_count as $value_emp) {
+                    if ($xx == 0) {
                         $emp_1 = $value_emp->employee_id;
-                    }
-                    else{
+                    } else {
                         $emp_2 = $value_emp->employee_id;
                     }
-                    $xx+=1;
+                    $xx += 1;
                 }
             }
 
@@ -243,7 +288,7 @@ class OrdersController extends Controller
                         }
                         $model_loop_issue = \backend\models\Journalissueline::find()->where(['issue_id' => $model->issue_id[$i]])->all();
                         foreach ($model_loop_issue as $val2) {
-                            if($val2->qty <= 0 || $val2->qty == null)continue;
+                            if ($val2->qty <= 0 || $val2->qty == null) continue;
                             $model_order_stock = new \common\models\OrderStock();
                             $model_order_stock->issue_id = $model_issue->id;
                             $model_order_stock->product_id = 1;
@@ -682,7 +727,7 @@ class OrdersController extends Controller
     public function getProductcolumn22($order_id, $price_group_id)
     {
         $html = '';
-        $model_price = \common\models\PriceGroupLine::find()->select(['product_id', 'sale_price'])->where(['price_group_id' => $price_group_id])->orderBy(['id'=>SORT_ASC])->all();
+        $model_price = \common\models\PriceGroupLine::find()->select(['product_id', 'sale_price'])->where(['price_group_id' => $price_group_id])->orderBy(['id' => SORT_ASC])->all();
         //  $sql = 'SELECT COUNT(DISTINCT product_id) as cnt FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id;
         $sql = 'SELECT product_id FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id . " GROUP BY product_id ORDER BY product_id ASC";
         $query = \Yii::$app->db->createCommand($sql)->queryAll();
@@ -728,7 +773,7 @@ class OrdersController extends Controller
                        <input type="hidden" class="line-sale-price" name="' . $input_name_price . '" value="' . $value->sale_price . '">
                        <input type="hidden" class="line-sale-price-cal" name="' . $input_name_price_cal . '" value="' . $value->sale_price . '">
                        <input type="hidden" class="line-product-onhand" name="' . $line_prod_onhand . '" value="' . $line_onhand_qty . '">
-                       <input type="number" name="' . $input_name . '" data-var="' . $value->sale_price . '" style="text-align: center" class="form-control" min="0" value="0" onchange="line_qty_cal($(this))">
+                       <input type="number" name="' . $input_name . '" data-var="' . $value->sale_price . '" style="text-align: center" class="form-control" min="0" step=".1" value="0" onchange="line_qty_cal($(this))">
                   </td>';
         }
         return $html;
@@ -937,7 +982,7 @@ class OrdersController extends Controller
     {
         $html = '';
         if ($price_group_id > 0 && $order_id > 0) {
-            $model = \common\models\QueryOrderUpdate::find()->select(['order_id','customer_id','name','bill_no'])->where(['order_id' => $order_id, 'price_group_id' => $price_group_id])->groupBy('customer_id')->all();
+            $model = \common\models\QueryOrderUpdate::find()->select(['order_id', 'customer_id', 'name', 'bill_no'])->where(['order_id' => $order_id, 'price_group_id' => $price_group_id])->groupBy('customer_id')->all();
             $html .= '<thead>';
             $html .= '<tr>';
             $html .= '<th style="width: 5%;text-align: center"><input type="checkbox" onchange="showselectpaymentall($(this))" class="selected-all-item"></th>';
@@ -988,7 +1033,7 @@ class OrdersController extends Controller
     {
         $html = '';
 
-        $model_price = \common\models\PriceGroupLine::find()->select(['product_id', 'sale_price'])->where(['price_group_id' => $price_group_id])->orderby(['id'=>SORT_ASC])->all();
+        $model_price = \common\models\PriceGroupLine::find()->select(['product_id', 'sale_price'])->where(['price_group_id' => $price_group_id])->orderby(['id' => SORT_ASC])->all();
 //        $model_order_product = \common\models\OrderLine::find()->where(['order_id' => $order_id, 'price_group_id' => $price_group_id])->distinct('product_id')->count();
         $sql = 'SELECT COUNT(DISTINCT product_id) as cnt FROM order_line WHERE order_id=' . $order_id . ' AND price_group_id=' . $price_group_id;
         $query = \Yii::$app->db->createCommand($sql)->queryAll();
@@ -1042,7 +1087,7 @@ class OrdersController extends Controller
                        <input type="hidden" class="line-qty-">
                        <input type="hidden" class="line-product-code" name="' . $line_prod_code . '" value="' . $line_prod_code . '">
                        <input type="hidden" class="line-sale-price" name="' . $input_name_price . '" value="' . $std_price . '">
-                       <input type="number" name="' . $input_name . '" data-var="' . $std_price . '" style="text-align: center' . $bg_color . '" value="0" class="form-control" min="0" onchange="line_qty_cal($(this))">
+                       <input type="number" name="' . $input_name . '" data-var="' . $std_price . '" style="text-align: center' . $bg_color . '" value="0" class="form-control" min="0" step=".1" onchange="line_qty_cal($(this))">
                   </td>';
                     }
                 }
@@ -1218,8 +1263,8 @@ class OrdersController extends Controller
 
     public function actionCheckhasempdata()
     {
-        $company_id = 1;
-        $branch_id = 1;
+        $company_id = 0;
+        $branch_id = 0;
 
         if (!empty(\Yii::$app->user->identity->company_id)) {
             $company_id = \Yii::$app->user->identity->company_id;
@@ -1271,7 +1316,7 @@ class OrdersController extends Controller
             }
             $t_date = date('Y-m-d', strtotime($t_date));
 
-            $model = Cardaily::find()->where(['car_id' => $id, 'trans_date' => $t_date])->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
+            $model = Cardaily::find()->where(['car_id' => $id, 'date(trans_date)' => $t_date])->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
             $i = 0;
             if ($model) {
                 foreach ($model as $value) {
@@ -1649,7 +1694,6 @@ class OrdersController extends Controller
         if (!empty(\Yii::$app->user->identity->branch_id)) {
             $branch_id = \Yii::$app->user->identity->branch_id;
         }
-
 
 
         $order_id = \Yii::$app->request->post('payment_order_id');
@@ -2116,6 +2160,189 @@ class OrdersController extends Controller
                     $model->save(false);
                 }
             }
+        }
+    }
+
+    public function actionPrintcarsummary()
+    {
+        $company_id = 0;
+        $branch_id = 0;
+
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
+        $from_date = \Yii::$app->request->post('from_date');
+        $to_date = \Yii::$app->request->post('to_date');
+        //  $find_sale_type = \Yii::$app->request->post('find_sale_type');
+        $find_user_id = \Yii::$app->request->post('find_user_id');
+        return $this->render('_print_sale_car_summary', [
+            'from_date' => $from_date,
+            'to_date' => $to_date,
+            //    'find_sale_type'=>$find_sale_type,
+            'find_user_id' => $find_user_id,
+            'company_id' => $company_id,
+            'branch_id' => $branch_id,
+        ]);
+    }
+
+    public function actionGetorderdetail()
+    {
+        $order_id = \Yii::$app->request->post('id');
+
+        $data = [];
+        $html = '';
+        $total_all = 0;
+        if ($order_id > 0) {
+            $model = \common\models\OrderLine::find()->where(['order_id' => $order_id])->all();
+            if ($model) {
+                foreach ($model as $value) {
+                    $total_all += $value->price * $value->qty;
+                    $html .= '<tr>';
+                    $html .= '<td style="text-align: left">' . \backend\models\Product::findName($value->product_id) . '</td>';
+                    $html .= '<td style="text-align: right">' . number_format($value->qty, 2) . '</td>';
+                    $html .= '<td style="text-align: right">' . number_format($value->price, 2) . '</td>';
+                    $html .= '<td style="text-align: right">' . number_format($value->price * $value->qty, 2) . '</td>';
+                    $html .= '</tr>';
+                }
+                $html .= '<tr>';
+                $html .= '<td style="text-align: left"></td>';
+                $html .= '<td style="text-align: right"></td>';
+                $html .= '<td style="text-align: right"></td>';
+                $html .= '<td style="text-align: right">' . number_format($total_all, 2) . '</td>';
+                $html .= '</tr>';
+            }
+        }
+        // array_push($data, ['data' => $html]);
+        //return json_encode($data);
+        echo $html;
+    }
+
+    public function actionPullcarorder()
+    {
+        $company_id = 0;
+        $branch_id = 0;
+
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
+        $res = 0;
+        $route_id = 894;
+        if($route_id > 0){
+            $reprocess_wh = $this->findReprocesswh($company_id, $branch_id);
+
+            if (\backend\models\Orders::updateAll(['status' => 1], ['order_channel_id' => $route_id, 'date(order_date)' => date('Y-m-d'), 'sale_from_mobile' => 1,'company_id'=>$company_id,'branch_id'=>$branch_id])) {
+                $model = \backend\models\Stocktrans::find()->where(['trans_ref_id' => $route_id, 'date(trans_date)' => date('Y-m-d'), 'activity_type_id' => 7,'company_id'=>$company_id,'branch_id'=>$branch_id])->all();
+                if ($model) {
+                    foreach ($model as $value) {
+                        $model_update = \backend\models\Stocksum::find()->where(['product_id' => $value->product_id, 'warehouse_id' => $reprocess_wh,'company_id'=>$company_id,'branch_id'=>$branch_id])->one();
+                        if ($model_update) {
+                            $model_update->qty = ($model_update->qty - $value->qty);
+                            if ($model_update->save(false)) {
+                                $res += 1;
+                            }
+                        }
+                    }
+                    if($res > 0){
+                        \backend\models\Stocktrans::deleteAll(['trans_ref_id' => $route_id, 'date(trans_date)' => date('Y-m-d'), 'activity_type_id' => 7,'company_id'=>$company_id,'branch_id'=>$branch_id]);
+                    }
+                }
+            }
+            if($res > 0){
+                echo "success";
+            }else{
+                echo "fail";
+            }
+        }
+
+    }
+
+    public function findReprocesswh($company_id, $branch_id)
+    {
+        $id = 0;
+        if ($company_id && $branch_id) {
+            $model = \backend\models\Warehouse::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id, 'is_reprocess' => 1])->one();
+            if ($model) {
+                $id = $model->id;
+            }
+        }
+        return $id;
+    }
+
+    public function getEmporder($id){
+
+        $model = \common\models\Orders::find()->where(['order_channel_id'=>$id,'date(order_date)'=>date('Y-m-d')])->all();
+        if($model){
+            foreach ($model as $value){
+               $emp_id = \backend\models\Employee::findIdFromUserId($value->created_by);
+               if($emp_id){
+                   $modelx = \common\models\Orders::find()->where(['id'=>$value->id])->one();
+                   if($modelx){
+                       $modelx->emp_1 = $emp_id;
+                       $modelx->save(false);
+                   }
+               }
+            }
+        }
+    }
+
+    public function actionPullorderdata(){
+        $pre_date = date('Y-m-d', strtotime(date('Y-m-d') . " -1 day"));
+        $model = \backend\models\Orders::find()->where(['date(order_date)'=>$pre_date,'sale_from_mobile'=>1])->all();
+        if($model){
+            foreach ($model as $value){
+                $model_line = \backend\models\Orderline::find()->where(['order_id'=>$value->id])->all();
+                if($model_line){
+                    foreach ($model_line as $value2){
+                        $model_x = new \backend\models\Orderlinetrans();
+                        $model_x->order_id = $value->id;
+                        $model_x->product_id = $value2->product_id;
+                        $model_x->qty = $value2->qty;
+                        $model_x->price = $value2->price;
+                        $model_x->line_total = $value2->line_total;
+                        $model_x->status =1;
+                        $model_x->customer_id = $value2->customer_id;
+                        $model_x->sale_payment_method_id = $value2->sale_payment_method_id;
+                        $model_x->is_free = $value2->is_free;
+                        $model_x->save(false);
+
+                    }
+                }
+            }
+        }
+        echo "ok";
+    }
+
+    public function actionUpdatecustomerPay(){
+
+        $sql = "select t1.id as order_id,t1.order_no,t1.order_date,sum(t2.line_total) AS remain_amt, t2.customer_id, t1.payment_status";
+        $sql .= " FROM orders as t1 INNER JOIN order_line as t2 ON t1.id = t2.order_id ";
+        $sql .= " WHERE  t2.customer_id =7156";
+        $sql .= " AND t1.payment_method_id = 2";
+        $sql .= " AND t1.status != 3";
+        $sql .= " AND date(t1.order_date)>='2022-10-24'";
+        $sql .= " AND date(t1.order_date)<='2022-10-30'";
+        $sql .= " GROUP BY t1.id";
+
+        $sql_query = \Yii::$app->db->createCommand($sql);
+        $model = $sql_query->queryAll();
+        $res = 0;
+        if ($model) {
+            for ($x = 0; $x <= count($model) - 1; $x++) {
+                \common\models\Orders::updateAll(['payment_status'=>0],['id'=>$model[$x]['order_id']]);
+                $res +=1;
+            }
+        }
+
+        if($res > 0){
+            echo "completed";
         }
     }
 }

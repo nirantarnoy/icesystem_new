@@ -17,17 +17,29 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::a(Yii::t('app', '<i class="fa fa-plus"></i> สร้างใหม่'), ['create'], ['class' => 'btn btn-success']) ?>
             </p>
         </div>
-        <div class="col-lg-2" style="text-align: right">
-            <form id="form-perpage" class="form-inline" action="<?= Url::to(['producttype/index'], true) ?>"
+        <div class="col-lg-2"
+             style="text-align: right">
+            <form id="form-perpage"
+                  class="form-inline"
+                  action="<?= Url::to(['paymentreceive/index'], true) ?>"
                   method="post">
                 <div class="form-group">
                     <label>แสดง </label>
-                    <select class="form-control" name="perpage" id="perpage">
-                        <option value="20" <?= $perpage == '20' ? 'selected' : '' ?>>20</option>
-                        <option value="50" <?= $perpage == '50' ? 'selected' : '' ?> >50</option>
-                        <option value="100" <?= $perpage == '100' ? 'selected' : '' ?>>100</option>
+                    <select class="form-control"
+                            name="perpage"
+                            id="perpage">
+                        <option value="20" <?= $perpage == '20' ? 'selected' : '' ?>>
+                            20
+                        </option>
+                        <option value="50" <?= $perpage == '50' ? 'selected' : '' ?> >
+                            50
+                        </option>
+                        <option value="100" <?= $perpage == '100' ? 'selected' : '' ?>>
+                            100
+                        </option>
                     </select>
-                    <label> รายการ</label>
+                    <label>
+                        รายการ</label>
                 </div>
             </form>
         </div>
@@ -62,11 +74,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
+                'label' => 'สายส่ง',
+                'value' => function ($data) {
+                    return \backend\models\Customer::findRoute($data->customer_id);
+                }
+            ],
+            [
                 'label' => 'ยอดชำระ',
                 'headerOptions' => ['style' => 'text-align: right'],
                 'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
-                    return number_format(\backend\models\Paymentreceive::findPayamt($data->id));
+                    return number_format(\backend\models\Paymentreceive::findPayamt($data->id),2);
                 }
             ],
             //'crated_by',

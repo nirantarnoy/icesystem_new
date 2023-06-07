@@ -12,10 +12,8 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
-        <div class="col-lg-1">
-
-        </div>
-        <div class="col-lg-10">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-5">
             <?= $form->field($model, 'username')->textInput() ?>
 
             <?php if ($model->isNewRecord): ?>
@@ -63,6 +61,26 @@ use yii\widgets\ActiveForm;
             </div>
         </div>
         <div class="col-lg-1"></div>
+        <div class="col-lg-5">
+<!--            <div class="row">-->
+<!--                <div class="col-lg-12">-->
+<!--                    <h3></h3>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <br />-->
+            <div class="row">
+                <div class="col-lg-5">
+                    <?php //print_r($model->roles)?>
+                    <?php echo $form->field($model, 'roles')->checkboxList($model->getAllRoles(),[
+
+                        'separator' => '<br>',
+                        'itemOptions' => [
+                            'class' => 'roles'
+                        ]
+                    ])->label('<label style="color: red">สิทธิ์การเข้าถึงระบบ</label>') ?>
+                </div>
+            </div>
+        </div>
 
         <?php ActiveForm::end(); ?>
 

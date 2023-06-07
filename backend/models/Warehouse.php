@@ -68,14 +68,23 @@ class Warehouse extends \common\models\Warehouse
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';
 //    }
+    public static function findCode($id)
+    {
+        $model = Warehouse::find()->where(['id' => $id])->one();
+        return $model != null ? $model->code : '';
+    }
     public static function findName($id)
     {
         $model = Warehouse::find()->where(['id' => $id])->one();
         return $model != null ? $model->name : '';
     }
-//    public function findUnitid($code){
-//        $model = Unit::find()->where(['name'=>$code])->one();
-//        return count($model)>0?$model->id:0;
-//    }
+    public static function findWarehousecar($company_id, $branch_id){
+        $model = Warehouse::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id,'is_warehouse_car'=>1])->one();
+        return $model != null ? $model->id:0;
+    }
+    public static function findPrimary($company_id, $branch_id){
+        $model = Warehouse::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id,'is_primary'=>1])->one();
+        return $model != null ? $model->id:0;
+    }
 
 }

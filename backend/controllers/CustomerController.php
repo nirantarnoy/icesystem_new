@@ -5,11 +5,14 @@ namespace backend\controllers;
 use backend\models\CustomersalehistorySearch;
 use backend\models\CustomersalepaySearch;
 use backend\models\DeliveryrouteSearch;
+use backend\models\PricegroupSearch;
 use backend\models\Product;
 use Yii;
 use backend\models\Customer;
 use backend\models\CustomerSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
@@ -30,6 +33,24 @@ class CustomerController extends Controller
                     'delete' => ['POST', 'GET'],
                 ],
             ],
+            'access'=>[
+                'class'=>AccessControl::className(),
+                'denyCallback' => function ($rule, $action) {
+                    throw new ForbiddenHttpException('คุณไม่ได้รับอนุญาติให้เข้าใช้งาน!');
+                },
+                'rules'=>[
+                    [
+                        'allow'=>true,
+                        'roles'=>['@'],
+                        'matchCallback'=>function($rule,$action){
+                            $currentRoute = Yii::$app->controller->getRoute();
+                            if(\Yii::$app->user->can($currentRoute)){
+                                return true;
+                            }
+                        }
+                    ]
+                ]
+            ],
         ];
     }
 
@@ -40,9 +61,24 @@ class CustomerController extends Controller
     public function actionIndex()
     {
         $pageSize = 50;
+        $viewstatus = 0;
+
+        if(\Yii::$app->request->get('viewstatus')!=null){
+            $viewstatus = \Yii::$app->request->get('viewstatus');
+        }
+
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new CustomerSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+       // $dataProvider->query->andFilterWhere(['status'=>1]);
+        if($viewstatus ==1){
+            $dataProvider->query->andFilterWhere(['status'=>$viewstatus]);
+        }
+        if($viewstatus == 2){
+            $dataProvider->query->andFilterWhere(['status'=>0]);
+        }
+
         $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
         $dataProvider->pagination->pageSize = $pageSize;
 
@@ -50,6 +86,7 @@ class CustomerController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'perpage' => $pageSize,
+            'viewstatus'=>$viewstatus,
         ]);
     }
 
@@ -85,8 +122,8 @@ class CustomerController extends Controller
      */
     public function actionCreate()
     {
-        $company_id = 1;
-        $branch_id = 1;
+        $company_id = 0;
+        $branch_id = 0;
         if (!empty(\Yii::$app->user->identity->company_id)) {
             $company_id = \Yii::$app->user->identity->company_id;
         }
@@ -112,6 +149,8 @@ class CustomerController extends Controller
                 $photo->saveAs(Yii::getAlias('@backend') . '/web/uploads/images/customer/' . $photo_name);
                 $model->shop_photo = $photo_name;
             }
+
+           // echo $model->getLastNo($company_id, $branch_id);
 
             $model->code = $model->getLastNo($company_id, $branch_id);
             $model->sort_name = $model->sort_name == null ? '' : $model->sort_name;
@@ -169,6 +208,7 @@ class CustomerController extends Controller
             if ($model->save(false)) {
                 if ($asset_id != null) {
                     for ($i = 0; $i <= count($asset_id) - 1; $i++) {
+                        if($asset_id[$i] == '' || $asset_id[$i] == null)continue;
                         $model_chk = \backend\models\Customerasset::find()->where(['customer_id' => $model->id, 'product_id' => $asset_id[$i]])->one();
                         if ($model_chk) {
                             // echo 'ok';return;
@@ -205,6 +245,7 @@ class CustomerController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+         //   'model_asset_list' => $model_asset_list,
             'model_asset_list' => $model_asset_list,
         ]);
     }

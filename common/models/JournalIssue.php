@@ -34,7 +34,7 @@ class JournalIssue extends \yii\db\ActiveRecord
         return [
             [['delivery_route_id'], 'required'],
             [['trans_date'], 'safe'],
-            [['created_at', 'created_by', 'updated_at', 'updated_by', 'delivery_route_id', 'car_ref_id', 'order_ref_id', 'reason_id'], 'integer'],
+            [['created_at', 'created_by', 'updated_at', 'updated_by', 'delivery_route_id', 'car_ref_id', 'order_ref_id', 'reason_id','plan_id','is_for_next_date','trans_ref_id'], 'integer'],
             [['journal_no'], 'string', 'max' => 255],
             [['status', 'user_confirm'], 'safe']
         ];
@@ -53,6 +53,7 @@ class JournalIssue extends \yii\db\ActiveRecord
             'order_ref_id' => 'เลขที่ขาย',
             'reason' => 'เหตุผลเบิก',
             'status' => 'สถานะ',
+            'plan_id' => 'เลขที่แผน',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',

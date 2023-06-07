@@ -34,12 +34,18 @@ $this->params['breadcrumbs'][] = $this->title;
             </form>
         </div>
     </div>
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel,'viewstatus'=>$viewstatus]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
          //'filterModel' => $searchModel,
         'emptyCell' => '-',
+        'toolbar' => [
+            '{toggleData}',
+            '{export}',
+        ],
+        'panel' => ['type' => 'info', 'heading' => ''],
+        'toggleDataContainer' => ['class' => 'btn-group mr-2'],
         'layout' => "{items}\n{summary}\n<div class='text-center'>{pager}</div>",
         'summary' => "แสดง {begin} - {end} ของทั้งหมด {totalCount} รายการ",
         'showOnEmpty' => false,

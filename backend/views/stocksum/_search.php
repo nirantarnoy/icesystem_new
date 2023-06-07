@@ -3,9 +3,15 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\StocksumSearch */
-/* @var $form yii\widgets\ActiveForm */
+$company_id = 1;
+$branch_id = 1;
+
+if (!empty(\Yii::$app->user->identity->company_id)) {
+    $company_id = \Yii::$app->user->identity->company_id;
+}
+if (!empty(\Yii::$app->user->identity->branch_id)) {
+    $branch_id = \Yii::$app->user->identity->branch_id;
+}
 ?>
 
 <div class="stocksum-search">
@@ -21,7 +27,7 @@ use yii\widgets\ActiveForm;
     <div class="input-group">
 
         <?= $form->field($model, 'warehouse_id')->widget(\kartik\select2\Select2::className(), [
-            'data' => \yii\helpers\ArrayHelper::map(\backend\models\Warehouse::find()->all(), 'id', function ($data) {
+            'data' => \yii\helpers\ArrayHelper::map(\backend\models\Warehouse::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', function ($data) {
                 return $data->code . ' ' . $data->name;
             }),
             'options' => [
@@ -35,7 +41,7 @@ use yii\widgets\ActiveForm;
         ])->label(false) ?>
         <span style="margin-left: 5px;"></span>
         <?= $form->field($model, 'product_id')->widget(\kartik\select2\Select2::className(), [
-            'data' => \yii\helpers\ArrayHelper::map(\backend\models\Product::find()->all(), 'id', function ($data) {
+            'data' => \yii\helpers\ArrayHelper::map(\backend\models\Product::find()->where(['company_id'=>$company_id,'branch_id'=>$branch_id])->all(), 'id', function ($data) {
                 return $data->code . ' ' . $data->name;
             }),
             'options' => [

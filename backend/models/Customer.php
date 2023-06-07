@@ -76,11 +76,49 @@ class Customer extends \common\models\Customer
         $model = Customer::find()->where(['id' => $id])->one();
         return $model != null ? $model->name : '';
     }
+    public static function findDescription($id)
+    {
+        $model = Customer::find()->where(['id' => $id])->one();
+        return $model != null ? $model->description : '';
+    }
+    public static function findType($id)
+    {
+        $name = '';
+        $model = Customer::find()->where(['id' => $id])->one();
+        $model_type = \backend\models\Customertype::findCode($model->customer_type_id);
+        return $model_type != null ? $model_type : '';
+    }
+
+    public static function findRoute($customer_id)
+    {
+        $model = \common\models\QueryCustomerInfo::find()->where(['customer_id' => $customer_id])->one();
+        return $model != null ? $model->route_code : '';
+    }
+    public static function findRouteId($customer_id)
+    {
+        $model = \common\models\QueryCustomerInfo::find()->where(['customer_id' => $customer_id])->one();
+        return $model != null ? $model->rt_id : 0;
+    }
+    public static function getAddress($customer_id)
+    {
+        $model = \common\models\Customer::find()->where(['id' => $customer_id])->one();
+        return $model != null ? $model->address : '';
+    }
+    public static function getPhone($customer_id)
+    {
+        $model = \common\models\Customer::find()->where(['id' => $customer_id])->one();
+        return $model != null ? $model->phone : '';
+    }
 
     public static function findPayMethod($id)
     {
         $model = Customer::find()->where(['id' => $id])->one();
         return $model != null ? $model->payment_method_id : 0;
+    }
+    public static function findLocation($id)
+    {
+        $model = Customer::find()->where(['id' => $id])->one();
+        return $model != null ? $model->location_info : '';
     }
 
     public static function findPayTerm($id)
@@ -96,22 +134,78 @@ class Customer extends \common\models\Customer
 //        $model = Unit::find()->where(['name'=>$code])->one();
 //        return count($model)>0?$model->id:0;
 //    }
+//    public static function getLastNo($company_id, $branch_id)
+//    {
+//        //   $model = Orders::find()->MAX('order_no');
+//        $model = Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->MAX('code');
+//
+//        $pre = "CU";
+//        if ($branch_id == 2) {
+//            $pre = "BT";
+//            if ($model != null) {
+////            $prefix = $pre.substr(date("Y"),2,2);
+////            $cnum = substr((string)$model,4,strlen($model));
+////            $len = strlen($cnum);
+////            $clen = strlen($cnum + 1);
+////            $loop = $len - $clen;
+//                $prefix = $pre ;// substr(date("Y"), 2, 2);
+//                $cnum = substr((string)$model, 2, strlen($model));
+//                $len = strlen($cnum);
+//                $clen = strlen($cnum + 1);
+//                $loop = $len - $clen;
+//                for ($i = 1; $i <= $loop; $i++) {
+//                    $prefix .= "0";
+//                }
+//                $prefix .= $cnum + 1;
+//                return $prefix;
+//            } else {
+//                $prefix = $pre ;// substr(date("Y"), 2, 2);
+//                return $prefix . '0001';
+//            }
+//        }
+//        if($branch_id==1){
+//            if ($model != null) {
+////            $prefix = $pre.substr(date("Y"),2,2);
+////            $cnum = substr((string)$model,4,strlen($model));
+////            $len = strlen($cnum);
+////            $clen = strlen($cnum + 1);
+////            $loop = $len - $clen;
+//                $prefix = $pre . '-' . substr(date("Y"), 2, 2);
+//                $cnum = substr((string)$model, 5, strlen($model));
+//                $len = strlen($cnum);
+//                $clen = strlen($cnum + 1);
+//                $loop = $len - $clen;
+//                for ($i = 1; $i <= $loop; $i++) {
+//                    $prefix .= "0";
+//                }
+//                $prefix .= $cnum + 1;
+//                return $prefix;
+//            } else {
+//                $prefix = $pre . '-' . substr(date("Y"), 2, 2);
+//                return $prefix . '00001';
+//            }
+//        }
+//
+//    }
     public static function getLastNo($company_id, $branch_id)
     {
         //   $model = Orders::find()->MAX('order_no');
         $model = Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->MAX('code');
 
         $pre = "CU";
-        if ($branch_id == 2) {
-            $pre = "BT";
+
+        //if($branch_id==1){
             if ($model != null) {
 //            $prefix = $pre.substr(date("Y"),2,2);
 //            $cnum = substr((string)$model,4,strlen($model));
 //            $len = strlen($cnum);
 //            $clen = strlen($cnum + 1);
 //            $loop = $len - $clen;
-                $prefix = $pre ;// substr(date("Y"), 2, 2);
-                $cnum = substr((string)$model, 2, strlen($model));
+                $prefix = $pre . '-' . substr(date("Y"), 2, 2);
+              //  $prefix = $pre;
+                   $cnum = substr((string)$model, 5, strlen($model)); // omnoi
+               // $cnum = substr((string)$model, 3, strlen($model));
+
                 $len = strlen($cnum);
                 $clen = strlen($cnum + 1);
                 $loop = $len - $clen;
@@ -121,32 +215,11 @@ class Customer extends \common\models\Customer
                 $prefix .= $cnum + 1;
                 return $prefix;
             } else {
-                $prefix = $pre ;// substr(date("Y"), 2, 2);
-                return $prefix . '0001';
-            }
-        }
-        if($branch_id==1){
-            if ($model != null) {
-//            $prefix = $pre.substr(date("Y"),2,2);
-//            $cnum = substr((string)$model,4,strlen($model));
-//            $len = strlen($cnum);
-//            $clen = strlen($cnum + 1);
-//            $loop = $len - $clen;
-                $prefix = $pre . '-' . substr(date("Y"), 2, 2);
-                $cnum = substr((string)$model, 5, strlen($model));
-                $len = strlen($cnum);
-                $clen = strlen($cnum + 1);
-                $loop = $len - $clen;
-                for ($i = 1; $i <= $loop; $i++) {
-                    $prefix .= "0";
-                }
-                $prefix .= $cnum + 1;
-                return $prefix;
-            } else {
-                $prefix = $pre . '-' . substr(date("Y"), 2, 2);
+             //   $prefix = $pre . '-' . substr(date("Y"), 2, 2); // omnoi
+                $prefix = $pre;
                 return $prefix . '00001';
             }
-        }
+       // }
 
     }
 

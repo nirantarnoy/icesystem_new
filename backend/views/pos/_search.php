@@ -1,5 +1,6 @@
 <?php
 
+use kartik\daterange\DateRangePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -45,27 +46,77 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
                 return $data->username;
             }),
             'options' => [
-                'placeholder' => '--เลือกพนักงาน--'
+                'placeholder' => '--เลือกพนักงาน--',
+                'style'=>['width: 450px;'],
             ],
             'pluginOptions' => [
                 'allowClear' => true
             ],
         ])->label(false) ?>
-        <?= $form->field($model, 'order_date')->widget(\kartik\daterange\DateRangePicker::className(), [
-            'value' => $dash_date,
-            'pluginOptions' => [
-                'format' => 'DD/MM/YYYY',
-                'locale' => [
-                    'format' => 'DD/MM/YYYY'
-                ],
-            ],
-            'presetDropdown' => true,
+        <?php //echo $form->field($model, 'order_date')->widget(\kartik\daterange\DateRangePicker::className(), [
+//            'value' => $dash_date,
+//            'pluginOptions' => [
+//                'format' => 'DD/MM/YYYY',
+//                'locale' => [
+//                    'format' => 'DD/MM/YYYY'
+//                ],
+//            ],
+//            'presetDropdown' => true,
+//            'options' => [
+//                'id' => 'search-date',
+//                'class' => 'form-control',
+//                'onchange' => '$("#form-dashboard").submit();'
+//            ],
+//        ])->label(false) ?>
+        <?php
+        echo DateRangePicker::widget([
+            'model' => $model,
+            'attribute' => 'from_date',
+            //'name'=>'date_range_5',
+            'value'=>'2015-10-19 12:00 AM',
+            //    'useWithAddon'=>true,
+            'convertFormat'=>true,
             'options' => [
-                'id' => 'search-date',
                 'class' => 'form-control',
-                'onchange' => '$("#form-dashboard").submit();'
+                'placeholder'=>'ตั้งแต่วันที่',
+              //  'onchange' => 'this.form.submit();',
+                'autocomplete' => 'off',
             ],
-        ])->label(false) ?>
+            'pluginOptions'=>[
+                'timePicker'=>true,
+                'timePickerIncrement'=>1,
+                'locale'=>['format' => 'Y-m-d H:i'],
+                'singleDatePicker'=>true,
+                'showDropdowns'=>true,
+                'timePicker24Hour'=>true
+            ]
+        ]) ;
+        ?>
+        <span style="margin-left: 2px;"></span>
+        <?php
+        echo DateRangePicker::widget([
+            'model' => $model,
+            'attribute' => 'to_date',
+            //'name'=>'date_range_5',
+            'value'=>'2015-10-19 12:00 AM',
+            //    'useWithAddon'=>true,
+            'convertFormat'=>true,
+            'options' => [
+                'class' => 'form-control',
+                'placeholder'=>'ถึงวันที่',
+              //  'onchange' => 'this.form.submit();',
+                'autocomplete' => 'off',
+            ],
+            'pluginOptions'=>[
+                'timePicker'=>true,
+                'timePickerIncrement'=>1,
+                'locale'=>['format' => 'Y-m-d H:i'],
+                'singleDatePicker'=>true,
+                'showDropdowns'=>true,
+                'timePicker24Hour'=>true
+            ]
+        ]) ;
+        ?>
         <span style="margin-left: 10px;"> <button type="submit" class="btn btn-primary btn-find-data">ค้นหา</button></span>
 
     </div>

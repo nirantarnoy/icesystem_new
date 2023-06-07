@@ -7,7 +7,9 @@ use kartik\mpdf\Pdf;
 use Yii;
 use backend\models\Product;
 use backend\models\ProductSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
@@ -31,6 +33,24 @@ class ProductController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access'=>[
+                'class'=>AccessControl::className(),
+                'denyCallback' => function ($rule, $action) {
+                    throw new ForbiddenHttpException('คุณไม่ได้รับอนุญาติให้เข้าใช้งาน!');
+                },
+                'rules'=>[
+                    [
+                        'allow'=>true,
+                        'roles'=>['@'],
+                        'matchCallback'=>function($rule,$action){
+                            $currentRoute = Yii::$app->controller->getRoute();
+                            if(Yii::$app->user->can($currentRoute)){
+                                return true;
+                            }
+                        }
+                    ]
+                ]
+            ],
         ];
     }
 
@@ -43,6 +63,7 @@ class ProductController extends Controller
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andFilterWhere(['status'=>1]);
         $dataProvider->setSort(['defaultOrder' => ['item_pos_seq' => SORT_ASC]]);
         $dataProvider->pagination->pageSize = $pageSize;
 
@@ -66,17 +87,17 @@ class ProductController extends Controller
     public function actionCreate()
     {
         $model = new Product();
-        $company_id = 1;
-        $branch_id = 1;
-        $default_warehouse = 6;
+        $company_id = 0;
+        $branch_id = 0;
+        $default_warehouse = 0;
         if (!empty(\Yii::$app->user->identity->company_id)) {
             $company_id = \Yii::$app->user->identity->company_id;
         }
         if (!empty(\Yii::$app->user->identity->branch_id)) {
             $branch_id = \Yii::$app->user->identity->branch_id;
-            if ($branch_id == 2) {
-                $default_warehouse = 5;
-            }
+//            if ($branch_id == 2) {
+//                $default_warehouse = 5;
+//            }
         }
         if ($model->load(Yii::$app->request->post())) {
             //   $photo = UploadedFile::getInstanceByName('doc_file');

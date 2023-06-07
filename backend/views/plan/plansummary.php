@@ -50,6 +50,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
         'showPageSummary' => true,
+        'toolbar' => [
+            '{toggleData}',
+            '{export}',
+        ],
+        'panel' => ['type' => 'info', 'heading' => ''],
         'pjax' => true,
         'striped' => true,
         'hover' => true,
@@ -75,10 +80,9 @@ $this->params['breadcrumbs'][] = $this->title;
 //            ],
             [
                 'attribute' => 'code',
-                'group' => true,
+               // 'group' => true,
             ],
             'name',
-
             [
                 'attribute' => 'qty',
                 'value' => function ($data) {
@@ -88,20 +92,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'text-align: right'],
                 // 'pageSummary' => 'Page Summary',
                 'pageSummaryOptions' => ['class' => 'text-right'],
+                'format' => ['decimal', 2],
+                'hAlign' => 'right',
                 'pageSummary' => true,
                 'pageSummaryFunc' => GridView::F_SUM
-            ],
-            [
-                'class' => '\kartik\grid\ExpandRowColumn',
-                'value' => function ($model, $key, $index, $column) {
-                    return GridView::ROW_EXPANDED;
-                },
-                //'detailUrl' => Yii::$app->request->getBaseUrl() . '..../expand-view',
-                'detail' => function ($model, $key, $index, $column) {
-                    return Yii::$app->controller->renderPartial('_expand-row-details', ['product_id' => $model->product_id]);
-                },
-                'headerOptions' => ['class' => 'kartik-sheet-style'],
-                'expandOneOnly' => true
             ],
 
         ],
@@ -110,4 +104,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php Pjax::end(); ?>
 
+</div>
+<div class="row">
+    <div class="col-lg-3">
+        <dib class="btn btn-info">สั่งผลิต</dib>
+    </div>
 </div>

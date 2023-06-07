@@ -3,11 +3,14 @@
 namespace backend\controllers;
 
 use backend\models\PlansummarySearch;
+use backend\models\RoutesummarySearch;
 use Yii;
 use backend\models\Plan;
 use backend\models\PlanSearch;
 use yii\base\BaseObject;
+use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -16,16 +19,35 @@ use yii\filters\VerbFilter;
  */
 class PlanController extends Controller
 {
-   public $enableCsrfValidation = false;
+    public $enableCsrfValidation = false;
+
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST','GET'],
+                    'delete' => ['POST', 'GET'],
                 ],
             ],
+            'access'=>[
+                'class'=>AccessControl::className(),
+                'denyCallback' => function ($rule, $action) {
+                    throw new ForbiddenHttpException('คุณไม่ได้รับอนุญาติให้เข้าใช้งาน!');
+                },
+                'rules'=>[
+                    [
+                        'allow'=>true,
+                        'roles'=>['@'],
+                        'matchCallback'=>function($rule,$action){
+                            $currentRoute = Yii::$app->controller->getRoute();
+                            if(Yii::$app->user->can($currentRoute)){
+                                return true;
+                            }
+                        }
+                    ]
+                ]
+            ]
         ];
     }
 
@@ -175,8 +197,15 @@ class PlanController extends Controller
 
     public function actionDelete($id)
     {
-        if(\backend\models\Planline::deleteAll(['plan_id'=>$id])){
-            $this->findModel($id)->delete();
+        if (\backend\models\Planline::deleteAll(['plan_id' => $id])) {
+            //$this->findModel($id)->delete();
+            if (\common\models\Plan::deleteAll(['id' => $id])) {
+                $issue_id = \backend\models\Journalissue::find()->where(['plan_id' => $id])->one();
+                if ($issue_id) {
+                    \backend\models\Journalissueline::deleteAll(['issue_id' => $issue_id->id]);
+                    \backend\models\Journalissue::deleteAll(['plan_id' => $id]);
+                }
+            }
         }
 
 
@@ -192,17 +221,94 @@ class PlanController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionCalsummary(){
+    public function actionCalsummary()
+    {
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new PlansummarySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
+
+        $dataProvider->query->groupby(['code']);
+        $dataProvider->setSort(['defaultOrder' => ['code' => SORT_DESC]]);
         $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render('plansummary', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'perpage' => $pageSize,
+        ]);
+    }
+
+    public function actionRoutesummary()
+    {
+        $pageSize = \Yii::$app->request->post("perpage");
+        $searchModel = new RoutesummarySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setSort(['defaultOrder' => ['route_id' => SORT_ASC]]);
+        $dataProvider->pagination->pageSize = $pageSize;
+
+        return $this->render('routesummary', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'perpage' => $pageSize,
+        ]);
+    }
+
+    public function actionReservorder($id)
+    {
+        if ($id) {
+            $company_id = 1;
+            $branch_id = 1;
+            if (!empty(\Yii::$app->user->identity->company_id)) {
+                $company_id = \Yii::$app->user->identity->company_id;
+            }
+            if (!empty(\Yii::$app->user->identity->branch_id)) {
+                $branch_id = \Yii::$app->user->identity->branch_id;
+            }
+
+            $model = \common\models\PlanLine::find()->where(['plan_id' => $id])->all();
+            if ($model) {
+                $model_reserv = new \backend\models\Orderreserv();
+                $model_reserv->journal_no = $model_reserv::getLastNo($company_id, $branch_id);
+                $model_reserv->status = 1;
+                $model_reserv->company_id = $company_id;
+                $model_reserv->branch_id = $branch_id;
+
+                if ($model_reserv->save(false)) {
+                    foreach ($model as $value) {
+                        $model_reserv_line = new \common\models\OrderReservLine();
+                        $model_reserv_line->reserv_id = $model_reserv->id;
+                        $model_reserv_line->product_id = $value->product_id;
+                        $model_reserv_line->qty = $value->qty;
+                        $model_reserv_line->status = 1;
+                        $model_reserv_line->save(false);
+                    }
+                }
+
+            }
+        }
+    }
+
+    public function actionPlanreview(){
+        $company_id = 0;
+        $branch_id = 0;
+
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+        }
+
+        $from_date = \Yii::$app->request->post('from_date');
+       // $to_date = \Yii::$app->request->post('to_date');
+        $find_route_id = \Yii::$app->request->post('find_route_id');
+        return $this->render('_planoverview',[
+            'from_date' => $from_date,
+          //  'to_date' => $to_date,
+            //    'find_sale_type'=>$find_sale_type,
+            'find_route_id' => $find_route_id,
+            'company_id' => $company_id,
+            'branch_id' => $branch_id,
         ]);
     }
 }

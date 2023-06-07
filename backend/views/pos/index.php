@@ -13,17 +13,16 @@ $filename_car_pos = "empty";
 $order_do = "empty";
 
 
-$company_id = 1;
-$branch_id = 1;
-$default_warehouse = 6;
+$company_id = 0;
+$branch_id = 0;
+$default_warehouse = 0; // 6
 if (!empty(\Yii::$app->user->identity->company_id)) {
     $company_id = \Yii::$app->user->identity->company_id;
 }
 if (!empty(\Yii::$app->user->identity->branch_id)) {
     $branch_id = \Yii::$app->user->identity->branch_id;
-    if ($branch_id == 2) {
-        $default_warehouse = 5;
-    }
+    $warehouse_primary = \backend\models\Warehouse::findPrimary($company_id, $branch_id);
+    $default_warehouse = $warehouse_primary;
 }
 
 //echo $company_id.'<br />';
@@ -32,22 +31,50 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
 if (!empty(\Yii::$app->session->getFlash('msg-index')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
     $f_name = \Yii::$app->session->getFlash('msg-index');
     // echo $f_name;
-    if (file_exists('../web/uploads/slip/' . $f_name)) {
-        $filename = "../web/uploads/slip/" . $f_name;
+//    if (file_exists('../web/uploads/slip/' . $f_name)) {
+//        $filename = "../web/uploads/slip/" . $f_name;
+//    }
+    if ($branch_id == 1) {
+        if (file_exists('../web/uploads/company1/slip/' . $f_name)) {
+            $filename = "../web/uploads/company1/slip/" . $f_name;
+        }
+    } else if ($branch_id == 2) {
+        if (file_exists('../web/uploads/company2/slip/' . $f_name)) {
+            $filename = "../web/uploads/company2/slip/" . $f_name;
+        }
     }
 }
 if (!empty(\Yii::$app->session->getFlash('msg-index-do')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
     $f_name = \Yii::$app->session->getFlash('msg-index-do');
     // echo $f_name;
-    if (file_exists('../web/uploads/slip_do/' . $f_name)) {
-        $filename_do = "../web/uploads/slip_do/" . $f_name;
+//    if (file_exists('../web/uploads/slip_do/' . $f_name)) {
+//        $filename_do = "../web/uploads/slip_do/" . $f_name;
+//    }
+
+    if ($branch_id == 1) {
+        if (file_exists('../web/uploads/company1/slip_do/' . $f_name)) {
+            $filename_do = "../web/uploads/company1/slip_do/" . $f_name;
+        }
+    } else if ($branch_id == 2) {
+        if (file_exists('../web/uploads/company2/slip_do/' . $f_name)) {
+            $filename_do = "../web/uploads/company2/slip_do/" . $f_name;
+        }
     }
 }
 if (!empty(\Yii::$app->session->getFlash('msg-index-car-pos')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
     $f_name = \Yii::$app->session->getFlash('msg-index-car-pos');
     // echo $f_name;
-    if (file_exists('../web/uploads/slip_car_pos/' . $f_name)) {
-        $filename_car_pos = "../web/uploads/slip_car_pos/" . $f_name;
+//    if (file_exists('../web/uploads/slip_car_pos/' . $f_name)) {
+//        $filename_car_pos = "../web/uploads/slip_car_pos/" . $f_name;
+//    }
+    if ($branch_id == 1) {
+        if (file_exists('../web/uploads/company1/slip_car_pos/' . $f_name)) {
+            $filename_car_pos = "../web/uploads/company1/slip_car_pos/" . $f_name;
+        }
+    } else if ($branch_id == 2) {
+        if (file_exists('../web/uploads/company2/slip_car_pos/' . $f_name)) {
+            $filename_car_pos = "../web/uploads/company2/slip_car_pos/" . $f_name;
+        }
     }
 }
 if (!empty(\Yii::$app->session->getFlash('msg-is-do')) && !empty(\Yii::$app->session->getFlash('after-save'))) {
@@ -95,7 +122,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                     echo Select2::widget([
                         'name' => 'customer_id',
                         // 'value' => 1,
-                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->andFilterWhere(['is_show_pos' => 1])->andFilterWhere(['status'=>1])->all(), 'id', function ($data) {
+                        'data' => ArrayHelper::map(\backend\models\Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->andFilterWhere(['is_show_pos' => 1])->andFilterWhere(['status' => 1])->all(), 'id', function ($data) {
                             return $data->code . ' ' . $data->name;
                         }),
                         'options' => [
@@ -247,6 +274,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
             <input type="hidden" class="sale-pay-change" name="sale_pay_change" value="">
             <input type="hidden" class="sale-pay-type" name="sale_pay_type" value="">
             <input type="hidden" class="print-type-doc" name="print_type_doc" value="">
+            <input type="hidden" class="default-warehouse-id" name="default_warehouse_id" value="<?=$default_warehouse?>">
 
             <div class="row">
                 <div class="col-lg-8" style="text-align: left">
@@ -256,11 +284,11 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                         <a id="modalListissue" class="btn btn-success"
                            href="<?= Url::to(['pos/listissue']); ?>">ยืนยันคำสั่งซื้อ(รถ)</a>
                         <a href="index.php?r=pos/salehistory" class="btn btn-outline-info btn-history-cart"
-                           style="display: noneผ">
+                           style="display: nonex">
                             ประวัติการขาย
                         </a>
                         <a href="index.php?r=pos/dailysum" class="btn btn-outline-info btn-history-cart"
-                           style="display: noneผ">
+                           style="display: nonex">
                             สรุปยอดขายประจำวัน
                         </a>
                     </div>
@@ -308,8 +336,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
                             <th style="width: 15%;text-align: center">รหัสสินค้า</th>
                             <th>ชื่อสินค้า</th>
                             <th style="text-align: right;width: 10%">จำนวน</th>
-                            <th style="text-align: right;width: 10%"
-                            ">ราคา</th>
+                            <th style="text-align: right;width: 10%">ราคา</th>
                             <th style="text-align: right;width: 15%">ราคารวม</th>
                             <th style="text-align: center">ลบ</th>
                         </tr>
@@ -848,7 +875,7 @@ if (!empty(\Yii::$app->session->getFlash('msg-do-order-id')) && !empty(\Yii::$ap
 
             <div class="modal-footer">
                 <div class="btn btn-outline-success btn-edit-cart-qty" data-dismiss="modalx"
-                        onclick="sumitchangeqty($(this))">
+                     onclick="sumitchangeqty($(this))">
                     <i class="fa fa-check"></i> ตกลง
                 </div>
                 <button type="button" class="btn btn-default" data-dismiss="modal"><i
@@ -911,9 +938,11 @@ $url_to_create_do = \yii\helpers\Url::to(['pos/printdo'], true);
 
 $js = <<<JS
  $(function(){
-         $('#modalButton').click(function (){               
+         $('#modalButton').click(function (){              
+             //alert($(this).attr('href'));
             $.get($(this).attr('href'), function(data) {
-              $('#modal-issue').modal('show').find('#modalContent').html(data)
+              $('#modal-issue').modal('show').find('#modalContent').html(data);
+              $.fn.modal.Constructor.prototype.enforceFocus = function() {};
            });
            return false;
         });
@@ -984,7 +1013,8 @@ $js = <<<JS
      dropdownAutoWidth : true
      });
      if($("#btn-general-customer").hasClass("active")){
-         $(".sale-customer-id").val(3646);
+         $(".sale-customer-id").val(3646); // 3646 & 1 & 210 bp
+         //$(".sale-customer-id").val(210); // 3646 & 1 & 210 bp
          $(".div-customer-search").hide();
      }else{
          $(".text-price-type").show();
@@ -1055,12 +1085,18 @@ $js = <<<JS
         $("#btn-general-customer").addClass('btn-outline-secondary');
         //$(".text-price-type").show();
         $(".div-customer-search").show();
+        // $(".table-cart tbody tr").remove();
+         $(".btn-cancel-cart").trigger("click");
      });
      
       $("#btn-general-customer").click(function(){
           $("#sale-by-original").show();
           $("#sale-by-customer").hide();
-
+          // $(".sale-customer-id").val(3646); 
+         $(".sale-customer-id").val(210); // bp
+          
+          //$(".table-cart tbody tr").remove();
+       $(".btn-cancel-cart").trigger("click");
           
         $(this).removeClass('btn-outline-secondary');
         $(this).addClass('btn-success');
@@ -1215,6 +1251,7 @@ function getproduct_price(e){
    
     var ids = e.val();
     if(ids > 0){
+      //  alert(ids);
         $(".sale-customer-id").val(ids);
         $("div.product-items").each(function(){
          // alert();
@@ -1246,7 +1283,7 @@ function getproduct_price(e){
 function getproduct_price2(e){
     var ids = e.val();
     if(ids > 0){
-       // alert(ids);
+     //  alert(ids);
         $(".sale-customer-id").val(ids);
          $.ajax({
               type: "post",
@@ -1400,7 +1437,7 @@ function addcart(e){
     var qty = $(".popup-qty").val();
     var price = $(".popup-price").val();
     var tr = $(".table-cart tbody tr:last");
-    //  alert(prod_code);
+     // alert(prod_code);
     var check_old = check_dup(prod_id);
     if(check_old == 1){
         $(".table-cart tbody tr").each(function(){
@@ -1449,7 +1486,7 @@ function addcart2(e){
     var prod_id = e.attr('data-vax');//$(".fix-list-item-id-"+ids).val();
     var prod_code = $(".fix-list-item-code-"+ids).val();
     var prod_name = $(".fix-list-item-name-"+ids).val();
-     //alert(prod_id);
+    // alert(prod_id);
     var qty = 1;
     var price =$(".fix-list-item-price-"+ids).val();
     //var onhand =$(".fix-list-item-onhand-"+ids).val(); 
@@ -1457,6 +1494,10 @@ function addcart2(e){
     var onhand = e.attr('data-val');
     var tr = $(".table-cart tbody tr:last");
      
+    if(parseFloat(onhand)<=0){
+         alert('จำนวนสินค้าในสต๊อกไม่เพียงพอ');
+                return false;
+    }
   //  alert(onhand);
   
     var check_old = check_dup(prod_id);
@@ -1512,7 +1553,7 @@ function reducecart2(e){
     var prod_id = e.attr('data-val');//$("#sale-by-original").find(".list-item-id-"+ids).val();
     var prod_code = $(".list-item-code-"+ids).val();
     var prod_name = $(".list-item-name-"+ids).val();
-     //alert(prod_id);
+    // alert(prod_id);
     var qty = -1;
     var price = $(".list-item-price-"+ids).val();
     var onhand = $(".list-item-onhand-"+ids).val();
@@ -1543,11 +1584,18 @@ function addcartdivcustomer(e){
     var prod_id = $(".list-item-id-"+ids).val();
     var prod_code = $(".list-item-code-"+ids).val();
     var prod_name = $(".list-item-name-"+ids).val();
-     //alert(prod_id);
+   //  alert(prod_id);
     var qty = 1;
     var price =$(".list-item-price-"+ids).val();
-    var onhand =$(".list-item-onhand-"+ids).val();
+   // var onhand =$(".list-item-onhand"+ids).val();
+   var onhand =$(".fix-list-item-onhand-"+ids).val();
     var tr = $(".table-cart tbody tr:last");
+    
+   //  alert(onhand);
+      if(parseFloat(onhand)<=0){
+         alert('จำนวนสินค้าในสต๊อกไม่เพียงพอ');
+                return false;
+    }
      
     var check_old = check_dup(prod_id);
     if(check_old == 1){
@@ -1601,7 +1649,8 @@ function reducecartdivcustomer(e){
     var price = $(".list-item-price-"+ids).val();
     var onhand = $(".list-item-onhand-"+ids).val();
     var tr = $(".table-cart tbody tr:last");
-     
+
+    
     var check_old = check_dup(prod_id);
     if(check_old == 1){
         $(".table-cart tbody tr").each(function(){

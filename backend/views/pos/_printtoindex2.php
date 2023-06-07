@@ -9,7 +9,7 @@ $fontData = $defaultFontConfig['fontdata'];
 $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp',
 //$mpdf = new \Mpdf\Mpdf([
     //'tempDir' => '/tmp',
-    'mode' => 'utf-8', 'format' => [80, 120],
+    'mode' => 'utf-8', 'format' => [80, 160],
     'fontdata' => $fontData + [
             'sarabun' => [ // ส่วนที่ต้องเป็น lower case ครับ
                 'R' => 'THSarabunNew.ttf',
@@ -165,7 +165,7 @@ $mpdf->AddPageByArray([
         <tr>
             <td><?= \backend\models\Product::findName($value->product_id); ?></td>
             <td style="text-align: center"><?= $value->qty ?></td>
-            <td style="text-align: center"><?= number_format($value->price) ?></td>
+            <td style="text-align: center"><?= number_format($value->price,2) ?></td>
             <td style="text-align: right"><?= number_format($value->qty * $value->price,2); ?></td>
         </tr>
 
@@ -227,13 +227,28 @@ $mpdf->AddPageByArray([
 //include("pdf_footer.php");
 ?>
 <?php
+
+$slip_path = '';
+if($branch_id == 1){
+    $slip_path = '../web/uploads/company1/slip_do/slip_index_do.pdf';
+}else if($branch_id == 2){
+    $slip_path = '../web/uploads/company2/slip_do/slip_index_do.pdf';
+}
+//    if(file_exists('../web/uploads/slip/slip_index.pdf')){
+//        unlink('../web/uploads/slip/slip_index.pdf');
+//    }
+if(file_exists($slip_path)){
+    unlink($slip_path);
+}
+
 $html = ob_get_contents(); // ทำการเก็บค่า HTML จากคำสั่ง ob_start()
 $mpdf->WriteHTML($html); // ทำการสร้าง PDF ไฟล์
 //$mpdf->Output( 'Packing02.pdf','F'); // ให้ทำการบันทึกโค้ด HTML เป็น PDF โดยบันทึกเป็นไฟล์ชื่อ MyPDF.pdf
 ob_clean();
 //$mpdf->SetJS('this.print();');
 $mpdf->SetJS('this.print();');
-$mpdf->Output('../web/uploads/slip_do/slip_index_do.pdf', 'F');
+//$mpdf->Output('../web/uploads/slip_do/slip_index_do.pdf', 'F');
+$mpdf->Output($slip_path, 'F');
 ob_end_flush();
 //header("location: system_stock/report_pdf/Packing.pdf");
 ?>

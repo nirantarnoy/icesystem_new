@@ -2,11 +2,15 @@
 
 namespace backend\controllers;
 
+use backend\models\IssuesummarySearch;
 use backend\models\LocationSearch;
 use Yii;
 use backend\models\Journalissue;
 use backend\models\JournalissueSearch;
+use yii\base\BaseObject;
+use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -26,6 +30,24 @@ class JournalissueController extends Controller
                     'delete' => ['POST', 'GET'],
                 ],
             ],
+//            'access'=>[
+//                'class'=>AccessControl::className(),
+//                'denyCallback' => function ($rule, $action) {
+//                    throw new ForbiddenHttpException('คุณไม่ได้รับอนุญาติให้เข้าใช้งาน!');
+//                },
+//                'rules'=>[
+//                    [
+//                        'allow'=>true,
+//                        'roles'=>['@'],
+//                        'matchCallback'=>function($rule,$action){
+//                            $currentRoute = Yii::$app->controller->getRoute();
+//                            if(Yii::$app->user->can($currentRoute)){
+//                                return true;
+//                            }
+//                        }
+//                    ]
+//                ]
+//            ],
         ];
     }
 
@@ -58,8 +80,8 @@ class JournalissueController extends Controller
     public function actionCreate()
     {
 
-        $company_id = 1;
-        $branch_id = 1;
+        $company_id = 0;
+        $branch_id = 0;
         if (!empty(\Yii::$app->user->identity->company_id)) {
             $company_id = \Yii::$app->user->identity->company_id;
         }
@@ -67,10 +89,10 @@ class JournalissueController extends Controller
             $branch_id = \Yii::$app->user->identity->branch_id;
         }
 
-        $default_warehouse = 6 ;
-        if($company_id == 1 && $branch_id ==2){
-            $default_warehouse = 5;
-        }
+        $default_warehouse = \backend\models\Warehouse::findPrimary($company_id, $branch_id) ;
+//        if($company_id == 1 && $branch_id ==2){
+//            $default_warehouse = 5;
+//        }
 
         $model = new Journalissue();
 
@@ -84,12 +106,15 @@ class JournalissueController extends Controller
             if (count($x_date) > 1) {
                 $sale_date = $x_date[2] . '/' . $x_date[1] . '/' . $x_date[0];
             }
+            $c_time = date('H:i:s');
+
             $model->journal_no = $model->getLastNo($sale_date, $company_id, $branch_id);
-            $model->trans_date = date('Y-m-d', strtotime($sale_date));
+            $model->trans_date = date('Y-m-d H:i:s', strtotime($sale_date.' '.$c_time));
             $model->status = 1;
-            $model->reason_id = 1;
+            $model->reason_id = 1; // เบิกขาย
             $model->company_id = $company_id;
             $model->branch_id = $branch_id;
+            $model->created_by = \Yii::$app->user->id;
             if ($model->save(false)) {
                 if ($prod_id != null) {
                     for ($i = 0; $i <= count($prod_id) - 1; $i++) {
@@ -110,9 +135,7 @@ class JournalissueController extends Controller
                 $session->setFlash('msg', 'บันทึกรายการเรียบร้อย');
                 return $this->redirect(['view', 'id' => $model->id]);
             }
-
         }
-
         return $this->render('create', [
             'model' => $model,
         ]);
@@ -301,18 +324,18 @@ class JournalissueController extends Controller
     }
     public function getStock($prod_id)
     {
-        $company_id = 1;
-        $branch_id = 1;
+        $company_id = 0;
+        $branch_id = 0;
         if (!empty(\Yii::$app->user->identity->company_id)) {
             $company_id = \Yii::$app->user->identity->company_id;
         }
         if (!empty(\Yii::$app->user->identity->branch_id)) {
             $branch_id = \Yii::$app->user->identity->branch_id;
         }
-        $default_warehouse = 6;
-        if ($company_id == 1 && $branch_id == 2) {
-            $default_warehouse = 5;
-        }
+        $default_warehouse = \backend\models\Warehouse::findPrimary($company_id,$branch_id);
+//        if ($company_id == 1 && $branch_id == 2) {
+//            $default_warehouse = 5;
+//        }
         $qty = 0;
         if ($prod_id != null) {
             $model = \backend\models\Stocksum::find()->where(['product_id' => $prod_id, 'warehouse_id' => $default_warehouse])->one();
@@ -322,4 +345,39 @@ class JournalissueController extends Controller
         }
         return $qty;
     }
+    public function actionPrint($id){
+        if($id){
+           // echo $id;return;
+            $model = \backend\models\Journalissue::find()->where(['id'=>$id])->one();
+
+            $model_line = \backend\models\Journalissueline::find()->where(['issue_id' => $model->id])->all();
+            $this->renderPartial('_printissue', ['model' => $model, 'model_line' => $model_line, 'change_amount' => 0, 'branch_id'=> $model->branch_id]);
+            $session = \Yii::$app->session;
+            $session->setFlash('msg-index-car-pos', 'slip.pdf');
+            $session->setFlash('after-save', true);
+          //  $session->setFlash('msg', 'บันทึกรายการเรียบร้อย');
+            return $this->redirect(['journalissue/index']);
+        }
+
+    }
+
+    public function actionIssuebyroute(){
+        $pageSize = \Yii::$app->request->post("perpage");
+        $searchModel = new IssuesummarySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andFilterWhere(['>','delivery_route_id', 0]);
+        $dataProvider->query->andFilterWhere(['>','qty', 0]);
+        $dataProvider->setSort(['defaultOrder' => ['delivery_route_id' => SORT_ASC]]);
+        $dataProvider->pagination->pageSize = 1500;
+
+        $model_bottom = $dataProvider->getModels();
+
+        return $this->render('routesummary', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'perpage' => $pageSize,
+            'model_bottom' => $model_bottom,
+        ]);
+    }
+
 }

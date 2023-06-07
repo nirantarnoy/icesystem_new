@@ -77,9 +77,7 @@ class QuerypaymentreceiveSearch extends QueryPaymentReceive
         }
 
         if ($this->globalSearch != '') {
-            $query->orFilterWhere(['like', 'journal_no', $this->globalSearch])
-                ->orFilterWhere(['like', 'order_no', $this->globalSearch])
-                ->orFilterWhere(['like', 'customer_name', $this->globalSearch]);
+            $query->andFilterWhere(['OR',['like', 'journal_no', $this->globalSearch],['like', 'order_no', $this->globalSearch],['like', 'customer_name', $this->globalSearch]]);
         }
 
 

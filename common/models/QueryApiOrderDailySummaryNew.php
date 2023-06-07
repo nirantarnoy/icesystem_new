@@ -43,7 +43,7 @@ class QueryApiOrderDailySummaryNew extends \yii\db\ActiveRecord
     {
         return [
             [['id', 'status', 'car_ref_id', 'customer_id', 'payment_method_id', 'sale_payment_method_id', 'order_line_id', 'product_id', 'created_at'], 'integer'],
-            [['order_date','order_line_status'], 'safe'],
+            [['order_date','order_line_status','customer_ref_no'], 'safe'],
             [['line_total', 'line_qty', 'price'], 'number'],
             [['order_no', 'code', 'name', 'product_code', 'product_name'], 'string', 'max' => 255],
         ];

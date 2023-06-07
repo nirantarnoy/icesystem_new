@@ -11,13 +11,13 @@ use yii\data\ActiveDataProvider;
  */
 class OrdersposSearch extends Orders
 {
-    public $globalSearch, $f_date, $t_date;
+    public $globalSearch, $from_date, $to_date;
 
     public function rules()
     {
         return [
             [['id', 'customer_id', 'customer_type', 'emp_sale_id', 'car_ref_id', 'order_channel_id', 'status', 'company_id', 'branch_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['order_no', 'order_date'], 'safe'],
+            [['order_no', 'order_date','from_date','to_date'], 'safe'],
             [['vat_amt', 'vat_per', 'order_total_amt'], 'number'],
             [['globalSearch'], 'string']
         ];
@@ -104,33 +104,78 @@ class OrdersposSearch extends Orders
             $query->andFilterWhere(['orders.branch_id' => \Yii::$app->user->identity->branch_id]);
         }
 
-        $query->andFilterWhere(['sale_channel_id' => 2]);
+       // $query->andFilterWhere(['sale_channel_id' => 2]);
+      //  $query->andFilterWhere(['>','orders.customer_id', 0 ]);
         $query->andFilterWhere([
             '=', 'orders.created_by', $this->created_by
         ]);
 
-        $f_date = null;
-        $t_date = null;
+//        $f_date = null;
+//        $t_date = null;
+//
+//        $dash_board = $this->order_date;
+//        $x_date = explode('-', trim($dash_board));
+//        if ($x_date != null) {
+//            if (count($x_date) > 1) {
+//                $ff_date = $x_date[0];
+//                $tt_date = $x_date[1];
+//
+//                $fff_date = explode('/', trim($ff_date));
+//                if (count($fff_date) > 0) {
+//                    $f_date = $fff_date[2] . '-' . $fff_date[1] . '-' . $fff_date[0];
+//                }
+//                $ttt_date = explode('/', trim($tt_date));
+//                if (count($ttt_date) > 0) {
+//                    $t_date = $ttt_date[2] . '-' . $ttt_date[1] . '-' . $ttt_date[0];
+//                }
+//            }
+//
+//            $query->andFilterWhere(['AND', ['>=', 'date(order_date)', date('Y-m-d', strtotime($f_date))], ['<=', 'date(order_date)', date('Y-m-d', strtotime($t_date))]]);
+//
+//        }
 
-        $dash_board = $this->order_date;
-        $x_date = explode('-', trim($dash_board));
-        if ($x_date != null) {
-            if (count($x_date) > 1) {
-                $ff_date = $x_date[0];
-                $tt_date = $x_date[1];
+        if($this->from_date != null && $this->to_date != null){
+            $fx_datetime = explode(' ',$this->from_date);
+            $tx_datetime = explode(' ',$this->to_date);
 
-                $fff_date = explode('/', trim($ff_date));
-                if (count($fff_date) > 0) {
-                    $f_date = $fff_date[2] . '-' . $fff_date[1] . '-' . $fff_date[0];
+            $f_date = null;
+            $f_time = null;
+            $t_date = null;
+            $t_time = null;
+
+            $from_date_time = null;
+            $to_date_time = null;
+
+            if(count($fx_datetime) > 0){
+                $f_date = $fx_datetime[0];
+                $f_time = $fx_datetime[1];
+
+                $x_date = explode('-', $f_date);
+                $xx_date = date('Y-m-d');
+                if (count($x_date) > 1) {
+                    $xx_date = trim($x_date[1]) . '/' . trim($x_date[2]) . '/' . trim($x_date[0]);
                 }
-                $ttt_date = explode('/', trim($tt_date));
-                if (count($ttt_date) > 0) {
-                    $t_date = $ttt_date[2] . '-' . $ttt_date[1] . '-' . $ttt_date[0];
-                }
+                $from_date_time = date('Y-m-d H:i:s',strtotime($xx_date.' '.$f_time));
+                //$from_date_time = date('Y-m-d',strtotime($xx_date));
+                $query->andFilterWhere(['>=','order_date', $from_date_time]);
             }
 
-            $query->andFilterWhere(['AND', ['>=', 'date(order_date)', date('Y-m-d', strtotime($f_date))], ['<=', 'date(order_date)', date('Y-m-d', strtotime($t_date))]]);
+            if(count($tx_datetime) > 0){
+                $t_date = $tx_datetime[0];
+                $t_time = $tx_datetime[1];
 
+                $n_date = explode('-', $t_date);
+                $nn_date = date('Y-m-d');
+                if (count($n_date) > 1) {
+                    $nn_date = trim($n_date[1]) . '/' . trim($n_date[2]) . '/' . trim($n_date[0]);
+                }
+                $to_date_time = date('Y-m-d H:i:s',strtotime($nn_date.' '.$t_time));
+                $query->andFilterWhere(['<=','order_date',$to_date_time]);
+            }
+
+        }else{
+            $query->andFilterWhere(['>=', 'date(order_date)', date('Y-m-d')]);
+            $query->andFilterWhere(['<=', 'date(order_date)', date('Y-m-d')]);
         }
 
 

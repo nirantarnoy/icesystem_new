@@ -75,7 +75,9 @@ class Paymentreceive extends \common\models\PaymentReceive
     public static function getLastNo2($date, $company_id, $branch_id)
     {
         //   $model = Orders::find()->MAX('order_no');
-        $model = Paymentreceive::find()->where(['date(trans_date)' => date('Y-m-d', strtotime($date))])->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])->MAX('journal_no');
+       // $model = Paymentreceive::find()->where(['date(trans_date)' => date('Y-m-d', strtotime($date))])->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])->MAX('journal_no');
+        $model = Paymentreceive::find()->where(['date(trans_date)' => date('Y-m-d', strtotime($date))])->MAX('journal_no');
+       // $model = Paymentreceive::find()->select(['journal_no'])->where(['date(trans_date)' => date('Y-m-d', strtotime($date))])->orderBy(['id'=>SORT_DESC])->one();
         $pre = "AR";
         if ($model != null) {
             $prefix = $pre . '-' . substr(date("Y"), 2, 2) . date('m', strtotime($date)) . date('d', strtotime($date)) . '-';
@@ -118,9 +120,17 @@ class Paymentreceive extends \common\models\PaymentReceive
 //        $model = Position::find()->where(['id'=>$id])->one();
 //        return $model!= null?$model->name:'';
 //    }
-//    public function findUnitid($code){
-//        $model = Unit::find()->where(['name'=>$code])->one();
-//        return count($model)>0?$model->id:0;
-//    }
+    public static function findNo($id){
+        $model = Paymentreceive::find()->where(['id'=>$id])->one();
+        return $model!=null?$model->journal_no:'';
+    }
+    public static function findDate($id){
+        $model = Paymentreceive::find()->where(['id'=>$id])->one();
+        return $model!=null?$model->trans_date:'';
+    }
+    public static function findEmpId($id){
+        $model = Paymentreceive::find()->where(['id'=>$id])->one();
+        return $model!=null?$model->crated_by:0;
+    }
 
 }

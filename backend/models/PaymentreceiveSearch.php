@@ -65,7 +65,7 @@ class PaymentreceiveSearch extends Paymentreceive
             'crated_by' => $this->crated_by,
             'updated_at' => $this->updated_at,
             'updated_by' => $this->updated_by,
-            'query_customer_info.rt_id' => $this->route_id,
+           // 'query_customer_info.rt_id' => $this->route_id,
             'status' => $this->status,
         ]);
 
@@ -77,6 +77,8 @@ class PaymentreceiveSearch extends Paymentreceive
             }
             $tx_date = date('Y-m-d', strtotime($t_date));
             $query->andFilterWhere(['date(trans_date)' => $tx_date]);
+        }else{
+            $query->andFilterWhere(['date(trans_date)' => date('Y-m-d')]);
         }
 
         if (!empty(\Yii::$app->user->identity->company_id)) {
@@ -86,8 +88,14 @@ class PaymentreceiveSearch extends Paymentreceive
             $query->andFilterWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
         }
 
+        if ($this->route_id != '') {
+            $query->andFilterWhere(['query_customer_info.rt_id'=>$this->route_id]);
+
+        }
+
         if ($this->globalSearch != '') {
-            $query->orFilterWhere(['like', 'journal_no', $this->globalSearchs]);
+            $query->orFilterWhere(['like', 'journal_no', $this->globalSearch])
+                ->orFilterWhere(['like', 'query_customer_info.cus_name', $this->globalSearch]);
 
         }
 

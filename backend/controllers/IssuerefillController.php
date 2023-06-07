@@ -61,6 +61,7 @@ class IssuerefillController extends Controller
 
         $company_id = 1;
         $branch_id = 1;
+        $default_warehouse = 0;
         if (!empty(\Yii::$app->user->identity->company_id)) {
             $company_id = \Yii::$app->user->identity->company_id;
         }
@@ -68,11 +69,10 @@ class IssuerefillController extends Controller
             $branch_id = \Yii::$app->user->identity->branch_id;
         }
 
-        $default_wh = 6;
         if (!empty(\Yii::$app->user->identity->branch_id)) {
-            if (\Yii::$app->user->identity->branch_id == 2) {
-                $default_wh = 5;
-            }
+            $branch_id = \Yii::$app->user->identity->branch_id;
+            $warehouse_primary = \backend\models\Warehouse::findPrimary($company_id, $branch_id);
+            $default_warehouse = $warehouse_primary;
         }
 
         $model = new Journalissue();
@@ -93,7 +93,7 @@ class IssuerefillController extends Controller
             $model->company_id = $company_id;
             $model->branch_id = $branch_id;
             $model->delivery_route_id = 0;
-            $model->reason_id = 3;
+            $model->reason_id = 3; // 3 refill 4 reprocess
             if ($model->save()) {
                 if ($prod_id != null) {
                     for ($i = 0; $i <= count($prod_id) - 1; $i++) {
@@ -107,7 +107,7 @@ class IssuerefillController extends Controller
                         $model_line->sale_price = $line_issue_price[$i];
                         $model_line->status = 1;
                         if ($model_line->save()) {
-                            $this->updateStock($prod_id[$i], $line_qty[$i], $default_wh, $model->journal_no, $company_id, $branch_id);
+                            $this->updateStock($prod_id[$i], $line_qty[$i], $default_warehouse, $model->journal_no, $company_id, $branch_id);
                         }
                     }
                 }
@@ -125,9 +125,20 @@ class IssuerefillController extends Controller
 
     public function updateStock($product_id, $qty, $wh_id, $journal_no, $company_id, $branch_id)
     {
-        $default_warehouse = 6;
-        if ($company_id == 1 && $branch_id == 2) {
-            $default_warehouse = 5;
+//        $default_warehouse = 6;
+//        if ($company_id == 1 && $branch_id == 2) {
+//            $default_warehouse = 5;
+//        }
+        $company_id = 1;
+        $branch_id = 1;
+        $default_warehouse = 0; // 6
+        if (!empty(\Yii::$app->user->identity->company_id)) {
+            $company_id = \Yii::$app->user->identity->company_id;
+        }
+        if (!empty(\Yii::$app->user->identity->branch_id)) {
+            $branch_id = \Yii::$app->user->identity->branch_id;
+            $warehouse_primary = \backend\models\Warehouse::findPrimary($company_id, $branch_id);
+            $default_warehouse = $warehouse_primary;
         }
 
         if ($product_id != null && $qty > 0) {

@@ -238,10 +238,18 @@ $mpdf->AddPageByArray([
 </body>
 </html>
 <?php
-
-    if(file_exists('../web/uploads/slip/slip_index.pdf')){
-        unlink('../web/uploads/slip/slip_index.pdf');
-    }
+$slip_path = '';
+if($branch_id == 1){
+    $slip_path = '../web/uploads/company1/slip/slip_index.pdf';
+}else if($branch_id == 2){
+    $slip_path = '../web/uploads/company2/slip/slip_index.pdf';
+}
+//    if(file_exists('../web/uploads/slip/slip_index.pdf')){
+//        unlink('../web/uploads/slip/slip_index.pdf');
+//    }
+if(file_exists($slip_path)){
+    unlink($slip_path);
+}
 
 $html = ob_get_contents(); // ทำการเก็บค่า HTML จากคำสั่ง ob_start()
 $mpdf->WriteHTML($html); // ทำการสร้าง PDF ไฟล์
@@ -250,7 +258,8 @@ ob_clean();
 //$mpdf->SetJS('this.print();');
 $mpdf->SetJS('this.print();');
 
-    $mpdf->Output('../web/uploads/slip/slip_index.pdf', 'F');
+//$mpdf->Output('../web/uploads/slip/slip_index.pdf', 'F');
+$mpdf->Output($slip_path, 'F');
 
 ob_end_flush();
 

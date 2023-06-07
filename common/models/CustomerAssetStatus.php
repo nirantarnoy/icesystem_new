@@ -36,7 +36,7 @@ class CustomerAssetStatus extends \yii\db\ActiveRecord
         return [
             [['cus_asset_id', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by','customer_id','company_id','branch_id'], 'integer'],
             [['trans_date'], 'safe'],
-            [['photo', 'description'], 'string', 'max' => 255],
+            [['photo', 'description','latlong'], 'string', 'max' => 255],
         ];
     }
 
