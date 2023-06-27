@@ -489,7 +489,7 @@ class PosController extends Controller
         ];
 
        // $url = 'http://192.168.60.180:1223/api/pos/posclose';
-        $url = 'http://103.253.73.108:1223/api/pos/posclose';
+        $url = 'http://141.98.19.240:1223/api/pos/posclose';
         // Initializes a new cURL session
         $curl = curl_init($url);
 // Set the CURLOPT_RETURNTRANSFER option to true

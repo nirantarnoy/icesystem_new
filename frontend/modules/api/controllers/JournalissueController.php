@@ -34,6 +34,7 @@ class JournalissueController extends Controller
                     'oldstockroute' => ['POST'],
                     'issueqrscanaddtemp' => ['POST'],
                     'issueconfirmcancel' => ['POST'],
+                    'pullrouteissue' => ['POST'],
                 ],
             ],
         ];
@@ -456,20 +457,25 @@ class JournalissueController extends Controller
         $data = [];
         if ($issue_id != null && $user_id != null) {
             //$data = ['issue_id'=> $issue_id,'user_id'=>$user_id];
-            $has_order_stock = $this->checkhasOrderStock($route_id, $issue_id);
-            if ($has_order_stock == 0) {
+           // $has_order_stock = $this->checkhasOrderStock($route_id, $issue_id);
+           // if ($has_order_stock == 0) {
                 $check_route_type = \backend\models\Deliveryroute::find()->where(['id' => $route_id])->one();
                 $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issue_id])->one();
-                $model_issue_line = \backend\models\Journalissueline::find()->where(['issue_id' => $issue_id])->all();
-                foreach ($model_issue_line as $val2) {
-                    if ($val2->qty <= 0 || $val2->qty == null) continue;
+               // $model_issue_line = \backend\models\Journalissueline::find()->select(['id','product_id','qty','avl_qty','origin_qty'])->where(['issue_id' => $issue_id])->andFilterWhere(['>','origin_qty',0])->all();
+                 $model_issue_line = \common\models\QueryRouteDailyForIssue::find()->select(['id','product_id','qty','avl_qty','origin_qty'])->where(['id' => $issue_id])->all(); 
+                 if($model_issue_line != null){
+                   foreach ($model_issue_line as $val2) {
+                   // if ($val2->avl_qty <= 0 || $val2->avl_qty == null) continue;
 
-                    $old_stock = 0;
+                   // $old_stock = 0;
 
-                    $model_check_has_old_product = \common\models\OrderStock::find()->where(['product_id' => $val2->product_id, 'route_id' => $model_update_issue_status->delivery_route_id])->orderBy(['id'=>SORT_DESC])->one();
-                    if ($model_check_has_old_product) {
-                        $model_check_has_old_product->qty = ($model_check_has_old_product->qty) + $val2->qty;
-                        $model_check_has_old_product->avl_qty = ($model_check_has_old_product->avl_qty) + $val2->qty;
+                   // $model_check_has_old_product = \common\models\OrderStock::find()->where(['product_id' => $val2->product_id, 'route_id' => $route_id])->orderBy(['id'=>SORT_DESC])->one();
+                     $model_check_has_old_product = \common\models\OrderStock::find()->where(['product_id' => $val2->product_id, 'route_id' => $route_id])->one();
+                     if ($model_check_has_old_product != null) {
+                        $old_qty = $model_check_has_old_product->avl_qty;
+                        $new_qty = ($old_qty + ($val2->origin_qty)); 
+                        $model_check_has_old_product->qty =  $val2->origin_qty;
+                        $model_check_has_old_product->avl_qty = $new_qty;
                         $model_check_has_old_product->trans_date = date('Y-m-d H:i:s');
                         if($model_check_has_old_product->save(false)){
                             if ($model_update_issue_status) {
@@ -480,17 +486,17 @@ class JournalissueController extends Controller
                                     }
                                 }
                             }
-                            $this->updateStockCar($company_id, $branch_id, $val2->product_id, $model_update_issue_status->delivery_route_id); // add new deduct stock from car warehouse
+                            $this->updateStockCar($company_id, $branch_id, $val2->product_id, $route_id); // add new deduct stock from car warehouse
                         }
                     } else {
                         $model_order_stock = new \common\models\OrderStock();
                         $model_order_stock->issue_id = $issue_id;
                         $model_order_stock->product_id = $val2->product_id;
                         //  $model_order_stock->qty = ($val2->qty + $old_stock);
-                        $model_order_stock->qty = $val2->qty;
+                        $model_order_stock->qty = $val2->origin_qty;
                         $model_order_stock->used_qty = 0;
                         // $model_order_stock->avl_qty = ($val2->qty + $old_stock);
-                        $model_order_stock->avl_qty = $val2->qty;
+                        $model_order_stock->avl_qty = $val2->origin_qty;
                         $model_order_stock->order_id = 0;
                         $model_order_stock->route_id = $model_update_issue_status->delivery_route_id;
                         $model_order_stock->trans_date = date('Y-m-d H:i:s');
@@ -514,6 +520,7 @@ class JournalissueController extends Controller
                             $this->updateStockCar($company_id, $branch_id, $val2->product_id, $model_update_issue_status->delivery_route_id); // add new deduct stock from car warehouse
                         }
                     }
+                  }
                 }
 
                 // check old stock product not in issue line
@@ -589,7 +596,7 @@ class JournalissueController extends Controller
 
                 }
 
-            }
+            //}
         }
         return ['status' => $status, 'data' => $data];
     }
@@ -877,14 +884,14 @@ class JournalissueController extends Controller
                 $model_line = \common\models\JournalIssueLine::find()->where(['issue_id' => $model->id])->all();
                 if ($model_line) {
                     foreach ($model_line as $value) {
-                        if ($value->qty <= 0) continue;
+                        if ($value->avl_qty <= 0) continue;
                         array_push($data, [
                             'has_record' => 1,
                             'issue_id' => $model->id,
                             'product_id' => $value->product_id,
                             'code' => \backend\models\Product::findCode($value->product_id),
                             'name' => \backend\models\Product::findName($value->product_id),
-                            'qty' => $value->qty,
+                            'qty' => $value->avl_qty,
                             'status' => $model->status,
                         ]);
                     }
@@ -1470,5 +1477,68 @@ class JournalissueController extends Controller
         }
 
         return $old_qty;
+    }
+    public function actionPullrouteissue(){
+
+        $check_route_type = 0;
+        $route_id = null;
+        $company_id = 1;
+        $branch_id = 1;
+        $status = 0;
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        $route_id = $req_data['route_id'];
+        $company_id = $req_data['company_id'];
+        $branch_id = $req_data['branch_id'];
+
+        $data = [];
+
+        if ($route_id != null) {
+            $issue_id = 0;
+            $check_route_type = \backend\models\Deliveryroute::find()->select('type_id')->where(['id' => $route_id])->one();
+            $model = \backend\models\Journalissue::find()->select(['id'])->where(['delivery_route_id'=>$route_id,'status'=>2])->andFilterWhere(['date(trans_date)'=>date('Y-m-d')])->all();
+            if($model){
+                foreach ($model as $value_model){
+                    $issue_id = $value_model->id;
+                    if($issue_id > 0){
+
+                        $model_update_issue_status = \common\models\JournalIssue::find()->where(['id' => $issue_id])->one();
+                        $model_issue_line = \backend\models\Journalissueline::find()->select(['id','product_id','qty','avl_qty','origin_qty'])->where(['issue_id' => $issue_id])->andFilterWhere(['>','origin_qty',0])->all();
+                        if($model_issue_line){
+                            foreach ($model_issue_line as $val2) {
+                                // if ($val2->avl_qty <= 0 || $val2->avl_qty == null) continue;
+
+                                // $old_stock = 0;
+
+                                //$model_check_has_old_product = \common\models\OrderStock::find()->where(['product_id' => $val2->product_id, 'route_id' => $route_id])->orderBy(['id'=>SORT_DESC])->one();
+                                $model_check_has_old_product = \common\models\OrderStock::find()->where(['product_id' => $val2->product_id, 'route_id' => $route_id])->andFilterWhere(['!=','date(trans_date)',date('Y-m-d')])->one();
+                                if ($model_check_has_old_product) {
+                                    $old_qty = $model_check_has_old_product->avl_qty;
+                                    $new_qty = ($old_qty + $val2->origin_qty);
+                                    $model_check_has_old_product->qty =  $val2->origin_qty;
+                                    $model_check_has_old_product->avl_qty = $new_qty;
+                                    $model_check_has_old_product->trans_date = date('Y-m-d H:i:s');
+                                    if($model_check_has_old_product->save(false)){
+                                        if ($model_update_issue_status) {
+                                            if ($model_update_issue_status->status != 2) {
+                                                $model_update_issue_status->status = 2;
+                                                if ($model_update_issue_status->save(false)) {
+                                                    $status += 1;
+                                                }
+                                            }
+                                        }
+                                        $this->updateStockCar($company_id, $branch_id, $val2->product_id, $route_id); // add new deduct stock from car warehouse
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            //}
+        }
+        return ['status' => $status];
     }
 }

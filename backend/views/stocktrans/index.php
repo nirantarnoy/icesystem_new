@@ -43,6 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'warehouse_id',
                 'value' => function ($data) {
                     return \backend\models\Warehouse::findName($data->warehouse_id);
+                   //   return $data->warehouse_id;
                 }
             ],
             //'location_id',
