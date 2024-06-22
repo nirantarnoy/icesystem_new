@@ -40,7 +40,7 @@ $mpdf->AddPageByArray([
 
 //$customer_name = $trans_data[0]['customer_id']?getCustomername($connect, $trans_data[0]['customer_id']):$trans_data[0]['customer_name'];
 //$model_product_daily = \common\models\QueryProductTransDaily::find()->where(['date(trans_date)' => date('Y-m-d')])->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])->all();
-$model_product_daily = \common\models\StockTrans::find()->where(['BETWEEN', 'trans_date', date('Y-m-d H:i:s', strtotime($from_date)), date('Y-m-d H:i:s', strtotime($to_date))])->andFilterWhere(['activity_type_id' => 5, 'company_id' => $company_id, 'branch_id' => $branch_id])->groupBy('product_id')->orderBy(['product_id' => SORT_ASC])->all();
+$model_product_daily = \common\models\StockTrans::find()->select("product_id")->where(['BETWEEN', 'trans_date', date('Y-m-d H:i:s', strtotime($from_date)), date('Y-m-d H:i:s', strtotime($to_date))])->andFilterWhere(['activity_type_id' => 5, 'company_id' => $company_id, 'branch_id' => $branch_id])->groupBy('product_id')->orderBy(['product_id' => SORT_ASC])->all();
 
 $user_login_datetime = '';
 $model_c_login = LoginLog::find()->select('MIN(login_date) as login_date')->where(['user_id' => $user_id, 'status' => 1])->one();
@@ -133,7 +133,13 @@ if ($model_c_login != null) {
 <div>
 
     <form action="<?= \yii\helpers\Url::to(['pos/printsummary'], true) ?>" method="post" id="form-search">
+        <input type="hidden" class="btn-order-type" name="btn_order_type" value="<?= $btn_order_type ?>">
         <table class="table-header" style="width: 100%;font-size: 18px;" border="0">
+            <tr>
+                <td style="padding: 10px;"><span>เรียงตาม <div class="btn-group"><div
+                                    class="btn btn-sm <?=$btn_order_type==1?"btn-success":"btn-default"?> btn-order-date">วันที่ขาย</div><div
+                                    class="btn btn-sm <?=$btn_order_type==2?"btn-success":"btn-default"?> btn-order-price">ราคาขาย</div></div></span></td>
+            </tr>
             <tr>
 
                 <td style="width: 20%">
@@ -200,19 +206,39 @@ if ($model_c_login != null) {
                             echo "selected";
                         } ?>>ขายเชื่อรถ
                         </option>
+                        <option value="4" <?php if ($find_sale_type == 4) {
+                            echo "selected";
+                        } ?>>ขายเชื่อรถต่างสาขา
+                        </option>
                     </select>
                 </td>
                 <td>
                     <?php
                     echo \kartik\select2\Select2::widget([
                         'name' => 'find_user_id',
-                        'data' => \yii\helpers\ArrayHelper::map(\backend\models\User::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id])->all(), 'id', 'username'),
+                        'data' => \yii\helpers\ArrayHelper::map(\backend\models\User::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id,'status'=>1])->all(), 'id', 'username'),
                         'value' => $find_user_id,
                         'options' => [
                             'placeholder' => '--พนักงานขาย--'
                         ],
                         'pluginOptions' => [
                             'allowClear' => true,
+                        ]
+                    ]);
+                    ?>
+                </td>
+                <td>
+                    <?php
+                    echo \kartik\select2\Select2::widget([
+                        'name' => 'is_invoice_req',
+                        'data' => \yii\helpers\ArrayHelper::map(\backend\helpers\CustomerInvoiceReqType::asArrayObject(), 'id', 'name'),
+                        'value' => $is_invoice_req,
+                        'options' => [
+                            'placeholder' => '--ทั้งหมด--'
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                            'multiple' => false,
                         ]
                     ]);
                     ?>
@@ -273,7 +299,7 @@ if ($model_c_login != null) {
                     <td colspan="7"><b><?= $line_product_code ?></b> <span
                                 style="color: darkblue"> <?= $line_product_name ?></span></td>
                 </tr>
-                <?php $find_order = getOrder($value->product_id, $from_date, $to_date, $find_sale_type, $find_user_id, $company_id, $branch_id); ?>
+                <?php $find_order = getOrder($value->product_id, $from_date, $to_date, $find_sale_type, $find_user_id, $company_id, $branch_id, $is_invoice_req, $btn_order_type); ?>
                 <?php if ($find_order != null): ?>
                     <?php
                     $loop_count = count($find_order);
@@ -286,10 +312,12 @@ if ($model_c_login != null) {
                         <?php
                         $x += 1;
                         $sum_qty += $find_order[$i]['qty'];
-                        $sum_total += ($find_order[$i]['qty'] * $find_order[$i]['sale_price']);
+                      //  $sum_total += ($find_order[$i]['qty'] * $find_order[$i]['sale_price']);
+                        $sum_total += ($find_order[$i]['line_total']);
 
                         $sum_qty_all += $find_order[$i]['qty'];
-                        $sum_total_all += ($find_order[$i]['qty'] * $find_order[$i]['sale_price']);
+                  //      $sum_total_all += ($find_order[$i]['qty'] * $find_order[$i]['sale_price']);
+                        $sum_total_all += ($find_order[$i]['line_total']);
                         ?>
                         <tr>
                             <td style="font-size: 16px;"><?= $find_order[$i]['order_no'] ?> </td>
@@ -299,7 +327,7 @@ if ($model_c_login != null) {
                             <td style="font-size: 16px;"><?= $line_product_name ?></td>
                             <td style="font-size: 16px;text-align: right;"><?= number_format($find_order[$i]['qty'], 2) ?></td>
                             <td style="font-size: 16px;text-align: right;"><?= number_format($find_order[$i]['sale_price'], 2) ?></td>
-                            <td style="font-size: 16px;text-align: right;"><?= number_format($find_order[$i]['sale_price'] * $find_order[$i]['qty'], 2) ?></td>
+                            <td style="font-size: 16px;text-align: right;"><?= number_format($find_order[$i]['line_total'], 2) ?></td>
                         </tr>
                         <?php if ($loop_count == $x): ?>
                             <tr>
@@ -355,19 +383,20 @@ if ($model_c_login != null) {
     //echo '<script src="../web/plugins/jquery/jquery.min.js"></script>';
     //echo '<script type="text/javascript">alert();</script>';
     ?>
-    </body>
+</div>
+</body>
 </html>
 
 <?php
-function getOrder($product_id, $f_date, $t_date, $find_sale_type, $find_user_id, $company_id, $branch_id)
+function getOrder($product_id, $f_date, $t_date, $find_sale_type, $find_user_id, $company_id, $branch_id, $is_invoice_req,$btn_order_type)
 {
     $data = [];
-    $sql = "SELECT t2.order_no, t3.code , t3.name, t1.qty, t1.price, t2.order_date, t2.order_channel_id 
-              FROM order_line as t1 INNER JOIN orders as t2 ON t1.order_id = t2.id LEFT  JOIN customer as t3 ON t2.customer_id=t3.id 
+    $sql = "SELECT t2.order_no, t3.code , t3.name, t1.qty, t1.price, t2.order_date, t2.order_channel_id, t1.line_total 
+              FROM order_line as t1 INNER JOIN orders as t2 ON t1.order_id = t2.id LEFT  JOIN customer as t3 ON t2.customer_id=t3.id LEFT JOIN delivery_route as t4 on t2.order_channel_id = t4.id
              WHERE  t2.order_date >=" . "'" . date('Y-m-d H:i:s', strtotime($f_date)) . "'" . " 
              AND t2.order_date <=" . "'" . date('Y-m-d H:i:s', strtotime($t_date)) . "'" . " 
              AND t1.product_id=" . $product_id . " 
-             AND t2.status=1
+             AND t2.status <> 3
              AND t2.sale_channel_id = 2
              AND t2.company_id=" . $company_id . " AND t2.branch_id=" . $branch_id;
 
@@ -376,16 +405,32 @@ function getOrder($product_id, $f_date, $t_date, $find_sale_type, $find_user_id,
             $sql .= " AND t2.payment_method_id=" . $find_sale_type;
         }
         if ($find_sale_type == 2) {
-            $sql .= " AND t2.order_channel_id is null AND t2.payment_method_id=" . $find_sale_type;
+            $sql .= " AND (t2.order_channel_id = 0 OR t2.order_channel_id is null) AND t2.payment_method_id=" . $find_sale_type;
         }
         if ($find_sale_type == 3) {
             $sql .= " AND t2.order_channel_id > 0";
+            $sql .= " AND t4.is_other_branch = 0";
+        }
+        if ($find_sale_type == 4) {
+            $sql .= " AND t2.order_channel_id > 0";
+            $sql .= " AND t4.is_other_branch = 1";
         }
     }
     if ($find_user_id != null) {
         $sql .= " AND t2.created_by=" . $find_user_id;
     }
-    $sql.=" ORDER BY t2.order_no ASC";
+    if ($is_invoice_req != null) {
+        $sql .= " AND t3.is_invoice_req =" . $is_invoice_req;
+    }
+    // $sql .=" ORDER BY t1.price ASC";
+    if($btn_order_type == 1){
+        $sql .= " ORDER BY t2.order_no ASC";
+    }else if($btn_order_type == 2){
+        $sql .= " ORDER BY t1.price ASC";
+    }else{
+        $sql .= " ORDER BY t2.order_no ASC";
+    }
+
     $query = \Yii::$app->db->createCommand($sql);
     $model = $query->queryAll();
     if ($model) {
@@ -403,6 +448,7 @@ function getOrder($product_id, $f_date, $t_date, $find_sale_type, $find_user_id,
                 'cus_name' => $customer_name,
                 'qty' => $model[$i]['qty'],
                 'sale_price' => $model[$i]['price'],
+                'line_total' => $model[$i]['line_total'],
                 'order_date' => $model[$i]['order_date'],
             ]);
         }
@@ -421,6 +467,29 @@ $js = <<<JS
     exclude: ".noExl",
     name: "Excel Document Name"
   });
+});
+$(".btn-order-date").click(function(){
+    $(".btn-order-type").val(1);
+    if($(".btn-order-price").hasClass("btn-success")){
+        $(".btn-order-price").removeClass("btn-success");
+        $(".btn-order-price").addClass("btn-default");
+    }
+    if($(this).hasClass("btn-default")){
+        $(this).removeClass("btn-default")
+        $(this).addClass("btn-success");
+    }
+    
+});
+$(".btn-order-price").click(function(){
+    $(".btn-order-type").val(2);
+      if($(".btn-order-date").hasClass("btn-success")){
+        $(".btn-order-date").removeClass("btn-success");
+        $(".btn-order-date").addClass("btn-default");
+    }
+    if($(this).hasClass("btn-default")){
+        $(this).removeClass("btn-default")
+        $(this).addClass("btn-success");
+    }
 });
 function printContent(el)
       {

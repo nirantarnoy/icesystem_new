@@ -110,9 +110,11 @@ class AdmintoolsController extends Controller
                                  // return qty to order stock
 
                                // $model_return = \common\models\OrderStock::find()->where(['product_id'=>$value->product_id,'route_id'=>$route_id,'date(trans_date)'=>date('Y-m-d')])->max('id');
-                                $model_return = \common\models\OrderStock::find()->select('id')->where(['product_id'=>$value->product_id,'route_id'=>$route_id,'date(trans_date)'=>date('Y-m-d')])->one();
+                                $model_return = \common\models\OrderStock::find()->where(['product_id'=>$value->product_id,'route_id'=>$route_id])->one();
                                 if($model_return){
-                                    \common\models\OrderStock::updateAll(['avl_qty'=>$value->qty],['id'=>$model_return->id]);
+                                    $model_return->avl_qty = $value->qty;
+                                    $model_return->save(false);
+                                   // \common\models\OrderStock::updateAll(['avl_qty'=>$value->qty],['id'=>$model_return->id]);
                                 }
                             }
                         }

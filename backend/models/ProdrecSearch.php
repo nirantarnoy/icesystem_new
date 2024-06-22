@@ -10,12 +10,12 @@ use yii\data\ActiveDataProvider;
 
 class ProdrecSearch extends Stocktrans
 {
-    public $from_date,$to_date;
+    public $from_date,$to_date,$prodrec_type;
     public function rules()
     {
         return [
-            [['id', 'company_id', 'branch_id', 'product_id', 'warehouse_id', 'location_id', 'qty', 'created_at'], 'integer'],
-            [['journal_no', 'trans_date', 'lot_no','activity_type_id', 'created_by','from_date','to_date'], 'safe'],
+            [['id', 'company_id', 'branch_id', 'product_id', 'warehouse_id', 'location_id', 'qty', 'created_at','transfer_branch_id'], 'integer'],
+            [['journal_no', 'trans_date', 'lot_no','activity_type_id', 'created_by','from_date','to_date','prodrec_type'], 'safe'],
         ];
     }
 
@@ -55,15 +55,16 @@ class ProdrecSearch extends Stocktrans
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+           // 'id' => $this->id,
             'company_id' => $this->company_id,
             'branch_id' => $this->branch_id,
             // 'trans_date' => $this->trans_date,
             'product_id' => $this->product_id,
             'warehouse_id' => $this->warehouse_id,
             'location_id' => $this->location_id,
+            'transfer_branch_id' => $this->transfer_branch_id,
             'qty' => $this->qty,
-            'created_at' => $this->created_at,
+           // 'created_at' => $this->created_at,
           //  'created_by' => $this->created_by,
         ]);
 
@@ -123,6 +124,10 @@ class ProdrecSearch extends Stocktrans
         }else{
             $query->andFilterWhere(['>=','date(trans_date)', date('Y-m-d')]);
             $query->andFilterWhere(['<=','date(trans_date)',date('Y-m-d')]);
+        }
+
+        if($this->prodrec_type!=''){
+            $query->andFilterWhere(['LIKE','journal_no',$this->prodrec_type]);
         }
 
 

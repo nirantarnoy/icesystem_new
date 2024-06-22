@@ -48,14 +48,19 @@ if ($is_start_find == 1) {
 //$model_customer_loan = \common\models\QuerySaleMobileDataNew::find()->where(['BETWEEN', 'order_date', date('Y-m-d H:i', strtotime($from_date)), date('Y-m-d H:i', strtotime($to_date))])
 
         if ($is_find_date == 1) {
-            $model_customer_loan = \common\models\QuerySaleMobileDataNew::find()->select(['route_id', 'customer_id'])->where(['BETWEEN', 'order_date', date('Y-m-d H:i', strtotime($from_date)), date('Y-m-d H:i', strtotime($to_date))])
+            $model_customer_loan = \common\models\QuerySaleMobileDataNew::find()->select(['route_id', 'customer_id'])->where(['>=', 'order_date', date('Y-m-d H:i', strtotime($from_date))])
+                ->andFilterWhere(['<=','order_date',date('Y-m-d H:i', strtotime($to_date))])
                 ->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])
                 ->andFilterWhere(['IN', 'route_id', $find_customer_id])
                 ->andFilterWhere(['>', 'line_total_credit', 0])
                 ->andFilterWhere(['IN', 'customer_id', $find_customer_id_select])
-                ->groupBy(['route_id', 'customer_id'])->orderBy(['route_id' => SORT_ASC])->all();
+                ->distinct(['route_id', 'customer_id'])->orderBy(['route_id' => SORT_ASC])->all();
+            // ->groupBy(['route_id', 'customer_id'])->orderBy(['route_id' => SORT_ASC])->all();
+
+
         } else {
-            $model_customer_loan = \common\models\QuerySaleMobileDataNew::find()->select(['route_id', 'customer_id'])->where(['<=', 'order_date', date('Y-m-d H:i', strtotime($to_date))])
+            $model_customer_loan = \common\models\QuerySaleMobileDataNew::find()->select(['route_id', 'customer_id'])->where(['>=', 'order_date', date('Y-m-d H:i', strtotime($from_date))])
+                ->andFilterWhere(['<=','order_date',date('Y-m-d H:i', strtotime($to_date))])
                 ->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])
                 ->andFilterWhere(['IN', 'route_id', $find_customer_id])
                 ->andFilterWhere(['>', 'line_total_credit', 0])
@@ -66,7 +71,8 @@ if ($is_start_find == 1) {
 
     } else { // not select route
         if ($is_find_date == 1) {
-            $model_customer_loan = \common\models\QuerySaleMobileDataNew::find()->select(['route_id', 'customer_id'])->where(['BETWEEN', 'order_date', date('Y-m-d H:i', strtotime($from_date)), date('Y-m-d H:i', strtotime($to_date))])
+            $model_customer_loan = \common\models\QuerySaleMobileDataNew::find()->select(['route_id', 'customer_id'])->where(['>=', 'order_date', date('Y-m-d H:i', strtotime($from_date))])
+                ->andFilterWhere(['<=','order_date',date('Y-m-d H:i', strtotime($to_date))])
                 ->andFilterWhere(['company_id' => $company_id, 'branch_id' => $branch_id])
                 ->andFilterWhere(['>', 'line_total_credit', 0])
                 ->andFilterWhere(['IN', 'customer_id', $find_customer_id_select])
@@ -268,12 +274,12 @@ if ($is_start_find == 1) {
                     ]);
                     ?>
                 </td>
-                <td style="width: 25%">
+                <td style="width: 20%">
                     <label for="">สายส่ง</label>
                     <?php
                     echo \kartik\select2\Select2::widget([
                         'name' => 'find_customer_id',
-                        'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id,'status'=> 1])->all(), 'id', 'name'),
+                        'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id, 'status' => 1])->all(), 'id', 'name'),
                         'value' => $find_customer_id,
                         'options' => [
                             'placeholder' => '--สายส่ง--'
@@ -285,7 +291,7 @@ if ($is_start_find == 1) {
                     ]);
                     ?>
                 </td>
-                <td style="width: 25%">
+                <td style="width: 20%">
                     <label for="">ลูกค้า</label>
                     <?php
                     echo \kartik\select2\Select2::widget([
@@ -301,6 +307,15 @@ if ($is_start_find == 1) {
                         ]
                     ]);
                     ?>
+                </td>
+                <td style="width: 20%">
+                    <label for="">มี/ไม่มีรายละเอียด</label>
+                    <select name="find_has_detail" class="form-control" id="">
+
+                        <option value="0" <?=$find_has_detail ==0?'selected':''?>>ทั้งหมด</option>
+                        <option value="1" <?=$find_has_detail ==1?'selected':''?>>มี</option>
+                        <option value="2" <?=$find_has_detail ==2?'selected':''?>>ไม่มี</option>
+                    </select>
                 </td>
                 <td>
                     <label for="" style="color: white">ค้นหา</label>
@@ -336,6 +351,7 @@ if ($is_start_find == 1) {
         <td style="border: 1px solid gray;text-align: center"><b>เลขเอกสาร</b></td>
         <td style="border: 1px solid gray;text-align: center"><b>วันที่</b></td>
         <td style="border: 1px solid gray;text-align: left"><b>ลูกค้า</b></td>
+        <td style="border: 1px solid gray;text-align: center;"><b>รายละเอียด</b></td>
         <td style="text-align: right;border: 1px solid gray"><b>จำนวนเงิน</b></td>
         <td style="text-align: right;border: 1px solid gray"><b>ชำระแล้ว</b></td>
         <td style="text-align: right;border: 1px solid gray"><b>ค้างชำระ</b></td>
@@ -361,7 +377,7 @@ if ($is_start_find == 1) {
             }
             ?>
             <?php //$find_order = getOrder($value->route_id, $value->customer_id, $from_date, $to_date, $company_id, $branch_id); ?>
-            <?php $find_order = getOrder($value->route_id, $value->customer_id, $to_date, $company_id, $branch_id, $is_find_date, $from_date); ?>
+            <?php $find_order = getOrder($value->route_id, $value->customer_id, $to_date, $company_id, $branch_id, $is_find_date, $from_date,$find_has_detail); ?>
             <?php if ($find_order != null): ?>
                 <?php
                 $loop_count = count($find_order);
@@ -381,9 +397,10 @@ if ($is_start_find == 1) {
 
 
 //
-                    if ((double)$find_order[$i]['total_credit'] - (double)$find_order[$i]['total_pay'] <= 0) {
-                        continue;
-                    }
+//                    if ((double)$find_order[$i]['total_credit'] - (double)$find_order[$i]['total_pay'] <= 0) {
+//                        continue;
+//                    }
+
 
                     $sum_line_total = ($sum_line_total + $find_order[$i]['total_credit']);
                     $sum_line_pay = ($sum_line_pay + $find_order[$i]['total_pay']);
@@ -401,6 +418,7 @@ if ($is_start_find == 1) {
                         <td style="font-size: 16px;border: 1px solid gray;text-align: center"><?= $find_order[$i]['order_no'] ?> </td>
                         <td style="font-size: 16px;border: 1px solid gray;text-align: center"><?= date('Y-m-d H:i:s', strtotime($find_order[$i]['order_date'])) ?></td>
                         <td style="font-size: 16px;border: 1px solid gray;text-align: left"><?= $find_order[$i]['customer_name'] ?></td>
+                        <td style="font-size: 16px;border: 1px solid gray;text-align: left"><?= $find_order[$i]['customer_detail'] ?></td>
                         <td style="font-size: 16px;text-align: right;border: 1px solid gray"><?= number_format($find_order[$i]['total_credit'], 2) ?></td>
                         <td style="font-size: 16px;text-align: right;color: green;border: 1px solid gray"><?= number_format($find_order[$i]['total_pay'], 2) ?></td>
                         <td style="font-size: 16px;text-align: right;color: red;border: 1px solid gray"><?= number_format(($find_order[$i]['total_credit'] - $find_order[$i]['total_pay']), 2) ?></td>
@@ -412,7 +430,7 @@ if ($is_start_find == 1) {
                 <?php if ($xx == count($find_order) && $sum_line_total > 0): ?>
 
                     <tr style="background-color: #1fc8e3">
-                        <td colspan="5" style="font-size: 16px;border: 1px solid grey;text-align: right"><b>รวม</b></td>
+                        <td colspan="6" style="font-size: 16px;border: 1px solid grey;text-align: right"><b>รวม</b></td>
                         <td style="font-size: 16px;text-align: right;border: 1px solid grey;">
                             <b><?= number_format($sum_line_total, 2) ?></b></td>
                         <td style="font-size: 16px;text-align: right;border: 1px solid grey;">
@@ -448,6 +466,7 @@ if ($is_start_find == 1) {
     <?php endif; ?>
     <tfoot>
     <tr>
+        <td style="font-size: 16px;border-top: 1px solid black"></td>
         <td style="font-size: 16px;border-top: 1px solid black"></td>
         <td style="font-size: 16px;border-top: 1px solid black"></td>
         <td style="font-size: 16px;border-top: 1px solid black"></td>
@@ -502,7 +521,7 @@ if ($is_start_find == 1) {
 </html>
 
 <?php
-function getOrder($route_id, $customer_id, $t_date, $company_id, $branch_id, $is_find_date, $f_date)
+function getOrder($route_id, $customer_id, $t_date, $company_id, $branch_id, $is_find_date, $f_date, $find_has_detail)
 {
 //    WHERE  t2.order_date >=" . "'" . date('Y-m-d H:i:s', strtotime($f_date)) . "'" . "
 //AND t2.order_date <=" . "'" . date('Y-m-d H:i:s', strtotime($t_date)) . "'" . "
@@ -515,6 +534,7 @@ function getOrder($route_id, $customer_id, $t_date, $company_id, $branch_id, $is
               WHERE  t2.order_date <=" . "'" . date('Y-m-d H:i:s', strtotime($t_date)) . "'" . "
               AND t2.route_id =" . $route_id . "              
               AND t2.payment_method_id = 2
+              AND t2.payment_status = 0;
               AND t2.company_id=" . $company_id . " AND t2.branch_id=" . $branch_id;
 
             if ($customer_id != null || $customer_id != '') {
@@ -524,35 +544,85 @@ function getOrder($route_id, $customer_id, $t_date, $company_id, $branch_id, $is
             $sql .= " GROUP BY t2.id,t2.customer_id, t2.order_no, t2.order_date";
             $sql .= " ORDER BY t2.customer_id, t2.order_date,t2.order_no ";
         } else {
-            $sql = "SELECT t2.id,t2.customer_id, t2.order_no, t2.order_date , sum(t2.line_total_credit) as total_credit
-             FROM query_sale_mobile_data_new2 as t2
+//            $sql = "SELECT t2.id,t2.customer_id, t2.order_no, t2.order_date , sum(t2.line_total_credit) as total_credit
+//             FROM query_sale_mobile_data_new2 as t2
+//             WHERE  t2.order_date >=" . "'" . date('Y-m-d H:i:s', strtotime($f_date)) . "'" . "
+//             AND t2.order_date <=" . "'" . date('Y-m-d H:i:s', strtotime($t_date)) . "'" . "
+//             AND t2.route_id =" . $route_id . "
+//             AND t2.payment_method_id = 2
+//             AND t2.company_id=" . $company_id . " AND t2.branch_id=" . $branch_id;
+//
+//            if ($customer_id != null || $customer_id != '') {
+//                $sql .= " AND t2.customer_id=" . $customer_id;
+//            }
+//
+//            $sql .= " GROUP BY t2.id,t2.customer_id, t2.order_no, t2.order_date";
+//            $sql .= " ORDER BY t2.customer_id, t2.order_date,t2.order_no ";
+
+            $sql = "SELECT t2.id,t1.customer_id, t2.order_no, t2.order_date , sum(t1.price * t1.qty) as total_credit
+             FROM order_line as t1 inner join orders as t2 on t1.order_id = t2.id
              WHERE  t2.order_date >=" . "'" . date('Y-m-d H:i:s', strtotime($f_date)) . "'" . "
              AND t2.order_date <=" . "'" . date('Y-m-d H:i:s', strtotime($t_date)) . "'" . "
-             AND t2.route_id =" . $route_id . " 
+             AND t2.order_channel_id =" . $route_id . "
              AND t2.payment_method_id = 2
+             AND t1.line_total > 0
+             AND t2.payment_status = 0
              AND t2.company_id=" . $company_id . " AND t2.branch_id=" . $branch_id;
 
+
             if ($customer_id != null || $customer_id != '') {
-                $sql .= " AND t2.customer_id=" . $customer_id;
+                $sql .= " AND t1.customer_id=" . $customer_id;
             }
 
-            $sql .= " GROUP BY t2.id,t2.customer_id, t2.order_no, t2.order_date";
-            $sql .= " ORDER BY t2.customer_id, t2.order_date,t2.order_no ";
+
+            $sql .= " GROUP BY t2.id,t1.customer_id, t2.order_no, t2.order_date";
+            $sql .= " ORDER BY t1.customer_id, t2.order_date,t2.order_no ";
         }
         $query = \Yii::$app->db->createCommand($sql);
         $model = $query->queryAll();
         if ($model) {
             for ($i = 0; $i <= count($model) - 1; $i++) {
+                if($find_has_detail == 0){
+                    array_push($data, [
+                        'order_id' => $model[$i]['id'],
+                        'customer_id' => $model[$i]['customer_id'],
+                        'customer_name' => \backend\models\Customer::findName($model[$i]['customer_id']),
+                        'customer_detail' => \backend\models\Customer::findDescription($model[$i]['customer_id']),
+                        'order_no' => $model[$i]['order_no'],
+                        'order_date' => $model[$i]['order_date'],
+                        'total_credit' => $model[$i]['total_credit'],
+                        'total_pay' => 0,// getPaytrans($model[$i]['id'], $model[$i]['customer_id']),
+                    ]);
+                }
+                if($find_has_detail == 1){
+                    $line_detail = \backend\models\Customer::findDescription($model[$i]['customer_id']);
+                    if($line_detail == '' || $line_detail == null)continue;
+                    array_push($data, [
+                        'order_id' => $model[$i]['id'],
+                        'customer_id' => $model[$i]['customer_id'],
+                        'customer_name' => \backend\models\Customer::findName($model[$i]['customer_id']),
+                        'customer_detail' => $line_detail,
+                        'order_no' => $model[$i]['order_no'],
+                        'order_date' => $model[$i]['order_date'],
+                        'total_credit' => $model[$i]['total_credit'],
+                        'total_pay' => 0,// getPaytrans($model[$i]['id'], $model[$i]['customer_id']),
+                    ]);
+                }
+                if($find_has_detail == 2){
+                    $line_detail = \backend\models\Customer::findDescription($model[$i]['customer_id']);
+                    if($line_detail != '' || $line_detail != null)continue;
+                    array_push($data, [
+                        'order_id' => $model[$i]['id'],
+                        'customer_id' => $model[$i]['customer_id'],
+                        'customer_name' => \backend\models\Customer::findName($model[$i]['customer_id']),
+                        'customer_detail' => $line_detail,
+                        'order_no' => $model[$i]['order_no'],
+                        'order_date' => $model[$i]['order_date'],
+                        'total_credit' => $model[$i]['total_credit'],
+                        'total_pay' => 0,// getPaytrans($model[$i]['id'], $model[$i]['customer_id']),
+                    ]);
+                }
 
-                array_push($data, [
-                    'order_id' => $model[$i]['id'],
-                    'customer_id' => $model[$i]['customer_id'],
-                    'customer_name' => \backend\models\Customer::findName($model[$i]['customer_id']),
-                    'order_no' => $model[$i]['order_no'],
-                    'order_date' => $model[$i]['order_date'],
-                    'total_credit' => $model[$i]['total_credit'],
-                    'total_pay' => getPaytrans($model[$i]['id'], $model[$i]['customer_id']),
-                ]);
             }
         }
     } else {
@@ -603,9 +673,21 @@ function getOrder($route_id, $customer_id, $t_date, $company_id, $branch_id, $is
 function getPaytrans($order_id, $customer_id)
 {
     $pay_total = 0;
-    if ($order_id) {
-        $model = \common\models\QueryPaymentReceive::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id])->sum('payment_amount');
-        $pay_total = $model;
+    if ($order_id && $customer_id) {
+//        $model = \common\models\QueryPaymentReceive::find()->where(['order_id' => $order_id, 'customer_id' => $customer_id])->sum('payment_amount');
+//        $pay_total = $model;
+        $sql = "SELECT sum(payment_amount) as payment_amount
+              FROM query_payment_receive_for_credit WHERE
+              order_id =" . $order_id . "    
+              AND customer_id=" . $customer_id;
+        $sql .= " GROUP BY order_id,customer_id";
+        $query = \Yii::$app->db->createCommand($sql);
+        $model = $query->queryAll();
+        if ($model) {
+            for ($i = 0; $i <= count($model) - 1; $i++) {
+                $pay_total = $model[$i]['payment_amount'];
+            }
+        }
     }
     return $pay_total;
 }

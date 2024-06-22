@@ -10,6 +10,18 @@ use yii\widgets\Pjax;
 
 $this->title = 'ประวัติรับสินค้าเข้า-ออก คลัง';
 $this->params['breadcrumbs'][] = $this->title;
+
+$view_type = 1;
+$view_type_name = 'All';
+if($view_type_main != null){
+    $view_type = $view_type_main;
+    if($view_type == 1){
+        $view_type_name = 'All';
+    }else if($view_type == 2){
+        $view_type_name = 'Page';
+    }
+}
+
 ?>
 <div class="stocktrans-index">
     <?php Pjax::begin(); ?>
@@ -19,6 +31,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
         'showPageSummary' => true,
+        'toolbar' => [
+            [
+                'content'=>
+                    Html::a($view_type_name, ['stocktrans/index','viewtype' => $view_type], [
+                        'class' => 'btn btn-secondary btn-default',
+                        'title' =>  $view_type_name
+                    ]),
+                'options' => ['class' => 'btn-group-sm']
+            ],
+//            '{export}',
+//            '{toggleData}'
+        ],
+        'panel' => ['type' => 'info', 'heading' => 'ประวัติรับสินค้าเข้า-ออก คลัง'],
+        //'toggleDataContainer' => ['class' => 'btn-group mr-2'],
+       // 'toggleDataContainer' => ['class' => 'btn-group'],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn',
                 'headerOptions' => ['style' => 'text-align: center'],
@@ -43,7 +70,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'warehouse_id',
                 'value' => function ($data) {
                     return \backend\models\Warehouse::findName($data->warehouse_id);
-                   //   return $data->warehouse_id;
                 }
             ],
             //'location_id',

@@ -2345,4 +2345,33 @@ class OrdersController extends Controller
             echo "completed";
         }
     }
+    public function actionRecalorder($route){
+      if ($route) {
+            $model = \backend\models\Orders::find()->select(['id', 'order_no'])->where(['order_channel_id' => $route, 'status' => 100, 'sale_from_mobile' => 1, 'date(order_date)' => date('Y-m-d')])->orderBy(['id' => SORT_ASC])->all();
+            if ($model != null) {
+                $i = 0;
+                $nums = 0;
+                $prefix = '';
+                
+                foreach ($model as $value) {
+                    $order_no_new = "";
+                    $new_order_no = "";
+                    if ($i == 0) {
+                        $prefix = substr($value->order_no, 0, 15);
+                    }
+                    $nums += 1;
+                    $clen = strlen($nums);
+                    $loop = 4 - $clen;
+                    for ($i = 1; $i <= $loop; $i++) {
+                        $new_order_no .= "0";
+                    }
+                    echo $prefix.$new_order_no.$nums.'<br />';
+                    $order_no_new = $prefix.$new_order_no.$nums;
+                    \common\models\Orders::updateAll(['order_no'=>$order_no_new],['id'=>$value->id]);
+
+                    $i += 1;
+                }
+            }
+        } 
+   }
 }

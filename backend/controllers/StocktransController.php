@@ -53,14 +53,32 @@ class StocktransController extends Controller
      */
     public function actionIndex()
     {
+        $view_type_main = \Yii::$app->request->get('view_type');
+        $request_params = \Yii::$app->request->queryParams;
+        $param_val = 'page';
+        foreach($request_params as $key => $value){
+            if (strpos($key, '_tog') !== false) {
+                $param_val = $value;
+            }
+        }
         $searchModel = new StocktransSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->pagination->pageSize = 100;
+        if($param_val == 'all'){
+            $dataProvider->pagination->pageSize = false;
+        }else{
+            $dataProvider->pagination->pageSize = 300;
+        }
+//        if($view_type_main == 1){
+//            $dataProvider->pagination->pageSize = 300;
+//        }else{
+//            $dataProvider->pagination->pageSize = false;
+//        }
         $dataProvider->setSort(['defaultOrder'=>['id'=>SORT_DESC]]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'view_type_main' => $view_type_main,
         ]);
     }
 

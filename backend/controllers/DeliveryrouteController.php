@@ -38,8 +38,8 @@ class DeliveryrouteController extends Controller
                         'allow'=>true,
                         'roles'=>['@'],
                         'matchCallback'=>function($rule,$action){
-                            $currentRoute = Yii::$app->controller->getRoute();
-                            if(Yii::$app->user->can($currentRoute)){
+                            $currentRoute = \Yii::$app->controller->getRoute();
+                            if(\Yii::$app->user->can($currentRoute)){
                                 return true;
                             }
                         }
@@ -203,5 +203,20 @@ class DeliveryrouteController extends Controller
             }
         }
         echo $html;
+    }
+    public function actionRoutestock($id){
+        $model = \common\models\OrderStock::find()->where(['route_id'=>$id])->andFilterWhere(['date(trans_date)'=>date('Y-m-d')])->all();
+        return $this->render('_currentstock',['route_id'=>$id,'model'=>$model]);
+    }
+    public function actionUpdateroutestock(){
+       $id = \Yii::$app->request->post('line_id');
+        $product_id = \Yii::$app->request->post('line_product_id');
+        $new_qty = \Yii::$app->request->post('line_qty');
+        if($id != null){
+            for($i=0;$i<=count($id)-1;$i++){
+                \common\models\OrderStock::updateAll(['avl_qty'=>$new_qty[$i]],['id'=>$id[$i]]);
+            }
+        }
+        return $this->redirect(['deliveryroute/index']);
     }
 }
