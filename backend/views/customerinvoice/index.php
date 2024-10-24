@@ -76,6 +76,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
+                'attribute' => 'created_by',
+                'label' => 'ดำเนินการโดย',
+                'value' => function ($data) {
+                    return \backend\models\User::findName($data->created_by);
+                }
+            ],
+            [
 
                 'header' => 'ตัวเลือก',
                 'headerOptions' => ['style' => 'text-align:center;', 'class' => 'activity-view-link',],

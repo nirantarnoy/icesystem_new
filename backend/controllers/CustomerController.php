@@ -151,6 +151,15 @@ class CustomerController extends Controller
             }
 
            // echo $model->getLastNo($company_id, $branch_id);
+            $fdate = date('Y-m-d');
+            $xdate = explode('-', $model->active_date);
+            if($xdate != null){
+                if(count($xdate) > 1){
+                    $fdate = $xdate[2] . '/' . $xdate[1] . '/' . $xdate[0];
+                }
+            }
+
+            $model->active_date = date('Y-m-d', strtotime($fdate));
 
             $model->code = $model->getLastNo($company_id, $branch_id);
             $model->sort_name = $model->sort_name == null ? '' : $model->sort_name;
@@ -306,5 +315,23 @@ class CustomerController extends Controller
             }
         }
         return $photo_name;
+    }
+
+    public function actionGetcustasset()
+    {
+        $id = \Yii::$app->request->post('id');
+        $html = '';
+        if ($id) {
+            $model = \common\models\CustomerAsset::find()->where(['customer_id' => $id])->orderBy(['product_id' => SORT_ASC])->all();
+            if ($model) {
+                foreach ($model as $value) {
+                    $html .= '<tr>';
+                    $html .= '<td>' . \backend\models\Assetsitem::findCode($value->product_id) . '</td>';
+                    $html .= '<td>' . $value->qty . '</td>';
+                    $html .= '</tr>';
+                }
+            }
+        }
+        echo $html;
     }
 }

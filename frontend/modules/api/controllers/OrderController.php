@@ -52,6 +52,7 @@ class OrderController extends Controller
                     'getbalancein' => ['POST'],
                     'closeorderposmobile' => ['POST'],
                     'testclosepos' => ['POST'],
+                    'createnotifyerrorsaletype'=>['POST'],
                 ],
             ],
         ];
@@ -1993,7 +1994,8 @@ class OrderController extends Controller
                 try {
                     $model_order_stock = \common\models\OrderStock::find()->where(['route_id' => $find_route_id, 'product_id' => $model->product_id, 'date(trans_date)' => date('Y-m-d')])->one();
                     if ($model_order_stock) {
-                        $model_order_stock->avl_qty = ($model_order_stock->avl_qty + $model->qty);
+                       // $model_order_stock->avl_qty = ($model_order_stock->avl_qty + $model->qty);
+                        $model_order_stock->avl_qty = ((float)$model_order_stock->avl_qty + (float)$model->qty);
                         if ($model_order_stock->save(false)) {
                             $model->status = 500;
                             if ($model->save(false)) {
@@ -2017,7 +2019,8 @@ class OrderController extends Controller
                         $pre_date = date('Y-m-d', strtotime(date('Y-m-d') . " -1 day"));
                         $model_order_stock = \common\models\OrderStock::find()->where(['route_id' => $find_route_id, 'product_id' => $model->product_id, 'date(trans_date)' => $pre_date])->one();
                         if ($model_order_stock) {
-                            $model_order_stock->avl_qty = ($model_order_stock->avl_qty + $model->qty);
+                           // $model_order_stock->avl_qty = ($model_order_stock->avl_qty + $model->qty);
+                            $model_order_stock->avl_qty = ((float)$model_order_stock->avl_qty + (float)$model->qty);
                             if ($model_order_stock->save(false)) {
                                 $model->status = 500;
                                 if ($model->save(false)) {
@@ -5075,4 +5078,78 @@ class OrderController extends Controller
 
         return $qty;
     }
+
+    public function actionCreatenotifyerrorsaletype()
+    {
+        $route_id = 0;
+        $user_id = '';
+        $company_id = 0;
+        $branch_id = 0;
+        $message = '';
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $req_data = \Yii::$app->request->getBodyParams();
+        if ($req_data != null) {
+            $route_id = $req_data['route_id'];
+            $user_id = $req_data['user_id'];
+            $company_id = $req_data['company_id'];
+            $branch_id = $req_data['branch_id'];
+            $message = $req_data['message'];
+            $order_no = $req_data['order_no'];
+            $customer_name = $req_data['customer_name'];
+            $total_amount = $req_data['total_amount'];
+        }
+
+        return $this->notifymessageError($route_id, $user_id, $company_id, $branch_id,$message,$order_no,$customer_name,$total_amount);
+    }
+
+    public function notifymessageError($route_id, $user_id, $company_id, $branch_id, $error_message,$order_no,$customer_name,$total_amount)
+    {
+        //$message = "This is test send request from camel paperless";
+        $line_api = 'https://notify-api.line.me/api/notify';
+        $line_token = 'y7v7BXGtbORRt790MWWe2UTH02pIqeGwvTPqAUXyzgY';
+
+//        //   6kL3UlbKb1djsoGE7KFXSo9SQ1ikYb2MxmTHDeEy3GE   token omnoi
+//        if ($company_id == 1 && $branch_id == 1) {
+//            //  $line_token = 'ZMqo4ZqwBGafMOXKVht2Liq9dCGswp4IRofT2EbdRNN'; // vorapat
+//            $b_token = \backend\models\Branch::findLintoken($company_id, $branch_id);
+//            //   $line_token = '6kL3UlbKb1djsoGE7KFXSo9SQ1ikYb2MxmTHDeEy3GE'; // omnoi
+//            $line_token = trim($b_token);
+//        } else if ($company_id == 1 && $branch_id == 2) {
+//            $b_token = \backend\models\Branch::findLintoken($company_id, $branch_id);
+//            $line_token = trim($b_token);
+//            //   $line_token = 'TxAUAOScIROaBexBWXaYrVcbjBItIKUwGzFpoFy3Jrx'; // BKT
+//        }
+
+        $message = '' . "\n";
+        $message = 'แจ้งเตือนบันทึกขายผิดประเภท' . "\n";
+        $message .= 'VORAPAT:' . \backend\models\Deliveryroute::findName($route_id) . "\n";
+        $message .= 'User:' . $this->findEmpName($user_id) . "\n";
+        //   $message .= 'User:' . \backend\models\User::findName($user_id) . "\n";
+        $message .= "วันที่: " . date('Y-m-d') . "(" . date('H:i') . ")" . "\n";
+
+        $message .= $error_message;
+        $message .= "\n";
+        $message .= "เลขที่ ".$order_no;
+        $message .= "\n";
+        $message .= "ลูกค้า ".$customer_name;
+        $message .= "\n";
+        $message .= "จำนวนเงิน ".number_format($total_amount,2);
+
+        $queryData = array('message' => $message);
+        $queryData = http_build_query($queryData, '', '&');
+        $headerOptions = array(
+            'http' => array(
+                'method' => 'POST',
+                'header' => "Content-Type: application/x-www-form-urlencoded\r\n"
+                    . "Authorization: Bearer " . $line_token . "\r\n"
+                    . "Content-Length: " . strlen($queryData) . "\r\n",
+                'content' => $queryData
+            )
+        );
+        $context = stream_context_create($headerOptions);
+        $result = file_get_contents($line_api, FALSE, $context);
+        $res = json_decode($result);
+        return $res;
+    }
+    
 }

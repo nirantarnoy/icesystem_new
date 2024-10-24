@@ -91,6 +91,11 @@ class Assetsitem extends \common\models\Assets
         $model = Assets::find()->select('asset_no')->where(['id' => $id])->one();
         return $model != null ? $model->asset_no : '';
     }
+    public static function findPrice($id)
+    {
+        $model = Assets::find()->select('rent_price')->where(['id' => $id])->one();
+        return $model != null ? $model->rent_price : 0;
+    }
     public static function findCustomername($id)
     {
         $model = \common\models\CustomerAsset::find()->where(['product_id' => $id])->one();

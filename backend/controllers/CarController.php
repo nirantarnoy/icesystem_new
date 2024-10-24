@@ -21,6 +21,7 @@ use yii\web\UploadedFile;
  */
 class CarController extends Controller
 {
+   public $enableCsrfValidation = false;
     /**
      * {@inheritdoc}
      */

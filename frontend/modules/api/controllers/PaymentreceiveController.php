@@ -256,6 +256,8 @@ class PaymentreceiveController extends Controller
         $user_id = $req_data['user_id'];
         $data_list = $req_data['data'];
 
+        $base64_string = $req_data['image'];
+       // $base64_string = null;
 
         $xdate = explode('-', trim($pay_date));
         $t_date = date('Y-m-d');
@@ -295,6 +297,24 @@ class PaymentreceiveController extends Controller
                             $status = true;
                             // $this->updatePaymenttransline($customer_id, $order_id, $pay_amount, $payment_channel_id);
                             $data = ['pay successfully'];
+
+                                if ($base64_string != null && $i == 0) {
+
+                                    $newfile = time() . ".jpg";
+                                    $outputfile = '../web/uploads/files/receive/' . $newfile;          //save as image.jpg in uploads/ folder
+                                    //$outputfile = \Yii::$app->urlManagerBackend->getBaseUrl() . '/uploads/files/receive/' . $newfile;          //save as image.jpg in uploads/ folder
+
+                                    $filehandler = fopen($outputfile, 'wb');
+                                    // fwrite($filehandler, base64_decode(trim($base64_string[$xp])));
+                                    fwrite($filehandler, base64_decode(trim($base64_string)));
+                                    // we could add validation here with ensuring count($data)>1
+
+                                    // clean up the file resource
+                                    fclose($filehandler);
+
+                                   \backend\models\Paymentreceive::updateAll(['slip_doc'=>$newfile],['id'=>$check_record->id]);
+
+                                }
                         }
                         // }
                     } else {
@@ -320,6 +340,29 @@ class PaymentreceiveController extends Controller
                                 // $this->updatePaymenttransline($customer_id, $order_id, $pay_amount, $payment_channel_id);
                                 $data = ['pay successfully'];
                             }
+                           
+                                  if ($base64_string != null && $i == 0) {
+//                                    for ($xp = 0; $xp <= count($base64_string) - 1; $xp++) {
+//                                        if ($xp == 0) { // only first
+                                    $newfile = time() . ".jpg";
+                                    $outputfile = '../web/uploads/files/receive/' . $newfile;          //save as image.jpg in uploads/ folder
+                                    //$outputfile = \Yii::$app->urlManagerBackend->getBaseUrl() . '/uploads/files/receive/' . $newfile;          //save as image.jpg in uploads/ folder
+
+                                    $filehandler = fopen($outputfile, 'wb');
+                                    // fwrite($filehandler, base64_decode(trim($base64_string[$xp])));
+                                    fwrite($filehandler, base64_decode(trim($base64_string)));
+                                    // we could add validation here with ensuring count($data)>1
+
+                                    // clean up the file resource
+                                    fclose($filehandler);
+
+                                    $model->slip_doc = $newfile;
+                                    $model->save(false);
+//                                        }
+//
+//                                    }
+                                }
+                          
                         }
                     }
                     \common\models\Orders::updateAll(['payment_status'=>1],['id'=>$order_id]);

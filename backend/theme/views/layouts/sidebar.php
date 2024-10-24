@@ -267,6 +267,7 @@
                                 </a>
                             </li>
                         <?php endif; ?>
+                        
                     </ul>
                 </li>
                 <li class="nav-item has-treeview has-sub">
@@ -547,6 +548,34 @@
                                 </a>
                             </li>
                         <?php endif;?>
+                        <?php if (\Yii::$app->user->can('assetrental/index')): ?>
+                            <li class="nav-item">
+                                <a href="index.php?r=assetrental/index" class="nav-link assetrental">
+                                    <i class="far fa-circlez nav-icon"></i>
+                                    <p>ยืมถัง</p>
+                                </a>
+                            </li>
+                        <?php endif;?>
+                         <?php //if (\Yii::$app->user->can('assetsitem/print')): ?>
+                            <li class="nav-item">
+                                <a href="index.php?r=pos/printsummarycarnky" class="nav-link pos">
+                                    <i class="far fa-circlez nav-icon"></i>
+                                    <p>
+                                        ยอดขายแยกสินค้าสายส่ง
+                                    </p>
+                                </a>
+                            </li>
+                        <?php //endif; ?>
+                        <?php //if (\Yii::$app->user->can('assetsitem/print')): ?>
+                            <li class="nav-item">
+                                <a href="index.php?r=pos/printsummaryposnky" class="nav-link pos">
+                                    <i class="far fa-circlez nav-icon"></i>
+                                    <p>
+                                        ยอดขายแยกสินค้าหน้าบ้าน
+                                    </p>
+                                </a>
+                            </li>
+                        <?php //endif; ?>
                     </ul>
                 </li>
                 <li class="nav-item has-treeview has-sub">
@@ -829,6 +858,22 @@
                                 <a href="index.php?r=adminreportcarissue/index2" class="nav-link adminreportcarissue">
                                     <i class="far fa-circlez nav-icon"></i>
                                     <p>สรุปเบิกสายส่ง</p>
+                                </a>
+                            </li>
+                        <?php endif;?>
+                         <?php if (\Yii::$app->user->can('saleqtysumbyprice/index')): ?>
+                            <li class="nav-item">
+                                <a href="index.php?r=saleqtysumbyprice/index2" class="nav-link saleqtysumbyprice">
+                                    <i class="far fa-circlez nav-icon"></i>
+                                    <p>แคทหน้าบ้าน</p>
+                                </a>
+                            </li>
+                        <?php endif;?>
+                        <?php if (\Yii::$app->user->can('saleqtysumbyprice/index2')): ?>
+                            <li class="nav-item">
+                                <a href="index.php?r=saleqtysumbyprice/index2" class="nav-link saleqtysumbyprice">
+                                    <i class="far fa-circlez nav-icon"></i>
+                                    <p>แคทขายรถ</p>
                                 </a>
                             </li>
                         <?php endif;?>

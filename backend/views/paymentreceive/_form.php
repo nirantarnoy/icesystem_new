@@ -168,13 +168,13 @@ if ($is_admin == 1) {
     </div>
     <?php if ($model->isNewRecord): ?>
         <div class="row show-button-payment" style="display: none;">
-            <div class="col-lg-9">
+            <div class="col-lg-4">
                 <div class="btn btn-primary" onclick="selectallcash();">ชำระด้วยเงินสดทั้งหมด</div>
                 <div class="btn btn-warning" onclick="selectallbank();">ชำระด้วยเงินโอนทั้งหมด</div>
 
             </div>
-            <div class="col-lg-3" style="text-align: right">
-
+            <div class="col-lg-3" style="text-align: left">
+                <input type="file" class="form-control-file" style="padding: 5px;background: #1ab6cf;color: black;" name="receive_doc" title="เลือกไฟล์แนบ">
             </div>
         </div>
     <?php endif; ?>

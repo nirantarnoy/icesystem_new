@@ -37,6 +37,7 @@ class Assets extends \yii\db\ActiveRecord
         return [
             [['status', 'company_id', 'branch_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['asset_no', 'asset_name', 'description'], 'string', 'max' => 255],
+            [['rent_price'],'safe']
         ];
     }
 
@@ -51,6 +52,7 @@ class Assets extends \yii\db\ActiveRecord
             'asset_name' => 'Asset Name',
             'description' => 'Description',
             'status' => 'Status',
+            'rent_price' => 'Rent Price',
             'company_id' => 'Company ID',
             'branch_id' => 'Branch ID',
             'created_at' => 'Created At',

@@ -15,6 +15,7 @@ use yii\filters\VerbFilter;
 
 class CustomertypeController extends Controller
 {
+   public $enableCsrfValidation = false;
     public function behaviors()
     {
         return [

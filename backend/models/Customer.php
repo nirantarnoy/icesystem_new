@@ -121,6 +121,18 @@ class Customer extends \common\models\Customer
         return $model != null ? $model->location_info : '';
     }
 
+      public static function getAssetCount($id)
+    {
+        $model = \common\models\CustomerAsset::find()->where(['customer_id' => $id])->count();
+        return $model;
+    }
+
+    public static function findRouteNums($customer_id)
+    {
+        $model = \common\models\Customer::find()->where(['id' => $customer_id])->one();
+        return $model != null ? $model->route_num : '';
+    }
+
     public static function findPayTerm($id)
     {
         $model = Customer::find()->where(['id' => $id])->one();

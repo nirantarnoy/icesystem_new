@@ -178,10 +178,26 @@ $mpdf->AddPageByArray([
                         <?php
                         echo \kartik\select2\Select2::widget([
                             'name' => 'find_user_id',
-                            'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id,'status'=>1])->all(), 'id', 'name'),
+                            'data' => \yii\helpers\ArrayHelper::map(\backend\models\Deliveryroute::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id, 'status' => 1])->all(), 'id', 'name'),
                             'value' => $find_user_id,
                             'options' => [
                                 'placeholder' => '--สายส่ง--'
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'multiple' => true,
+                            ]
+                        ]);
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                        echo \kartik\select2\Select2::widget([
+                            'name' => 'find_cus_id',
+                            'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customer::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id, 'status' => 1])->all(), 'id', 'name'),
+                            'value' => $find_cus_id,
+                            'options' => [
+                                'placeholder' => '--ลูกค้า--'
                             ],
                             'pluginOptions' => [
                                 'allowClear' => true,
@@ -249,7 +265,7 @@ $mpdf->AddPageByArray([
                     $line_route_code = \backend\models\Deliveryroute::findName($find_user_id[$k]);
                     ?>
 
-                    <?php $find_order = getPayment($from_date, $to_date, 0, $find_user_id[$k], $company_id, $branch_id); ?>
+                    <?php $find_order = getPayment($from_date, $to_date, 0, $find_user_id[$k], $company_id, $branch_id,$find_cus_id); ?>
                     <?php if ($find_order != null): ?>
                         <?php
                         $loop_count = count($find_order);
@@ -290,24 +306,38 @@ $mpdf->AddPageByArray([
                                                 <td>คงเหลือ</td>
                                                 <td>สถานะ</td>
                                                 <td>รับชำระโดย</td>
+                                                <td>ไฟล์แนบ</td>
                                             </tr>
                                             <?php for ($k = 0; $k <= count($payline) - 1; $k++): ?>
-                                            <?php
-                                               $order_credit = \backend\models\Orders::getlinesumcredit($payline[$k]['order_id']);
-                                                if($payline[$k]['status'] == 'เงินสด'){
+                                                <?php
+                                                $order_credit = \backend\models\Orders::getlinesumcredit($payline[$k]['order_id']);
+                                                if ($payline[$k]['status'] == 'เงินสด') {
                                                     $payment_cash = ($payment_cash + $payline[$k]['pay']);
-                                                }else  if($payline[$k]['status'] == 'เงินโอน'){
+                                                } else if ($payline[$k]['status'] == 'เงินโอน') {
                                                     $payment_transfer = ($payment_transfer + $payline[$k]['pay']);
                                                 }
-                                            ?>
+                                                ?>
                                                 <tr>
-                                                    <td><?=\backend\models\Orders::getOrderdate($payline[$k]['order_id'])?></td>
-                                                    <td><?=\backend\models\Orders::getNumber($payline[$k]['order_id'])?></td>
-                                                    <td><?=number_format($order_credit,2)?></td>
-                                                    <td><?=number_format($payline[$k]['pay'],2)?></td>
-                                                    <td><?=number_format($order_credit - $payline[$k]['pay'],2)?></td>
-                                                    <td style="color: red"><?=$payline[$k]['status']?></td>
-                                                    <td style="color: red"><?= $payline[$k]['user']?></td>
+                                                    <td><?= \backend\models\Orders::getOrderdate($payline[$k]['order_id']) ?></td>
+                                                    <td><?= \backend\models\Orders::getNumber($payline[$k]['order_id']) ?></td>
+                                                    <td><?= number_format($order_credit, 2) ?></td>
+                                                    <td><?= number_format($payline[$k]['pay'], 2) ?></td>
+                                                    <td><?= number_format($order_credit - $payline[$k]['pay'], 2) ?></td>
+                                                    <td style="color: red"><?= $payline[$k]['status'] ?></td>
+                                                    <td style="color: red"><?= $payline[$k]['user'] ?></td>
+                                                    <td style="color: red">
+                                                        <?php if ($k==0): ?>
+                                                            <?php if ($find_order[$i]['slip_doc'] != null || $find_order[$i]['slip_doc'] != ''): ?>
+                                                                <?php if (file_exists('../web/uploads/files/receive/' . trim($find_order[$i]['slip_doc']))): ?>
+                                                                    <a href="<?= \Yii::$app->getUrlManager()->baseUrl . '/uploads/files/receive/' . trim($find_order[$i]['slip_doc']) ?>"
+                                                                       target="_blank" style="color: red">view</a>
+                                                                <?php else: ?>
+                                                                    <a href="<?= \Yii::$app->urlManagerFrontend->getBaseUrl() . '/uploads/files/receive/' . trim($find_order[$i]['slip_doc']) ?>"
+                                                                       target="_blank" style="color: red">view</a>
+                                                                <?php endif; ?>
+                                                            <?php endif; ?>
+                                                        <?php endif; ?>
+                                                    </td>
                                                 </tr>
                                             <?php endfor; ?>
                                         </table>
@@ -360,11 +390,11 @@ $mpdf->AddPageByArray([
             <table style="border: 1px solid grey;">
                 <tr>
                     <td style="width: 20%">เงินสด</td>
-                    <td><?=number_format($payment_cash,2)?></td>
+                    <td><?= number_format($payment_cash, 2) ?></td>
                 </tr>
                 <tr>
                     <td>เงินโอน</td>
-                    <td><?=number_format($payment_transfer, 2)?></td>
+                    <td><?= number_format($payment_transfer, 2) ?></td>
                 </tr>
             </table>
         </div>
@@ -384,9 +414,21 @@ $mpdf->AddPageByArray([
     </html>
 
 <?php
-function getPayment($f_date, $t_date, $find_sale_type, $find_user_id, $company_id, $branch_id)
+function getPayment($f_date, $t_date, $find_sale_type, $find_user_id, $company_id, $branch_id, $find_cus_id)
 {
     $list_route_id = null;
+   
+     $cust_list = '';
+
+    if ($find_cus_id != null) {
+        for($i = 0; $i < count($find_cus_id); $i++) {
+            if ($i == 0) {
+                $cust_list .= $find_cus_id[$i];
+            } else {
+                $cust_list .= ',' . $find_cus_id[$i];
+            }
+        }
+    }    
 
     $data = [];
 //    $sql = "SELECT t1.id,t1.journal_no,t1.trans_date,t1.customer_id,SUM(t2.payment_amount) as amount
@@ -398,14 +440,16 @@ function getPayment($f_date, $t_date, $find_sale_type, $find_user_id, $company_i
 //             AND t3.delivery_route_id = " . $find_user_id . "
 //             AND t1.company_id=" . $company_id . " AND t1.branch_id=" . $branch_id;
 
-    $sql = "SELECT t1.id,t1.journal_no,t1.customer_code,t1.customer_name,t1.customer_id,SUM(t1.payment_amount) as amount,t1.trans_date  from query_payment_receive as t1 INNER JOIN customer as t2 on t2.id = t1.customer_id 
+    $sql = "SELECT t1.id,t1.slip_doc,t1.journal_no,t1.customer_code,t1.customer_name,t1.customer_id,SUM(t1.payment_amount) as amount,t1.trans_date  from query_payment_receive as t1 INNER JOIN customer as t2 on t2.id = t1.customer_id 
               WHERE (date(t1.trans_date)>= " . "'" . date('Y-m-d', strtotime($f_date)) . "'" . " 
               AND date(t1.trans_date)<= " . "'" . date('Y-m-d', strtotime($t_date)) . "'" . " )
               AND t1.status <> 100 
-              AND t1.payment_method_id=2 AND  t2.delivery_route_id =".$find_user_id."
+              AND t1.payment_method_id=2 AND  t2.delivery_route_id =" . $find_user_id . "
               AND t1.company_id=" . $company_id . " AND t1.branch_id=" . $branch_id;
 
-
+    if ($find_cus_id != null) {
+        $sql .= " AND t1.customer_id in (" . $cust_list .")";
+    }
 
     $sql .= " GROUP BY t1.id,t1.journal_no";
     $query = \Yii::$app->db->createCommand($sql);
@@ -429,6 +473,7 @@ function getPayment($f_date, $t_date, $find_sale_type, $find_user_id, $company_i
                 'cus_type' => $customer_type,
                 'pay' => $model[$i]['amount'],
                 'trans_date' => $model[$i]['trans_date'],
+                'slip_doc' => $model[$i]['slip_doc'],
             ]);
         }
     }
@@ -455,7 +500,7 @@ function getPaymentLine($payment_id, $company_id, $branch_id)
                 'order_id' => $model[$i]['order_id'],
                 'pay' => $model[$i]['payment_amount'],
 //                'status'=> $model[$i]['status'] == 3 ?'ยกเลิก':'ชำระแล้ว',
-                'status'=> $model[$i]['payment_channel_id'] == 1 ?'เงินสด':'เงินโอน',
+                'status' => $model[$i]['payment_channel_id'] == 1 ? 'เงินสด' : 'เงินโอน',
                 'user' => \backend\models\User::findName($model[$i]['crated_by']),
             ]);
         }

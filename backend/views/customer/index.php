@@ -34,11 +34,11 @@ $this->params['breadcrumbs'][] = $this->title;
             </form>
         </div>
     </div>
-    <?php echo $this->render('_search', ['model' => $searchModel,'viewstatus'=>$viewstatus]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel, 'viewstatus' => $viewstatus]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-         //'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'emptyCell' => '-',
         'toolbar' => [
             '{toggleData}',
@@ -63,14 +63,27 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'code',
             'sort_name',
+            'route_num',
             'name',
             'description',
             [
+                'attribute' => 'active_date',
+                'value' => function ($data) {
+                    if(date('Y',strtotime($data->active_date)) == 1970){
+                        return '';
+                    }else{
+                        return date('d-m-Y', strtotime($data->active_date));
+                    }
+
+                }
+            ],
+            
+      /*      [
                 'attribute' => 'customer_group_id',
                 'value' => function ($data) {
                     return \backend\models\Customergroup::findName($data->customer_group_id);
                 }
-            ],
+            ],*/
             [
                 'attribute' => 'customer_type_id',
                 'value' => function ($data) {
@@ -83,8 +96,27 @@ $this->params['breadcrumbs'][] = $this->title;
                     return \backend\models\Deliveryroute::findName($data->delivery_route_id);
                 }
             ],
-            //'location_info',
-            //'delivery_route_id',
+           // 'cus_description',
+            [
+                'attribute' => 'sale_id',
+                'label' => 'การตลาด',
+                'value' => function ($data) {
+                    return \backend\models\Employee::findName2($data->sale_id);
+                }
+            ],
+            [
+                'attribute'=>'cus_description',
+                'label'=>'หมายเหตุ',
+            ],
+            [
+                'label'=>'ถัง',
+                'format'=>'raw',
+                'value'=>function($data){
+                  $asset_cnt =  \backend\models\Customer::getAssetCount($data->id);
+                  return '<a href="#" data-var="' . $data->id . '" onclick="showcust($(this))">' . $asset_cnt . '</a>';
+                }
+            ],
+          //  'cus_description',
             //'active_date',
             //'logo',
             //'shop_photo',
@@ -165,3 +197,65 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::end(); ?>
 
 </div>
+
+<div id="findModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>รายการถัง</h3>
+            </div>
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+
+            <div class="modal-body">
+                <input type="hidden" name="line_qc_product" class="line_qc_product" value="">
+                <table class="table table-bordered table-striped table-find-list" width="100%">
+                    <thead>
+                    <tr>
+                        <th>รหัสถัง</th>                       
+                        <th>จำนวน</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                            class="fa fa-close text-danger"></i> ปิดหน้าต่าง
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<?php
+$url_to_find_cust = Url::to(['customer/getcustasset'], true);
+$js = <<<JS
+$(function(){
+  
+});
+function showcust(e){
+    var ids = e.attr("data-var");
+    if(ids >0 ){
+     $.ajax({
+              'type':'post',
+              'dataType': 'html',
+              'async': false,
+              'url': "$url_to_find_cust",
+              'data': {'id': ids},
+              'success': function(data) {
+                  //  alert(data);
+                   $(".table-find-list tbody").html(data);
+                   $("#findModal").modal("show");
+                 }
+              });   
+    }
+}
+JS;
+$this->registerJs($js, static::POS_END);
+?>

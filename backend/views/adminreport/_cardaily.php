@@ -199,7 +199,7 @@ $model_line = \common\models\QuerySaleMobileDataNew::find()->select(['route_id']
                         <input type="submit" class="btn btn-primary" value="ค้นหา">
                     </td>
                     <td style="width: 25%; text-align: right">
-
+                        <a href="<?= \yii\helpers\Url::to(['adminreport/cardaily2'], true) ?>" class="btn btn-info">รายงานแบบแยกวันที่</a>
                     </td>
                 </tr>
             </table>

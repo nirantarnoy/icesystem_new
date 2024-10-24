@@ -37,9 +37,14 @@ class AssetsitemController extends Controller
     public function actionIndex()
     {
         $viewstatus = 1;
+        $viewstatus2 = 0;
 
         if (\Yii::$app->request->get('viewstatus') != null) {
             $viewstatus = \Yii::$app->request->get('viewstatus');
+        }
+
+        if (\Yii::$app->request->get('viewstatus2') != null) {
+            $viewstatus2 = \Yii::$app->request->get('viewstatus2');
         }
 
         $pageSize = \Yii::$app->request->post("perpage");
@@ -52,6 +57,15 @@ class AssetsitemController extends Controller
             $dataProvider->query->andFilterWhere(['assets.status' => 0]);
         }
 
+        if ($viewstatus2 == 1) {
+            $dataProvider->query->andFilterWhere(['is','customer_asset.product_id', new \yii\db\Expression('NULL')]);
+        }
+        if ($viewstatus2 == 2) {
+            $dataProvider->query->andFilterWhere(['is not','customer_asset.product_id', new \yii\db\Expression('NULL')]);
+        }
+
+
+
         $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
         $dataProvider->pagination->pageSize = $pageSize;
 
@@ -60,6 +74,7 @@ class AssetsitemController extends Controller
             'dataProvider' => $dataProvider,
             'perpage' => $pageSize,
             'viewstatus' => $viewstatus,
+            'viewstatus2' => $viewstatus2
         ]);
     }
 
@@ -243,6 +258,64 @@ class AssetsitemController extends Controller
                     if ($modelx->save(false)) {
                         $res += 1;
                     }
+                }
+                //    print_r($qty_text);return;
+
+                if ($res > 0) {
+                    $session = Yii::$app->session;
+                    $session->setFlash('msg', 'นำเข้าข้อมูลเรียบร้อย');
+                    return $this->redirect(['index']);
+                } else {
+                    $session = Yii::$app->session;
+                    $session->setFlash('msg-error', 'พบข้อมผิดพลาดนะ');
+                    return $this->redirect(['index']);
+                }
+                // }
+                fclose($file);
+//            }
+//        }
+            }
+        }
+    }
+
+    public function actionImportAssetUpdateprice()
+    {
+        $uploaded = UploadedFile::getInstanceByName('file_asset_update');
+        if (!empty($uploaded)) {
+            //echo "ok";return;
+            $upfiles = time() . "." . $uploaded->getExtension();
+            // if ($uploaded->saveAs(Yii::$app->request->baseUrl . '/uploads/files/' . $upfiles)) {
+            if ($uploaded->saveAs('../web/uploads/files/customers/' . $upfiles)) {
+                //  echo "okk";return;
+                // $myfile = Yii::$app->request->baseUrl . '/uploads/files/' . $upfiles;
+                $myfile = '../web/uploads/files/customers/' . $upfiles;
+                $file = fopen($myfile, "r+");
+                fwrite($file, "\xEF\xBB\xBF");
+
+                setlocale(LC_ALL, 'th_TH.TIS-620');
+                $i = -1;
+                $res = 0;
+                $data = [];
+                while (($rowData = fgetcsv($file, 10000, ",")) !== FALSE) {
+                    $i += 1;
+                    $catid = 0;
+                    $qty = 0;
+                    $price = 0;
+                    $cost = 0;
+                    if ($rowData[1] == '' || $i == 0) {
+                        continue;
+                    }
+
+                    $model_dup = \backend\models\Assetsitem::find()->where(['asset_no' => trim($rowData[1]), 'company_id' => 1, 'branch_id' => 1])->one();
+                    if ($model_dup != null) {
+                        $model_dup->description = $rowData[2];
+                        $model_dup->rent_price = $rowData[4];
+                        $model_dup->status = $rowData[5];
+                        if ($model_dup->save(false)) {
+                            $res += 1;
+                        }
+                    }
+
                 }
                 //    print_r($qty_text);return;
 

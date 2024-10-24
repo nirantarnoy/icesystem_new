@@ -29,7 +29,7 @@ class SiteController extends Controller
 //                        'allow' => false,
 //                    ],
                     [
-                        'actions' => ['login', 'error', 'createadmin', 'changepassword', 'decodex', 'grab', 'addseconduser', 'getcominfo', 'transactionsalecar', 'transactionsalecar2', 'transactionsalecar3', 'createscreenshort', 'transactionsalepos', 'updateroute', 'calmachine', 'clearorder','testclosesum','updateorderpayment','caltransactionsaledistributor','startcaldailymanagerauto'],
+                        'actions' => ['login', 'error', 'createadmin', 'changepassword', 'decodex', 'grab', 'addseconduser', 'getcominfo', 'transactionsalecar', 'transactionsalecar2', 'transactionsalecar3', 'createscreenshort', 'transactionsalepos', 'updateroute', 'calmachine', 'clearorder','testclosesum','updateorderpayment','caltransactionsaledistributor','startcaldailymanagerauto','uploadfromgo'],
                         'allow' => true,
                     ],
                     [
@@ -2199,6 +2199,22 @@ class SiteController extends Controller
             }
         }
         return $data;
+    }
+
+   function actionUploadfromgo()
+    {
+        if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
+            $uploadFile = basename($_FILES['image']['name']);
+
+            // if (move_uploaded_file($_FILES['image']['tmp_name'], \Yii::$app->getUrlManager()->baseUrl . '/uploads/files/receive/' . $uploadFile)) {
+            if (move_uploaded_file($_FILES['image']['tmp_name'], '../web/uploads/files/receive/' . $uploadFile)) {
+                echo "File is valid, and was successfully uploaded.\n";
+            } else {
+                echo "Possible file upload attack!\n";
+            }
+        } else {
+            echo \Yii::$app->getUrlManager()->baseUrl;
+        }
     }
 }
 

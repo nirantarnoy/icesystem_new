@@ -30,7 +30,7 @@ if (count($xxtodate) > 1) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Print</title>
     <link href="https://fonts.googleapis.com/css?family=Sarabun&display=swap" rel="stylesheet">
-    <style>
+    <style media="print">
         /*body {*/
         /*    font-family: sarabun;*/
         /*    !*font-family: garuda;*!*/
@@ -41,21 +41,24 @@ if (count($xxtodate) > 1) {
             /*font-family: garuda;*/
             font-size: 18px;
         }
+       
+
 
         table.table-header {
             border: 0px;
             border-spacing: 1px;
         }
 
+
         table.table-footer {
-            border: 0px;
-            border-spacing: 0px;
-        }
+            thead { border: 0px;
+                display: table-header-group; border-spacing: 0px;
+            }        }
 
         table.table-header td, th {
-            border: 0px solid #dddddd;
-            text-align: left;
-            padding-top: 2px;
+            tfoot { border: 0px solid #dddddd;
+                display: none; /* Hide tfoot in print */ text-align: left;
+            }            padding-top: 2px;
             padding-bottom: 2px;
         }
 
@@ -97,11 +100,21 @@ if (count($xxtodate) > 1) {
             padding: 2px;
         }
 
+	@media print {
+         .footerx {
+           display: none;
+         }
+        }
+
+        tfoot.last-page {
+           display: table-footer-group;
+        }
+
     </style>
 </head>
 <body>
 <div id="div1">
-    <table style="border: 0px;">
+    <table style="border: none">
         <!--    <table style="border: 0px;">-->
         <tr>
             <td style="text-align: left;border: none" colspan="2"><h3>สรุปรายการส่งน้ำแข็ง</h3></td>
@@ -269,7 +282,7 @@ if (count($xxtodate) > 1) {
                 <td style="text-align: center;padding: 8px;padding-right: 5px;border: 1px solid grey"><?= $value->note ?></td>
             </tr>
         <?php endforeach; ?>
-        <tfoot>
+        <tfoot class="footerx">
         <tr>
             <td colspan="2"
                 style="text-align: left;padding: 0px;text-indent: 15px;border: 0px solid grey;padding: 10px;"></td>
@@ -324,6 +337,9 @@ if (count($xxtodate) > 1) {
     <td style="text-align: right">
         <button id="btn-export-excel-top" class="btn btn-secondary">Export Excel</button>
         <!--            <button id="btn-print" class="btn btn-warning" onclick="printContent('div1')">Print</button>-->
+    </td>
+    <td>
+        <a href="index.php?r=customerinvoice/recal&id=<?= $model->id ?>" class="btn btn-warning">คำนวนใหม่</a>
     </td>
 </table>
 </body>
@@ -388,6 +404,7 @@ function getOrderQty2($order_id, $product_description)
 
 <?php
 $this->registerJsFile(\Yii::$app->request->baseUrl . '/js/jquery.table2excel.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/printThis/1.15.0/printThis.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $js = <<<JS
  $("#btn-export-excel").click(function(){
   $("#table-data-2").table2excel({
@@ -403,7 +420,7 @@ $("#btn-export-excel-top").click(function(){
     name: "Excel Document Name"
   });
 });
-function printContent(el)
+function printContentx(el)
       {
          var restorepage = document.body.innerHTML;
          var printcontent = document.getElementById(el).innerHTML;
@@ -411,7 +428,39 @@ function printContent(el)
          window.print();
          document.body.innerHTML = restorepage;
      }
+function printContent(el){
+    // Clone the table to manipulate it before printing
+    //   var tableClone = document.getElementById('printTable').cloneNode(true);
+    //
+    //   // Add the last-page class to tfoot
+    //   tableClone.querySelector('tfoot').classList.add('last-page');
+    //
+    //   // Use printThis to print the table
+    //   $(tableClone).printThis({
+    //     importCSS: true,
+    //     loadCSS: '',
+    //     printContainer: true,
+    //     pageTitle: '',
+    //     removeInline: false,
+    //     header: null,
+    //     footer: null,
+    //     base: false,
+    //     formValues: true,
+    //     canvas: false,
+    //     doctypeString: '<!DOCTYPE html>',
+    //     removeScripts: false,
+    //     copyTagClasses: false
+    //   });
+    
+    $('#div1').printThis({
+                    importCSS: true,
+                    loadCSS: "", // Additional CSS file to load if needed
+                    pageTitle: "Print Area",
+                    removeInline: false,
+                    printContainer: true,
+                    debug: false
+                });
+}      
 JS;
 $this->registerJs($js, static::POS_END);
 ?>
-

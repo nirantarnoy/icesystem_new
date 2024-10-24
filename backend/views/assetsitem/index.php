@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </form>
         </div>
     </div>
-    <?php echo $this->render('_search', ['model' => $searchModel, 'viewstatus' => $viewstatus]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel, 'viewstatus' => $viewstatus,'viewstatus2' => $viewstatus2]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -158,4 +158,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <form action="<?= Url::to(['assetsitem/import-asset-by-customer']) ?>" method="post" enctype="multipart/form-data">
     <input type="file" name="file_asset_customer">
     <button class="btn btn-info">import asset customer</button>
+</form>
+
+<br/>
+<form action="<?= Url::to(['assetsitem/import-asset-updateprice']) ?>" method="post" enctype="multipart/form-data">
+    <input type="file" name="file_asset_update">
+    <button class="btn btn-info">import update rent price</button>
 </form>

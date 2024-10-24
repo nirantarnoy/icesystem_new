@@ -73,7 +73,16 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
             <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'active_date')->textInput() ?>
+            <?php $model->active_date = $model->isNewRecord?date('Y-m-d'):$model->active_date; ?>
+            <?= $form->field($model, 'active_date')->widget(\kartik\date\DatePicker::className(),[
+                'value' => date('Y-m-d'),
+                'options' => [
+                    'disabled' => true
+                ],
+                'pluginOptions' => [
+                    'format' => 'dd-mm-yyyy',
+                ]
+            ]) ?>
         </div>
         <div class="col-lg-3">
             <?= $form->field($model, 'payment_method_id')->widget(\kartik\select2\Select2::className(), [
@@ -103,6 +112,24 @@ if (!empty(\Yii::$app->user->identity->branch_id)) {
             <?= $form->field($model, 'address')->textarea(['maxlength' => true]) ?>
         </div>
 
+    </div>
+     <div class="row">
+        <div class="col-lg-3">
+            <?= $form->field($model, 'cus_description')->textInput(['maxlength' => true])->label('หมายเหตุ') ?>
+        </div>
+        <div class="col-lg-3">
+             <?= $form->field($model, 'sale_id')->Widget(\kartik\select2\Select2::className(), [
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Employee::find()->where(['company_id' => $company_id, 'branch_id' => $branch_id,'status'=>1,'position'=>3])->all(), 'id', function ($data) {
+                    return $data->code . ' ' . $data->fname;
+                }),
+                'options' => [
+                    'placeholder' => '--เลือกพนักงานตลาด--'
+                ]
+            ])->label('เจ้าหน้าที่การตลาด') ?>
+        </div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'route_num')->textInput(['maxlength' => true]) ?>
+        </div>
     </div>
     <div class="row">
         <div class="col-lg-4">
